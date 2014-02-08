@@ -1,0 +1,17 @@
+package proteaj.lang;
+
+public class Letter {
+  public Letter(char ch) {
+    this.ch = ch;
+  }
+  
+  public char toChar() {
+    return ch;
+  }
+  
+  public String toString() {
+    return String.valueOf(ch);
+  }
+  
+  private char ch;
+}

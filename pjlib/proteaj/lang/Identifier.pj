@@ -1,0 +1,13 @@
+package proteaj.lang;
+
+public class Identifier {
+  public Identifier(String id) {
+    this.id = id;
+  }
+  
+  public String toString() {
+    return id;
+  }
+  
+  private String id;
+}

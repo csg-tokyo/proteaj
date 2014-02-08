@@ -1,0 +1,17 @@
+package proteaj.lang;
+
+public class Type {
+  public Type(Class cls) {
+    this.cls = cls;
+  }
+  
+  public String toString() {
+    return cls.getName();
+  }
+  
+  public Class toClass() {
+    return cls;
+  }
+  
+  private Class cls;
+}

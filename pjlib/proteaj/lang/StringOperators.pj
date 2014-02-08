@@ -1,0 +1,25 @@
+package proteaj.lang;
+
+unusing proteaj.lang.StringOperators;
+
+public operators StringOperators {
+  public String left "+" right (String left, String right) : priority = 300 {
+    return left.concat(right);
+  }
+  
+  public String left "+" right (String left, int right) : priority = 300 {
+    return left.concat(String.valueOf(right));
+  }
+  
+  public String left "+" right (int left, String right) : priority = 300 {
+    return String.valueOf(left).concat(right);
+  }
+  
+  public String left "+" right (String left, char right) : priority = 300 {
+    return left.concat(String.valueOf(right));
+  }
+  
+  public String left "+" right (char left, String right) : priority = 300 {
+    return String.valueOf(left).concat(right);
+  }
+}
