@@ -1,7 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8e6497db-168c-40d5-b91d-8295649a5b7f" name="Default" comment="" />
+    <list default="true" id="8e6497db-168c-40d5-b91d-8295649a5b7f" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/proteaj/ir/tast/CastExpression.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/proteaj/pparser/CastExpressionParser.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/file/ChildDirectoryPath.lj" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/file/CurrentDirectory.lj" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/file/DirectoryPath.lj" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/file/FileExtension.lj" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/file/FileOrDirectory.lj" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/file/FilePath.lj" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/file/FilePathOperators.lj" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/file/HomeDirectory.lj" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/file/Main.lj" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/file/ParentDirectoryPath.lj" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/print/PrintOperators.lj" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/proteaj/pparser/ProteaJCastExpressionParser.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/file/RootDirectory.lj" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/cast/Test.pj" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/pj" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/pjc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/BodyCompiler.java" afterPath="$PROJECT_DIR$/src/proteaj/BodyCompiler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/BodyParser.java" afterPath="$PROJECT_DIR$/src/proteaj/BodyParser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/Compiler.java" afterPath="$PROJECT_DIR$/src/proteaj/Compiler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/util/CtClassUtil.java" afterPath="$PROJECT_DIR$/src/proteaj/util/CtClassUtil.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/DefaultExpressionParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/DefaultExpressionParser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/OperationParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/OperationParser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/PrimaryParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/PrimaryParser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/SigParser.java" afterPath="$PROJECT_DIR$/src/proteaj/SigParser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/SigSemanticsChecker.java" afterPath="$PROJECT_DIR$/src/proteaj/SigSemanticsChecker.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="proteaj.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -64,68 +94,42 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="PrimaryParser.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/PrimaryParser.java">
+      <file leaf-file-name="DefaultExpressionParser.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/DefaultExpressionParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="10" selection-start="60" selection-end="60" vertical-scroll-proportion="0.0" vertical-offset="420" max-vertical-offset="1050">
+            <state line="46" column="61" selection-start="1345" selection-end="1369" vertical-scroll-proportion="0.0" vertical-offset="354" max-vertical-offset="1500">
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#2850#2884#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JavaExpressionParser.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/JavaExpressionParser.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="7" column="13" selection-start="132" selection-end="132" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="900">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CastExpression.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/proteaj/ir/tast/CastExpression.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="12" column="74" selection-start="325" selection-end="325" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SigCompiler.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/proteaj/SigCompiler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="28" column="0" selection-start="779" selection-end="779" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="495">
-              <folding>
-                <element signature="e#270#287#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SigIRGenerator.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/proteaj/SigIRGenerator.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="43" selection-start="851" selection-end="851" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="8505">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SigLexer.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/proteaj/SigLexer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="13" selection-start="342" selection-end="342" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4320">
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#2228#2235#0" expanded="true" />
-                <element signature="e#7139#7161#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SigParser.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/proteaj/SigParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="966" column="26" selection-start="30307" selection-end="30307" vertical-scroll-proportion="0.6703297" vertical-offset="14049" max-vertical-offset="14595">
-              <folding>
-                <element signature="e#23340#23351#0" expanded="true" />
-                <element signature="e#25401#25409#0" expanded="true" />
-                <element signature="e#28822#28838#0" expanded="true" />
-                <element signature="e#28881#28888#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Compiler.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="Compiler.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/proteaj/Compiler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="13" selection-start="127" selection-end="127" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="615">
+            <state line="33" column="45" selection-start="735" selection-end="735" vertical-scroll-proportion="0.7761194" vertical-offset="79" max-vertical-offset="615">
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#300#306#0" expanded="true" />
@@ -134,18 +138,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LiteralParser.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/LiteralParser.java">
+      <file leaf-file-name="ProteaJCastExpressionParser.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ProteaJCastExpressionParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="0" selection-start="118" selection-end="118" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3000">
+            <state line="3" column="20" selection-start="70" selection-end="70" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3060">
               <folding>
-                <marker date="1391875448000" expanded="true" signature="510:1187" placeholder="{...}" />
-                <marker date="1391875448000" expanded="true" signature="1337:1897" placeholder="{...}" />
-                <marker date="1391875448000" expanded="true" signature="2048:2546" placeholder="{...}" />
-                <marker date="1391875448000" expanded="true" signature="2688:3590" placeholder="{...}" />
-                <marker date="1391875448000" expanded="true" signature="3755:4805" placeholder="{...}" />
-                <marker date="1391875448000" expanded="true" signature="4864:4985" placeholder="{...}" />
+                <element signature="e#6090#6128#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BodyParser.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/proteaj/BodyParser.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="251" column="42" selection-start="9676" selection-end="9676" vertical-scroll-proportion="0.0" vertical-offset="3309" max-vertical-offset="4320">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -157,27 +165,12 @@
       <setting name="OPEN_NEW_TAB" value="false" />
     </FindUsagesManager>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/proteaj/pparser/ThrowStatementParser.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/ir/tast/ThrowStatement.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/pparser/TryStatementParser.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/ir/tast/TryStatement.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/pparser/ClassNameParser.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/ir/tast/ClassName.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/pparser/ReturnStatementParser.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/ir/tast/ReturnStatement.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/pparser/DefaultExpressionParser.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/ir/tast/NullLiteral.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/pparser/ExpressionParser.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/pparser/OperationParser.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/ir/tast/Operation.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/ir/tast/StaticMethodCall.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/ir/tast/VariableOperands.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/pparser/JavaExpressionParser.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/pparser/ReadasExpressionParser.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/pparser/ReadasOperandParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/ReadasOperationParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/ReadasOperatorParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/ir/tast/ReadasOperator.java" />
@@ -196,7 +189,6 @@
         <option value="$PROJECT_DIR$/src/proteaj/pparser/FieldAccessParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/ArrayAccessParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/ir/tast/ArrayAccess.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/pparser/PrimaryParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/AbbMethodCallParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/VariableParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/StaticMethodCallParser.java" />
@@ -211,6 +203,25 @@
         <option value="$PROJECT_DIR$/src/proteaj/SigIRGenerator.java" />
         <option value="$PROJECT_DIR$/src/proteaj/SigCompiler.java" />
         <option value="$PROJECT_DIR$/test/test/Test.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/SSigParser.scala" />
+        <option value="$PROJECT_DIR$/src/proteaj/parser/BodyParsers.scala" />
+        <option value="$PROJECT_DIR$/src/proteaj/pparser/OperationParser.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/BodyCompiler.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/SigParser.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/SigSemanticsChecker.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/pparser/PrimaryParser.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/pparser/ProteaJCastExpressionParser.scala" />
+        <option value="$PROJECT_DIR$/src/proteaj/ir/tast/ProteaJCastExpression.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/pparser/CastExpressionParser.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/pparser/ProteaJCastExpressionParser.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/pparser/DefaultExpressionParser.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/BodyParser.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/util/CtClassUtil.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/ir/tast/CastExpression.java" />
+        <option value="$PROJECT_DIR$/test/file/FilePathOperators.lj" />
+        <option value="$PROJECT_DIR$/test/cast/Test.pj" />
+        <option value="$PROJECT_DIR$/test/print/PrintOperators.lj" />
+        <option value="$PROJECT_DIR$/src/proteaj/Compiler.java" />
       </list>
     </option>
   </component>
@@ -289,6 +300,60 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proteaj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proteaj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proteaj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proteaj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proteaj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proteaj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tast" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proteaj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proteaj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="print" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scope">
@@ -360,6 +425,60 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="print" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proteaj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proteaj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="file" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proteaj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proteaj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cast" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proteaj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proteaj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -389,6 +508,8 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="recentsLimit" value="5" />
     <property name="dynamic.classpath" value="false" />
+    <property name="OverrideImplement.combined" value="true" />
+    <property name="OverrideImplement.overriding.sorted" value="false" />
   </component>
   <component name="RunManager" selected="Application.Test">
     <configuration default="false" name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -603,29 +724,29 @@
     <frame x="0" y="22" width="1280" height="705" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32879046" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17124394" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32879046" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32879046" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32879046" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18739903" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32879046" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="combo" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -649,353 +770,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ClassNameParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="26" selection-start="1236" selection-end="1245" vertical-scroll-proportion="0.45617172" vertical-offset="555" max-vertical-offset="1275">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/tast/ReturnStatement.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="0" selection-start="434" selection-end="434" vertical-scroll-proportion="0.61717355" vertical-offset="0" max-vertical-offset="559">
-          <folding>
-            <element signature="e#235#236#0" expanded="true" />
-            <element signature="e#255#256#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ControlFlowParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="0" selection-start="118" selection-end="118" vertical-scroll-proportion="0.16483517" vertical-offset="0" max-vertical-offset="915">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ReturnStatementParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="0" selection-start="115" selection-end="115" vertical-scroll-proportion="0.18783543" vertical-offset="0" max-vertical-offset="915">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/TryStatementParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="5" selection-start="363" selection-end="363" vertical-scroll-proportion="0.37567085" vertical-offset="0" max-vertical-offset="2205">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1499#1512#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/tast/NullLiteral.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="20" selection-start="46" selection-end="46" vertical-scroll-proportion="0.053667262" vertical-offset="0" max-vertical-offset="559">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/tast/Operation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="19" selection-start="67" selection-end="67" vertical-scroll-proportion="0.107334524" vertical-offset="0" max-vertical-offset="615">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#318#319#0" expanded="true" />
-            <element signature="e#343#344#0" expanded="true" />
-            <element signature="e#386#387#0" expanded="true" />
-            <element signature="e#411#412#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/tast/StaticMethodCall.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="18" selection-start="44" selection-end="44" vertical-scroll-proportion="0.053667262" vertical-offset="0" max-vertical-offset="570">
-          <folding>
-            <element signature="e#301#302#0" expanded="true" />
-            <element signature="e#324#325#0" expanded="true" />
-            <element signature="e#356#357#0" expanded="true" />
-            <element signature="e#377#378#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/tast/VariableOperands.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="0" selection-start="25" selection-end="25" vertical-scroll-proportion="0.026833631" vertical-offset="0" max-vertical-offset="675">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/OperationParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="108" column="11" selection-start="4014" selection-end="4014" vertical-scroll-proportion="1.6868132" vertical-offset="699" max-vertical-offset="3135">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#444#456#0" expanded="true" />
-            <element signature="e#1446#1458#0" expanded="true" />
-            <element signature="e#6187#6216#0" expanded="true" />
-            <element signature="e#7079#7132#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ExpressionParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="36" selection-start="459" selection-end="459" vertical-scroll-proportion="-1.6373626" vertical-offset="1149" max-vertical-offset="1695">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/BodyParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="13" selection-start="219" selection-end="219" vertical-scroll-proportion="-6.5274725" vertical-offset="3744" max-vertical-offset="4320">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#4573#4587#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/tast/ReadasOperator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="0" selection-start="25" selection-end="25" vertical-scroll-proportion="0.027985075" vertical-offset="0" max-vertical-offset="536">
-          <folding>
-            <element signature="e#162#163#0" expanded="true" />
-            <element signature="e#182#183#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ReadasOperatorParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="76" selection-start="587" selection-end="587" vertical-scroll-proportion="0.34034416" vertical-offset="122" max-vertical-offset="990">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1479#1509#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ReadasExpressionParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="47" selection-start="183" selection-end="183" vertical-scroll-proportion="0.25186568" vertical-offset="0" max-vertical-offset="810">
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#1149#1182#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/DefaultExpressionParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="45" selection-start="1908" selection-end="1930" vertical-scroll-proportion="0.46703297" vertical-offset="630" max-vertical-offset="1425">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2650#2684#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/tast/NewExpression.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="20" selection-start="302" selection-end="302" vertical-scroll-proportion="0.30783582" vertical-offset="0" max-vertical-offset="536">
-          <folding>
-            <element signature="e#322#323#0" expanded="true" />
-            <element signature="e#350#351#0" expanded="true" />
-            <element signature="e#382#383#0" expanded="true" />
-            <element signature="e#403#404#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/tast/StringLiteral.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="36" selection-start="84" selection-end="84" vertical-scroll-proportion="0.1119403" vertical-offset="0" max-vertical-offset="536">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#266#267#0" expanded="true" />
-            <element signature="e#286#287#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/tast/CharLiteral.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="36" selection-start="83" selection-end="83" vertical-scroll-proportion="0.1119403" vertical-offset="0" max-vertical-offset="536">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#243#244#0" expanded="true" />
-            <element signature="e#263#264#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/tast/ClassLiteral.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="19" selection-start="67" selection-end="67" vertical-scroll-proportion="0.1119403" vertical-offset="0" max-vertical-offset="536">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/PrimitiveReadasOperationParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="155" column="0" selection-start="5195" selection-end="5195" vertical-scroll-proportion="0.34065935" vertical-offset="2139" max-vertical-offset="2685">
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#2593#2634#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ReadasOperationParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="0" selection-start="26" selection-end="140" vertical-scroll-proportion="0.054945055" vertical-offset="0" max-vertical-offset="2775">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#450#462#0" expanded="true" />
-            <element signature="e#1462#1474#0" expanded="true" />
-            <element signature="e#5331#5360#0" expanded="true" />
-            <element signature="e#6270#6329#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/DefaultReadasOperandParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="19" selection-start="138" selection-end="138" vertical-scroll-proportion="0.18783543" vertical-offset="0" max-vertical-offset="1065">
-          <folding>
-            <element signature="e#1676#1713#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ReadasOperandParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="19" selection-start="186" selection-end="186" vertical-scroll-proportion="0.24725275" vertical-offset="0" max-vertical-offset="1485">
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#2921#2968#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/tast/AssignExpression.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="0" selection-start="490" selection-end="490" vertical-scroll-proportion="0.72450805" vertical-offset="0" max-vertical-offset="559">
-          <folding>
-            <element signature="e#239#240#0" expanded="true" />
-            <element signature="e#259#260#0" expanded="true" />
-            <element signature="e#293#294#0" expanded="true" />
-            <element signature="e#313#314#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/AssignExpressionParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="5" selection-start="677" selection-end="677" vertical-scroll-proportion="0.64400715" vertical-offset="0" max-vertical-offset="765">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/tast/ArrayLength.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="15" selection-start="155" selection-end="155" vertical-scroll-proportion="0.16100179" vertical-offset="0" max-vertical-offset="559">
-          <folding>
-            <element signature="e#228#229#0" expanded="true" />
-            <element signature="e#250#251#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ArrayLengthParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="50" selection-start="944" selection-end="955" vertical-scroll-proportion="0.35599285" vertical-offset="311" max-vertical-offset="870">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/tast/MethodCall.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="19" selection-start="45" selection-end="45" vertical-scroll-proportion="0.053667262" vertical-offset="0" max-vertical-offset="645">
-          <folding>
-            <element signature="e#332#333#0" expanded="true" />
-            <element signature="e#353#354#0" expanded="true" />
-            <element signature="e#386#387#0" expanded="true" />
-            <element signature="e#409#410#0" expanded="true" />
-            <element signature="e#441#442#0" expanded="true" />
-            <element signature="e#462#463#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/MethodCallParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="57" column="29" selection-start="1783" selection-end="1793" vertical-scroll-proportion="0.6318681" vertical-offset="510" max-vertical-offset="1380">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/FieldAccessParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="46" selection-start="186" selection-end="186" vertical-scroll-proportion="0.24150269" vertical-offset="0" max-vertical-offset="1395">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/tast/ArrayAccess.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="19" selection-start="45" selection-end="45" vertical-scroll-proportion="0.053667262" vertical-offset="0" max-vertical-offset="570">
-          <folding>
-            <element signature="e#307#308#0" expanded="true" />
-            <element signature="e#329#330#0" expanded="true" />
-            <element signature="e#363#364#0" expanded="true" />
-            <element signature="e#385#386#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ArrayAccessParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="28" selection-start="1436" selection-end="1447" vertical-scroll-proportion="0.53667265" vertical-offset="510" max-vertical-offset="1185">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/JavaExpressionParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="0" selection-start="26" selection-end="117" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="900">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/AbbMethodCallParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="10" column="41" selection-start="221" selection-end="221" vertical-scroll-proportion="0.26833633" vertical-offset="0" max-vertical-offset="1215">
@@ -1024,15 +798,6 @@
     <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/StaticFieldAccessParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="9" column="39" selection-start="179" selection-end="179" vertical-scroll-proportion="0.24150269" vertical-offset="0" max-vertical-offset="1380">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/NewExpressionParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="39" selection-start="179" selection-end="179" vertical-scroll-proportion="0.24150269" vertical-offset="0" max-vertical-offset="1230">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1086,33 +851,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/PrimaryParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="10" selection-start="60" selection-end="60" vertical-scroll-proportion="0.0" vertical-offset="420" max-vertical-offset="1050">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/LiteralParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="6" column="0" selection-start="118" selection-end="118" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3000">
           <folding>
-            <marker date="1391875448000" expanded="true" signature="510:1187" placeholder="{...}" />
-            <marker date="1391875448000" expanded="true" signature="1337:1897" placeholder="{...}" />
-            <marker date="1391875448000" expanded="true" signature="2048:2546" placeholder="{...}" />
-            <marker date="1391875448000" expanded="true" signature="2688:3590" placeholder="{...}" />
-            <marker date="1391875448000" expanded="true" signature="3755:4805" placeholder="{...}" />
-            <marker date="1391875448000" expanded="true" signature="4864:4985" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/Compiler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="13" selection-start="127" selection-end="127" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="615">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#300#306#0" expanded="true" />
+            <marker date="1391875448000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1391875448000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1391875448000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1391875448000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1391875448000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1391875448000" expanded="true" signature="-1:-1" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -1126,18 +874,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/SigIRGenerator.java">
+    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/UsingOperators.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="43" selection-start="851" selection-end="851" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="8505">
+        <state line="8" column="13" selection-start="123" selection-end="123" vertical-scroll-proportion="0.0" vertical-offset="184" max-vertical-offset="2340">
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#1726#1734#0" expanded="true" />
+            <element signature="e#5420#5446#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/BodyCompiler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="30" selection-start="238" selection-end="238" vertical-scroll-proportion="0.13992538" vertical-offset="0" max-vertical-offset="2265">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/proteaj/SigLexer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="13" selection-start="342" selection-end="342" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4320">
+        <state line="13" column="13" selection-start="342" selection-end="342" vertical-scroll-proportion="-6.6958957" vertical-offset="3784" max-vertical-offset="4320">
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#2228#2235#0" expanded="true" />
@@ -1148,12 +905,313 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/proteaj/SigParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="966" column="26" selection-start="30307" selection-end="30307" vertical-scroll-proportion="0.6703297" vertical-offset="14049" max-vertical-offset="14595">
+        <state line="570" column="47" selection-start="19056" selection-end="19056" vertical-scroll-proportion="-3.3594646" vertical-offset="10232" max-vertical-offset="14610">
           <folding>
-            <element signature="e#23340#23351#0" expanded="true" />
-            <element signature="e#25401#25409#0" expanded="true" />
-            <element signature="e#28822#28838#0" expanded="true" />
-            <element signature="e#28881#28888#0" expanded="true" />
+            <element signature="e#23366#23377#0" expanded="true" />
+            <element signature="e#25427#25435#0" expanded="true" />
+            <element signature="e#28848#28864#0" expanded="true" />
+            <element signature="e#28907#28914#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/SigSemanticsChecker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="390" column="60" selection-start="13199" selection-end="13199" vertical-scroll-proportion="0.7131931" vertical-offset="5477" max-vertical-offset="6000">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#8940#8949#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/ast/OperatorPattern.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="13" selection-start="56" selection-end="56" vertical-scroll-proportion="-0.19589552" vertical-offset="165" max-vertical-offset="1335">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/ast/Operand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="13" selection-start="35" selection-end="35" vertical-scroll-proportion="-1.119403" vertical-offset="630" max-vertical-offset="1185">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/SigIRGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="384" column="74" selection-start="14543" selection-end="14543" vertical-scroll-proportion="0.11472275" vertical-offset="5700" max-vertical-offset="8505">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/IROperator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="13" selection-start="138" selection-end="138" vertical-scroll-proportion="0.2294455" vertical-offset="0" max-vertical-offset="1455">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/OperationParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="32" column="42" selection-start="969" selection-end="969" vertical-scroll-proportion="0.5879121" vertical-offset="159" max-vertical-offset="3165">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#444#456#0" expanded="true" />
+            <element signature="e#1446#1458#0" expanded="true" />
+            <element signature="e#6187#6216#0" expanded="true" />
+            <element signature="e#7115#7168#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/IROperandAttribute.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="13" selection-start="79" selection-end="79" vertical-scroll-proportion="-0.3685152" vertical-offset="296" max-vertical-offset="960">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/IRPattern.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="241" column="41" selection-start="6319" selection-end="6319" vertical-scroll-proportion="0.53296703" vertical-offset="3144" max-vertical-offset="3690">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/tast/Operation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="0" selection-start="283" selection-end="283" vertical-scroll-proportion="0.32200357" vertical-offset="0" max-vertical-offset="559">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/util/Modifiers.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="13" selection-start="57" selection-end="57" vertical-scroll-proportion="-1.5366726" vertical-offset="919" max-vertical-offset="1905">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/CodeGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="13" selection-start="137" selection-end="137" vertical-scroll-proportion="0.107334524" vertical-offset="0" max-vertical-offset="1620">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ArrayLengthParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="34" column="50" selection-start="944" selection-end="955" vertical-scroll-proportion="0.7630597" vertical-offset="101" max-vertical-offset="870">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/tast/LocalVarDecl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="13" selection-start="66" selection-end="66" vertical-scroll-proportion="-0.0074626864" vertical-offset="64" max-vertical-offset="630">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/tast/NewExpression.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="0" selection-start="612" selection-end="612" vertical-scroll-proportion="0.64365673" vertical-offset="0" max-vertical-offset="536">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/NewExpressionParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="13" selection-start="194" selection-end="194" vertical-scroll-proportion="0.0" vertical-offset="375" max-vertical-offset="1230">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/TypeNameParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="64" column="41" selection-start="1572" selection-end="1578" vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="1050">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/LocalVarDeclParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="35" selection-start="391" selection-end="391" vertical-scroll-proportion="0.0" vertical-offset="156" max-vertical-offset="945">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/PrimaryParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="22" selection-start="344" selection-end="344" vertical-scroll-proportion="0.40250447" vertical-offset="0" max-vertical-offset="1110">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ExpressionParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="0" selection-start="558" selection-end="558" vertical-scroll-proportion="-1.5223614" vertical-offset="1136" max-vertical-offset="1695">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ForStatementParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="13" selection-start="108" selection-end="108" vertical-scroll-proportion="0.16100179" vertical-offset="0" max-vertical-offset="1290">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ForCondParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="13" selection-start="129" selection-end="129" vertical-scroll-proportion="0.107334524" vertical-offset="0" max-vertical-offset="559">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/CastExpressionParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="48" column="25" selection-start="1475" selection-end="1475" vertical-scroll-proportion="0.40250447" vertical-offset="495" max-vertical-offset="1155">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/PackratParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="22" selection-start="185" selection-end="185" vertical-scroll-proportion="-2.75" vertical-offset="1624" max-vertical-offset="4590">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/IRCommonTypes.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="13" selection-start="80" selection-end="80" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1020">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/util/CtClassUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="48" column="5" selection-start="1549" selection-end="1549" vertical-scroll-proportion="0.0" vertical-offset="315" max-vertical-offset="900">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#823#833#0" expanded="true" />
+            <element signature="e#1620#1645#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/file/FileOrDirectory.lj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="555">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/cast/Test.pj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="1" selection-start="265" selection-end="265" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="300">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/JavaExpressionParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="13" selection-start="132" selection-end="132" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="900">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/DefaultExpressionParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="61" selection-start="1345" selection-end="1369" vertical-scroll-proportion="0.0" vertical-offset="354" max-vertical-offset="1500">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2850#2884#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/BodyParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="251" column="42" selection-start="9676" selection-end="9676" vertical-scroll-proportion="0.0" vertical-offset="3774" max-vertical-offset="4320">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ProteaJCastExpressionParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="20" selection-start="70" selection-end="70" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3060">
+          <folding>
+            <element signature="e#6090#6128#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/print/PrintOperators.lj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="1" selection-start="347" selection-end="347" vertical-scroll-proportion="0.4477612" vertical-offset="0" max-vertical-offset="536">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/file/Main.lj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="0" selection-start="15" selection-end="44" vertical-scroll-proportion="0.05597015" vertical-offset="0" max-vertical-offset="615">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/file/FilePathOperators.lj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="3" selection-start="696" selection-end="696" vertical-scroll-proportion="0.34416825" vertical-offset="15" max-vertical-offset="660">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/tast/CastExpression.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="74" selection-start="325" selection-end="325" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/Compiler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="45" selection-start="735" selection-end="735" vertical-scroll-proportion="0.7761194" vertical-offset="79" max-vertical-offset="615">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#300#306#0" expanded="true" />
           </folding>
         </state>
       </provider>

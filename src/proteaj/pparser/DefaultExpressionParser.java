@@ -11,6 +11,7 @@ import javassist.*;
 public class DefaultExpressionParser extends ExpressionParser {
   /* DefaultExpression
    *  : '(' Expression ')'
+   *  | ProteaJCastExpression
    *  | JavaExpression
    *  | "null"
    */
@@ -33,6 +34,10 @@ public class DefaultExpressionParser extends ExpressionParser {
       else flog = expr.getFailLog();
     }
     else flog = lbrace.getFailLog();
+
+    reader.setPos(pos);
+    TypedAST cast = ProteaJCastExpressionParser.getParser(type).applyRule(reader, env);
+    if (! cast.isFail()) return cast;
 
     reader.setPos(pos);
     TypedAST expr = JavaExpressionParser.parser.applyRule(reader, env);
@@ -62,7 +67,7 @@ public class DefaultExpressionParser extends ExpressionParser {
       return literal;
     }
 
-    flog = chooseBest(flog, expr.getFailLog(), nll.getFailLog(), literal.getFailLog());
+    flog = chooseBest(flog, cast.getFailLog(), expr.getFailLog(), nll.getFailLog(), literal.getFailLog());
     reader.setPos(pos);
     return new BadAST(flog);
   }

@@ -1,0 +1,32 @@
+package file;
+
+import java.io.File;
+import java.io.IOException;
+
+public class FileOrDirectory {
+  public FileOrDirectory(String path) {
+    this.file = new File(path);
+  }
+  
+  public String getPath() {
+    return file.getPath();
+  }
+  
+  public String getAbsolutePath() {
+    return file.getAbsolutePath();
+  }
+  
+  public String getCanonicalPath() throws IOException {
+    return file.getCanonicalPath();
+  }
+  
+  public boolean isSameFileOrDirectory(FileOrDirectory path) {
+    return file.equals(path.file);
+  }
+  
+  public File toFile() {
+    return file;
+  }
+  
+  private File file;
+}

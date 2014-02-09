@@ -1,0 +1,25 @@
+package file;
+
+public class FileExtension {
+  public FileExtension(String ext) {
+    this.ext = ext;
+  }
+  
+  public String toString() {
+    return "." + ext;
+  }
+  
+  private String ext;
+}
+
+class NoFileExtension extends FileExtension {
+  public static final NoFileExtension instance = new NoFileExtension();
+  
+  private NoFileExtension() {
+    super("");
+  }
+  
+  public String toString() {
+    return "";
+  }
+}

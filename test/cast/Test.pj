@@ -1,0 +1,15 @@
+package cast;
+
+import file.*;
+
+using file.FilePathOperators;
+using print.PrintOperators;
+
+public class Test {
+  public static void main(String[] args) {
+    Object obj = "Hello, world!";
+
+    (<- FilePath) /home/ichikawa/memo.txt;
+    p (Object -> String)obj;
+  }
+}

@@ -1,0 +1,17 @@
+package file;
+
+import java.io.File;
+
+public class CurrentDirectory implements DirectoryPath {
+  public static final CurrentDirectory instance = new CurrentDirectory(); 
+  
+  public String toString() {
+    return "./";
+  }
+  
+  public File toFile() {
+    return new File(toString());  
+  }
+  
+  private CurrentDirectory() {}
+}

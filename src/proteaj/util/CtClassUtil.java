@@ -1,5 +1,7 @@
 package proteaj.util;
 
+import proteaj.error.*;
+
 import java.util.*;
 import javassist.*;
 
@@ -31,6 +33,20 @@ public class CtClassUtil {
     cache.put(cls, methods);
 
     return methods;
+  }
+
+  // not perfect
+  public static boolean isCastable (CtClass from, CtClass to, String file, int line) {
+    return from.isPrimitive() || to.isPrimitive() || isSubtype(from, to, file, line) || isSubtype(to, from, file, line) || to == CtClass.voidType;
+  }
+
+  public static boolean isSubtype (CtClass sub, CtClass sup, String file, int line) {
+    try {
+      return sub.subtypeOf(sup);
+    } catch (NotFoundException e) {
+      ErrorList.addError(new NotFoundError(e, file, line));
+      return false;
+    }
   }
 
   private static Map<CtClass, List<CtMethod>> cache = new HashMap<CtClass, List<CtMethod>>();

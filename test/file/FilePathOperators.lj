@@ -1,0 +1,39 @@
+package file;
+
+public operators FilePathOperators {
+  public readas FileOrDirectory dir? name ext? (DirectoryPath dir = CurrentDirectory.instance, Identifier name, FileExtension ext = NoFileExtension.instance) : priority = 100 {
+    return new FileOrDirectory(dir.toString() + name.toString() + ext.toString());
+  }
+  
+  public readas FileOrDirectory dir (DirectoryPath dir) : priority = 100 {
+    return new FileOrDirectory(dir.toString());
+  }
+
+  public readas FilePath dir? name ext? (DirectoryPath dir = CurrentDirectory.instance, Identifier name, FileExtension ext = NoFileExtension.instance) : priority = 100 {
+    return new FilePath(dir.toString() + name.toString() + ext.toString());
+  }
+  
+  public readas FileExtension "." ext (Identifier ext) : priority = 200 {
+    return new FileExtension(ext.toString());
+  }
+  
+  public readas DirectoryPath parent? name "/" (DirectoryPath parent = CurrentDirectory.instance, Identifier name) : priority = 200 {
+    return new ChildDirectoryPath(parent, name.toString());
+  }
+  
+  public readas DirectoryPath parent? "./" (DirectoryPath parent = CurrentDirectory.instance) : priority = 200 {
+    return parent;
+  }
+  
+  public readas DirectoryPath child? "../" (DirectoryPath child = CurrentDirectory.instance) : priority = 200 {
+    return new ParentDirectoryPath(child);
+  }
+  
+  public readas DirectoryPath "/" () : priority = 200 {
+    return RootDirectory.instance;
+  }
+  
+  public readas DirectoryPath "~/" () : priority = 200 {
+    return HomeDirectory.instance;
+  }
+}

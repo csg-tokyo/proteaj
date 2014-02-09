@@ -175,7 +175,8 @@ public class OperationParser extends PackratParser {
     return parser;
   }
 
-  public static void initAll(UsingOperators usops) {
+  public static void initAll(UsingOperators usops, IR ir) {
+    OperationParser.ir = ir;
     OperationParser.usops = usops;
     for(OperationParser parser : parsers.values()) {
       parser.init();
@@ -199,5 +200,6 @@ public class OperationParser extends PackratParser {
 
   private static Map<Triad<CtClass, Integer, IRPattern>, OperationParser> parsers = new HashMap<Triad<CtClass, Integer, IRPattern>, OperationParser>();
   private static UsingOperators usops;
+  private static IR ir;
 }
 

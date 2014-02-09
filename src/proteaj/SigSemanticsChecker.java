@@ -388,7 +388,7 @@ public class SigSemanticsChecker {
   private static final int ABSTRACT_METHOD_MODIFIER = PUBLIC | ABSTRACT;
   private static final int CONCRETE_METHOD_MODIFIER = FINAL | NATIVE | PUBLIC | PROTECTED | PRIVATE | STATIC | STRICT | SYNCHRONIZED;
   private static final int OPERATOR_MODIFIER = NON_ASSOC | PUBLIC | READAS | RIGHT_ASSOC | STRICT | SYNCHRONIZED;
-  private static final int OPERAND_MODIFIER = READAS | VARARGS;
+  private static final int OPERAND_MODIFIER = VARARGS | LAZY;
   private static final int PARAMETER_MODIFIER = FINAL | VARARGS;
 }
 

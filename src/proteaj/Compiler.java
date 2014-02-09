@@ -31,5 +31,5 @@ public class Compiler {
     }
   }
 
-  public static final String version = "1.1.0.0";
+  public static final String version = "1.1.1.0";
 }

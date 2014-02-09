@@ -1,0 +1,17 @@
+package print;
+
+public operators PrintOperators {
+  public void "p" str (String str) {
+    System.out.println(str);
+  }
+
+  public void "p" obj (Object obj) {
+    System.out.println(obj.toString());
+  }
+  
+  public void "p" "{" strs* "}" (String... strs) {
+    for(int i = 0; i < strs.length; i++) {
+      System.out.println(strs[i]);
+    }
+  }
+}

@@ -1,0 +1,36 @@
+package file;
+
+using file.FilePathOperators;
+using print.PrintOperators;
+
+public class Main {
+  public static void main(String[] args) throws Exception {
+    FilePath path1 = /home/ichikawa/workspace/ProteaJ/test/file/Main.lj;
+    FilePath path2 = ./test/./file/FilePathOperators.lj;
+    FilePath path3 = ../../workspace/ProteaJ/test/file/FilePathExtension.lj;
+    FilePath path4 = ~/workspace/ProteaJ/test/file/FilePath.lj;
+    FilePath path5 = a/a/a/a/a/a/a/a/a/a/a/a/a/a/a/a/a/a/a/a/a.a;
+    
+    p "--------------------------";
+    p "absolute path";
+    p "--------------------------";
+    
+    p path1.getAbsolutePath();
+    p path2.getAbsolutePath();
+    p path3.getAbsolutePath();
+    p path4.getAbsolutePath();
+    p path5.getAbsolutePath();
+
+    p {
+      "--------------------------"
+      "absolute path"
+      "--------------------------"
+    
+      path1.getCanonicalPath()
+      path2.getCanonicalPath()
+      path3.getCanonicalPath()
+      path4.getCanonicalPath()
+      path5.getCanonicalPath()
+    };
+  }
+}

@@ -1,0 +1,8 @@
+package file;
+
+import java.io.File;
+
+public interface DirectoryPath {
+  String toString();
+  File toFile();
+}

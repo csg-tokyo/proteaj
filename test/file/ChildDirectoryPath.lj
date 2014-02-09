@@ -1,0 +1,21 @@
+package file;
+
+import java.io.File;
+
+public class ChildDirectoryPath implements DirectoryPath {
+  public ChildDirectoryPath(DirectoryPath parent, String name) {
+    this.parent = parent;
+    this.name = name;
+  }
+  
+  public String toString() {
+    return parent.toString() + name + "/";
+  }
+  
+  public File toFile() {
+    return new File(toString());  
+  }
+  
+  private DirectoryPath parent;
+  private String name;
+}

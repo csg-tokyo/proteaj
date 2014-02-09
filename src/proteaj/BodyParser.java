@@ -11,6 +11,10 @@ import java.util.Map.Entry;
 import javassist.*;
 
 public class BodyParser {
+  public BodyParser(IR ir) {
+    this.ir = ir;
+  }
+
   public MethodBody parseMethodBody(CtMethod method, SourceStringReader reader, Environment env, TypeResolver resolver, UsingOperators usops) throws CompileError, CompileErrors {
     try {
       CtClass thisCls = method.getDeclaringClass();
@@ -245,9 +249,10 @@ public class BodyParser {
   private void initParser_Expression(CtClass thisCls, CtMember member, TypeResolver resolver, UsingOperators usops) {
     ExpressionParser.init(usops);
     DefaultExpressionParser.initAll();
+    ProteaJCastExpressionParser.initAll();
     JavaExpressionParser.parser.init();
     PrimaryParser.parser.init();
-    OperationParser.initAll(usops);
+    OperationParser.initAll(usops, ir);
     MethodCallParser.parser.init(thisCls);
     FieldAccessParser.parser.init(thisCls);
     AssignExpressionParser.parser.init();
@@ -258,6 +263,7 @@ public class BodyParser {
     StaticFieldAccessParser.parser.init(thisCls);
     NewExpressionParser.parser.init(thisCls);
     NewArrayExpressionParser.parser.init(resolver);
+    CastExpressionParser.parser.init(resolver);
     ParenthesizedJavaExpressionParser.parser.init();
     ArgumentsParser.initAll();
     VariableArgumentsParser.initAll();
@@ -279,4 +285,6 @@ public class BodyParser {
     KeywordParser.initAll();
     PackratParser.initialize();
   }
+
+  private final IR ir;
 }

@@ -1,0 +1,17 @@
+package file;
+
+import java.io.File;
+
+public class HomeDirectory implements DirectoryPath {
+  public static final HomeDirectory instance = new HomeDirectory(); 
+  
+  public String toString() {
+    return System.getProperty("user.home") + "/";
+  }
+  
+  public File toFile() {
+    return new File(toString());  
+  }
+  
+  private HomeDirectory() {}
+}

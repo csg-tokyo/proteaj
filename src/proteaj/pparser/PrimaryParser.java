@@ -13,6 +13,7 @@ public class PrimaryParser extends PackratParser {
    *  | StaticFieldAccess
    *  | NewExpression
    *  | NewArrayExpression
+   *  | CastExpression
    *  | Literal
    *  | ParenthesizedJavaExpression
    */
@@ -38,6 +39,9 @@ public class PrimaryParser extends PackratParser {
     TypedAST newarray = NewArrayExpressionParser.parser.applyRule(reader, env, pos);
     if(! newarray.isFail()) return newarray;
 
+    TypedAST cast = CastExpressionParser.parser.applyRule(reader, env, pos);
+    if(! cast.isFail()) return cast;
+
     TypedAST parenexp = ParenthesizedJavaExpressionParser.parser.applyRule(reader, env, pos);
     if(! parenexp.isFail()) return parenexp;
 
@@ -46,7 +50,7 @@ public class PrimaryParser extends PackratParser {
 
     // fail
     FailLog flog = chooseBest(abbmcall.getFailLog(), variable.getFailLog(), stmcall.getFailLog(),
-        sfaccess.getFailLog(), newexpr.getFailLog(), newarray.getFailLog(),
+        sfaccess.getFailLog(), newexpr.getFailLog(), newarray.getFailLog(), cast.getFailLog(),
         parenexp.getFailLog(), literal.getFailLog());
     reader.setPos(pos);
     return new BadAST(flog);

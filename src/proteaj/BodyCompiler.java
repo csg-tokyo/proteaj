@@ -12,7 +12,7 @@ import static proteaj.util.Modifiers.isStatic;
 public class BodyCompiler {
   public BodyCompiler(IR ir) {
     this.ir = ir;
-    this.parser = new BodyParser();
+    this.parser = new BodyParser(ir);
   }
 
   public IR compile() {

@@ -1,0 +1,17 @@
+package file;
+
+import java.io.File;
+
+public class RootDirectory implements DirectoryPath {
+  public static final RootDirectory instance = new RootDirectory(); 
+  
+  public String toString() {
+    return "/";
+  }
+  
+  public File toFile() {
+    return new File(toString());  
+  }
+  
+  private RootDirectory() {}
+}
