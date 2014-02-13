@@ -157,6 +157,38 @@ public abstract class PackratParser {
   private static final BadAST DISABLE = new BadAST(new FailLog("disable parser", 0, 0));
 }
 
+
+class ComposedParser_Alternative extends PackratParser {
+  public ComposedParser_Alternative(String name, PackratParser... ps) {
+    this.name = name;
+    this.ps = ps;
+  }
+
+  @Override
+  protected TypedAST parse(SourceStringReader reader, Environment env) {
+    int pos = reader.getPos();
+
+    FailLog flog = new FailLog("Suitable parser is not found", pos, reader.getLine());
+
+    for (PackratParser p : ps) {
+      TypedAST ret = p.applyRule(reader, env, pos);
+      if (! ret.isFail()) return ret;
+      else if (flog == null || flog.getEndPosition() < ret.getFailLog().getEndPosition()) flog = ret.getFailLog();
+    }
+
+    reader.setPos(pos);
+    return new BadAST(flog);
+  }
+
+  @Override
+  public String toString() {
+    return name;
+  }
+
+  private String name;
+  private PackratParser[] ps;
+}
+
 class LR extends TypedAST {
   public LR(PackratParser parser, LR next) {
     this.seed = FAIL;
