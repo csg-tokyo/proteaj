@@ -4,6 +4,7 @@ import proteaj.error.*;
 
 import java.util.*;
 import javassist.*;
+import javassist.bytecode.*;
 
 public class CtClassUtil {
   public static CtConstructor getConstructor(CtClass cls, CtClass... argTypes) throws NotFoundException {
@@ -45,6 +46,19 @@ public class CtClassUtil {
       return sub.subtypeOf(sup);
     } catch (NotFoundException e) {
       ErrorList.addError(new NotFoundError(e, file, line));
+      return false;
+    }
+  }
+
+  public static boolean hasTypeParameter (CtClass clazz, String file, int line) {
+    SignatureAttribute sig = (SignatureAttribute)clazz.getClassFile2().getAttribute("Signature");
+    if (sig == null) return false;
+
+    try {
+      SignatureAttribute.ClassSignature s = SignatureAttribute.toClassSignature(sig.getSignature());
+      return s.getParameters().length != 0;
+    } catch (BadBytecode e) {
+      ErrorList.addError(new BadBytecodeError(e, file, line));
       return false;
     }
   }
