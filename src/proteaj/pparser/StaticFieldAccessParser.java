@@ -41,7 +41,7 @@ public class StaticFieldAccessParser extends PackratParser {
     CtClass ctcls = ((ClassName)className).getCtClass();
     String name = ((Identifier)identifier).getName();
 
-    if(ctcls == thisClass) {
+    if(ctcls == env.thisClass) {
       for(CtField field : ctcls.getDeclaredFields()) {
         if(isStatic(field.getModifiers()) && field.getName().equals(name)) try {
           return new StaticFieldAccess(field);
@@ -53,7 +53,7 @@ public class StaticFieldAccessParser extends PackratParser {
     }
 
     for(CtField field : ctcls.getFields()) {
-      if(isStatic(field.getModifiers()) && field.visibleFrom(thisClass) && field.getName().equals(name)) try {
+      if(isStatic(field.getModifiers()) && field.visibleFrom(env.thisClass) && field.getName().equals(name)) try {
         return new StaticFieldAccess(field);
       } catch (NotFoundException e) {
         ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
@@ -67,10 +67,6 @@ public class StaticFieldAccessParser extends PackratParser {
     return new BadAST(flog);
   }
 
-  public void init(CtClass thisClass) {
-    this.thisClass = thisClass;
-  }
-
   @Override
   public String toString() {
     return "StaticFieldAccessParser";
@@ -79,7 +75,5 @@ public class StaticFieldAccessParser extends PackratParser {
   public static final StaticFieldAccessParser parser = new StaticFieldAccessParser();
 
   private StaticFieldAccessParser() {}
-
-  private CtClass thisClass;
 }
 

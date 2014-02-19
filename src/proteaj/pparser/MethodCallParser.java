@@ -46,7 +46,7 @@ public class MethodCallParser extends PackratParser {
 
     // Arguments
     for(CtMethod method : getMethods(expr.getType())) try {
-      if(isStatic(method.getModifiers()) || ! method.visibleFrom(thisClass) || ! method.getName().equals(name)) continue;
+      if(isStatic(method.getModifiers()) || ! method.visibleFrom(env.thisClass) || ! method.getName().equals(name)) continue;
 
       TypedAST args = ArgumentsParser.getParser(method.getParameterTypes()).applyRule(reader, env, apos);
       if(args.isFail() && hasVarArgs(method.getModifiers())) {
@@ -67,18 +67,12 @@ public class MethodCallParser extends PackratParser {
     return new BadAST(flog);
   }
 
-  public void init(CtClass thisClass) {
-    this.thisClass = thisClass;
-  }
-
   @Override
   public String toString() {
     return "MethodCallParser";
   }
 
   public static final MethodCallParser parser = new MethodCallParser();
-
-  private CtClass thisClass;
 
   private MethodCallParser() {}
 }

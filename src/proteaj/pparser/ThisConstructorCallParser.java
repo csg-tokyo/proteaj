@@ -25,7 +25,7 @@ public class ThisConstructorCallParser extends PackratParser {
 
     int apos = reader.getPos();
 
-    for(CtConstructor c : thisCls.getDeclaredConstructors()) try {
+    for(CtConstructor c : env.thisClass.getDeclaredConstructors()) try {
       TypedAST args = ArgumentsParser.getParser(c.getParameterTypes()).applyRule(reader, env, apos);
       if(args.isFail() && hasVarArgs(c.getModifiers())) {
         args = VariableArgumentsParser.getParser(c.getParameterTypes()).applyRule(reader, env, apos);
@@ -57,14 +57,12 @@ public class ThisConstructorCallParser extends PackratParser {
     return new BadAST(flog);
   }
 
-  public void init(CtClass thisCls, CtConstructor constructor) {
-    this.thisCls = thisCls;
+  public void init(CtConstructor constructor) {
     this.constructor = constructor;
   }
 
   public static final ThisConstructorCallParser parser = new ThisConstructorCallParser();
 
-  private CtClass thisCls;
   private CtConstructor constructor;
 
   private ThisConstructorCallParser() {}

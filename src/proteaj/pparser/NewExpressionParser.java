@@ -36,7 +36,7 @@ public class NewExpressionParser extends PackratParser {
 
     // Arguments
     for(CtConstructor constructor : type.getDeclaredConstructors()) try {
-      if(! constructor.visibleFrom(thisClass)) continue;
+      if(! constructor.visibleFrom(env.thisClass)) continue;
 
       TypedAST args = ArgumentsParser.getParser(constructor.getParameterTypes()).applyRule(reader, env, apos);
       if(args.isFail() && hasVarArgs(constructor.getModifiers())) {
@@ -57,10 +57,6 @@ public class NewExpressionParser extends PackratParser {
     return new BadAST(flog);
   }
 
-  public void init(CtClass thisClass) {
-    this.thisClass = thisClass;
-  }
-
   @Override
   public String toString() {
     return "NewExpressionParser";
@@ -69,7 +65,5 @@ public class NewExpressionParser extends PackratParser {
   public static final NewExpressionParser parser = new NewExpressionParser();
 
   private NewExpressionParser() {}
-
-  private CtClass thisClass;
 }
 

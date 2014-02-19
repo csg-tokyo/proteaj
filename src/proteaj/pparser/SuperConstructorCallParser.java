@@ -26,10 +26,10 @@ public class SuperConstructorCallParser extends PackratParser {
     int apos = reader.getPos();
 
     try {
-      CtClass superCls = thisCls.getSuperclass();
+      CtClass superCls = env.thisClass.getSuperclass();
 
       for(CtConstructor constructor : superCls.getDeclaredConstructors()) {
-        if(! constructor.visibleFrom(thisCls)) continue;
+        if(! constructor.visibleFrom(env.thisClass)) continue;
 
         TypedAST args = ArgumentsParser.getParser(constructor.getParameterTypes()).applyRule(reader, env, apos);
         if(args.isFail() && hasVarArgs(constructor.getModifiers())) {
@@ -57,13 +57,7 @@ public class SuperConstructorCallParser extends PackratParser {
     return new BadAST(flog);
   }
 
-  public void init(CtClass thisCls) {
-    this.thisCls = thisCls;
-  }
-
   public static final SuperConstructorCallParser parser = new SuperConstructorCallParser();
-
-  private CtClass thisCls;
 
   private SuperConstructorCallParser() {}
 }

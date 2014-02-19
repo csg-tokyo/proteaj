@@ -3,51 +3,16 @@
   <component name="ChangeListManager">
     <list default="true" id="8e6497db-168c-40d5-b91d-8295649a5b7f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/AbbMethodCallParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/AbbMethodCallParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/ArgumentsParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/ArgumentsParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/ArrayAccessParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/ArrayAccessParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/ArrayLengthParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/ArrayLengthParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/BlockParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/BlockParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/BlockStatementParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/BlockStatementParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/BodyParser.java" afterPath="$PROJECT_DIR$/src/proteaj/BodyParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/CastExpressionParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/CastExpressionParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/ClassNameParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/ClassNameParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/ConstructorBodyParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/ConstructorBodyParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/ControlFlowParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/ControlFlowParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/DefaultArgumentParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/DefaultArgumentParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/DefaultExpressionParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/DefaultExpressionParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/DefaultReadasOperandParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/DefaultReadasOperandParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/ExpressionParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/ExpressionParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/ExpressionStatementParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/ExpressionStatementParser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/ir/Environment.java" afterPath="$PROJECT_DIR$/src/proteaj/ir/Environment.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/FieldAccessParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/FieldAccessParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/FieldBodyParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/FieldBodyParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/ForInitParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/ForInitParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/JavaExpressionParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/JavaExpressionParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/KeywordParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/KeywordParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/LocalVarDeclStatementParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/LocalVarDeclStatementParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/MethodCallParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/MethodCallParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/NewArrayExpressionParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/NewArrayExpressionParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/NewExpressionParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/NewExpressionParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/OperationParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/OperationParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/PackratParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/PackratParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/ParenthesizedJavaExpressionParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/ParenthesizedJavaExpressionParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/PrimaryParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/PrimaryParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/PrimitiveReadasOperationParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/PrimitiveReadasOperationParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/ProteaJCastExpressionParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/ProteaJCastExpressionParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/ReadasExpressionParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/ReadasExpressionParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/ReadasOperandParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/ReadasOperandParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/ReadasOperationParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/ReadasOperationParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/ReadasOperatorParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/ReadasOperatorParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/ReturnStatementParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/ReturnStatementParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/SingleStatementParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/SingleStatementParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/StaticFieldAccessParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/StaticFieldAccessParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/StaticMethodCallParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/StaticMethodCallParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/SuperConstructorCallParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/SuperConstructorCallParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/ThisConstructorCallParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/ThisConstructorCallParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/TypeNameParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/TypeNameParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/VariableArgumentsParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/VariableArgumentsParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/WhileStatementParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/WhileStatementParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="proteaj.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -143,25 +108,7 @@
       <file leaf-file-name="BodyParser.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/proteaj/BodyParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="164" column="31" selection-start="6503" selection-end="6503" vertical-scroll-proportion="0.38772213" vertical-offset="2100" max-vertical-offset="2910">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ReturnStatementParser.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ReturnStatementParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="30" selection-start="383" selection-end="383" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="990">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PrimitiveReadasOperationParser.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/PrimitiveReadasOperationParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="5" selection-start="877" selection-end="877" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2445">
+            <state line="41" column="9" selection-start="1370" selection-end="1370" vertical-scroll-proportion="0.7996769" vertical-offset="0" max-vertical-offset="2715">
               <folding />
             </state>
           </provider>
@@ -180,7 +127,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/proteaj/error/BadBytecodeError.java" />
         <option value="$PROJECT_DIR$/test/Test.java" />
         <option value="$PROJECT_DIR$/src/proteaj/util/CtClassUtil.java" />
         <option value="$PROJECT_DIR$/src/proteaj/parser/Type.scala" />
@@ -200,21 +146,16 @@
         <option value="$PROJECT_DIR$/src/proteaj/ir/tast/TAstList.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/BlockParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/PackratParser.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/pparser/AbbMethodCallParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/ArgumentsParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/CastExpressionParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/ClassNameParser.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/pparser/ConstructorBodyParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/DefaultArgumentParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/DefaultExpressionParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/DefaultReadasOperandParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/ExpressionParser.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/pparser/FieldAccessParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/FieldBodyParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/KeywordParser.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/pparser/MethodCallParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/NewArrayExpressionParser.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/pparser/NewExpressionParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/OperationParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/PrimitiveReadasOperationParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/ProteaJCastExpressionParser.java" />
@@ -222,14 +163,20 @@
         <option value="$PROJECT_DIR$/src/proteaj/pparser/ReadasOperandParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/ReadasOperationParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/ReadasOperatorParser.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/pparser/StaticFieldAccessParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/StaticInitializerParser.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/pparser/StaticMethodCallParser.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/pparser/SuperConstructorCallParser.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/pparser/ThisConstructorCallParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/TypeNameParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/VariableArgumentsParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/ReturnStatementParser.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/ir/Environment.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/pparser/MethodCallParser.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/pparser/FieldAccessParser.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/pparser/StaticMethodCallParser.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/pparser/StaticFieldAccessParser.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/pparser/NewExpressionParser.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/pparser/SuperConstructorCallParser.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/pparser/ConstructorBodyParser.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/pparser/AbbMethodCallParser.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/pparser/ThisConstructorCallParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/BodyParser.java" />
       </list>
     </option>
@@ -868,41 +815,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ClassNameParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="63" column="29" selection-start="1510" selection-end="1510" vertical-scroll-proportion="0.50158226" vertical-offset="538" max-vertical-offset="1170">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ConstructorBodyParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="83" column="27" selection-start="2792" selection-end="2792" vertical-scroll-proportion="0.61227787" vertical-offset="761" max-vertical-offset="1380">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ControlFlowParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="6" selection-start="627" selection-end="627" vertical-scroll-proportion="0.56962025" vertical-offset="0" max-vertical-offset="632">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/DefaultArgumentParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="21" selection-start="579" selection-end="579" vertical-scroll-proportion="0.47468355" vertical-offset="0" max-vertical-offset="632">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/DefaultExpressionParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="77" column="71" selection-start="2573" selection-end="2573" vertical-scroll-proportion="0.61227787" vertical-offset="686" max-vertical-offset="1305">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ExpressionListParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="9" column="13" selection-start="149" selection-end="149" vertical-scroll-proportion="0.094936706" vertical-offset="0" max-vertical-offset="810">
@@ -922,13 +834,6 @@
     <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/FieldBodyParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="26" column="21" selection-start="615" selection-end="615" vertical-scroll-proportion="0.5221519" vertical-offset="0" max-vertical-offset="632">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/FieldAccessParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="71" column="31" selection-start="2120" selection-end="2120" vertical-scroll-proportion="0.50158226" vertical-offset="643" max-vertical-offset="1275">
           <folding />
         </state>
       </provider>
@@ -1033,20 +938,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/MethodCallParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="31" selection-start="2203" selection-end="2203" vertical-scroll-proportion="0.4911147" vertical-offset="626" max-vertical-offset="1245">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/NewExpressionParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="31" selection-start="1893" selection-end="1893" vertical-scroll-proportion="0.50158226" vertical-offset="478" max-vertical-offset="1110">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/NewArrayExpressionParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="118" column="29" selection-start="3454" selection-end="3454" vertical-scroll-proportion="0.50158226" vertical-offset="1348" max-vertical-offset="1980">
@@ -1125,13 +1016,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/StaticFieldAccessParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="31" selection-start="2102" selection-end="2102" vertical-scroll-proportion="0.50158226" vertical-offset="628" max-vertical-offset="1260">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ReadasOperatorParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="37" column="3" selection-start="1049" selection-end="1049" vertical-scroll-proportion="0.46688208" vertical-offset="191" max-vertical-offset="810">
@@ -1142,27 +1026,6 @@
     <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/StaticInitializerParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="6" column="13" selection-start="108" selection-end="108" vertical-scroll-proportion="0.094936706" vertical-offset="0" max-vertical-offset="632">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/StaticMethodCallParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="31" selection-start="2218" selection-end="2218" vertical-scroll-proportion="0.4911147" vertical-offset="611" max-vertical-offset="1230">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/SuperConstructorCallParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="27" selection-start="1923" selection-end="1923" vertical-scroll-proportion="0.62025315" vertical-offset="403" max-vertical-offset="1035">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ThisConstructorCallParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="35" selection-start="1971" selection-end="1971" vertical-scroll-proportion="1.2816455" vertical-offset="0" max-vertical-offset="1065">
           <folding />
         </state>
       </provider>
@@ -1211,6 +1074,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/PrimitiveReadasOperationParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="5" selection-start="877" selection-end="877" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2445">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ReturnStatementParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="30" selection-start="383" selection-end="383" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="990">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/BodyCompiler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="64" column="28" selection-start="2201" selection-end="2201" vertical-scroll-proportion="0.0" vertical-offset="680" max-vertical-offset="2265">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/PackratParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="19" column="4" selection-start="523" selection-end="523" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6090">
@@ -1238,23 +1122,88 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/PrimitiveReadasOperationParser.java">
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/DefaultArgumentParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="5" selection-start="877" selection-end="877" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2445">
+        <state line="24" column="21" selection-start="579" selection-end="579" vertical-scroll-proportion="0.49261084" vertical-offset="0" max-vertical-offset="609">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ReturnStatementParser.java">
+    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/Environment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="30" selection-start="383" selection-end="383" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="990">
+        <state line="121" column="14" selection-start="3579" selection-end="3579" vertical-scroll-proportion="0.72906405" vertical-offset="1251" max-vertical-offset="1860">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/FieldAccessParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="43" column="0" selection-start="1102" selection-end="1102" vertical-scroll-proportion="0.8866995" vertical-offset="0" max-vertical-offset="1185">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/StaticMethodCallParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="43" column="31" selection-start="1200" selection-end="1200" vertical-scroll-proportion="0.16946308" vertical-offset="424" max-vertical-offset="1140">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/StaticFieldAccessParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="52" column="5" selection-start="1508" selection-end="1508" vertical-scroll-proportion="1.1083744" vertical-offset="0" max-vertical-offset="1170">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/NewExpressionParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="37" column="23" selection-start="942" selection-end="942" vertical-scroll-proportion="0.06403941" vertical-offset="411" max-vertical-offset="1020">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/SuperConstructorCallParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="0" selection-start="719" selection-end="719" vertical-scroll-proportion="0.5418719" vertical-offset="0" max-vertical-offset="945">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ConstructorBodyParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="47" column="34" selection-start="1668" selection-end="1668" vertical-scroll-proportion="0.647651" vertical-offset="214" max-vertical-offset="1290">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ThisConstructorCallParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="0" selection-start="648" selection-end="648" vertical-scroll-proportion="0.45094937" vertical-offset="0" max-vertical-offset="1035">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/AbbMethodCallParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="37" column="9" selection-start="1226" selection-end="1226" vertical-scroll-proportion="0.43037975" vertical-offset="283" max-vertical-offset="1170">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/MethodCallParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="68" column="0" selection-start="2135" selection-end="2135" vertical-scroll-proportion="1.453958" vertical-offset="0" max-vertical-offset="1155">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/proteaj/BodyParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="164" column="31" selection-start="6503" selection-end="6503" vertical-scroll-proportion="0.38772213" vertical-offset="2100" max-vertical-offset="2910">
+        <state line="41" column="9" selection-start="1370" selection-end="1370" vertical-scroll-proportion="0.7996769" vertical-offset="0" max-vertical-offset="2715">
           <folding />
         </state>
       </provider>

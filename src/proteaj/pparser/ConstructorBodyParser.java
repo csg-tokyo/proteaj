@@ -40,14 +40,14 @@ public class ConstructorBodyParser extends PackratParser {
       else try {
         flog = chooseBest(flog, superstmt.getFailLog());
 
-        CtClass superCls = thisCls.getSuperclass();
+        CtClass superCls = env.thisClass.getSuperclass();
         if(! hasDefaultConstructor(superCls)) {
           flog = chooseBest(new FailLog("implicit super constructor is undefined. Must explicitly invoke another constructor", reader.getPos(), reader.getLine()), flog);
           reader.setPos(pos);
           flog = chooseBest(flog, thisstmt.getFailLog(), superstmt.getFailLog());
           return new BadAST(flog);
         }
-        else if(! getDefaultConstructor(superCls).visibleFrom(thisCls)) {
+        else if(! getDefaultConstructor(superCls).visibleFrom(env.thisClass)) {
           flog = chooseBest(new FailLog("implicit super constructor is not visible. Must explicitly invoke another constructor", reader.getPos(), reader.getLine()), flog);
           reader.setPos(pos);
           return new BadAST(flog);
@@ -80,13 +80,7 @@ public class ConstructorBodyParser extends PackratParser {
     return new ConstructorBody(block);
   }
 
-  public void init(CtClass thisCls) {
-    this.thisCls = thisCls;
-  }
-
   public static final ConstructorBodyParser parser = new ConstructorBodyParser();
-
-  private CtClass thisCls;
 
   private ConstructorBodyParser() {}
 }

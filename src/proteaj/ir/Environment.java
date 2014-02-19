@@ -10,8 +10,9 @@ import static proteaj.util.Modifiers.isStatic;
 
 public class Environment {
   public Environment(CtClass thisClass, boolean isStatic, String file) {
-    env = new HashMap<String, Expression>();
-    exceptions = new HashMap<CtClass, List<Integer>>();
+    this.thisClass = thisClass;
+    this.env = new HashMap<String, Expression>();
+    this.exceptions = new HashMap<CtClass, List<Integer>>();
 
     if(! isStatic) {
       Expression thisExpr = new ThisExpression(thisClass);
@@ -49,6 +50,7 @@ public class Environment {
   }
 
   public Environment(Environment env) {
+    this.thisClass = env.thisClass;
     this.env = new HashMap<String, Expression>(env.env);
     this.exceptions = new HashMap<CtClass, List<Integer>>();
   }
@@ -117,6 +119,7 @@ public class Environment {
     return env.get(name);
   }
 
+  public final CtClass thisClass;
   private Map<String, Expression> env;
   private Map<CtClass, List<Integer>> exceptions;
 }

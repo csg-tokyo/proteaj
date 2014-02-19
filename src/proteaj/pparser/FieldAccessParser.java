@@ -42,7 +42,7 @@ public class FieldAccessParser extends PackratParser {
 
     String name = ((Identifier)identifier).getName();
 
-    if(expr.getType() == thisClass) {
+    if(expr.getType() == env.thisClass) {
       for(CtField field : expr.getType().getDeclaredFields()) {
         if((! isStatic(field.getModifiers())) && field.getName().equals(name)) try {
           return new FieldAccess(expr, field);
@@ -54,7 +54,7 @@ public class FieldAccessParser extends PackratParser {
     }
 
     for(CtField field : expr.getType().getFields()) {
-      if((! isStatic(field.getModifiers())) && field.visibleFrom(thisClass) && field.getName().equals(name)) try {
+      if((! isStatic(field.getModifiers())) && field.visibleFrom(env.thisClass) && field.getName().equals(name)) try {
         return new FieldAccess(expr, field);
       } catch (NotFoundException e) {
         ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
@@ -68,18 +68,12 @@ public class FieldAccessParser extends PackratParser {
     return new BadAST(flog);
   }
 
-  public void init(CtClass thisClass) {
-    this.thisClass = thisClass;
-  }
-
   @Override
   public String toString() {
     return "FieldAccessParser";
   }
 
   public static final FieldAccessParser parser = new FieldAccessParser();
-
-  private CtClass thisClass;
 
   private FieldAccessParser() {}
 }
