@@ -1,34 +1,25 @@
 package proteaj.pparser;
 
-import proteaj.io.*;
-import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
-public class LocalVarDeclStatementParser extends PackratParser {
+public class LocalVarDeclStatementParser extends ComposedParser_Sequential {
   /* LocalVarDeclStatement
    *  : LocalVarDecl ';'
    */
+  private LocalVarDeclStatementParser() {
+    super("LocalVarDeclStatementParser");
+  }
+
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected PackratParser[] getParsers() {
+    return new PackratParser[] { LocalVarDeclParser.parser, KeywordParser.getParser(";") };
+  }
 
-    TypedAST lvdecl = LocalVarDeclParser.parser.applyRule(reader, env);
-    if(lvdecl.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(lvdecl.getFailLog());
-    }
-
-    TypedAST semicolon = KeywordParser.getParser(";").applyRule(reader, env);
-    if(semicolon.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(semicolon.getFailLog());
-    }
-
-    return new LocalVarDeclStatement((LocalVarDecl)lvdecl);
+  @Override
+  protected TypedAST makeAST(int pos, int line, String file, TypedAST... as) {
+    return new LocalVarDeclStatement((LocalVarDecl)as[0]);
   }
 
   public static final LocalVarDeclStatementParser parser = new LocalVarDeclStatementParser();
-
-  private LocalVarDeclStatementParser() {}
 }
 

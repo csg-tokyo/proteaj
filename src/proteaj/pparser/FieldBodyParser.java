@@ -25,7 +25,6 @@ public class FieldBodyParser extends PackratParser {
 
   public void init(CtClass type) {
     this.type = type;
-    super.init();
   }
 
   public static final FieldBodyParser parser = new FieldBodyParser();

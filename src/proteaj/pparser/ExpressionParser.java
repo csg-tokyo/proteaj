@@ -81,7 +81,6 @@ public class ExpressionParser extends PackratParser {
 
     for(Map.Entry<Integer, List<IRPattern>> entry : patternsMap.entrySet()) {
       ExpressionParser parser = new ExpressionParser(type, entry.getValue(), entry.getKey());
-      parser.init();
       tmap.put(entry.getKey(), parser);
     }
   }

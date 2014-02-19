@@ -117,7 +117,6 @@ public class NewArrayExpressionParser extends PackratParser {
 
   public void init(TypeResolver resolver) {
     this.resolver = resolver;
-    super.init();
   }
 
   @Override

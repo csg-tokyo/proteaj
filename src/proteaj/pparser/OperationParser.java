@@ -170,7 +170,6 @@ public class OperationParser extends PackratParser {
     if(parsers.containsKey(key)) return parsers.get(key);
 
     OperationParser parser = new OperationParser(type, pattern, priority);
-    parser.init();
     parsers.put(key, parser);
     return parser;
   }
@@ -178,9 +177,6 @@ public class OperationParser extends PackratParser {
   public static void initAll(UsingOperators usops, IR ir) {
     OperationParser.ir = ir;
     OperationParser.usops = usops;
-    for(OperationParser parser : parsers.values()) {
-      parser.init();
-    }
   }
 
   @Override

@@ -57,7 +57,6 @@ public class AbbMethodCallParser extends PackratParser {
   public void init(CtClass thisClass, CtMember signature) {
     this.thisClass = thisClass;
     this.isStaticMember = isStatic(signature.getModifiers());
-    super.init();
   }
 
   @Override

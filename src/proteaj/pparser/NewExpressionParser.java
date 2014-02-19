@@ -59,7 +59,6 @@ public class NewExpressionParser extends PackratParser {
 
   public void init(CtClass thisClass) {
     this.thisClass = thisClass;
-    super.init();
   }
 
   @Override

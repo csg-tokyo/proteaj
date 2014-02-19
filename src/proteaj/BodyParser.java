@@ -130,26 +130,13 @@ public class BodyParser {
   }
 
   private void initParsers_MethodBody(CtClass thisCls, CtClass returnType, CtMethod method, TypeResolver resolver, UsingOperators usops) {
-    MethodBodyParser.parser.init();
-    ConstructorBodyParser.parser.disable();
-    FieldBodyParser.parser.disable();
-    DefaultArgumentParser.parser.disable();
-    StaticInitializerParser.parser.disable();
-
-    ThisConstructorCallParser.parser.disable();
-    SuperConstructorCallParser.parser.disable();
-
     initParser_Statement(returnType);
     initParser_Expression(thisCls, method, resolver, usops);
     initParser_Basic(resolver);
   }
 
   private void initParsers_ConstructorBody(CtClass thisCls, CtConstructor constructor, TypeResolver resolver, UsingOperators usops) {
-    MethodBodyParser.parser.disable();
     ConstructorBodyParser.parser.init(thisCls);
-    FieldBodyParser.parser.disable();
-    DefaultArgumentParser.parser.disable();
-    StaticInitializerParser.parser.disable();
 
     ThisConstructorCallParser.parser.init(thisCls, constructor);
     SuperConstructorCallParser.parser.init(thisCls);
@@ -160,129 +147,48 @@ public class BodyParser {
   }
 
   private void initParsers_FieldBody(CtClass thisCls, CtClass type, CtField field, TypeResolver resolver, UsingOperators usops) {
-    MethodBodyParser.parser.disable();
-    ConstructorBodyParser.parser.disable();
     FieldBodyParser.parser.init(type);
-    DefaultArgumentParser.parser.disable();
-    StaticInitializerParser.parser.disable();
 
-    ThisConstructorCallParser.parser.disable();
-    SuperConstructorCallParser.parser.disable();
-
-    disableParser_Statement();
     initParser_Expression(thisCls, field, resolver, usops);
     initParser_Basic(resolver);
   }
 
   private void initParsers_DefaultArgs(CtClass thisCls, CtClass type, CtMethod method, TypeResolver resolver, UsingOperators usops) {
-    MethodBodyParser.parser.disable();
-    ConstructorBodyParser.parser.disable();
-    FieldBodyParser.parser.disable();
     DefaultArgumentParser.parser.init(type);
-    StaticInitializerParser.parser.disable();
-
-    ThisConstructorCallParser.parser.disable();
-    SuperConstructorCallParser.parser.disable();
-
-    disableParser_Statement();
     initParser_Expression(thisCls, method, resolver, usops);
     initParser_Basic(resolver);
   }
 
   private void initParsers_StaticInitializer(CtClass thisCls, CtConstructor constructor, TypeResolver resolver, UsingOperators usops) {
-    MethodBodyParser.parser.disable();
-    ConstructorBodyParser.parser.disable();
-    FieldBodyParser.parser.disable();
-    DefaultArgumentParser.parser.disable();
-    StaticInitializerParser.parser.init();
-
-    ThisConstructorCallParser.parser.disable();
-    SuperConstructorCallParser.parser.disable();
-
     initParser_Statement(null);
     initParser_Expression(thisCls, constructor, resolver, usops);
     initParser_Basic(resolver);
   }
 
   private void initParser_Statement(CtClass returnType) {
-    BlockParser.parser.init();
-    BlockStatementParser.parser.init();
-    SingleStatementParser.parser.init();
-    ControlFlowParser.parser.init();
-    LocalVarDeclStatementParser.parser.init();
-    LocalVarDeclParser.parser.init();
-    ExpressionStatementParser.parser.init();
-    IfStatementParser.parser.init();
-    WhileStatementParser.parser.init();
-    ForStatementParser.parser.init();
-    ForInitParser.parser.init();
-    ForCondParser.parser.init();
-    ForUpdateParser.parser.init();
-    ThrowStatementParser.parser.init();
-    TryStatementParser.parser.init();
-    ExpressionListParser.parser.init();
-
-    if(returnType == null)  ReturnStatementParser.parser.disable();
+    if(returnType == null) ReturnStatementParser.parser.disable();
     else ReturnStatementParser.parser.init(returnType);
-  }
-
-  private void disableParser_Statement() {
-    BlockParser.parser.disable();
-    BlockStatementParser.parser.disable();
-    SingleStatementParser.parser.disable();
-    ControlFlowParser.parser.disable();
-    LocalVarDeclStatementParser.parser.disable();
-    LocalVarDeclParser.parser.disable();
-    ExpressionStatementParser.parser.disable();
-    IfStatementParser.parser.disable();
-    WhileStatementParser.parser.disable();
-    ForStatementParser.parser.disable();
-    ForInitParser.parser.disable();
-    ForCondParser.parser.disable();
-    ForUpdateParser.parser.disable();
-    ThrowStatementParser.parser.disable();
-    TryStatementParser.parser.disable();
-    ExpressionListParser.parser.disable();
-    ReturnStatementParser.parser.disable();
   }
 
   private void initParser_Expression(CtClass thisCls, CtMember member, TypeResolver resolver, UsingOperators usops) {
     ExpressionParser.init(usops);
-    DefaultExpressionParser.initAll();
-    ProteaJCastExpressionParser.initAll();
-    JavaExpressionParser.parser.init();
-    PrimaryParser.parser.init();
     OperationParser.initAll(usops, ir);
     MethodCallParser.parser.init(thisCls);
     FieldAccessParser.parser.init(thisCls);
-    AssignExpressionParser.parser.init();
-    ArrayLengthParser.parser.init();
-    ArrayAccessParser.parser.init();
     AbbMethodCallParser.parser.init(thisCls, member);
     StaticMethodCallParser.parser.init(thisCls);
     StaticFieldAccessParser.parser.init(thisCls);
     NewExpressionParser.parser.init(thisCls);
     NewArrayExpressionParser.parser.init(resolver);
     CastExpressionParser.parser.init(resolver);
-    ParenthesizedJavaExpressionParser.parser.init();
-    ArgumentsParser.initAll();
-    VariableArgumentsParser.initAll();
-    ReadasExpressionParser.initAll();
     ReadasOperationParser.initAll(usops);
     PrimitiveReadasOperationParser.initAll();
     ReadasOperandParser.init(usops);
-    DefaultReadasOperandParser.initAll();
-    ReadasOperatorParser.initAll();
-    VariableParser.parser.init();
-    LiteralParser.parser.init();
   }
 
   private void initParser_Basic(TypeResolver resolver) {
     ClassNameParser.parser.init(resolver);
     TypeNameParser.parser.init(resolver);
-    QualifiedIdentifierParser.parser.init();
-    IdentifierParser.parser.init();
-    KeywordParser.initAll();
     PackratParser.initialize();
   }
 

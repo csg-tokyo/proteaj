@@ -26,15 +26,8 @@ public class ReadasExpressionParser extends PackratParser {
     if (parsers.containsKey(type)) return parsers.get(type);
 
     ReadasExpressionParser parser = new ReadasExpressionParser(type);
-    parser.init();
     parsers.put(type, parser);
     return parser;
-  }
-
-  public static void initAll() {
-    for (ReadasExpressionParser parser : parsers.values()) {
-      parser.init();
-    }
   }
 
   private ReadasExpressionParser(CtClass type) {

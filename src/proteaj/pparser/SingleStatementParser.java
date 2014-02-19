@@ -7,7 +7,12 @@ public class SingleStatementParser extends ComposedParser_Alternative {
    *  | ExpressionStatement
    */
   private SingleStatementParser() {
-    super("SingleStatementParser", BlockParser.parser, ControlFlowParser.parser, ExpressionStatementParser.parser);
+    super("SingleStatementParser");
+  }
+
+  @Override
+  protected PackratParser[] getParsers() {
+    return new PackratParser[] { BlockParser.parser, ControlFlowParser.parser, ExpressionStatementParser.parser };
   }
 
   public static final SingleStatementParser parser = new SingleStatementParser();

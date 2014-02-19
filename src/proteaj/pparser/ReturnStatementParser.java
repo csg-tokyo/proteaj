@@ -1,5 +1,6 @@
 package proteaj.pparser;
 
+import proteaj.error.FailLog;
 import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.ir.tast.*;
@@ -13,6 +14,8 @@ public class ReturnStatementParser extends PackratParser {
   @Override
   protected TypedAST parse(SourceStringReader reader, Environment env) {
     int pos = reader.getPos();
+
+    if (! enable) return DISABLE;
 
     // "return"
     TypedAST keyword = KeywordParser.getParser("return").applyRule(reader, env);
@@ -44,7 +47,11 @@ public class ReturnStatementParser extends PackratParser {
 
   public void init(CtClass returnType) {
     this.returnType = returnType;
-    super.init();
+    this.enable = true;
+  }
+
+  public void disable() {
+    this.enable = false;
   }
 
   public static final ReturnStatementParser parser = new ReturnStatementParser();
@@ -52,4 +59,7 @@ public class ReturnStatementParser extends PackratParser {
   private ReturnStatementParser() {}
 
   private CtClass returnType;
+  private boolean enable;
+
+  private static final BadAST DISABLE = new BadAST(new FailLog("disable parser", 0, 0));
 }

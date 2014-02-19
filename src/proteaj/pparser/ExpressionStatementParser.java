@@ -1,36 +1,27 @@
 package proteaj.pparser;
 
-import proteaj.io.*;
-import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
 import javassist.*;
 
-public class ExpressionStatementParser extends PackratParser {
+public class ExpressionStatementParser extends ComposedParser_Sequential {
   /* ExpressionStatement
    *  : Expression ';'
    */
+  private ExpressionStatementParser() {
+    super("ExpressionStatementParser");
+  }
+
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected PackratParser[] getParsers() {
+    return new PackratParser[] { ExpressionParser.getParser(CtClass.voidType), KeywordParser.getParser(";") };
+  }
 
-    TypedAST expr = ExpressionParser.getParser(CtClass.voidType).applyRule(reader, env);
-    if(expr.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(expr.getFailLog());
-    }
-
-    TypedAST semicolon = KeywordParser.getParser(";").applyRule(reader, env);
-    if(semicolon.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(semicolon.getFailLog());
-    }
-
-    return new ExpressionStatement((Expression)expr);
+  @Override
+  protected TypedAST makeAST(int pos, int line, String file, TypedAST... as) {
+    return new ExpressionStatement((Expression)as[0]);
   }
 
   public static final ExpressionStatementParser parser = new ExpressionStatementParser();
-
-  private ExpressionStatementParser() {}
 }
 

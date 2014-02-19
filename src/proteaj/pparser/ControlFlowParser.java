@@ -10,14 +10,19 @@ public class ControlFlowParser extends ComposedParser_Alternative {
    *  | ReturnStatement
    */
   private ControlFlowParser() {
-    super("ControlFlowParser",
+    super("ControlFlowParser");
+  }
+
+  @Override
+  protected PackratParser[] getParsers() {
+    return new PackratParser[] {
         IfStatementParser.parser,
         WhileStatementParser.parser,
         ForStatementParser.parser,
         ThrowStatementParser.parser,
         TryStatementParser.parser,
         ReturnStatementParser.parser
-    );
+    };
   }
 
   public static final ControlFlowParser parser = new ControlFlowParser();

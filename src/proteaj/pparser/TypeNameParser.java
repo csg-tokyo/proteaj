@@ -59,7 +59,6 @@ public class TypeNameParser extends PackratParser {
 
   public void init(TypeResolver resolver) {
     this.resolver = resolver;
-    super.init();
   }
 
   public static final TypeNameParser parser = new TypeNameParser();

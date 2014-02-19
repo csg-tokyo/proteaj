@@ -67,7 +67,6 @@ public class ReadasOperandParser extends PackratParser {
 
     for(Map.Entry<Integer, List<IRPattern>> entry : patternsMap.entrySet()) {
       ReadasOperandParser parser = new ReadasOperandParser(type, entry.getValue(), entry.getKey());
-      parser.init();
       tmap.put(entry.getKey(), parser);
     }
   }

@@ -59,7 +59,6 @@ public class SuperConstructorCallParser extends PackratParser {
 
   public void init(CtClass thisCls) {
     this.thisCls = thisCls;
-    super.init();
   }
 
   public static final SuperConstructorCallParser parser = new SuperConstructorCallParser();

@@ -28,11 +28,6 @@ public abstract class PrimitiveReadasOperationParser extends ReadasOperationPars
       addReadasLetterParser();
       addReadasTypeParser();
     }
-
-    for(PrimitiveReadasOperationParser parser : parsers.values()) {
-      parser.init();
-    }
-    defaultParser.init();
   }
 
   private static void addReadasIdentifierParser() {

@@ -173,17 +173,10 @@ public class ProteaJCastExpressionParser extends PackratParser {
     return new CastExpression(to, (Expression)expr);
   }
 
-  public static void initAll() {
-    for(ProteaJCastExpressionParser parser : parsers.values()) {
-      parser.init();
-    }
-  }
-
   public static ProteaJCastExpressionParser getParser(CtClass type) {
     if(parsers.containsKey(type)) return parsers.get(type);
 
     ProteaJCastExpressionParser parser = new ProteaJCastExpressionParser(type);
-    parser.init();
     parsers.put(type, parser);
     return parser;
   }

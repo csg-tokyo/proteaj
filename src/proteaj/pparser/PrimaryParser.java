@@ -13,7 +13,12 @@ public class PrimaryParser extends ComposedParser_Alternative {
    *  | ParenthesizedJavaExpression
    */
   private PrimaryParser() {
-    super("PrimaryParser",
+    super("PrimaryParser");
+  }
+
+  @Override
+  protected PackratParser[] getParsers() {
+    return new PackratParser[] {
         AbbMethodCallParser.parser,
         VariableParser.parser,
         StaticMethodCallParser.parser,
@@ -23,7 +28,7 @@ public class PrimaryParser extends ComposedParser_Alternative {
         CastExpressionParser.parser,
         ParenthesizedJavaExpressionParser.parser,
         LiteralParser.parser
-    );
+    };
   }
 
   public static final PrimaryParser parser = new PrimaryParser();

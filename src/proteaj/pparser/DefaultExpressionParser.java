@@ -72,17 +72,10 @@ public class DefaultExpressionParser extends ExpressionParser {
     return new BadAST(flog);
   }
 
-  public static void initAll() {
-    for(DefaultExpressionParser parser : parsers.values()) {
-      parser.init();
-    }
-  }
-
   public static DefaultExpressionParser getParser(CtClass type) {
     if(parsers.containsKey(type)) return parsers.get(type);
 
     DefaultExpressionParser parser = new DefaultExpressionParser(type);
-    parser.init();
     parsers.put(type, parser);
     return parser;
   }

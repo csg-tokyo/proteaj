@@ -53,15 +53,8 @@ public class KeywordParser extends PackratParser {
     if(parsers.containsKey(keyword)) return parsers.get(keyword);
     else {
       KeywordParser parser = new KeywordParser(keyword);
-      parser.init();
       parsers.put(keyword, parser);
       return parser;
-    }
-  }
-
-  public static void initAll() {
-    for(KeywordParser parser : parsers.values()) {
-      parser.init();
     }
   }
 

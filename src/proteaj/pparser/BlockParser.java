@@ -5,9 +5,9 @@ import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
 public class BlockParser extends PackratParser {
-  /* Block
- *  : '{' { BlockStatement } '}'
- */
+ /* Block
+  *  : '{' { BlockStatement } '}'
+  */
   @Override
   protected TypedAST parse(SourceStringReader reader, Environment env) {
     int pos = reader.getPos();

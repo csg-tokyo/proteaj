@@ -46,15 +46,8 @@ public class DefaultReadasOperandParser extends ReadasOperandParser {
     if(parsers.containsKey(type)) return parsers.get(type);
 
     DefaultReadasOperandParser parser = new DefaultReadasOperandParser(type);
-    parser.init();
     parsers.put(type, parser);
     return parser;
-  }
-
-  public static void initAll() {
-    for(DefaultReadasOperandParser parser : parsers.values()) {
-      parser.init();
-    }
   }
 
   private static Map<CtClass, DefaultReadasOperandParser> parsers = new HashMap<CtClass, DefaultReadasOperandParser>();

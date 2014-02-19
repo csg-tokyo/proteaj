@@ -146,16 +146,12 @@ public class ReadasOperationParser extends PackratParser {
 
     ReadasOperationParser parser = new ReadasOperationParser(type, pattern, priority);
 
-    parser.init();
     parsers.put(key, parser);
     return parser;
   }
 
   public static void initAll(UsingOperators usops) {
     ReadasOperationParser.usops = usops;
-    for(ReadasOperationParser parser : parsers.values()) {
-      parser.init();
-    }
   }
 
   @Override

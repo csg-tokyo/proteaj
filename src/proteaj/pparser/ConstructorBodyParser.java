@@ -82,7 +82,6 @@ public class ConstructorBodyParser extends PackratParser {
 
   public void init(CtClass thisCls) {
     this.thisCls = thisCls;
-    super.init();
   }
 
   public static final ConstructorBodyParser parser = new ConstructorBodyParser();

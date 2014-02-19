@@ -23,7 +23,6 @@ public class DefaultArgumentParser extends PackratParser {
 
   public void init(CtClass type) {
     this.type = type;
-    super.init();
   }
 
   public static final DefaultArgumentParser parser = new DefaultArgumentParser();

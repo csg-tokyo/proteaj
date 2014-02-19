@@ -32,15 +32,8 @@ public class ReadasOperatorParser extends PackratParser {
     if(parsers.containsKey(keyword)) return parsers.get(keyword);
     else {
       ReadasOperatorParser parser = new ReadasOperatorParser(keyword);
-      parser.init();
       parsers.put(keyword, parser);
       return parser;
-    }
-  }
-
-  public static void initAll() {
-    for(ReadasOperatorParser parser : parsers.values()) {
-      parser.init();
     }
   }
 

@@ -119,15 +119,8 @@ public class VariableArgumentsParser extends PackratParser {
     if(parsers.containsKey(lst)) return parsers.get(lst);
 
     VariableArgumentsParser parser = new VariableArgumentsParser(lst);
-    parser.init();
     parsers.put(lst, parser);
     return parser;
-  }
-
-  public static void initAll() {
-    for(VariableArgumentsParser parser : parsers.values()) {
-      parser.init();
-    }
   }
 
   private VariableArgumentsParser(List<CtClass> argTypes) {

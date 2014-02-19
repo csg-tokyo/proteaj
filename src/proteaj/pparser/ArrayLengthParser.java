@@ -1,52 +1,32 @@
 package proteaj.pparser;
 
 import proteaj.error.*;
-import proteaj.io.*;
-import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
-public class ArrayLengthParser extends PackratParser {
+public class ArrayLengthParser extends ComposedParser_Sequential {
   /* ArrayLength
    *  : JavaExpression '.' "length"
    */
-  @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
-
-    // JavaExpression
-    TypedAST jexpr = JavaExpressionParser.parser.applyRule(reader, env);
-    if(jexpr.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(jexpr.getFailLog());
-    }
-
-    Expression expr = (Expression)jexpr;
-
-    // '.'
-    TypedAST dot = KeywordParser.getParser(".").applyRule(reader, env);
-    if(dot.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(dot.getFailLog());
-    }
-
-    // "length"
-    if(expr.getType().isArray()) {
-      TypedAST length = KeywordParser.getParser("length").applyRule(reader, env);
-      if(! length.isFail()) return new ArrayLength(expr);
-    }
-
-    FailLog flog = new FailLog("not array length expression", reader.getPos(), reader.getLine());
-    reader.setPos(pos);
-    return new BadAST(flog);
+  private ArrayLengthParser() {
+    super("ArrayLengthParser");
   }
 
   @Override
-  public String toString() {
-    return "ArrayLengthParser";
+  protected PackratParser[] getParsers() {
+    return new PackratParser[] {
+        JavaExpressionParser.parser,
+        KeywordParser.getParser("."),
+        KeywordParser.getParser("length")
+    };
+  }
+
+  @Override
+  protected TypedAST makeAST(int pos, int line, String file, TypedAST... as) {
+    Expression expr = (Expression)as[0];
+    if (expr.getType().isArray()) return new ArrayLength(expr);
+    else return new BadAST(new FailLog("not array type", pos, line));
   }
 
   public static final ArrayLengthParser parser = new ArrayLengthParser();
-
-  private ArrayLengthParser() {}
 }
 

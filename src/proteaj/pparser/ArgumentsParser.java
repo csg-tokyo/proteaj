@@ -65,15 +65,8 @@ public class ArgumentsParser extends PackratParser {
     if(parsers.containsKey(lst)) return parsers.get(lst);
 
     ArgumentsParser parser = new ArgumentsParser(lst);
-    parser.init();
     parsers.put(lst, parser);
     return parser;
-  }
-
-  public static void initAll() {
-    for(ArgumentsParser parser : parsers.values()) {
-      parser.init();
-    }
   }
 
   private ArgumentsParser(List<CtClass> argTypes) {

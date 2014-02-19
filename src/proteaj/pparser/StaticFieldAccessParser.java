@@ -69,7 +69,6 @@ public class StaticFieldAccessParser extends PackratParser {
 
   public void init(CtClass thisClass) {
     this.thisClass = thisClass;
-    super.init();
   }
 
   @Override
