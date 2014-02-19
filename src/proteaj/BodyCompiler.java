@@ -7,8 +7,6 @@ import proteaj.ir.tast.*;
 
 import javassist.*;
 
-import static proteaj.util.Modifiers.isStatic;
-
 public class BodyCompiler {
   public BodyCompiler(IR ir) {
     this.ir = ir;
@@ -34,7 +32,7 @@ public class BodyCompiler {
       SourceStringReader reader = new SourceStringReader(irbody.getSource(), header.getFilePath(), irbody.getLine());
       TypeResolver resolver = new TypeResolver(header, ir.getClassPool());
       UsingOperators usops = new UsingOperators(header, ir.getOperatorPool());
-      Environment env = new Environment(thisClass, isStatic(method.getModifiers()), header.getFilePath());
+      Environment env = new Environment(method, header.getFilePath());
 
       try {
         env.addParams(irbody.getParamNames(), irbody.getParamTypes());
@@ -62,7 +60,7 @@ public class BodyCompiler {
       SourceStringReader reader = new SourceStringReader(irbody.getSource(), header.getFilePath(), irbody.getLine());
       TypeResolver resolver = new TypeResolver(header, ir.getClassPool());
       UsingOperators usops = new UsingOperators(header, ir.getOperatorPool());
-      Environment env = new Environment(thisClass, isStatic(constructor.getModifiers()), header.getFilePath());
+      Environment env = new Environment(constructor, header.getFilePath());
 
       try {
         env.addParams(irbody.getParamNames(), irbody.getParamTypes());
@@ -90,7 +88,7 @@ public class BodyCompiler {
       SourceStringReader reader = new SourceStringReader(irbody.getSource(), header.getFilePath(), irbody.getLine());
       TypeResolver resolver = new TypeResolver(header, ir.getClassPool());
       UsingOperators usops = new UsingOperators(header, ir.getOperatorPool());
-      Environment env = new Environment(thisClass, isStatic(field.getModifiers()), header.getFilePath());
+      Environment env = new Environment(field, header.getFilePath());
 
       try {
         FieldBody fbody = parser.parseFieldBody(field, reader, env, resolver, usops);
@@ -112,7 +110,7 @@ public class BodyCompiler {
       SourceStringReader reader = new SourceStringReader(irbody.getSource(), header.getFilePath(), irbody.getLine());
       TypeResolver resolver = new TypeResolver(header, ir.getClassPool());
       UsingOperators usops = new UsingOperators(header, ir.getOperatorPool());
-      Environment env = new Environment(thisClass, isStatic(method.getModifiers()), header.getFilePath());
+      Environment env = new Environment(method, header.getFilePath());
 
       try {
         DefaultValue defval = parser.parseDefaultArgument(method, reader, env, resolver, usops);
@@ -134,10 +132,10 @@ public class BodyCompiler {
       SourceStringReader reader = new SourceStringReader(sinit.getSource(), header.getFilePath(), sinit.getLine());
       TypeResolver resolver = new TypeResolver(header, ir.getClassPool());
       UsingOperators usops = new UsingOperators(header, ir.getOperatorPool());
-      Environment env = new Environment(thisClass, isStatic(clinit.getModifiers()), header.getFilePath());
+      Environment env = new Environment(clinit, header.getFilePath());
 
       try {
-        ClassInitializer body = parser.parseStaticInitializer(clinit, reader, env, resolver, usops);
+        ClassInitializer body = parser.parseStaticInitializer(reader, env, resolver, usops);
         sinit.setAST(body);
       } catch (CompileError e) {
         ErrorList.addError(e);

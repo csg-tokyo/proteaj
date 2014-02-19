@@ -3,15 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="8e6497db-168c-40d5-b91d-8295649a5b7f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/AbbMethodCallParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/AbbMethodCallParser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/BodyCompiler.java" afterPath="$PROJECT_DIR$/src/proteaj/BodyCompiler.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/BodyParser.java" afterPath="$PROJECT_DIR$/src/proteaj/BodyParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/ConstructorBodyParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/ConstructorBodyParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/ir/Environment.java" afterPath="$PROJECT_DIR$/src/proteaj/ir/Environment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/FieldAccessParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/FieldAccessParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/MethodCallParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/MethodCallParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/NewExpressionParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/NewExpressionParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/StaticFieldAccessParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/StaticFieldAccessParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/StaticMethodCallParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/StaticMethodCallParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/SuperConstructorCallParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/SuperConstructorCallParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/proteaj/pparser/ThisConstructorCallParser.java" afterPath="$PROJECT_DIR$/src/proteaj/pparser/ThisConstructorCallParser.java" />
     </list>
     <ignored path="proteaj.iws" />
@@ -108,8 +102,50 @@
       <file leaf-file-name="BodyParser.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/proteaj/BodyParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="41" column="9" selection-start="1370" selection-end="1370" vertical-scroll-proportion="0.7996769" vertical-offset="0" max-vertical-offset="2715">
+            <state line="43" column="34" selection-start="1463" selection-end="1463" vertical-scroll-proportion="-2.1208053" vertical-offset="1789" max-vertical-offset="2670">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ThisConstructorCallParser.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ThisConstructorCallParser.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="59" column="89" selection-start="1941" selection-end="1941" vertical-scroll-proportion="0.0" vertical-offset="336" max-vertical-offset="945">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Environment.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/proteaj/ir/Environment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="21" selection-start="184" selection-end="184" vertical-scroll-proportion="0.0" vertical-offset="1431" max-vertical-offset="2040">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BodyCompiler.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/proteaj/BodyCompiler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="134" column="40" selection-start="5113" selection-end="5113" vertical-scroll-proportion="0.0" vertical-offset="1731" max-vertical-offset="2340">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AbbMethodCallParser.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/AbbMethodCallParser.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="33" column="60" selection-start="931" selection-end="931" vertical-scroll-proportion="0.0" vertical-offset="318" max-vertical-offset="1080">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -127,7 +163,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/test/Test.java" />
         <option value="$PROJECT_DIR$/src/proteaj/util/CtClassUtil.java" />
         <option value="$PROJECT_DIR$/src/proteaj/parser/Type.scala" />
         <option value="$PROJECT_DIR$/src/proteaj/parser/Operators.scala" />
@@ -167,7 +202,6 @@
         <option value="$PROJECT_DIR$/src/proteaj/pparser/TypeNameParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/VariableArgumentsParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/ReturnStatementParser.java" />
-        <option value="$PROJECT_DIR$/src/proteaj/ir/Environment.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/MethodCallParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/FieldAccessParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/StaticMethodCallParser.java" />
@@ -176,6 +210,8 @@
         <option value="$PROJECT_DIR$/src/proteaj/pparser/SuperConstructorCallParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/ConstructorBodyParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/AbbMethodCallParser.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/ir/Environment.java" />
+        <option value="$PROJECT_DIR$/src/proteaj/BodyCompiler.java" />
         <option value="$PROJECT_DIR$/src/proteaj/pparser/ThisConstructorCallParser.java" />
         <option value="$PROJECT_DIR$/src/proteaj/BodyParser.java" />
       </list>
@@ -1088,50 +1124,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/BodyCompiler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="28" selection-start="2201" selection-end="2201" vertical-scroll-proportion="0.0" vertical-offset="680" max-vertical-offset="2265">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/PackratParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="4" selection-start="523" selection-end="523" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6090">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3725#3740#0" expanded="true" />
-            <element signature="e#6070#6080#0" expanded="true" />
-            <element signature="e#6688#6689#0" expanded="true" />
-            <element signature="e#6709#6710#0" expanded="true" />
-            <element signature="e#6747#6748#0" expanded="true" />
-            <element signature="e#6770#6771#0" expanded="true" />
-            <element signature="e#6797#6798#0" expanded="true" />
-            <element signature="e#6818#6819#0" expanded="true" />
-            <element signature="e#6843#6844#0" expanded="true" />
-            <element signature="e#6864#6865#0" expanded="true" />
-            <element signature="e#6904#6905#0" expanded="true" />
-            <element signature="e#6930#6931#0" expanded="true" />
-            <element signature="e#6966#6967#0" expanded="true" />
-            <element signature="e#6992#6993#0" expanded="true" />
-            <element signature="e#7599#7600#0" expanded="true" />
-            <element signature="e#7622#7623#0" expanded="true" />
-            <element signature="e#9639#9640#0" expanded="true" />
-            <element signature="e#9663#9664#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/DefaultArgumentParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="24" column="21" selection-start="579" selection-end="579" vertical-scroll-proportion="0.49261084" vertical-offset="0" max-vertical-offset="609">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/Environment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="121" column="14" selection-start="3579" selection-end="3579" vertical-scroll-proportion="0.72906405" vertical-offset="1251" max-vertical-offset="1860">
           <folding />
         </state>
       </provider>
@@ -1178,22 +1173,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ThisConstructorCallParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="0" selection-start="648" selection-end="648" vertical-scroll-proportion="0.45094937" vertical-offset="0" max-vertical-offset="1035">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/AbbMethodCallParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="9" selection-start="1226" selection-end="1226" vertical-scroll-proportion="0.43037975" vertical-offset="283" max-vertical-offset="1170">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/MethodCallParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="68" column="0" selection-start="2135" selection-end="2135" vertical-scroll-proportion="1.453958" vertical-offset="0" max-vertical-offset="1155">
@@ -1201,9 +1180,70 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/PackratParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="4" selection-start="523" selection-end="523" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6090">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3725#3740#0" expanded="true" />
+            <element signature="e#6070#6080#0" expanded="true" />
+            <element signature="e#6688#6689#0" expanded="true" />
+            <element signature="e#6709#6710#0" expanded="true" />
+            <element signature="e#6747#6748#0" expanded="true" />
+            <element signature="e#6770#6771#0" expanded="true" />
+            <element signature="e#6797#6798#0" expanded="true" />
+            <element signature="e#6818#6819#0" expanded="true" />
+            <element signature="e#6843#6844#0" expanded="true" />
+            <element signature="e#6864#6865#0" expanded="true" />
+            <element signature="e#6904#6905#0" expanded="true" />
+            <element signature="e#6930#6931#0" expanded="true" />
+            <element signature="e#6966#6967#0" expanded="true" />
+            <element signature="e#6992#6993#0" expanded="true" />
+            <element signature="e#7599#7600#0" expanded="true" />
+            <element signature="e#7622#7623#0" expanded="true" />
+            <element signature="e#9639#9640#0" expanded="true" />
+            <element signature="e#9663#9664#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/AbbMethodCallParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="60" selection-start="931" selection-end="931" vertical-scroll-proportion="0.0" vertical-offset="318" max-vertical-offset="1080">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/BodyCompiler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="134" column="40" selection-start="5113" selection-end="5113" vertical-scroll-proportion="0.0" vertical-offset="1731" max-vertical-offset="2340">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/ir/Environment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="21" selection-start="184" selection-end="184" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2040">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/proteaj/pparser/ThisConstructorCallParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="59" column="89" selection-start="1941" selection-end="1941" vertical-scroll-proportion="0.0" vertical-offset="336" max-vertical-offset="945">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/proteaj/BodyParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="9" selection-start="1370" selection-end="1370" vertical-scroll-proportion="0.7996769" vertical-offset="0" max-vertical-offset="2715">
+        <state line="43" column="34" selection-start="1463" selection-end="1463" vertical-scroll-proportion="-2.1208053" vertical-offset="1789" max-vertical-offset="2670">
           <folding />
         </state>
       </provider>

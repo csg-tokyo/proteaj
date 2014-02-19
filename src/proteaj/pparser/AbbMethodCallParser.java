@@ -31,7 +31,7 @@ public class AbbMethodCallParser extends PackratParser {
     // Arguments
     for(CtMethod method : getMethods(env.thisClass)) try {
       if(! method.getName().equals(name)) continue;
-      if(isStatic(method.getModifiers()) || ! isStaticMember) {
+      if(isStatic(method.getModifiers()) || ! env.isStatic()) {
         TypedAST args = ArgumentsParser.getParser(method.getParameterTypes()).applyRule(reader, env, apos);
         if(args.isFail() && hasVarArgs(method.getModifiers())) {
           args = VariableArgumentsParser.getParser(method.getParameterTypes()).applyRule(reader, env, apos);
@@ -54,18 +54,12 @@ public class AbbMethodCallParser extends PackratParser {
     return new BadAST(flog);
   }
 
-  public void init(CtMember signature) {
-    this.isStaticMember = isStatic(signature.getModifiers());
-  }
-
   @Override
   public String toString() {
     return "AbbMethodCallParser";
   }
 
   public static final AbbMethodCallParser parser = new AbbMethodCallParser();
-
-  private boolean isStaticMember;
 
   private AbbMethodCallParser() {}
 }

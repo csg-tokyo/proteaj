@@ -19,7 +19,7 @@ public class BodyParser {
     try {
       CtClass returnType = method.getReturnType();
       CtClass[] exceptionTypes = method.getExceptionTypes();
-      initParsers_MethodBody(returnType, method, resolver, usops);
+      initParsers_MethodBody(returnType, resolver, usops);
 
       TypedAST mbody = MethodBodyParser.parser.applyRule(reader, env);
       if(! mbody.isFail()) {
@@ -41,7 +41,7 @@ public class BodyParser {
   public ConstructorBody parseConstructorBody(CtConstructor constructor, SourceStringReader reader, Environment env, TypeResolver resolver, UsingOperators usops) throws CompileError, CompileErrors {
     try {
       CtClass[] exceptionTypes = constructor.getExceptionTypes();
-      initParsers_ConstructorBody(constructor, resolver, usops);
+      initParsers_ConstructorBody(resolver, usops);
 
       TypedAST cbody = ConstructorBodyParser.parser.applyRule(reader, env);
       if(! cbody.isFail()) {
@@ -63,7 +63,7 @@ public class BodyParser {
   public FieldBody parseFieldBody(CtField field, SourceStringReader reader, Environment env, TypeResolver resolver, UsingOperators usops) throws CompileError, CompileErrors {
     try {
       CtClass type = field.getType();
-      initParsers_FieldBody(type, field, resolver, usops);
+      initParsers_FieldBody(type, resolver, usops);
 
       TypedAST fbody = FieldBodyParser.parser.applyRule(reader, env);
       if(! fbody.isFail()) {
@@ -82,7 +82,7 @@ public class BodyParser {
   public DefaultValue parseDefaultArgument(CtMethod method, SourceStringReader reader, Environment env, TypeResolver resolver, UsingOperators usops) throws CompileError, CompileErrors {
     try {
       CtClass type = method.getReturnType();
-      initParsers_DefaultArgs(type, method, resolver, usops);
+      initParsers_DefaultArgs(type, resolver, usops);
 
       TypedAST defval = DefaultArgumentParser.parser.applyRule(reader, env);
       if(! defval.isFail()) {
@@ -98,8 +98,8 @@ public class BodyParser {
     }
   }
 
-  public ClassInitializer parseStaticInitializer(CtConstructor constructor, SourceStringReader reader, Environment env, TypeResolver resolver, UsingOperators usops) throws CompileError, CompileErrors {
-    initParsers_StaticInitializer(constructor, resolver, usops);
+  public ClassInitializer parseStaticInitializer(SourceStringReader reader, Environment env, TypeResolver resolver, UsingOperators usops) throws CompileError, CompileErrors {
+    initParsers_StaticInitializer(resolver, usops);
 
     TypedAST sibody = StaticInitializerParser.parser.applyRule(reader, env);
     if(! sibody.isFail()) {
@@ -124,36 +124,34 @@ public class BodyParser {
     return new CompileErrors(errors);
   }
 
-  private void initParsers_MethodBody(CtClass returnType, CtMethod method, TypeResolver resolver, UsingOperators usops) {
+  private void initParsers_MethodBody(CtClass returnType, TypeResolver resolver, UsingOperators usops) {
     initParser_Statement(returnType);
-    initParser_Expression(method, resolver, usops);
+    initParser_Expression(resolver, usops);
     initParser_Basic(resolver);
   }
 
-  private void initParsers_ConstructorBody(CtConstructor constructor, TypeResolver resolver, UsingOperators usops) {
-    ThisConstructorCallParser.parser.init(constructor);
-
+  private void initParsers_ConstructorBody(TypeResolver resolver, UsingOperators usops) {
     initParser_Statement(null);
-    initParser_Expression(constructor, resolver, usops);
+    initParser_Expression(resolver, usops);
     initParser_Basic(resolver);
   }
 
-  private void initParsers_FieldBody(CtClass type, CtField field, TypeResolver resolver, UsingOperators usops) {
+  private void initParsers_FieldBody(CtClass type, TypeResolver resolver, UsingOperators usops) {
     FieldBodyParser.parser.init(type);
 
-    initParser_Expression(field, resolver, usops);
+    initParser_Expression(resolver, usops);
     initParser_Basic(resolver);
   }
 
-  private void initParsers_DefaultArgs(CtClass type, CtMethod method, TypeResolver resolver, UsingOperators usops) {
+  private void initParsers_DefaultArgs(CtClass type, TypeResolver resolver, UsingOperators usops) {
     DefaultArgumentParser.parser.init(type);
-    initParser_Expression(method, resolver, usops);
+    initParser_Expression(resolver, usops);
     initParser_Basic(resolver);
   }
 
-  private void initParsers_StaticInitializer(CtConstructor constructor, TypeResolver resolver, UsingOperators usops) {
+  private void initParsers_StaticInitializer(TypeResolver resolver, UsingOperators usops) {
     initParser_Statement(null);
-    initParser_Expression(constructor, resolver, usops);
+    initParser_Expression(resolver, usops);
     initParser_Basic(resolver);
   }
 
@@ -162,10 +160,9 @@ public class BodyParser {
     else ReturnStatementParser.parser.init(returnType);
   }
 
-  private void initParser_Expression(CtMember member, TypeResolver resolver, UsingOperators usops) {
+  private void initParser_Expression(TypeResolver resolver, UsingOperators usops) {
     ExpressionParser.init(usops);
     OperationParser.initAll(usops, ir);
-    AbbMethodCallParser.parser.init(member);
     NewArrayExpressionParser.parser.init(resolver);
     CastExpressionParser.parser.init(resolver);
     ReadasOperationParser.initAll(usops);

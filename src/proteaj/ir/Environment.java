@@ -2,19 +2,19 @@ package proteaj.ir;
 
 import proteaj.error.*;
 import proteaj.ir.tast.*;
+import proteaj.util.*;
 
 import java.util.*;
 import javassist.*;
 
-import static proteaj.util.Modifiers.isStatic;
-
 public class Environment {
-  public Environment(CtClass thisClass, boolean isStatic, String file) {
-    this.thisClass = thisClass;
+  public Environment(CtMember thisMember, String file) {
+    this.thisClass = thisMember.getDeclaringClass();
+    this.thisMember = thisMember;
     this.env = new HashMap<String, Expression>();
     this.exceptions = new HashMap<CtClass, List<Integer>>();
 
-    if(! isStatic) {
+    if(! isStatic()) {
       Expression thisExpr = new ThisExpression(thisClass);
       add("this", thisExpr);
 
@@ -40,7 +40,7 @@ public class Environment {
 
     else {
       for(CtField field : thisClass.getDeclaredFields()) try {
-        if(isStatic(field.getModifiers())) {
+        if(Modifiers.isStatic(field.getModifiers())) {
           add(field.getName(), new StaticFieldAccess(field));
         }
       } catch (NotFoundException e) {
@@ -51,8 +51,13 @@ public class Environment {
 
   public Environment(Environment env) {
     this.thisClass = env.thisClass;
+    this.thisMember = env.thisMember;
     this.env = new HashMap<String, Expression>(env.env);
     this.exceptions = new HashMap<CtClass, List<Integer>>();
+  }
+
+  public boolean isStatic() {
+    return Modifiers.isStatic(thisMember.getModifiers());
   }
 
   public void inheritExceptions(Environment env) {
@@ -120,6 +125,7 @@ public class Environment {
   }
 
   public final CtClass thisClass;
+  public final CtMember thisMember;
   private Map<String, Expression> env;
   private Map<CtClass, List<Integer>> exceptions;
 }

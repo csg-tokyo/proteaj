@@ -39,7 +39,7 @@ public class ThisConstructorCallParser extends PackratParser {
         return new BadAST(semicolon.getFailLog());
       }
 
-      if(c == constructor) {
+      if(c == env.thisMember) {
         FailLog flog = new FailLog("recursive constructor invocation", reader.getPos(), reader.getLine());
         reader.setPos(pos);
         return new BadAST(flog);
@@ -57,13 +57,7 @@ public class ThisConstructorCallParser extends PackratParser {
     return new BadAST(flog);
   }
 
-  public void init(CtConstructor constructor) {
-    this.constructor = constructor;
-  }
-
   public static final ThisConstructorCallParser parser = new ThisConstructorCallParser();
-
-  private CtConstructor constructor;
 
   private ThisConstructorCallParser() {}
 }
