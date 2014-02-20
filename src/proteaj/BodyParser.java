@@ -58,8 +58,6 @@ public class BodyParser {
 
   public FieldBody parseFieldBody(CtField field, SourceStringReader reader, Environment env) throws CompileError, CompileErrors {
     try {
-      initParser_Expression();
-
       TypedAST fbody = FieldBodyParser.getParser(field.getType()).applyRule(reader, env);
       if(! fbody.isFail()) {
         if(env.hasException()) {
@@ -76,8 +74,6 @@ public class BodyParser {
 
   public DefaultValue parseDefaultArgument(CtMethod method, SourceStringReader reader, Environment env) throws CompileError, CompileErrors {
     try {
-      initParser_Expression();
-
       TypedAST defval = DefaultArgumentParser.getParser(method.getReturnType()).applyRule(reader, env);
       if(! defval.isFail()) {
         if(env.hasException()) {
@@ -120,15 +116,9 @@ public class BodyParser {
 
   private void initParser_Statement() {
     ReturnStatementParser.parser.disable();
-    initParser_Expression();
   }
 
   private void initParser_Statement(CtClass returnType) {
     ReturnStatementParser.parser.init(returnType);
-    initParser_Expression();
-  }
-
-  private void initParser_Expression() {
-    PackratParser.initialize();
   }
 }

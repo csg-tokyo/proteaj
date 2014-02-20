@@ -15,18 +15,17 @@ public abstract class PackratParser {
     return applyRule(reader, env, reader.getPos());
   }
 
-  // TODO memoize env
   public TypedAST applyRule(SourceStringReader reader, Environment env, int pos) {
     Pair<TypedAST, Integer> m = recall(reader, env, pos);
     if(m == null) {
-      LR lr = new LR(this, lrStack);
-      lrStack = lr;
+      LR lr = new LR(this, getState(reader).lrStack);
+      getState(reader).lrStack = lr;
       mtable.memoize(reader, pos, lr, pos);
 
       reader.setPos(pos);
       TypedAST ans = parse(reader, env);
 
-      lrStack = lrStack.getNext();
+      getState(reader).lrStack = getState(reader).lrStack.getNext();
 
       if(lr.isDetected()) {
         lr.setSeed(ans);
@@ -43,7 +42,7 @@ public abstract class PackratParser {
 
       if(m.getFirst() instanceof LR) {
         LR lr = (LR)m.getFirst();
-        setupLR(lr);
+        setupLR(reader, lr);
         return lr.getSeed();
       }
       else return m.getFirst();
@@ -51,7 +50,7 @@ public abstract class PackratParser {
   }
 
   private TypedAST growLR(Head h, SourceStringReader reader, Environment env, int pos) {
-    heads.put(pos, h);
+    getState(reader).heads.put(pos, h);
     while(true) {
       reader.setPos(pos);
       h.copyInvolvedSetToEvalSet();
@@ -62,7 +61,7 @@ public abstract class PackratParser {
       int position = reader.getPos();
 
       if(ans.isFail() || position <= m.getSecond()) {
-        heads.remove(pos);
+        getState(reader).heads.remove(pos);
         reader.setPos(m.getSecond());
         return m.getFirst();
       }
@@ -70,10 +69,10 @@ public abstract class PackratParser {
     }
   }
 
-  private void setupLR(LR lr) {
+  private void setupLR(SourceStringReader reader, LR lr) {
     if(! lr.isDetected()) lr.setHead(new Head(this));
 
-    LR s = lrStack;
+    LR s = getState(reader).lrStack;
     while(s.getHead() != lr.getHead()) {
       s.setHead(lr.getHead());
       lr.getHead().addInvolvedParser(s.getParser());
@@ -96,8 +95,8 @@ public abstract class PackratParser {
   }
 
   private Pair<TypedAST, Integer> recall(SourceStringReader reader, Environment env, int pos) {
-    if(! heads.containsKey(pos)) return mtable.lookup(reader, pos);
-    Head h = heads.get(pos);
+    if(! getState(reader).heads.containsKey(pos)) return mtable.lookup(reader, pos);
+    Head h = getState(reader).heads.get(pos);
 
     if(! (mtable.contains(reader, pos) || h.isInvolved(this))) return new Pair<TypedAST, Integer>(FAIL, pos);
 
@@ -115,11 +114,6 @@ public abstract class PackratParser {
     return ret;
   }
 
-  public static void initialize() {
-    lrStack = null;
-    heads.clear();
-  }
-
   protected PackratParser() {
     mtable = new MemoTable();
   }
@@ -135,14 +129,21 @@ public abstract class PackratParser {
     return best;
   }
 
+  private PackratParserState getState (SourceStringReader reader) {
+    if (! state.containsKey(reader)) state.put(reader, new PackratParserState());
+    return state.get(reader);
+  }
+
   private MemoTable mtable;
 
-  private static LR lrStack;
-  private static Map<Integer, Head> heads = new HashMap<Integer, Head>();
-
+  private static final Map<SourceStringReader, PackratParserState> state = new WeakHashMap<SourceStringReader, PackratParserState>();
   private static final BadAST FAIL = new BadAST(new FailLog("not involved in this left recursion", 0, 0));
-}
 
+  private static class PackratParserState {
+    LR lrStack = null;
+    Map<Integer, Head> heads = new HashMap<Integer, Head>();
+  }
+}
 
 abstract class ComposedParser_Sequential extends PackratParser {
   public ComposedParser_Sequential(String name) {
