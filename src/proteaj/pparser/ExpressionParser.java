@@ -23,7 +23,7 @@ public class ExpressionParser extends PackratParser {
       //
       // if "type" is a super type of "rtype" and "pattern" has a left recursion, first time analysis will always fail.
       // (ad-hoc solution. I'm not sure that it is a complete solution.)
-      CtClass rtype = usops.getIROperator(type, priority, pattern).getReturnType();
+      CtClass rtype = env.getOperator(type, priority, pattern).getReturnType();
       if(rtype != type) {
         op = OperationParser.getParser(rtype, priority, pattern).applyRule(reader, env, pos);
         if(! op.isFail()) return op;
@@ -33,7 +33,7 @@ public class ExpressionParser extends PackratParser {
       else flog = chooseBest(flog, op.getFailLog());
     }
 
-    TypedAST op = getParser(type, priority, false).applyRule(reader, env, pos);
+    TypedAST op = getParser(type, priority, false, env).applyRule(reader, env, pos);
     if(! op.isFail()) return op;
 
     if(flog == null) flog = op.getFailLog();
@@ -42,30 +42,20 @@ public class ExpressionParser extends PackratParser {
     return new BadAST(flog);
   }
 
-  public static ExpressionParser getParser(CtClass type) {
-    if(! parsers.containsKey(type)) registerOperators(type);
+  public static ExpressionParser getParser(CtClass type, Environment env) {
+    TreeMap<Integer, ExpressionParser> tmap = getFromCache(type, env);
 
-    TreeMap<Integer, ExpressionParser> tmap = parsers.get(type);
     if(tmap.isEmpty()) return DefaultExpressionParser.getParser(type);
     else return tmap.firstEntry().getValue();
   }
 
-  public static ExpressionParser getParser(CtClass type, int priority, boolean inclusive) {
-    if(! parsers.containsKey(type)) registerOperators(type);
+  public static ExpressionParser getParser(CtClass type, int priority, boolean inclusive, Environment env) {
+    TreeMap<Integer, ExpressionParser> tmap = getFromCache(type, env);
 
-    TreeMap<Integer, ExpressionParser> tmap = parsers.get(type);
-
-    Entry<Integer, ExpressionParser> entry;
-    if(inclusive) entry = tmap.ceilingEntry(priority);
-    else entry = tmap.higherEntry(priority);
+    Entry<Integer, ExpressionParser> entry = inclusive ? tmap.ceilingEntry(priority) : tmap.higherEntry(priority);
 
     if(entry != null) return entry.getValue();
     else return DefaultExpressionParser.getParser(type);
-  }
-
-  public static void init(UsingOperators usops) {
-    ExpressionParser.usops = usops;
-    parsers.clear();
   }
 
   @Override
@@ -73,15 +63,25 @@ public class ExpressionParser extends PackratParser {
     return "ExpressionParser" + "[" + type.getName() + "]";
   }
 
-  private static void registerOperators(CtClass type) {
-    NavigableMap<Integer, List<IRPattern>> patternsMap = usops.getPatterns(type);
+  private static TreeMap<Integer, ExpressionParser> getFromCache(CtClass type, Environment env) {
+    if (! parsers.containsKey(env) || ! parsers.get(env).containsKey(type)) {
+      registerOperators(type, env);
+    }
+    return parsers.get(env).get(type);
+  }
 
-    if(! parsers.containsKey(type)) parsers.put(type, new TreeMap<Integer, ExpressionParser>());
-    TreeMap<Integer, ExpressionParser> tmap = parsers.get(type);
+  private static void registerOperators(CtClass type, Environment env) {
+    NavigableMap<Integer, List<IRPattern>> patternsMap = env.getPatterns(type);
+
+    if (! parsers.containsKey(env)) parsers.put(env, new HashMap<CtClass, TreeMap<Integer, ExpressionParser>>());
+    Map<CtClass, TreeMap<Integer, ExpressionParser>> map = parsers.get(env);
+
+    if (! map.containsKey(type)) map.put(type, new TreeMap<Integer, ExpressionParser>());
+    TreeMap<Integer, ExpressionParser> tMap = map.get(type);
 
     for(Map.Entry<Integer, List<IRPattern>> entry : patternsMap.entrySet()) {
       ExpressionParser parser = new ExpressionParser(type, entry.getValue(), entry.getKey());
-      tmap.put(entry.getKey(), parser);
+      tMap.put(entry.getKey(), parser);
     }
   }
 
@@ -101,7 +101,6 @@ public class ExpressionParser extends PackratParser {
   private List<IRPattern> patterns;
   private int priority;
 
-  private static Map<CtClass, TreeMap<Integer, ExpressionParser>> parsers = new HashMap<CtClass, TreeMap<Integer,ExpressionParser>>();
-
-  private static UsingOperators usops;
+  private static Map<Environment, Map<CtClass, TreeMap<Integer, ExpressionParser>>> parsers =
+      new WeakHashMap<Environment, Map<CtClass, TreeMap<Integer, ExpressionParser>>>();
 }

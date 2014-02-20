@@ -1,5 +1,6 @@
 package proteaj.pparser;
 
+import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
 public class ParenthesizedJavaExpressionParser extends ComposedParser_Sequential {
@@ -11,7 +12,7 @@ public class ParenthesizedJavaExpressionParser extends ComposedParser_Sequential
   }
 
   @Override
-  protected PackratParser[] getParsers() {
+  protected PackratParser[] getParsers(Environment env) {
     return new PackratParser[] { KeywordParser.getParser("("), JavaExpressionParser.parser, KeywordParser.getParser(")") };
   }
 

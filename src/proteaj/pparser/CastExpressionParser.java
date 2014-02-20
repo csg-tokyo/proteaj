@@ -1,8 +1,8 @@
 package proteaj.pparser;
 
 import javassist.CtClass;
-import proteaj.TypeResolver;
 import proteaj.error.*;
+import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
 import static proteaj.util.CtClassUtil.*;
@@ -16,7 +16,7 @@ public class CastExpressionParser extends ComposedParser_Sequential {
   }
 
   @Override
-  protected PackratParser[] getParsers() {
+  protected PackratParser[] getParsers(Environment env) {
     return new PackratParser[] {
         KeywordParser.getParser("("),
         TypeNameParser.parser,
@@ -34,11 +34,5 @@ public class CastExpressionParser extends ComposedParser_Sequential {
     else return new BadAST(new FailLog(e.getType().getName() + " cannot cast to " + to.getName(), pos, line));
   }
 
-  public void init(TypeResolver resolver) {
-    this.resolver = resolver;
-  }
-
   public static final CastExpressionParser parser = new CastExpressionParser();
-
-  private TypeResolver resolver;
 }

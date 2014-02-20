@@ -1,5 +1,7 @@
 package proteaj.pparser;
 
+import proteaj.ir.Environment;
+
 public class ForInitParser extends ComposedParser_Alternative {
   /* ForInit
    *  : ExpressionList
@@ -10,7 +12,7 @@ public class ForInitParser extends ComposedParser_Alternative {
   }
 
   @Override
-  protected PackratParser[] getParsers() {
+  protected PackratParser[] getParsers(Environment env) {
     return new PackratParser[] { LocalVarDeclParser.parser, ExpressionListParser.parser };
   }
 

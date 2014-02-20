@@ -25,7 +25,7 @@ public class ThrowStatementParser extends PackratParser {
     int line = reader.getLine();
 
     // Expression
-    TypedAST exception = ExpressionParser.getParser(IRCommonTypes.getThrowableType()).applyRule(reader, env);
+    TypedAST exception = ExpressionParser.getParser(IRCommonTypes.getThrowableType(), env).applyRule(reader, env);
     if(exception.isFail()) {
       reader.setPos(pos);
       return new BadAST(exception.getFailLog());

@@ -53,7 +53,7 @@ public class VariableArgumentsParser extends PackratParser {
       }
       else reader.setPos(bpos);
 
-      TypedAST arg = ExpressionParser.getParser(componentType).applyRule(reader, env);
+      TypedAST arg = ExpressionParser.getParser(componentType, env).applyRule(reader, env);
       if(arg.isFail()) {
         reader.setPos(pos);
         return new BadAST(arg.getFailLog());
@@ -62,7 +62,7 @@ public class VariableArgumentsParser extends PackratParser {
       args.add((Expression)arg);
     }
     else {
-      TypedAST arg = ExpressionParser.getParser(argTypes.get(0)).applyRule(reader, env);
+      TypedAST arg = ExpressionParser.getParser(argTypes.get(0), env).applyRule(reader, env);
       if(arg.isFail()) {
         reader.setPos(pos);
         return new BadAST(arg.getFailLog());
@@ -78,7 +78,7 @@ public class VariableArgumentsParser extends PackratParser {
         return new BadAST(delim.getFailLog());
       }
 
-      TypedAST arg = ExpressionParser.getParser(argTypes.get(i)).applyRule(reader, env);
+      TypedAST arg = ExpressionParser.getParser(argTypes.get(i), env).applyRule(reader, env);
       if(arg.isFail()) {
         reader.setPos(pos);
         return new BadAST(arg.getFailLog());
@@ -95,7 +95,7 @@ public class VariableArgumentsParser extends PackratParser {
         break;
       }
 
-      TypedAST arg = ExpressionParser.getParser(componentType).applyRule(reader, env);
+      TypedAST arg = ExpressionParser.getParser(componentType, env).applyRule(reader, env);
       if(arg.isFail()) {
         reader.setPos(pos);
         return new BadAST(arg.getFailLog());

@@ -1,6 +1,5 @@
 package proteaj.pparser;
 
-import proteaj.TypeResolver;
 import proteaj.error.*;
 import proteaj.io.*;
 import proteaj.ir.*;
@@ -42,7 +41,7 @@ public class ClassNameParser extends PackratParser {
 
       String lname = name + '.' + ((Identifier)id).getName();
 
-      if(resolver.isTypeName(name) && (! resolver.isTypeName(lname))) {
+      if(env.isTypeName(name) && (! env.isTypeName(lname))) {
         reader.setPos(dpos);
         break;
       }
@@ -51,17 +50,13 @@ public class ClassNameParser extends PackratParser {
     }
 
     try {
-      CtClass cls = resolver.getType(name);
+      CtClass cls = env.getType(name);
       return new ClassName(cls);
     } catch (NotFoundError e) {
       FailLog flog = new FailLog(e.getMessage(), reader.getPos(), reader.getLine());
       reader.setPos(pos);
       return new BadAST(flog);
     }
-  }
-
-  public void init(TypeResolver resolver) {
-    this.resolver = resolver;
   }
 
   @Override
@@ -72,7 +67,5 @@ public class ClassNameParser extends PackratParser {
   public static final ClassNameParser parser = new ClassNameParser();
 
   private ClassNameParser() {}
-
-  private TypeResolver resolver;
 }
 

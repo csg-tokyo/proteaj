@@ -18,16 +18,14 @@ public abstract class PrimitiveReadasOperationParser extends ReadasOperationPars
   protected abstract TypedAST parse(SourceStringReader reader, Environment env);
 
   public static PrimitiveReadasOperationParser getParser(CtClass type) {
-    if(parsers.containsKey(type)) return parsers.get(type);
-    return defaultParser;
-  }
-
-  public static void initAll() {
     if(parsers.isEmpty()) {
       addReadasIdentifierParser();
       addReadasLetterParser();
       addReadasTypeParser();
     }
+
+    if(parsers.containsKey(type)) return parsers.get(type);
+    return defaultParser;
   }
 
   private static void addReadasIdentifierParser() {

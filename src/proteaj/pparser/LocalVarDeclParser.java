@@ -38,7 +38,7 @@ public class LocalVarDeclParser extends PackratParser {
       lvdecl = new LocalVarDecl(cttype, name);
     }
     else {
-      TypedAST val = ExpressionParser.getParser(cttype).applyRule(reader, env);
+      TypedAST val = ExpressionParser.getParser(cttype, env).applyRule(reader, env);
       if(val.isFail()) {
         reader.setPos(pos);
         return new BadAST(val.getFailLog());

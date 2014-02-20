@@ -1,6 +1,7 @@
 package proteaj.pparser;
 
 import proteaj.error.*;
+import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
 import javassist.*;
@@ -14,11 +15,11 @@ public class ArrayAccessParser extends ComposedParser_Sequential {
   }
 
   @Override
-  protected PackratParser[] getParsers() {
+  protected PackratParser[] getParsers(Environment env) {
     return new PackratParser[] {
         JavaExpressionParser.parser,
         KeywordParser.getParser("["),
-        ExpressionParser.getParser(CtClass.intType),
+        ExpressionParser.getParser(CtClass.intType, env),
         KeywordParser.getParser("]")
     };
   }

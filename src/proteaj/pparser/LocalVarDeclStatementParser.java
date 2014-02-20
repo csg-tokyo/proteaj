@@ -1,5 +1,6 @@
 package proteaj.pparser;
 
+import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
 public class LocalVarDeclStatementParser extends ComposedParser_Sequential {
@@ -11,7 +12,7 @@ public class LocalVarDeclStatementParser extends ComposedParser_Sequential {
   }
 
   @Override
-  protected PackratParser[] getParsers() {
+  protected PackratParser[] getParsers(Environment env) {
     return new PackratParser[] { LocalVarDeclParser.parser, KeywordParser.getParser(";") };
   }
 

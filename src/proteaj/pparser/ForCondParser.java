@@ -14,7 +14,7 @@ public class ForCondParser extends PackratParser {
   protected TypedAST parse(SourceStringReader reader, Environment env) {
     int pos = reader.getPos();
 
-    TypedAST expr = ExpressionParser.getParser(CtClass.booleanType).applyRule(reader, env);
+    TypedAST expr = ExpressionParser.getParser(CtClass.booleanType, env).applyRule(reader, env);
     if(expr.isFail()) {
       reader.setPos(pos);
       expr = new BooleanLiteral(true);

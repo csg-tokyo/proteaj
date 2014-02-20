@@ -30,7 +30,7 @@ public class ReadasOperationParser extends PackratParser {
         int opos = reader.getPos();
         boolean inclusive = pattern.getInclusive(i);
 
-        TypedAST operand = ReadasOperandParser.getParser(pattern.getOperandType(i), priority, inclusive).applyRule(reader, env);
+        TypedAST operand = ReadasOperandParser.getParser(pattern.getOperandType(i), priority, inclusive, env).applyRule(reader, env);
         if(! operand.isFail()) {
           operands.add((Expression)operand);
           continue;
@@ -42,7 +42,7 @@ public class ReadasOperationParser extends PackratParser {
           CtClass componentType = arrayType.getComponentType();
           List<Expression> args = new ArrayList<Expression>();
 
-          operand = ReadasOperandParser.getParser(componentType, priority, inclusive).applyRule(reader, env);
+          operand = ReadasOperandParser.getParser(componentType, priority, inclusive, env).applyRule(reader, env);
           if(operand.isFail()) {
             reader.setPos(opos);
 
@@ -61,13 +61,13 @@ public class ReadasOperationParser extends PackratParser {
             TypedAST sep = ReadasOperatorParser.getParser(pattern.getSeparator(i)).applyRule(reader, env);
             if(sep.isFail()) break;
 
-            operand = ReadasOperandParser.getParser(componentType, priority, inclusive).applyRule(reader, env);
+            operand = ReadasOperandParser.getParser(componentType, priority, inclusive, env).applyRule(reader, env);
             if(operand.isFail()) break;
             else args.add((Expression)operand);
           }
           else while(true) {
             opos = reader.getPos();
-            operand = ReadasOperandParser.getParser(componentType, priority, inclusive).applyRule(reader, env);
+            operand = ReadasOperandParser.getParser(componentType, priority, inclusive, env).applyRule(reader, env);
             if(operand.isFail()) break;
             else args.add((Expression)operand);
           }
@@ -99,7 +99,7 @@ public class ReadasOperationParser extends PackratParser {
         int opos = reader.getPos();
         boolean inclusive = pattern.getInclusive(i);
 
-        TypedAST operand = ReadasOperandParser.getParser(pattern.getAndPredicateType(i), priority, inclusive).applyRule(reader, env);
+        TypedAST operand = ReadasOperandParser.getParser(pattern.getAndPredicateType(i), priority, inclusive, env).applyRule(reader, env);
         if(operand.isFail()) {
           reader.setPos(pos);
           return new BadAST(operand.getFailLog());
@@ -113,7 +113,7 @@ public class ReadasOperationParser extends PackratParser {
         int opos = reader.getPos();
         boolean inclusive = pattern.getInclusive(i);
 
-        TypedAST operand = ReadasOperandParser.getParser(pattern.getNotPredicateType(i), priority, inclusive).applyRule(reader, env);
+        TypedAST operand = ReadasOperandParser.getParser(pattern.getNotPredicateType(i), priority, inclusive, env).applyRule(reader, env);
         if(operand.isFail()) {
           reader.setPos(opos);
           continue;
@@ -126,7 +126,7 @@ public class ReadasOperationParser extends PackratParser {
       }
     }
 
-    IROperator operator = usops.getIRReadasOperator(type, priority, pattern);
+    IROperator operator = env.getReadasOperator(type, priority, pattern);
     try {
       env.addExceptions(operator.getExceptionTypes(), reader.getLine());
     } catch (NotFoundException e) {
@@ -150,10 +150,6 @@ public class ReadasOperationParser extends PackratParser {
     return parser;
   }
 
-  public static void initAll(UsingOperators usops) {
-    ReadasOperationParser.usops = usops;
-  }
-
   @Override
   public String toString() {
     return "ReadasOperationParser" + "[" + type.getName() + " : " + pattern + "]";
@@ -170,6 +166,5 @@ public class ReadasOperationParser extends PackratParser {
   private int priority;
 
   private static Map<Triad<CtClass, Integer, IRPattern>, ReadasOperationParser> parsers = new HashMap<Triad<CtClass, Integer, IRPattern>, ReadasOperationParser>();
-  private static UsingOperators usops;
 }
 

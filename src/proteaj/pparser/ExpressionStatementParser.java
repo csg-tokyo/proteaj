@@ -1,5 +1,6 @@
 package proteaj.pparser;
 
+import proteaj.ir.Environment;
 import proteaj.ir.tast.*;
 
 import javassist.*;
@@ -13,8 +14,8 @@ public class ExpressionStatementParser extends ComposedParser_Sequential {
   }
 
   @Override
-  protected PackratParser[] getParsers() {
-    return new PackratParser[] { ExpressionParser.getParser(CtClass.voidType), KeywordParser.getParser(";") };
+  protected PackratParser[] getParsers(Environment env) {
+    return new PackratParser[] { ExpressionParser.getParser(CtClass.voidType, env), KeywordParser.getParser(";") };
   }
 
   @Override

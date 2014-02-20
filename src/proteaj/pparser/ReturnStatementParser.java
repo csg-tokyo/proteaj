@@ -27,7 +27,7 @@ public class ReturnStatementParser extends PackratParser {
     // [ Expression ]
     TypedAST val = null;
     if(! returnType.equals(CtClass.voidType)) {
-      val = ExpressionParser.getParser(returnType).applyRule(reader, env);
+      val = ExpressionParser.getParser(returnType, env).applyRule(reader, env);
       if(val.isFail()) {
         reader.setPos(pos);
         return new BadAST(val.getFailLog());

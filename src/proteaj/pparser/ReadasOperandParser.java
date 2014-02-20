@@ -23,7 +23,7 @@ public class ReadasOperandParser extends PackratParser {
       else flog = chooseBest(flog, op.getFailLog());
     }
 
-    TypedAST op = getParser(type, priority, false).applyRule(reader, env, pos);
+    TypedAST op = getParser(type, priority, false, env).applyRule(reader, env, pos);
     if(! op.isFail()) return op;
 
     if(flog == null) flog = op.getFailLog();
@@ -33,37 +33,36 @@ public class ReadasOperandParser extends PackratParser {
     return new BadAST(flog);
   }
 
-  public static ReadasOperandParser getParser(CtClass type) {
-    if(! parsers.containsKey(type)) registerOperators(type);
+  public static ReadasOperandParser getParser(CtClass type, Environment env) {
+    TreeMap<Integer, ReadasOperandParser> tmap = getFromCache(type, env);
 
-    TreeMap<Integer, ReadasOperandParser> tmap = parsers.get(type);
     if(tmap.isEmpty()) return DefaultReadasOperandParser.getParser(type);
     else return tmap.firstEntry().getValue();
   }
 
-  public static ReadasOperandParser getParser(CtClass type, int priority, boolean inclusive) {
-    if(! parsers.containsKey(type)) registerOperators(type);
-
-    TreeMap<Integer, ReadasOperandParser> tmap = parsers.get(type);
-
-    Entry<Integer, ReadasOperandParser> entry;
-    if(inclusive) entry = tmap.ceilingEntry(priority);
-    else entry = tmap.higherEntry(priority);
+  public static ReadasOperandParser getParser(CtClass type, int priority, boolean inclusive, Environment env) {
+    final TreeMap<Integer, ReadasOperandParser> tmap = getFromCache(type, env);
+    final Entry<Integer, ReadasOperandParser> entry = inclusive ? tmap.ceilingEntry(priority) : tmap.higherEntry(priority);
 
     if(entry != null) return entry.getValue();
     else return DefaultReadasOperandParser.getParser(type);
   }
 
-  public static void init(UsingOperators usops) {
-    ReadasOperandParser.usops = usops;
-    parsers.clear();
+  private static TreeMap<Integer, ReadasOperandParser> getFromCache(CtClass type, Environment env) {
+    if (! parsers.containsKey(env) || ! parsers.get(env).containsKey(type)) {
+      registerOperators(type, env);
+    }
+    return parsers.get(env).get(type);
   }
 
-  private static void registerOperators(CtClass type) {
-    NavigableMap<Integer, List<IRPattern>> patternsMap = usops.getReadasPatterns(type);
+  private static void registerOperators(CtClass type, Environment env) {
+    NavigableMap<Integer, List<IRPattern>> patternsMap = env.getReadasPatterns(type);
 
-    if(! parsers.containsKey(type)) parsers.put(type, new TreeMap<Integer, ReadasOperandParser>());
-    TreeMap<Integer, ReadasOperandParser> tmap = parsers.get(type);
+    if (! parsers.containsKey(env)) parsers.put(env, new HashMap<CtClass, TreeMap<Integer, ReadasOperandParser>>());
+    Map<CtClass, TreeMap<Integer, ReadasOperandParser>> map = parsers.get(env);
+
+    if(! map.containsKey(type)) map.put(type, new TreeMap<Integer, ReadasOperandParser>());
+    TreeMap<Integer, ReadasOperandParser> tmap = map.get(type);
 
     for(Map.Entry<Integer, List<IRPattern>> entry : patternsMap.entrySet()) {
       ReadasOperandParser parser = new ReadasOperandParser(type, entry.getValue(), entry.getKey());
@@ -87,6 +86,6 @@ public class ReadasOperandParser extends PackratParser {
   private List<IRPattern> patterns;
   private int priority;
 
-  private static Map<CtClass, TreeMap<Integer, ReadasOperandParser>> parsers = new HashMap<CtClass, TreeMap<Integer,ReadasOperandParser>>();
-  private static UsingOperators usops;
+  private static Map<Environment, Map<CtClass, TreeMap<Integer, ReadasOperandParser>>> parsers =
+      new WeakHashMap<Environment, Map<CtClass, TreeMap<Integer, ReadasOperandParser>>>();
 }

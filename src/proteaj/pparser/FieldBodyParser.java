@@ -14,7 +14,7 @@ public class FieldBodyParser extends PackratParser {
   protected TypedAST parse(SourceStringReader reader, Environment env) {
     int pos = reader.getPos();
 
-    TypedAST expr = ExpressionParser.getParser(type).applyRule(reader, env);
+    TypedAST expr = ExpressionParser.getParser(type, env).applyRule(reader, env);
     if(expr.isFail()) {
       reader.setPos(pos);
       return new BadAST(expr.getFailLog());
@@ -23,14 +23,14 @@ public class FieldBodyParser extends PackratParser {
     return new FieldBody((Expression)expr);
   }
 
-  public void init(CtClass type) {
-    this.type = type;
+  public static FieldBodyParser getParser(CtClass type) {
+    return new FieldBodyParser(type);
   }
 
-  public static final FieldBodyParser parser = new FieldBodyParser();
+  private final CtClass type;
 
-  private CtClass type;
-
-  private FieldBodyParser() {}
+  private FieldBodyParser(CtClass type) {
+    this.type = type;
+  }
 }
 

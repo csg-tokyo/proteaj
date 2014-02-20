@@ -1,5 +1,7 @@
 package proteaj.pparser;
 
+import proteaj.ir.Environment;
+
 public class ControlFlowParser extends ComposedParser_Alternative {
   /* ControlFlow
    *  : IfStatement
@@ -14,7 +16,7 @@ public class ControlFlowParser extends ComposedParser_Alternative {
   }
 
   @Override
-  protected PackratParser[] getParsers() {
+  protected PackratParser[] getParsers(Environment env) {
     return new PackratParser[] {
         IfStatementParser.parser,
         WhileStatementParser.parser,

@@ -30,7 +30,7 @@ public class OperationParser extends PackratParser {
         int opos = reader.getPos();
         boolean inclusive = pattern.getInclusive(i);
 
-        TypedAST operand = ExpressionParser.getParser(pattern.getOperandType(i), priority, inclusive).applyRule(reader, env);
+        TypedAST operand = ExpressionParser.getParser(pattern.getOperandType(i), priority, inclusive, env).applyRule(reader, env);
         if(! operand.isFail()) {
           operands.add((Expression)operand);
           continue;
@@ -42,7 +42,7 @@ public class OperationParser extends PackratParser {
           CtClass componentType = arrayType.getComponentType();
           List<Expression> args = new ArrayList<Expression>();
 
-          operand = ExpressionParser.getParser(componentType, priority, inclusive).applyRule(reader, env);
+          operand = ExpressionParser.getParser(componentType, priority, inclusive, env).applyRule(reader, env);
           /*if(operand.isFail() && pattern.isReadasOperand(i)) {
             reader.setPos(opos);
             operand = ReadasExpressionParser.getParser(componentType).applyRule(reader, env);
@@ -67,7 +67,7 @@ public class OperationParser extends PackratParser {
             if(sep.isFail()) break;
 
             //int epos = reader.getPos();
-            operand = ExpressionParser.getParser(componentType, priority, inclusive).applyRule(reader, env);
+            operand = ExpressionParser.getParser(componentType, priority, inclusive, env).applyRule(reader, env);
             /*if(operand.isFail() && pattern.isReadasOperand(i)) {
               reader.setPos(epos);
               operand = ReadasExpressionParser.getParser(componentType).applyRule(reader, env);
@@ -78,7 +78,7 @@ public class OperationParser extends PackratParser {
           }
           else while(true) {
             opos = reader.getPos();
-            operand = ExpressionParser.getParser(componentType, priority, inclusive).applyRule(reader, env);
+            operand = ExpressionParser.getParser(componentType, priority, inclusive, env).applyRule(reader, env);
             /*if(operand.isFail() && pattern.isReadasOperand(i)) {
               reader.setPos(opos);
               operand = ReadasExpressionParser.getParser(componentType).applyRule(reader, env);
@@ -126,7 +126,7 @@ public class OperationParser extends PackratParser {
         int opos = reader.getPos();
         boolean inclusive = pattern.getInclusive(i);
 
-        TypedAST operand = ExpressionParser.getParser(pattern.getAndPredicateType(i), priority, inclusive).applyRule(reader, env);
+        TypedAST operand = ExpressionParser.getParser(pattern.getAndPredicateType(i), priority, inclusive, env).applyRule(reader, env);
         if(operand.isFail()) {
           reader.setPos(pos);
           return new BadAST(operand.getFailLog());
@@ -140,7 +140,7 @@ public class OperationParser extends PackratParser {
         int opos = reader.getPos();
         boolean inclusive = pattern.getInclusive(i);
 
-        TypedAST operand = ExpressionParser.getParser(pattern.getNotPredicateType(i), priority, inclusive).applyRule(reader, env);
+        TypedAST operand = ExpressionParser.getParser(pattern.getNotPredicateType(i), priority, inclusive, env).applyRule(reader, env);
         if(operand.isFail()) {
           reader.setPos(opos);
           continue;
@@ -153,7 +153,7 @@ public class OperationParser extends PackratParser {
       }
     }
 
-    IROperator operator = usops.getIROperator(type, priority, pattern);
+    IROperator operator = env.getOperator(type, priority, pattern);
     try {
       env.addExceptions(operator.getExceptionTypes(), reader.getLine());
     } catch (NotFoundException e) {
@@ -174,11 +174,6 @@ public class OperationParser extends PackratParser {
     return parser;
   }
 
-  public static void initAll(UsingOperators usops, IR ir) {
-    OperationParser.ir = ir;
-    OperationParser.usops = usops;
-  }
-
   @Override
   public String toString() {
     return "OperationParser" + "[" + type.getName() + " : " + pattern + "]";
@@ -195,7 +190,5 @@ public class OperationParser extends PackratParser {
   private int priority;
 
   private static Map<Triad<CtClass, Integer, IRPattern>, OperationParser> parsers = new HashMap<Triad<CtClass, Integer, IRPattern>, OperationParser>();
-  private static UsingOperators usops;
-  private static IR ir;
 }
 

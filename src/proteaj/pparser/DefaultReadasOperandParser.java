@@ -18,7 +18,7 @@ public class DefaultReadasOperandParser extends ReadasOperandParser {
 
     TypedAST lbrace = ReadasOperatorParser.getParser("(").applyRule(reader, env);
     if(! lbrace.isFail()) {
-      TypedAST expr = ReadasOperandParser.getParser(type).applyRule(reader, env);
+      TypedAST expr = ReadasOperandParser.getParser(type, env).applyRule(reader, env);
       if(! expr.isFail()) {
         TypedAST rbrace = ReadasOperatorParser.getParser(")").applyRule(reader, env);
         if(! rbrace.isFail()) {

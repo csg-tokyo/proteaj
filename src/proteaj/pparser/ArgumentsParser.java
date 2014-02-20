@@ -25,7 +25,7 @@ public class ArgumentsParser extends PackratParser {
     List<Expression> args = new ArrayList<Expression>(nargs);
 
     if(nargs != 0) {
-      TypedAST arg = ExpressionParser.getParser(argTypes.get(0)).applyRule(reader, env);
+      TypedAST arg = ExpressionParser.getParser(argTypes.get(0), env).applyRule(reader, env);
       if(arg.isFail()) {
         reader.setPos(pos);
         return new BadAST(arg.getFailLog());
@@ -40,7 +40,7 @@ public class ArgumentsParser extends PackratParser {
           return new BadAST(delim.getFailLog());
         }
 
-        arg = ExpressionParser.getParser(argTypes.get(i)).applyRule(reader, env);
+        arg = ExpressionParser.getParser(argTypes.get(i), env).applyRule(reader, env);
         if(arg.isFail()) {
           reader.setPos(pos);
           return new BadAST(arg.getFailLog());

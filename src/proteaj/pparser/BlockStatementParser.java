@@ -1,5 +1,7 @@
 package proteaj.pparser;
 
+import proteaj.ir.Environment;
+
 public class BlockStatementParser extends ComposedParser_Alternative {
   /* BlockStatement
    *  : Block
@@ -12,7 +14,7 @@ public class BlockStatementParser extends ComposedParser_Alternative {
   }
 
   @Override
-  protected PackratParser[] getParsers() {
+  protected PackratParser[] getParsers(Environment env) {
     return new PackratParser[] {
         BlockParser.parser,
         ControlFlowParser.parser,

@@ -1,5 +1,7 @@
 package proteaj.pparser;
 
+import proteaj.ir.Environment;
+
 public class PrimaryParser extends ComposedParser_Alternative {
   /* Primary
    *  : AbbMethodCall
@@ -17,7 +19,7 @@ public class PrimaryParser extends ComposedParser_Alternative {
   }
 
   @Override
-  protected PackratParser[] getParsers() {
+  protected PackratParser[] getParsers(Environment env) {
     return new PackratParser[] {
         AbbMethodCallParser.parser,
         VariableParser.parser,

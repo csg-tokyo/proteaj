@@ -29,7 +29,7 @@ public class IfStatementParser extends PackratParser {
     }
 
     // Expression
-    TypedAST condition = ExpressionParser.getParser(CtClass.booleanType).applyRule(reader, env);
+    TypedAST condition = ExpressionParser.getParser(CtClass.booleanType, env).applyRule(reader, env);
     if(condition.isFail()) {
       reader.setPos(pos);
       return new BadAST(condition.getFailLog());

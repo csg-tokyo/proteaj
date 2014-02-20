@@ -1,5 +1,6 @@
 package proteaj.pparser;
 
+import proteaj.ir.Environment;
 import proteaj.ir.tast.*;
 
 import javassist.*;
@@ -13,11 +14,11 @@ public class WhileStatementParser extends ComposedParser_Sequential {
   }
 
   @Override
-  protected PackratParser[] getParsers() {
+  protected PackratParser[] getParsers(Environment env) {
     return new PackratParser[] {
         KeywordParser.getParser("while"),
         KeywordParser.getParser("("),
-        ExpressionParser.getParser(CtClass.booleanType),
+        ExpressionParser.getParser(CtClass.booleanType, env),
         KeywordParser.getParser(")"),
         SingleStatementParser.parser
     };

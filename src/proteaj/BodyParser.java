@@ -11,15 +11,11 @@ import java.util.Map.Entry;
 import javassist.*;
 
 public class BodyParser {
-  public BodyParser(IR ir) {
-    this.ir = ir;
-  }
-
-  public MethodBody parseMethodBody(CtMethod method, SourceStringReader reader, Environment env, TypeResolver resolver, UsingOperators usops) throws CompileError, CompileErrors {
+  public MethodBody parseMethodBody(CtMethod method, SourceStringReader reader, Environment env) throws CompileError, CompileErrors {
     try {
       CtClass returnType = method.getReturnType();
       CtClass[] exceptionTypes = method.getExceptionTypes();
-      initParsers_MethodBody(returnType, resolver, usops);
+      initParser_Statement(returnType);
 
       TypedAST mbody = MethodBodyParser.parser.applyRule(reader, env);
       if(! mbody.isFail()) {
@@ -38,10 +34,10 @@ public class BodyParser {
     }
   }
 
-  public ConstructorBody parseConstructorBody(CtConstructor constructor, SourceStringReader reader, Environment env, TypeResolver resolver, UsingOperators usops) throws CompileError, CompileErrors {
+  public ConstructorBody parseConstructorBody(CtConstructor constructor, SourceStringReader reader, Environment env) throws CompileError, CompileErrors {
     try {
       CtClass[] exceptionTypes = constructor.getExceptionTypes();
-      initParsers_ConstructorBody(resolver, usops);
+      initParser_Statement();
 
       TypedAST cbody = ConstructorBodyParser.parser.applyRule(reader, env);
       if(! cbody.isFail()) {
@@ -60,12 +56,11 @@ public class BodyParser {
     }
   }
 
-  public FieldBody parseFieldBody(CtField field, SourceStringReader reader, Environment env, TypeResolver resolver, UsingOperators usops) throws CompileError, CompileErrors {
+  public FieldBody parseFieldBody(CtField field, SourceStringReader reader, Environment env) throws CompileError, CompileErrors {
     try {
-      CtClass type = field.getType();
-      initParsers_FieldBody(type, resolver, usops);
+      initParser_Expression();
 
-      TypedAST fbody = FieldBodyParser.parser.applyRule(reader, env);
+      TypedAST fbody = FieldBodyParser.getParser(field.getType()).applyRule(reader, env);
       if(! fbody.isFail()) {
         if(env.hasException()) {
           throw createUnhandledExceptions(reader, env);
@@ -79,12 +74,11 @@ public class BodyParser {
     }
   }
 
-  public DefaultValue parseDefaultArgument(CtMethod method, SourceStringReader reader, Environment env, TypeResolver resolver, UsingOperators usops) throws CompileError, CompileErrors {
+  public DefaultValue parseDefaultArgument(CtMethod method, SourceStringReader reader, Environment env) throws CompileError, CompileErrors {
     try {
-      CtClass type = method.getReturnType();
-      initParsers_DefaultArgs(type, resolver, usops);
+      initParser_Expression();
 
-      TypedAST defval = DefaultArgumentParser.parser.applyRule(reader, env);
+      TypedAST defval = DefaultArgumentParser.getParser(method.getReturnType()).applyRule(reader, env);
       if(! defval.isFail()) {
         if(env.hasException()) {
           throw createUnhandledExceptions(reader, env);
@@ -98,8 +92,8 @@ public class BodyParser {
     }
   }
 
-  public ClassInitializer parseStaticInitializer(SourceStringReader reader, Environment env, TypeResolver resolver, UsingOperators usops) throws CompileError, CompileErrors {
-    initParsers_StaticInitializer(resolver, usops);
+  public ClassInitializer parseStaticInitializer(SourceStringReader reader, Environment env) throws CompileError, CompileErrors {
+    initParser_Statement();
 
     TypedAST sibody = StaticInitializerParser.parser.applyRule(reader, env);
     if(! sibody.isFail()) {
@@ -124,57 +118,17 @@ public class BodyParser {
     return new CompileErrors(errors);
   }
 
-  private void initParsers_MethodBody(CtClass returnType, TypeResolver resolver, UsingOperators usops) {
-    initParser_Statement(returnType);
-    initParser_Expression(resolver, usops);
-    initParser_Basic(resolver);
-  }
-
-  private void initParsers_ConstructorBody(TypeResolver resolver, UsingOperators usops) {
-    initParser_Statement(null);
-    initParser_Expression(resolver, usops);
-    initParser_Basic(resolver);
-  }
-
-  private void initParsers_FieldBody(CtClass type, TypeResolver resolver, UsingOperators usops) {
-    FieldBodyParser.parser.init(type);
-
-    initParser_Expression(resolver, usops);
-    initParser_Basic(resolver);
-  }
-
-  private void initParsers_DefaultArgs(CtClass type, TypeResolver resolver, UsingOperators usops) {
-    DefaultArgumentParser.parser.init(type);
-    initParser_Expression(resolver, usops);
-    initParser_Basic(resolver);
-  }
-
-  private void initParsers_StaticInitializer(TypeResolver resolver, UsingOperators usops) {
-    initParser_Statement(null);
-    initParser_Expression(resolver, usops);
-    initParser_Basic(resolver);
+  private void initParser_Statement() {
+    ReturnStatementParser.parser.disable();
+    initParser_Expression();
   }
 
   private void initParser_Statement(CtClass returnType) {
-    if(returnType == null) ReturnStatementParser.parser.disable();
-    else ReturnStatementParser.parser.init(returnType);
+    ReturnStatementParser.parser.init(returnType);
+    initParser_Expression();
   }
 
-  private void initParser_Expression(TypeResolver resolver, UsingOperators usops) {
-    ExpressionParser.init(usops);
-    OperationParser.initAll(usops, ir);
-    NewArrayExpressionParser.parser.init(resolver);
-    CastExpressionParser.parser.init(resolver);
-    ReadasOperationParser.initAll(usops);
-    PrimitiveReadasOperationParser.initAll();
-    ReadasOperandParser.init(usops);
-  }
-
-  private void initParser_Basic(TypeResolver resolver) {
-    ClassNameParser.parser.init(resolver);
-    TypeNameParser.parser.init(resolver);
+  private void initParser_Expression() {
     PackratParser.initialize();
   }
-
-  private final IR ir;
 }

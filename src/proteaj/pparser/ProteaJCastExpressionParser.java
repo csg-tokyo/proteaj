@@ -51,7 +51,7 @@ public class ProteaJCastExpressionParser extends PackratParser {
 
       CtClass from = ((TypeName)right).getType();
 
-      TypedAST expr = ExpressionParser.getParser(from).applyRule(reader, env);
+      TypedAST expr = ExpressionParser.getParser(from, env).applyRule(reader, env);
       if (expr.isFail()) {
         reader.setPos(pos);
         return new BadAST(expr.getFailLog());
@@ -93,7 +93,7 @@ public class ProteaJCastExpressionParser extends PackratParser {
       CtClass from = ((TypeName)right).getType();
       CtClass to = ((TypeName)left).getType();
 
-      TypedAST expr = ExpressionParser.getParser(from).applyRule(reader, env);
+      TypedAST expr = ExpressionParser.getParser(from, env).applyRule(reader, env);
       if (expr.isFail()) {
         reader.setPos(pos);
         return new BadAST(expr.getFailLog());
@@ -128,7 +128,7 @@ public class ProteaJCastExpressionParser extends PackratParser {
 
       CtClass from = ((TypeName)left).getType();
 
-      TypedAST expr = ExpressionParser.getParser(from).applyRule(reader, env);
+      TypedAST expr = ExpressionParser.getParser(from, env).applyRule(reader, env);
       if (expr.isFail()) {
         reader.setPos(pos);
         return new BadAST(expr.getFailLog());
@@ -152,7 +152,7 @@ public class ProteaJCastExpressionParser extends PackratParser {
     CtClass from = ((TypeName)left).getType();
     CtClass to = ((TypeName)right).getType();
 
-    TypedAST expr = ExpressionParser.getParser(from).applyRule(reader, env);
+    TypedAST expr = ExpressionParser.getParser(from, env).applyRule(reader, env);
     if (expr.isFail()) {
       reader.setPos(pos);
       return new BadAST(expr.getFailLog());

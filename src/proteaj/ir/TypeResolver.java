@@ -1,4 +1,4 @@
-package proteaj;
+package proteaj.ir;
 
 import proteaj.error.*;
 import proteaj.ir.*;

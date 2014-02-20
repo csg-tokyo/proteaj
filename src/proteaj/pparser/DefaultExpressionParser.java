@@ -23,7 +23,7 @@ public class DefaultExpressionParser extends ExpressionParser {
 
     TypedAST lbrace = KeywordParser.getParser("(").applyRule(reader, env);
     if(! lbrace.isFail()) {
-      TypedAST expr = ExpressionParser.getParser(type).applyRule(reader, env);
+      TypedAST expr = ExpressionParser.getParser(type, env).applyRule(reader, env);
       if(! expr.isFail()) {
         TypedAST rbrace = KeywordParser.getParser(")").applyRule(reader, env);
         if(! rbrace.isFail()) {

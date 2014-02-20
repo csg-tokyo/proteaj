@@ -1,6 +1,7 @@
 package proteaj.pparser;
 
 import proteaj.error.*;
+import proteaj.ir.Environment;
 import proteaj.ir.tast.*;
 
 public class ArrayLengthParser extends ComposedParser_Sequential {
@@ -12,7 +13,7 @@ public class ArrayLengthParser extends ComposedParser_Sequential {
   }
 
   @Override
-  protected PackratParser[] getParsers() {
+  protected PackratParser[] getParsers(Environment env) {
     return new PackratParser[] {
         JavaExpressionParser.parser,
         KeywordParser.getParser("."),

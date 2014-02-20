@@ -24,7 +24,7 @@ public class AssignExpressionParser extends PackratParser {
       return new BadAST(eq.getFailLog());
     }
 
-    TypedAST val = ExpressionParser.getParser(((Expression)expr).getType()).applyRule(reader, env);
+    TypedAST val = ExpressionParser.getParser(((Expression)expr).getType(), env).applyRule(reader, env);
     if(val.isFail()) {
       reader.setPos(pos);
       return new BadAST(val.getFailLog());

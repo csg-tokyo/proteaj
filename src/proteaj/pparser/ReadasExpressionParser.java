@@ -16,7 +16,7 @@ public class ReadasExpressionParser extends PackratParser {
     int pos = reader.getPos();
     while(isWhitespace(reader.lookahead())) reader.next();
 
-    TypedAST operand = ReadasOperandParser.getParser(type).applyRule(reader, env);
+    TypedAST operand = ReadasOperandParser.getParser(type, env).applyRule(reader, env);
     if(operand.isFail()) reader.setPos(pos);
 
     return operand;

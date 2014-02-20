@@ -12,7 +12,7 @@ public class DefaultArgumentParser extends PackratParser {
   protected TypedAST parse(SourceStringReader reader, Environment env) {
     int pos = reader.getPos();
 
-    TypedAST expr = ExpressionParser.getParser(type).applyRule(reader, env);
+    TypedAST expr = ExpressionParser.getParser(type, env).applyRule(reader, env);
     if(expr.isFail()) {
       reader.setPos(pos);
       return new BadAST(expr.getFailLog());
@@ -21,14 +21,14 @@ public class DefaultArgumentParser extends PackratParser {
     return new DefaultValue((Expression)expr);
   }
 
-  public void init(CtClass type) {
-    this.type = type;
+  public static DefaultArgumentParser getParser(CtClass type) {
+    return new DefaultArgumentParser(type);
   }
 
-  public static final DefaultArgumentParser parser = new DefaultArgumentParser();
+  private final CtClass type;
 
-  private CtClass type;
-
-  private DefaultArgumentParser() {}
+  private DefaultArgumentParser(CtClass type) {
+    this.type = type;
+  }
 }
 

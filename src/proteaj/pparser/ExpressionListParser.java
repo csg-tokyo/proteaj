@@ -17,7 +17,7 @@ public class ExpressionListParser extends PackratParser {
 
     List<Expression> exprs = new ArrayList<Expression>();
 
-    TypedAST expr = ExpressionParser.getParser(CtClass.voidType).applyRule(reader, env);
+    TypedAST expr = ExpressionParser.getParser(CtClass.voidType, env).applyRule(reader, env);
     if(expr.isFail()) {
       reader.setPos(pos);
       return new ExpressionList(exprs);
@@ -34,7 +34,7 @@ public class ExpressionListParser extends PackratParser {
         break;
       }
 
-      expr = ExpressionParser.getParser(CtClass.voidType).applyRule(reader, env);
+      expr = ExpressionParser.getParser(CtClass.voidType, env).applyRule(reader, env);
       if(expr.isFail()) {
         reader.setPos(pos);
         return new BadAST(expr.getFailLog());

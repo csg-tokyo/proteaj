@@ -1,5 +1,7 @@
 package proteaj.pparser;
 
+import proteaj.ir.Environment;
+
 public class JavaExpressionParser extends ComposedParser_Alternative {
   /* JavaExpression
    *  : AssignExpression
@@ -14,7 +16,7 @@ public class JavaExpressionParser extends ComposedParser_Alternative {
   }
 
   @Override
-  protected PackratParser[] getParsers() {
+  protected PackratParser[] getParsers(Environment env) {
     return new PackratParser[] {
         AssignExpressionParser.parser,
         ArrayLengthParser.parser,

@@ -8,9 +8,13 @@ import java.util.*;
 import javassist.*;
 
 public class Environment {
-  public Environment(CtMember thisMember, String file) {
+  public Environment(IR ir, CtMember thisMember) {
     this.thisClass = thisMember.getDeclaringClass();
     this.thisMember = thisMember;
+    IRHeader header = ir.getIRHeader(thisClass);
+    this.filePath = header.getFilePath();
+    this.resolver = new TypeResolver(header, ir.getClassPool());
+    this.operators = new UsingOperators(header, ir.getOperatorPool());
     this.env = new HashMap<String, Expression>();
     this.exceptions = new HashMap<CtClass, List<Integer>>();
 
@@ -22,19 +26,19 @@ public class Environment {
         Expression superExpr = new SuperExpression(thisClass);
         add("super", superExpr);
       } catch (NotFoundException e) {
-        ErrorList.addError(new NotFoundError(e, file, 0));
+        ErrorList.addError(new NotFoundError(e, filePath, 0));
       }
 
       for(CtField field : thisClass.getFields()) try {
         add(field.getName(), new FieldAccess(thisExpr, field));
       } catch (NotFoundException e) {
-        ErrorList.addError(new NotFoundError(e, file, 0));
+        ErrorList.addError(new NotFoundError(e, filePath, 0));
       }
 
       for(CtField field : thisClass.getDeclaredFields()) try {
         add(field.getName(), new FieldAccess(thisExpr, field));
       } catch (NotFoundException e) {
-        ErrorList.addError(new NotFoundError(e, file, 0));
+        ErrorList.addError(new NotFoundError(e, filePath, 0));
       }
     }
 
@@ -44,7 +48,7 @@ public class Environment {
           add(field.getName(), new StaticFieldAccess(field));
         }
       } catch (NotFoundException e) {
-        ErrorList.addError(new NotFoundError(e, file, 0));
+        ErrorList.addError(new NotFoundError(e, filePath, 0));
       }
     }
   }
@@ -52,12 +56,39 @@ public class Environment {
   public Environment(Environment env) {
     this.thisClass = env.thisClass;
     this.thisMember = env.thisMember;
+    this.filePath = env.filePath;
+    this.resolver = env.resolver;
+    this.operators = env.operators;
     this.env = new HashMap<String, Expression>(env.env);
     this.exceptions = new HashMap<CtClass, List<Integer>>();
   }
 
   public boolean isStatic() {
     return Modifiers.isStatic(thisMember.getModifiers());
+  }
+
+  public CtClass getType(String name) throws NotFoundError {
+    return resolver.getType(name);
+  }
+
+  public boolean isTypeName(String name) {
+    return resolver.isTypeName(name);
+  }
+
+  public NavigableMap<Integer, List<IRPattern>> getPatterns(CtClass type) {
+    return operators.getPatterns(type);
+  }
+
+  public NavigableMap<Integer, List<IRPattern>> getReadasPatterns(CtClass type) {
+    return operators.getReadasPatterns(type);
+  }
+
+  public IROperator getOperator(CtClass type, int priority, IRPattern pattern) {
+    return operators.getIROperator(type, priority, pattern);
+  }
+
+  public IROperator getReadasOperator(CtClass type, int priority, IRPattern pattern) {
+    return operators.getIRReadasOperator(type, priority, pattern);
   }
 
   public void inheritExceptions(Environment env) {
@@ -126,6 +157,9 @@ public class Environment {
 
   public final CtClass thisClass;
   public final CtMember thisMember;
+  public final String filePath;
+  private final TypeResolver resolver;
+  private final UsingOperators operators;
   private Map<String, Expression> env;
   private Map<CtClass, List<Integer>> exceptions;
 }

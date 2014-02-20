@@ -10,7 +10,7 @@ import javassist.*;
 public class BodyCompiler {
   public BodyCompiler(IR ir) {
     this.ir = ir;
-    this.parser = new BodyParser(ir);
+    this.parser = new BodyParser();
   }
 
   public IR compile() {
@@ -26,13 +26,8 @@ public class BodyCompiler {
   private void compileMethods() {
     for(IRMethodBody irbody : ir.getMethods()) {
       CtMethod method = irbody.getCtMethod();
-      CtClass thisClass = method.getDeclaringClass();
-      IRHeader header = ir.getIRHeader(thisClass);
-
-      SourceStringReader reader = new SourceStringReader(irbody.getSource(), header.getFilePath(), irbody.getLine());
-      TypeResolver resolver = new TypeResolver(header, ir.getClassPool());
-      UsingOperators usops = new UsingOperators(header, ir.getOperatorPool());
-      Environment env = new Environment(method, header.getFilePath());
+      Environment env = new Environment(ir, method);
+      SourceStringReader reader = new SourceStringReader(irbody.getSource(), env.filePath, irbody.getLine());
 
       try {
         env.addParams(irbody.getParamNames(), irbody.getParamTypes());
@@ -41,7 +36,7 @@ public class BodyCompiler {
       }
 
       try {
-        MethodBody mbody = parser.parseMethodBody(method, reader, env, resolver, usops);
+        MethodBody mbody = parser.parseMethodBody(method, reader, env);
         irbody.setAST(mbody);
       } catch (CompileError e) {
         ErrorList.addError(e);
@@ -54,13 +49,8 @@ public class BodyCompiler {
   private void compileConstructors() {
     for(IRConstructorBody irbody : ir.getConstructors()) {
       CtConstructor constructor = irbody.getCtConstructor();
-      CtClass thisClass = constructor.getDeclaringClass();
-      IRHeader header = ir.getIRHeader(thisClass);
-
-      SourceStringReader reader = new SourceStringReader(irbody.getSource(), header.getFilePath(), irbody.getLine());
-      TypeResolver resolver = new TypeResolver(header, ir.getClassPool());
-      UsingOperators usops = new UsingOperators(header, ir.getOperatorPool());
-      Environment env = new Environment(constructor, header.getFilePath());
+      Environment env = new Environment(ir, constructor);
+      SourceStringReader reader = new SourceStringReader(irbody.getSource(), env.filePath, irbody.getLine());
 
       try {
         env.addParams(irbody.getParamNames(), irbody.getParamTypes());
@@ -69,7 +59,7 @@ public class BodyCompiler {
       }
 
       try {
-        ConstructorBody cbody = parser.parseConstructorBody(constructor, reader, env, resolver, usops);
+        ConstructorBody cbody = parser.parseConstructorBody(constructor, reader, env);
         irbody.setAST(cbody);
       } catch (CompileError e) {
         ErrorList.addError(e);
@@ -82,16 +72,11 @@ public class BodyCompiler {
   private void compileFields() {
     for(IRFieldBody irbody : ir.getFields()) {
       CtField field = irbody.getCtField();
-      CtClass thisClass = field.getDeclaringClass();
-      IRHeader header = ir.getIRHeader(thisClass);
-
-      SourceStringReader reader = new SourceStringReader(irbody.getSource(), header.getFilePath(), irbody.getLine());
-      TypeResolver resolver = new TypeResolver(header, ir.getClassPool());
-      UsingOperators usops = new UsingOperators(header, ir.getOperatorPool());
-      Environment env = new Environment(field, header.getFilePath());
+      Environment env = new Environment(ir, field);
+      SourceStringReader reader = new SourceStringReader(irbody.getSource(), env.filePath, irbody.getLine());
 
       try {
-        FieldBody fbody = parser.parseFieldBody(field, reader, env, resolver, usops);
+        FieldBody fbody = parser.parseFieldBody(field, reader, env);
         irbody.setAST(fbody);
       } catch (CompileError e) {
         ErrorList.addError(e);
@@ -104,16 +89,11 @@ public class BodyCompiler {
   private void compileDefaultArguments() {
     for(IRDefaultArgument irbody : ir.getDefaultArguments()) {
       CtMethod method = irbody.getCtMethod();
-      CtClass thisClass = method.getDeclaringClass();
-      IRHeader header = ir.getIRHeader(thisClass);
-
-      SourceStringReader reader = new SourceStringReader(irbody.getSource(), header.getFilePath(), irbody.getLine());
-      TypeResolver resolver = new TypeResolver(header, ir.getClassPool());
-      UsingOperators usops = new UsingOperators(header, ir.getOperatorPool());
-      Environment env = new Environment(method, header.getFilePath());
+      Environment env = new Environment(ir, method);
+      SourceStringReader reader = new SourceStringReader(irbody.getSource(), env.filePath, irbody.getLine());
 
       try {
-        DefaultValue defval = parser.parseDefaultArgument(method, reader, env, resolver, usops);
+        DefaultValue defval = parser.parseDefaultArgument(method, reader, env);
         irbody.setAST(defval);
       } catch (CompileError e) {
         ErrorList.addError(e);
@@ -126,16 +106,11 @@ public class BodyCompiler {
   private void compileStaticInitializers() {
     for(IRStaticInitializer sinit : ir.getStaticInitializers()) {
       CtConstructor clinit = sinit.getCtConstructor();
-      CtClass thisClass = clinit.getDeclaringClass();
-      IRHeader header = ir.getIRHeader(thisClass);
-
-      SourceStringReader reader = new SourceStringReader(sinit.getSource(), header.getFilePath(), sinit.getLine());
-      TypeResolver resolver = new TypeResolver(header, ir.getClassPool());
-      UsingOperators usops = new UsingOperators(header, ir.getOperatorPool());
-      Environment env = new Environment(clinit, header.getFilePath());
+      Environment env = new Environment(ir, clinit);
+      SourceStringReader reader = new SourceStringReader(sinit.getSource(), env.filePath, sinit.getLine());
 
       try {
-        ClassInitializer body = parser.parseStaticInitializer(reader, env, resolver, usops);
+        ClassInitializer body = parser.parseStaticInitializer(reader, env);
         sinit.setAST(body);
       } catch (CompileError e) {
         ErrorList.addError(e);

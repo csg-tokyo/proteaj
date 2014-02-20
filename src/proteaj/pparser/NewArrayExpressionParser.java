@@ -1,6 +1,5 @@
 package proteaj.pparser;
 
-import proteaj.TypeResolver;
 import proteaj.error.*;
 import proteaj.io.*;
 import proteaj.ir.*;
@@ -42,7 +41,7 @@ public class NewArrayExpressionParser extends PackratParser {
     }
 
     // Expression
-    TypedAST arg = ExpressionParser.getParser(CtClass.intType).applyRule(reader, env);
+    TypedAST arg = ExpressionParser.getParser(CtClass.intType, env).applyRule(reader, env);
     if(arg.isFail()) {
       reader.setPos(pos);
       return new BadAST(arg.getFailLog());
@@ -65,7 +64,7 @@ public class NewArrayExpressionParser extends PackratParser {
       // "["
       lbracket = KeywordParser.getParser("[").applyRule(reader, env);
       if(lbracket.isFail()) try {
-        CtClass arrayType = resolver.getType(typeNameBuf.toString());
+        CtClass arrayType = env.getType(typeNameBuf.toString());
         return new NewArrayExpression(arrayType, args);
       } catch (NotFoundError e) {
         FailLog flog = new FailLog("unknown type : " + typeNameBuf.toString(), reader.getPos(), reader.getLine());
@@ -74,7 +73,7 @@ public class NewArrayExpressionParser extends PackratParser {
       }
 
       // Expression
-      arg = ExpressionParser.getParser(CtClass.intType).applyRule(reader, env);
+      arg = ExpressionParser.getParser(CtClass.intType, env).applyRule(reader, env);
       if(arg.isFail()) {
         reader.setPos(bpos);
         break;
@@ -96,7 +95,7 @@ public class NewArrayExpressionParser extends PackratParser {
       // "["
       lbracket = KeywordParser.getParser("[").applyRule(reader, env);
       if(lbracket.isFail()) try {
-        CtClass arrayType = resolver.getType(typeNameBuf.toString());
+        CtClass arrayType = env.getType(typeNameBuf.toString());
         return new NewArrayExpression(arrayType, args);
       } catch (NotFoundError e) {
         FailLog flog = new FailLog("unknown type : " + typeNameBuf.toString(), reader.getPos(), reader.getLine());
@@ -115,18 +114,12 @@ public class NewArrayExpressionParser extends PackratParser {
     }
   }
 
-  public void init(TypeResolver resolver) {
-    this.resolver = resolver;
-  }
-
   @Override
   public String toString() {
     return "NewArrayExpressionParser";
   }
 
   public static final NewArrayExpressionParser parser = new NewArrayExpressionParser();
-
-  private TypeResolver resolver;
 
   private NewArrayExpressionParser() {}
 }
