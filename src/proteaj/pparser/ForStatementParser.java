@@ -32,7 +32,7 @@ public class ForStatementParser extends PackratParser<Statement> {
     ParseResult<String> semicolon2 = KeywordParser.getParser(";").applyRule(reader, newenv);
     if(semicolon2.isFail()) return fail(semicolon2, pos, reader);
 
-    ParseResult<Expression> update = ForUpdateParser.parser.applyRule(reader, newenv);
+    ParseResult<ExpressionList> update = ForUpdateParser.parser.applyRule(reader, newenv);
     if(update.isFail()) return fail(update, pos, reader);
 
     ParseResult<String> rPar = KeywordParser.getParser(")").applyRule(reader, newenv);

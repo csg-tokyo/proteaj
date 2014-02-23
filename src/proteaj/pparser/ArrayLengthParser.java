@@ -4,12 +4,12 @@ import proteaj.io.SourceStringReader;
 import proteaj.ir.Environment;
 import proteaj.ir.tast.*;
 
-public class ArrayLengthParser extends PackratParser<Expression> {
+public class ArrayLengthParser extends PackratParser<ArrayLength> {
   /* ArrayLength
    *  : JavaExpression '.' "length"
    */
   @Override
-  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<ArrayLength> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
     ParseResult<Expression> expr = JavaExpressionParser.parser.applyRule(reader, env);

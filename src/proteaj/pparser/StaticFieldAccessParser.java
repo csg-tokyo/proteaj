@@ -9,12 +9,12 @@ import javassist.*;
 
 import static proteaj.util.Modifiers.*;
 
-public class StaticFieldAccessParser extends PackratParser<Expression> {
+public class StaticFieldAccessParser extends PackratParser<StaticFieldAccess> {
   /* StaticFieldAccess
    *  : ClassName '.' Identifier
    */
   @Override
-  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<StaticFieldAccess> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
     // ClassName

@@ -9,12 +9,12 @@ import javassist.*;
 
 import static proteaj.util.Modifiers.hasVarArgs;
 
-public class SuperConstructorCallParser extends PackratParser<Statement> {
+public class SuperConstructorCallParser extends PackratParser<SuperConstructorCall> {
   /* SuperConstructorCall
    *  : "super" Arguments ';'
    */
   @Override
-  protected ParseResult<Statement> parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<SuperConstructorCall> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
     ParseResult<String> keyword = KeywordParser.getParser("super").applyRule(reader, env);

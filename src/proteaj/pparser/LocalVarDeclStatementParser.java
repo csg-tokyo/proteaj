@@ -4,12 +4,12 @@ import proteaj.io.SourceStringReader;
 import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
-public class LocalVarDeclStatementParser extends PackratParser<Statement> {
+public class LocalVarDeclStatementParser extends PackratParser<LocalVarDeclStatement> {
   /* LocalVarDeclStatement
    *  : LocalVarDecl ';'
    */
   @Override
-  protected ParseResult<Statement> parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<LocalVarDeclStatement> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
     ParseResult<LocalVarDecl> local = LocalVarDeclParser.parser.applyRule(reader, env);

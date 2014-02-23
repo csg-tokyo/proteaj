@@ -6,14 +6,14 @@ import proteaj.ir.tast.*;
 import java.util.*;
 import javassist.*;
 
-public class ProteaJCastExpressionParser extends ComposedParser_Alternative<Expression> {
+public class ProteaJCastExpressionParser extends ComposedParser_Alternative<CastExpression> {
   /* ProteaJCastExpression
    *  : ProteaJRightArrowCast
    *  | ProteaJLeftArrowCast
    */
 
   @Override
-  protected List<PackratParser<? extends  Expression>> getParsers(Environment env) {
+  protected List<PackratParser<? extends CastExpression>> getParsers(Environment env) {
     return asList(ProteaJRightArrowCastParser.getParser(type), ProteaJLeftArrowCastParser.getParser(type));
   }
 

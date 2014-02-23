@@ -22,7 +22,7 @@ public class TryStatementParser extends PackratParser<Statement> {
 
     Environment tryenv = new Environment(env);
 
-    ParseResult<Statement> tryBlock = BlockParser.parser.applyRule(reader, tryenv);
+    ParseResult<Block> tryBlock = BlockParser.parser.applyRule(reader, tryenv);
     if(tryBlock.isFail()) return fail(tryBlock, pos, reader);
 
     int cpos = reader.getPos();
@@ -32,7 +32,7 @@ public class TryStatementParser extends PackratParser<Statement> {
     if(! finallyKeyword.isFail()) {
       env.inheritExceptions(tryenv);
 
-      ParseResult<Statement> finallyBlock = BlockParser.parser.applyRule(reader, env);
+      ParseResult<Block> finallyBlock = BlockParser.parser.applyRule(reader, env);
       if(finallyBlock.isFail()) return fail(finallyBlock, pos, reader);
 
       stmt.setFinallyBlock(finallyBlock.get());
@@ -66,7 +66,7 @@ public class TryStatementParser extends PackratParser<Statement> {
       Environment newenv = new Environment(env);
       newenv.add(name.get(), new LocalVariable(name.get(), type.get()));
 
-      ParseResult<Statement> catchBlock = BlockParser.parser.applyRule(reader, newenv);
+      ParseResult<Block> catchBlock = BlockParser.parser.applyRule(reader, newenv);
       if(catchBlock.isFail()) return fail(catchBlock, pos, reader);
 
       try {
@@ -91,7 +91,7 @@ public class TryStatementParser extends PackratParser<Statement> {
 
     finallyKeyword = KeywordParser.getParser("finally").applyRule(reader, env);
     if(! finallyKeyword.isFail()) {
-      ParseResult<Statement> finallyBlock = BlockParser.parser.applyRule(reader, env);
+      ParseResult<Block> finallyBlock = BlockParser.parser.applyRule(reader, env);
       if(finallyBlock.isFail()) return fail(finallyBlock, pos, reader);
       else stmt.setFinallyBlock(finallyBlock.get());
     }

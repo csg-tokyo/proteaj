@@ -9,12 +9,12 @@ import javassist.*;
 
 import static proteaj.util.Modifiers.*;
 
-public class NewExpressionParser extends PackratParser<Expression> {
+public class NewExpressionParser extends PackratParser<NewExpression> {
   /* NewExpression
    *  : "new" ClassName Arguments
    */
   @Override
-  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<NewExpression> parse(SourceStringReader reader, Environment env) {
     int pos = reader.getPos();
 
     // "new"

@@ -6,12 +6,12 @@ import proteaj.ir.tast.*;
 
 import javassist.*;
 
-public class ExpressionStatementParser extends PackratParser<Statement> {
+public class ExpressionStatementParser extends PackratParser<ExpressionStatement> {
   /* ExpressionStatement
    *  : Expression ';'
    */
   @Override
-  protected ParseResult<Statement> parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<ExpressionStatement> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
     ParseResult<Expression> expr = ExpressionParser.getParser(CtClass.voidType, env).applyRule(reader, env);

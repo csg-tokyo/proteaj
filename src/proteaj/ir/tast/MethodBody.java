@@ -1,7 +1,7 @@
 package proteaj.ir.tast;
 
 public class MethodBody extends TypedAST {
-  public MethodBody(Statement block) {
+  public MethodBody(Block block) {
     this.block = block;
   }
 
@@ -10,6 +10,6 @@ public class MethodBody extends TypedAST {
     return block.toJavassistCode();
   }
 
-  private Statement block;
+  private Block block;
 }
 

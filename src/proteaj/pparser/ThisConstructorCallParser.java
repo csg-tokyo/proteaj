@@ -9,12 +9,12 @@ import javassist.*;
 
 import static proteaj.util.Modifiers.hasVarArgs;
 
-public class ThisConstructorCallParser extends PackratParser<Statement> {
+public class ThisConstructorCallParser extends PackratParser<ThisConstructorCall> {
   /* ThisConstructorCall
    *  : "this" Arguments ';'
    */
   @Override
-  protected ParseResult<Statement> parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<ThisConstructorCall> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
     ParseResult<String> keyword = KeywordParser.getParser("this").applyRule(reader, env);

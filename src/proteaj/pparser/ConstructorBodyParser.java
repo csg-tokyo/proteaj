@@ -26,11 +26,11 @@ public class ConstructorBodyParser extends PackratParser<ConstructorBody> {
     Block block = new Block();
 
     // [ ThisConstructorCall | SuperConstructorCall ]
-    ParseResult<Statement> thisstmt = ThisConstructorCallParser.parser.applyRule(reader, env, bpos);
+    ParseResult<ThisConstructorCall> thisstmt = ThisConstructorCallParser.parser.applyRule(reader, env, bpos);
     if(! thisstmt.isFail()) block.addStatement(thisstmt.get());
 
     else {
-      ParseResult<Statement> superstmt = SuperConstructorCallParser.parser.applyRule(reader, env, bpos);
+      ParseResult<SuperConstructorCall> superstmt = SuperConstructorCallParser.parser.applyRule(reader, env, bpos);
       if(! superstmt.isFail()) block.addStatement(superstmt.get());
       else try {
         CtClass superCls = env.thisClass.getSuperclass();

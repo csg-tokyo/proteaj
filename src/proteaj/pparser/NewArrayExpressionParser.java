@@ -8,12 +8,12 @@ import proteaj.ir.tast.*;
 import java.util.*;
 import javassist.*;
 
-public class NewArrayExpressionParser extends PackratParser<Expression> {
+public class NewArrayExpressionParser extends PackratParser<NewArrayExpression> {
   /* NewArrayExpression
    *  : "new" ClassName '[' Expression ']' { '[' Expression ']' } { '[' ']' }
    */
   @Override
-  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<NewArrayExpression> parse(SourceStringReader reader, Environment env) {
     int pos = reader.getPos();
 
     // "new"

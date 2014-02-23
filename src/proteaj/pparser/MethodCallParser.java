@@ -10,12 +10,12 @@ import javassist.*;
 import static proteaj.util.Modifiers.*;
 import static proteaj.util.CtClassUtil.*;
 
-public class MethodCallParser extends PackratParser<Expression> {
+public class MethodCallParser extends PackratParser<MethodCall> {
   /* MethodCall
    *  : JavaExpression '.' Identifier Arguments
    */
   @Override
-  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<MethodCall> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
     // JavaExpression

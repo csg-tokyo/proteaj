@@ -6,12 +6,12 @@ import proteaj.ir.tast.*;
 
 import javassist.*;
 
-public class ReturnStatementParser extends PackratParser<Statement> {
+public class ReturnStatementParser extends PackratParser<ReturnStatement> {
   /* ReturnStatement
    *  : "return" [ Expression ] ';'
    */
   @Override
-  protected ParseResult<Statement> parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<ReturnStatement> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
     if (! enable) return DISABLE;
@@ -51,5 +51,5 @@ public class ReturnStatementParser extends PackratParser<Statement> {
   private CtClass returnType;
   private boolean enable;
 
-  private static final Failure<Statement> DISABLE = new Failure<Statement>("disable parser", 0, 0);
+  private static final Failure<ReturnStatement> DISABLE = new Failure<ReturnStatement>("disable parser", 0, 0);
 }

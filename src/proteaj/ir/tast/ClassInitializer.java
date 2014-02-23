@@ -1,7 +1,7 @@
 package proteaj.ir.tast;
 
 public class ClassInitializer extends TypedAST {
-  public ClassInitializer(Statement block) {
+  public ClassInitializer(Block block) {
     this.block = block;
   }
 
@@ -10,6 +10,6 @@ public class ClassInitializer extends TypedAST {
     return block.toJavassistCode();
   }
 
-  private Statement block;
+  private Block block;
 }
 

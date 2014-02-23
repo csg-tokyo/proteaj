@@ -9,12 +9,12 @@ import javassist.*;
 
 import static proteaj.util.Modifiers.isStatic;
 
-public class FieldAccessParser extends PackratParser<Expression> {
+public class FieldAccessParser extends PackratParser<FieldAccess> {
   /* FieldAccess
    *  : JavaExpression '.' Identifier
    */
   @Override
-  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<FieldAccess> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
     // JavaExpression

@@ -7,12 +7,12 @@ import proteaj.ir.tast.*;
 
 import javassist.*;
 
-public class ArrayAccessParser extends PackratParser<Expression> {
+public class ArrayAccessParser extends PackratParser<ArrayAccess> {
   /* ArrayAccess
    *  : JavaExpression '[' Expression ']'
    */
   @Override
-  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<ArrayAccess> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
     ParseResult<Expression> expr = JavaExpressionParser.parser.applyRule(reader, env);

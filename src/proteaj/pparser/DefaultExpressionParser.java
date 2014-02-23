@@ -25,8 +25,8 @@ public class DefaultExpressionParser extends ExpressionParser {
     if (! parExpr.isFail()) return parExpr;
     else fails.add(parExpr);
 
-    ParseResult<Expression> cast = ProteaJCastExpressionParser.getParser(type).applyRule(reader, env, pos);
-    if (! cast.isFail()) return cast;
+    ParseResult<CastExpression> cast = ProteaJCastExpressionParser.getParser(type).applyRule(reader, env, pos);
+    if (! cast.isFail()) return success(cast.get());
     else fails.add(cast);
 
     ParseResult<Expression> expr = JavaExpressionParser.parser.applyRule(reader, env);

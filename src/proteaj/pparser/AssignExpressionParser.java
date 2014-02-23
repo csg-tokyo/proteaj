@@ -4,12 +4,12 @@ import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
-public class AssignExpressionParser extends PackratParser<Expression> {
+public class AssignExpressionParser extends PackratParser<AssignExpression> {
   /* AssignExpression
    *  : JavaExpression '=' Expression
    */
   @Override
-  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<AssignExpression> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
     ParseResult<Expression> expr = JavaExpressionParser.parser.applyRule(reader, env);

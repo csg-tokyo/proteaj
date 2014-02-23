@@ -6,12 +6,12 @@ import proteaj.ir.tast.*;
 
 import javassist.*;
 
-public class WhileStatementParser extends PackratParser<Statement> {
+public class WhileStatementParser extends PackratParser<WhileStatement> {
   /* WhileStatement
    *  : "while" '(' Expression ')' SingleStatement
    */
   @Override
-  protected ParseResult<Statement> parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<WhileStatement> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
     // "while"

@@ -4,12 +4,12 @@ import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
-public class BlockParser extends PackratParser<Statement> {
+public class BlockParser extends PackratParser<Block> {
  /* Block
   *  : '{' { BlockStatement } '}'
   */
   @Override
-  protected ParseResult<Statement> parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<Block> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
     // '{'

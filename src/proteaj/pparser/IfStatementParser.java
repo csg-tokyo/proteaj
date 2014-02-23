@@ -6,12 +6,12 @@ import proteaj.ir.tast.*;
 
 import javassist.*;
 
-public class IfStatementParser extends PackratParser<Statement> {
+public class IfStatementParser extends PackratParser<IfStatement> {
   /* IfStatement
    *  : "if" '(' Expression ')' SingleStatement [ "else" SigleStatement ]
    */
   @Override
-  protected ParseResult<Statement> parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<IfStatement> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
     // "if"

@@ -12,7 +12,7 @@ public class StaticInitializerParser extends PackratParser<ClassInitializer> {
   protected ParseResult<ClassInitializer> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
-    ParseResult<Statement> block = BlockParser.parser.applyRule(reader, env);
+    ParseResult<Block> block = BlockParser.parser.applyRule(reader, env);
     if(block.isFail()) return fail(block, pos, reader);
 
     return success(new ClassInitializer(block.get()));

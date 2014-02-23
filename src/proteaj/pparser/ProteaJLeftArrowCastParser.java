@@ -9,12 +9,12 @@ import javassist.*;
 
 import static proteaj.util.CtClassUtil.*;
 
-public class ProteaJLeftArrowCastParser extends PackratParser<Expression> {
+public class ProteaJLeftArrowCastParser extends PackratParser<CastExpression> {
   /* ProteaJLeftArrowCast
    *  : '(' [ TypeName ] "<-" TypeName ')' Expression
    */
   @Override
-  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<CastExpression> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
     ParseResult<String> lPar = KeywordParser.getParser("(").applyRule(reader, env);

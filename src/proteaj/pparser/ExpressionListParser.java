@@ -7,12 +7,12 @@ import proteaj.ir.tast.*;
 import java.util.*;
 import javassist.*;
 
-public class ExpressionListParser extends PackratParser<Expression> {
+public class ExpressionListParser extends PackratParser<ExpressionList> {
   /* ExpressionList
    *  : [ Expression { ',' Expression } ]
    */
   @Override
-  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<ExpressionList> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
     List<Expression> exprs = new ArrayList<Expression>();

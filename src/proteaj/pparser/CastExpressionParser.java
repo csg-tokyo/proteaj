@@ -8,12 +8,12 @@ import proteaj.ir.tast.*;
 
 import static proteaj.util.CtClassUtil.*;
 
-public class CastExpressionParser extends PackratParser<Expression> {
+public class CastExpressionParser extends PackratParser<CastExpression> {
   /* CastExpression
    *  : '(' TypeName ')' JavaExpression
    */
   @Override
-  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<CastExpression> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
     ParseResult<String> lBrace = KeywordParser.getParser("(").applyRule(reader, env);

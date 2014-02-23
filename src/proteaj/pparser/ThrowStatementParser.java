@@ -7,12 +7,12 @@ import proteaj.ir.tast.*;
 
 import javassist.*;
 
-public class ThrowStatementParser extends PackratParser<Statement> {
+public class ThrowStatementParser extends PackratParser<ThrowStatement> {
   /* ThrowStatement
    *  : "throw" Expression ';'
    */
   @Override
-  protected ParseResult<Statement> parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<ThrowStatement> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
     // "throw"
