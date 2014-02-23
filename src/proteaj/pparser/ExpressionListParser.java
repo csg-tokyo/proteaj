@@ -7,43 +7,40 @@ import proteaj.ir.tast.*;
 import java.util.*;
 import javassist.*;
 
-public class ExpressionListParser extends PackratParser {
+public class ExpressionListParser extends PackratParser<Expression> {
   /* ExpressionList
    *  : [ Expression { ',' Expression } ]
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
     List<Expression> exprs = new ArrayList<Expression>();
 
-    TypedAST expr = ExpressionParser.getParser(CtClass.voidType, env).applyRule(reader, env);
+    ParseResult<Expression> expr = ExpressionParser.getParser(CtClass.voidType, env).applyRule(reader, env);
     if(expr.isFail()) {
       reader.setPos(pos);
-      return new ExpressionList(exprs);
+      return success(new ExpressionList(exprs));
     }
 
-    exprs.add((Expression)expr);
+    exprs.add(expr.get());
 
     while(true) {
       int cpos = reader.getPos();
 
-      TypedAST comma = KeywordParser.getParser(",").applyRule(reader, env);
+      ParseResult<String> comma = KeywordParser.getParser(",").applyRule(reader, env);
       if(comma.isFail()) {
         reader.setPos(cpos);
         break;
       }
 
       expr = ExpressionParser.getParser(CtClass.voidType, env).applyRule(reader, env);
-      if(expr.isFail()) {
-        reader.setPos(pos);
-        return new BadAST(expr.getFailLog());
-      }
+      if(expr.isFail()) return fail(expr, pos, reader);
 
-      exprs.add((Expression)expr);
+      exprs.add(expr.get());
     }
 
-    return new ExpressionList(exprs);
+    return success(new ExpressionList(exprs));
   }
 
   public static final ExpressionListParser parser = new ExpressionListParser();

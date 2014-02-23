@@ -1,32 +1,19 @@
 package proteaj.pparser;
 
-import proteaj.error.*;
 import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
-public class VariableParser extends PackratParser {
+public class VariableParser extends PackratParser<Expression> {
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
-    // Identifier
-    TypedAST identifier = IdentifierParser.parser.applyRule(reader, env);
-    if(identifier.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(identifier.getFailLog());
-    }
+    ParseResult<String> identifier = IdentifierParser.parser.applyRule(reader, env);
+    if(identifier.isFail()) return fail(identifier, pos, reader);
 
-    String name = ((Identifier)identifier).getName();
-
-    if(env.contains(name)) {
-      return env.get(name);
-    }
-    else {
-      FailLog flog = new FailLog("unknown variable : " + name, reader.getPos(), reader.getLine());
-      reader.setPos(pos);
-      return new BadAST(flog);
-    }
+    if(env.contains(identifier.get())) return success(env.get(identifier.get()));
+    else return fail("unknown variable : " + identifier.get(), pos, reader);
   }
 
   @Override

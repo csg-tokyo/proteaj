@@ -9,52 +9,44 @@ import javassist.*;
 
 import static proteaj.util.Modifiers.hasVarArgs;
 
-public class SuperConstructorCallParser extends PackratParser {
+public class SuperConstructorCallParser extends PackratParser<Statement> {
   /* SuperConstructorCall
    *  : "super" Arguments ';'
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<Statement> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
-    TypedAST keyword = KeywordParser.getParser("super").applyRule(reader, env);
-    if(keyword.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(keyword.getFailLog());
-    }
+    ParseResult<String> keyword = KeywordParser.getParser("super").applyRule(reader, env);
+    if(keyword.isFail()) return fail(keyword, pos, reader);
 
     int apos = reader.getPos();
 
     try {
-      CtClass superCls = env.thisClass.getSuperclass();
+      final CtClass superCls = env.thisClass.getSuperclass();
 
       for(CtConstructor constructor : superCls.getDeclaredConstructors()) {
         if(! constructor.visibleFrom(env.thisClass)) continue;
 
-        TypedAST args = ArgumentsParser.getParser(constructor.getParameterTypes()).applyRule(reader, env, apos);
+        ParseResult<Arguments> args = ArgumentsParser.getParser(constructor.getParameterTypes()).applyRule(reader, env, apos);
         if(args.isFail() && hasVarArgs(constructor.getModifiers())) {
           args = VariableArgumentsParser.getParser(constructor.getParameterTypes()).applyRule(reader, env, apos);
         }
 
         if(args.isFail()) continue;
 
-        TypedAST semicolon = KeywordParser.getParser(";").applyRule(reader, env);
-        if(semicolon.isFail()) {
-          reader.setPos(pos);
-          return new BadAST(semicolon.getFailLog());
-        }
+        ParseResult<String> semicolon = KeywordParser.getParser(";").applyRule(reader, env);
+        if(semicolon.isFail()) return fail(semicolon, pos, reader);
 
         env.addExceptions(constructor.getExceptionTypes(), reader.getLine());
-        return new SuperConstructorCall(constructor, (Arguments)args);
+        return success(new SuperConstructorCall(constructor, args.get()));
       }
     } catch (NotFoundException e) {
       ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
     }
 
     // fail
-    FailLog flog = new FailLog("undefined super constructor", reader.getPos(), reader.getLine());
-    reader.setPos(pos);
-    return new BadAST(flog);
+    return fail("undefined super constructor", pos, reader);
   }
 
   public static final SuperConstructorCallParser parser = new SuperConstructorCallParser();

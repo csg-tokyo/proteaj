@@ -1,6 +1,5 @@
 package proteaj.pparser;
 
-import proteaj.error.*;
 import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.ir.tast.*;
@@ -11,7 +10,7 @@ import static java.lang.Character.isWhitespace;
 import static java.lang.Character.isDigit;
 import static java.lang.Character.digit;
 
-public class LiteralParser extends PackratParser {
+public class LiteralParser extends PackratParser<Expression> {
   /* Literal
    *  : IntLiteral
    *  | BooleanLiteral
@@ -19,31 +18,29 @@ public class LiteralParser extends PackratParser {
    *  | CharLiteral
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
-    TypedAST intLiteral = parseIntLiteral(reader, env, pos);
+    ParseResult<Expression> intLiteral = parseIntLiteral(reader, env, pos);
     if(! intLiteral.isFail()) return intLiteral;
 
-    TypedAST boolLiteral = parseBooleanLiteral(reader, env, pos);
+    ParseResult<Expression> boolLiteral = parseBooleanLiteral(reader, env, pos);
     if(! boolLiteral.isFail()) return boolLiteral;
 
-    TypedAST strLiteral = parseStringLiteral(reader, env, pos);
+    ParseResult<Expression> strLiteral = parseStringLiteral(reader, env, pos);
     if(! strLiteral.isFail()) return strLiteral;
 
-    TypedAST chrLiteral = parseCharLiteral(reader, env, pos);
+    ParseResult<Expression> chrLiteral = parseCharLiteral(reader, env, pos);
     if(! chrLiteral.isFail()) return chrLiteral;
 
-    FailLog flog = chooseBest(intLiteral.getFailLog(), boolLiteral.getFailLog(), strLiteral.getFailLog(), chrLiteral.getFailLog());
-    reader.setPos(pos);
-    return new BadAST(flog);
+    return fail(Arrays.<ParseResult<?>>asList(intLiteral, boolLiteral, strLiteral, chrLiteral), pos, reader);
   }
 
   /* IntLiteral
    *  : Non0Digit { Digit }
    *  | 0
    */
-  private TypedAST parseIntLiteral(SourceStringReader reader, Environment env, int pos) {
+  private ParseResult<Expression> parseIntLiteral(SourceStringReader reader, Environment env, int pos) {
     reader.setPos(pos);
 
     while(isWhitespace(reader.lookahead())) reader.next();
@@ -51,7 +48,7 @@ public class LiteralParser extends PackratParser {
     if(isDigit(reader.lookahead())) {
       if(reader.lookahead() == 0) {
         reader.next();
-        return new IntLiteral(0);
+        return success(new IntLiteral(0));
       }
 
       int val = digit(reader.next(), 10);
@@ -60,106 +57,80 @@ public class LiteralParser extends PackratParser {
         val = val * 10 + digit(reader.next(), 10);
       }
 
-      return new IntLiteral(val);
+      return success(new IntLiteral(val));
     }
 
-    FailLog flog = new FailLog("digits is not found", reader.getPos(), reader.getLine());
-    reader.setPos(pos);
-    return new BadAST(flog);
+    return fail("digits is not found", pos, reader);
   }
 
   /* BooleanLiteral
    *  : "true"
    *  | "false"
    */
-  private TypedAST parseBooleanLiteral(SourceStringReader reader, Environment env, int pos) {
+  private ParseResult<Expression> parseBooleanLiteral(SourceStringReader reader, Environment env, int pos) {
     // "true"
-    TypedAST trueKeyword = KeywordParser.getParser("true").applyRule(reader, env, pos);
-    if(! trueKeyword.isFail()) return new BooleanLiteral(true);
+    ParseResult<String> trueKeyword = KeywordParser.getParser("true").applyRule(reader, env, pos);
+    if(! trueKeyword.isFail()) return success(new BooleanLiteral(true));
 
     // "false"
-    TypedAST falseKeyword = KeywordParser.getParser("false").applyRule(reader, env, pos);
-    if(! falseKeyword.isFail()) return new BooleanLiteral(false);
+    ParseResult<String> falseKeyword = KeywordParser.getParser("false").applyRule(reader, env, pos);
+    if(! falseKeyword.isFail()) return success(new BooleanLiteral(false));
 
-    reader.setPos(pos);
-    FailLog flog = new FailLog("boolean literals are not found", reader.getPos(), reader.getLine());
-    return new BadAST(flog);
+    return fail("boolean literals are not found", pos, reader);
   }
 
   /* StringLiteral
    *  : '"' { any } '"'
    */
-  private TypedAST parseStringLiteral(SourceStringReader reader, Environment env, int pos) {
+  private ParseResult<Expression> parseStringLiteral(SourceStringReader reader, Environment env, int pos) {
     reader.setPos(pos);
 
     // '"'
-    TypedAST bdq = KeywordParser.getParser("\"").applyRule(reader, env);
-    if(bdq.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(bdq.getFailLog());
-    }
+    ParseResult<String> bdq = KeywordParser.getParser("\"").applyRule(reader, env);
+    if(bdq.isFail()) return fail(bdq, pos, reader);
 
     StringBuilder buf = new StringBuilder();
 
     while(reader.hasNext() && reader.lookahead() != '\n') {
       int ch = reader.next();
       switch(ch) {
-        case '"' : return new StringLiteral(buf.toString());
+        case '"' : return success(new StringLiteral(buf.toString()));
         case '\\':
           ch = readEscapedChar(reader);
-          if(ch == -1) {
-            FailLog flog = new FailLog("invalid escape character", reader.getPos(), reader.getLine());
-            reader.setPos(pos);
-            return new BadAST(flog);
-          }
+          if(ch == -1) return fail("invalid escape character", pos, reader);
         default: buf.append((char)ch);
       }
     }
 
-    FailLog flog = new FailLog("unterminated string literal", reader.getPos(), reader.getLine());
-    reader.setPos(pos);
-    return new BadAST(flog);
+    return fail("unterminated string literal", pos, reader);
   }
 
   /* CharLiteral
    *  : '\'' ( Character | EscapedCharacter ) '\''
    */
-  private TypedAST parseCharLiteral(SourceStringReader reader, Environment env, int pos) {
+  private ParseResult<Expression> parseCharLiteral(SourceStringReader reader, Environment env, int pos) {
     reader.setPos(pos);
 
     // '\''
-    TypedAST bquote = KeywordParser.getParser("\'").applyRule(reader, env);
-    if(bquote.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(bquote.getFailLog());
-    }
+    ParseResult<String> bquote = KeywordParser.getParser("\'").applyRule(reader, env);
+    if(bquote.isFail()) return fail(bquote, pos, reader);
 
     if(reader.hasNext() && reader.lookahead() != '\n') {
       int ch = reader.next();
 
-      if(ch == '\'') {
-        FailLog flog = new FailLog("invalid character literal", reader.getPos(), reader.getLine());
-        reader.setPos(pos);
-        return new BadAST(flog);
-      }
+      if(ch == '\'') return fail("invalid character literal", pos, reader);
       else if(ch == '\\') {
         ch = readEscapedChar(reader);
-        if(ch == -1) {
-          FailLog flog = new FailLog("invalid escape character", reader.getPos(), reader.getLine());
-          reader.setPos(pos);
-          return new BadAST(flog);
-        }
+        if(ch == -1) return fail("invalid escape character", pos, reader);
       }
 
       if(reader.lookahead() == '\'') {
         reader.next();
-        return new CharLiteral((char)ch);
+        return success(new CharLiteral((char)ch));
       }
     }
 
-    FailLog flog = new FailLog("unterminated character literal", reader.getPos(), reader.getLine());
-    reader.setPos(pos);
-    return new BadAST(flog);
+    return fail("unterminated character literal", pos, reader);
   }
 
   private int readEscapedChar(SourceStringReader reader) {

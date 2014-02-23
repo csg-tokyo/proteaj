@@ -1,28 +1,31 @@
 package proteaj.pparser;
 
+import proteaj.io.SourceStringReader;
 import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
-public class ParenthesizedJavaExpressionParser extends ComposedParser_Sequential {
+public class ParenthesizedJavaExpressionParser extends PackratParser<Expression> {
   /* ParenthesizedJavaExpression
    *  : '(' JavaExpression ')'
    */
-  private ParenthesizedJavaExpressionParser() {
-    super("ParenthesizedJavaExpressionParser");
-  }
-
   @Override
-  protected PackratParser[] getParsers(Environment env) {
-    return new PackratParser[] { KeywordParser.getParser("("), JavaExpressionParser.parser, KeywordParser.getParser(")") };
-  }
+  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
-  @Override
-  protected TypedAST makeAST(int pos, int line, String file, TypedAST... as) {
-    return as[1];
+    ParseResult<String> lPar = KeywordParser.getParser("(").applyRule(reader, env);
+    if(lPar.isFail()) return fail(lPar, pos, reader);
+
+    ParseResult<Expression> expr = JavaExpressionParser.parser.applyRule(reader, env);
+    if(expr.isFail()) return fail(expr, pos, reader);
+
+    ParseResult<String> rPar = KeywordParser.getParser(")").applyRule(reader, env);
+    if(rPar.isFail()) return fail(rPar, pos, reader);
+
+    return expr;
   }
 
   public static final ParenthesizedJavaExpressionParser parser = new ParenthesizedJavaExpressionParser();
 
-
+  private ParenthesizedJavaExpressionParser() {}
 }
 

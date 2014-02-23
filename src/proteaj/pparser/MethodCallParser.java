@@ -10,61 +10,47 @@ import javassist.*;
 import static proteaj.util.Modifiers.*;
 import static proteaj.util.CtClassUtil.*;
 
-public class MethodCallParser extends PackratParser {
+public class MethodCallParser extends PackratParser<Expression> {
   /* MethodCall
    *  : JavaExpression '.' Identifier Arguments
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
     // JavaExpression
-    TypedAST jexpr = JavaExpressionParser.parser.applyRule(reader, env);
-    if(jexpr.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(jexpr.getFailLog());
-    }
-
-    Expression expr = (Expression)jexpr;
+    ParseResult<Expression> expr = JavaExpressionParser.parser.applyRule(reader, env);
+    if(expr.isFail()) return fail(expr, pos, reader);
 
     // '.'
-    TypedAST dot = KeywordParser.getParser(".").applyRule(reader, env);
-    if(dot.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(dot.getFailLog());
-    }
+    ParseResult<String> dot = KeywordParser.getParser(".").applyRule(reader, env);
+    if(dot.isFail()) return fail(dot, pos, reader);
 
     // Identifier
-    TypedAST identifier = IdentifierParser.parser.applyRule(reader, env);
-    if(identifier.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(identifier.getFailLog());
-    }
+    ParseResult<String> identifier = IdentifierParser.parser.applyRule(reader, env);
+    if(identifier.isFail()) return fail(identifier, pos, reader);
 
-    String name = ((Identifier)identifier).getName();
     int apos = reader.getPos();
 
     // Arguments
-    for(CtMethod method : getMethods(expr.getType())) try {
-      if(isStatic(method.getModifiers()) || ! method.visibleFrom(env.thisClass) || ! method.getName().equals(name)) continue;
+    for(CtMethod method : getMethods(expr.get().getType())) try {
+      if(isStatic(method.getModifiers()) || ! method.visibleFrom(env.thisClass) || ! method.getName().equals(identifier.get())) continue;
 
-      TypedAST args = ArgumentsParser.getParser(method.getParameterTypes()).applyRule(reader, env, apos);
+      ParseResult<Arguments> args = ArgumentsParser.getParser(method.getParameterTypes()).applyRule(reader, env, apos);
       if(args.isFail() && hasVarArgs(method.getModifiers())) {
         args = VariableArgumentsParser.getParser(method.getParameterTypes()).applyRule(reader, env, apos);
       }
 
       if(! args.isFail()) {
         env.addExceptions(method.getExceptionTypes(), reader.getLine());
-        return new MethodCall(expr, method, (Arguments)args);
+        return success(new MethodCall(expr.get(), method, args.get()));
       }
     } catch (NotFoundException e) {
       ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
     }
 
     // fail
-    FailLog flog = new FailLog("undefined method : " + name, reader.getPos(), reader.getLine());
-    reader.setPos(pos);
-    return new BadAST(flog);
+    return fail("undefined method : " + identifier.get(), pos, reader);
   }
 
   @Override

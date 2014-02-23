@@ -16,60 +16,48 @@ public class DefaultExpressionParser extends ExpressionParser {
    *  | "null"
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
-    FailLog flog = null;
+    List<ParseResult<?>> fails = new ArrayList<ParseResult<?>>();
 
-    TypedAST lbrace = KeywordParser.getParser("(").applyRule(reader, env);
-    if(! lbrace.isFail()) {
-      TypedAST expr = ExpressionParser.getParser(type, env).applyRule(reader, env);
-      if(! expr.isFail()) {
-        TypedAST rbrace = KeywordParser.getParser(")").applyRule(reader, env);
-        if(! rbrace.isFail()) {
-          return expr;
-        }
-        else flog = rbrace.getFailLog();
-      }
-      else flog = expr.getFailLog();
-    }
-    else flog = lbrace.getFailLog();
+    ParseResult<Expression> parExpr = ParenthesizedExpressionParser.getParser(type).applyRule(reader, env, pos);
+    if (! parExpr.isFail()) return parExpr;
+    else fails.add(parExpr);
 
-    reader.setPos(pos);
-    TypedAST cast = ProteaJCastExpressionParser.getParser(type).applyRule(reader, env);
+    ParseResult<Expression> cast = ProteaJCastExpressionParser.getParser(type).applyRule(reader, env, pos);
     if (! cast.isFail()) return cast;
+    else fails.add(cast);
 
-    reader.setPos(pos);
-    TypedAST expr = JavaExpressionParser.parser.applyRule(reader, env);
+    ParseResult<Expression> expr = JavaExpressionParser.parser.applyRule(reader, env);
     if(! expr.isFail()) try {
-      CtClass exprType = ((Expression)expr).getType();
+      CtClass exprType = expr.get().getType();
 
       if(exprType.subtypeOf(type) || type == CtClass.voidType) return expr;
-
-      FailLog f = new FailLog("type mismatch: expected " + type.getName() + " but found " + exprType.getName(), reader.getPos(), reader.getLine());
-      expr = new BadAST(f);
+      else {
+        String msg = "type mismatch: expected " + type.getName() + " but found " + exprType.getName();
+        fails.add(new Failure<Expression>(msg, reader.getPos(), reader.getLine()));
+      }
     } catch (NotFoundException e) {
       ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
     }
+    else fails.add(expr);
 
-    reader.setPos(pos);
-    TypedAST nll = KeywordParser.getParser("null").applyRule(reader, env);
+    ParseResult<String> nll = KeywordParser.getParser("null").applyRule(reader, env, pos);
     if(! nll.isFail()) {
-      if(! type.isPrimitive()) return NullLiteral.instance;
-
-      FailLog f = new FailLog("type mismatch: expected " + type.getName() + " but found null", reader.getPos(), reader.getLine());
-      nll = new BadAST(f);
+      if(! type.isPrimitive()) return success(NullLiteral.instance);
+      else {
+        String msg = "type mismatch: expected " + type.getName() + " but found null";
+        fails.add(new Failure<Expression>(msg, reader.getPos(), reader.getLine()));
+      }
     }
+    else fails.add(nll);
 
-    reader.setPos(pos);
-    TypedAST literal = ReadasExpressionParser.getParser(type).applyRule(reader, env);
-    if(! literal.isFail()) {
-      return literal;
-    }
+    ParseResult<Expression> literal = ReadasExpressionParser.getParser(type).applyRule(reader, env, pos);
+    if(! literal.isFail()) return literal;
+    else fails.add(literal);
 
-    flog = chooseBest(flog, cast.getFailLog(), expr.getFailLog(), nll.getFailLog(), literal.getFailLog());
-    reader.setPos(pos);
-    return new BadAST(flog);
+    return fail(fails, pos, reader);
   }
 
   public static DefaultExpressionParser getParser(CtClass type) {

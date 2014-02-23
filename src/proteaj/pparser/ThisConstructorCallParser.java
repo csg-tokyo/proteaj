@@ -9,52 +9,39 @@ import javassist.*;
 
 import static proteaj.util.Modifiers.hasVarArgs;
 
-public class ThisConstructorCallParser extends PackratParser {
+public class ThisConstructorCallParser extends PackratParser<Statement> {
   /* ThisConstructorCall
    *  : "this" Arguments ';'
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<Statement> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
-    TypedAST keyword = KeywordParser.getParser("this").applyRule(reader, env);
-    if(keyword.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(keyword.getFailLog());
-    }
+    ParseResult<String> keyword = KeywordParser.getParser("this").applyRule(reader, env);
+    if(keyword.isFail()) return fail(keyword, pos, reader);
 
     int apos = reader.getPos();
 
     for(CtConstructor c : env.thisClass.getDeclaredConstructors()) try {
-      TypedAST args = ArgumentsParser.getParser(c.getParameterTypes()).applyRule(reader, env, apos);
+      ParseResult<Arguments> args = ArgumentsParser.getParser(c.getParameterTypes()).applyRule(reader, env, apos);
       if(args.isFail() && hasVarArgs(c.getModifiers())) {
         args = VariableArgumentsParser.getParser(c.getParameterTypes()).applyRule(reader, env, apos);
       }
 
       if(args.isFail()) continue;
 
-      TypedAST semicolon = KeywordParser.getParser(";").applyRule(reader, env);
-      if(semicolon.isFail()) {
-        reader.setPos(pos);
-        return new BadAST(semicolon.getFailLog());
-      }
+      ParseResult<String> semicolon = KeywordParser.getParser(";").applyRule(reader, env);
+      if(semicolon.isFail()) return fail(semicolon, pos, reader);
 
-      if(c == env.thisMember) {
-        FailLog flog = new FailLog("recursive constructor invocation", reader.getPos(), reader.getLine());
-        reader.setPos(pos);
-        return new BadAST(flog);
-      }
+      if(c == env.thisMember) return fail("recursive constructor invocation", pos, reader);
 
       env.addExceptions(c.getExceptionTypes(), reader.getLine());
-      return new ThisConstructorCall(c, (Arguments)args);
+      return success(new ThisConstructorCall(c, args.get()));
     } catch (NotFoundException e) {
       ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
     }
 
-    // fail
-    FailLog flog = new FailLog("undefined constructor", reader.getPos(), reader.getLine());
-    reader.setPos(pos);
-    return new BadAST(flog);
+    return fail("undefined constructor", pos, reader);
   }
 
   public static final ThisConstructorCallParser parser = new ThisConstructorCallParser();

@@ -10,36 +10,33 @@ import javassist.*;
 import static proteaj.util.Modifiers.*;
 import static proteaj.util.CtClassUtil.*;
 
-public class AbbMethodCallParser extends PackratParser {
+public class AbbMethodCallParser extends PackratParser<Expression> {
   /* AbbMethodCall
    *  : Identifier Arguments
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
     // Identifier
-    TypedAST identifier = IdentifierParser.parser.applyRule(reader, env);
-    if(identifier.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(identifier.getFailLog());
-    }
+    ParseResult<String> identifier = IdentifierParser.parser.applyRule(reader, env);
+    if(identifier.isFail()) return fail(identifier, pos, reader);
 
-    String name = ((Identifier)identifier).getName();
+    String name = identifier.get();
     int apos = reader.getPos();
 
     // Arguments
     for(CtMethod method : getMethods(env.thisClass)) try {
       if(! method.getName().equals(name)) continue;
       if(isStatic(method.getModifiers()) || ! env.isStatic()) {
-        TypedAST args = ArgumentsParser.getParser(method.getParameterTypes()).applyRule(reader, env, apos);
+        ParseResult<Arguments> args = ArgumentsParser.getParser(method.getParameterTypes()).applyRule(reader, env, apos);
         if(args.isFail() && hasVarArgs(method.getModifiers())) {
           args = VariableArgumentsParser.getParser(method.getParameterTypes()).applyRule(reader, env, apos);
         }
         if(! args.isFail()) {
           env.addExceptions(method.getExceptionTypes(), reader.getLine());
-          if(isStatic(method.getModifiers())) return new StaticMethodCall(method, (Arguments)args);
-          else return new MethodCall(new ThisExpression(env.thisClass), method, (Arguments)args);
+          if(isStatic(method.getModifiers())) return success(new StaticMethodCall(method, args.get()));
+          else return success(new MethodCall(new ThisExpression(env.thisClass), method, args.get()));
         }
       }
     } catch (NotFoundException e) {
@@ -49,9 +46,7 @@ public class AbbMethodCallParser extends PackratParser {
     // TODO static import
 
     // fail
-    FailLog flog = new FailLog("undefined method : " + name, reader.getPos(), reader.getLine());
-    reader.setPos(pos);
-    return new BadAST(flog);
+    return fail("undefined method : " + name, pos, reader);
   }
 
   @Override

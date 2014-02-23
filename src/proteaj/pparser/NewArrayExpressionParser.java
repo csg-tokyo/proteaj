@@ -8,53 +8,38 @@ import proteaj.ir.tast.*;
 import java.util.*;
 import javassist.*;
 
-public class NewArrayExpressionParser extends PackratParser {
+public class NewArrayExpressionParser extends PackratParser<Expression> {
   /* NewArrayExpression
    *  : "new" ClassName '[' Expression ']' { '[' Expression ']' } { '[' ']' }
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
     int pos = reader.getPos();
 
     // "new"
-    TypedAST newkeyword = KeywordParser.getParser("new").applyRule(reader, env);
-    if(newkeyword.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(newkeyword.getFailLog());
-    }
+    ParseResult<String> newKeyword = KeywordParser.getParser("new").applyRule(reader, env);
+    if(newKeyword.isFail()) return fail(newKeyword, pos, reader);
 
     // ClassName
-    TypedAST clsName = ClassNameParser.parser.applyRule(reader, env);
-    if(clsName.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(clsName.getFailLog());
-    }
+    ParseResult<CtClass> clsName = ClassNameParser.parser.applyRule(reader, env);
+    if(clsName.isFail()) return fail(clsName, pos, reader);
 
-    StringBuilder typeNameBuf = new StringBuilder(((ClassName)clsName).getCtClass().getName());
+    StringBuilder typeNameBuf = new StringBuilder(clsName.get().getName());
     List<Expression> args = new ArrayList<Expression>();
 
     // '['
-    TypedAST lbracket = KeywordParser.getParser("[").applyRule(reader, env);
-    if(lbracket.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(lbracket.getFailLog());
-    }
+    ParseResult<String> lBracket = KeywordParser.getParser("[").applyRule(reader, env);
+    if(lBracket.isFail()) return fail(lBracket, pos, reader);
 
     // Expression
-    TypedAST arg = ExpressionParser.getParser(CtClass.intType, env).applyRule(reader, env);
-    if(arg.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(arg.getFailLog());
-    }
+    ParseResult<Expression> arg = ExpressionParser.getParser(CtClass.intType, env).applyRule(reader, env);
+    if(arg.isFail()) return fail(arg, pos, reader);
 
-    args.add((Expression)arg);
+    args.add(arg.get());
 
     // ']'
-    TypedAST rbracket = KeywordParser.getParser("]").applyRule(reader, env);
-    if(rbracket.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(rbracket.getFailLog());
-    }
+    ParseResult<String> rBracket = KeywordParser.getParser("]").applyRule(reader, env);
+    if(rBracket.isFail()) return fail(rBracket, pos, reader);
 
     typeNameBuf.append("[]");
 
@@ -62,14 +47,11 @@ public class NewArrayExpressionParser extends PackratParser {
       int bpos = reader.getPos();
 
       // "["
-      lbracket = KeywordParser.getParser("[").applyRule(reader, env);
-      if(lbracket.isFail()) try {
-        CtClass arrayType = env.getType(typeNameBuf.toString());
-        return new NewArrayExpression(arrayType, args);
+      lBracket = KeywordParser.getParser("[").applyRule(reader, env);
+      if(lBracket.isFail()) try {
+        return success(new NewArrayExpression(env.getType(typeNameBuf.toString()), args));
       } catch (NotFoundError e) {
-        FailLog flog = new FailLog("unknown type : " + typeNameBuf.toString(), reader.getPos(), reader.getLine());
-        reader.setPos(pos);
-        return new BadAST(flog);
+        return fail("unknown type : " + typeNameBuf.toString(), pos, reader);
       }
 
       // Expression
@@ -79,36 +61,27 @@ public class NewArrayExpressionParser extends PackratParser {
         break;
       }
 
-      args.add((Expression)arg);
+      args.add(arg.get());
 
       // "]"
-      rbracket = KeywordParser.getParser("]").applyRule(reader, env);
-      if(rbracket.isFail()) {
-        reader.setPos(pos);
-        return new BadAST(rbracket.getFailLog());
-      }
+      rBracket = KeywordParser.getParser("]").applyRule(reader, env);
+      if(rBracket.isFail()) return fail(rBracket, pos, reader);
 
       typeNameBuf.append("[]");
     }
 
     while(true) {
       // "["
-      lbracket = KeywordParser.getParser("[").applyRule(reader, env);
-      if(lbracket.isFail()) try {
-        CtClass arrayType = env.getType(typeNameBuf.toString());
-        return new NewArrayExpression(arrayType, args);
+      lBracket = KeywordParser.getParser("[").applyRule(reader, env);
+      if(lBracket.isFail()) try {
+        return success(new NewArrayExpression(env.getType(typeNameBuf.toString()), args));
       } catch (NotFoundError e) {
-        FailLog flog = new FailLog("unknown type : " + typeNameBuf.toString(), reader.getPos(), reader.getLine());
-        reader.setPos(pos);
-        return new BadAST(flog);
+        return fail("unknown type : " + typeNameBuf.toString(), pos, reader);
       }
 
       // "]"
-      rbracket = KeywordParser.getParser("]").applyRule(reader, env);
-      if(rbracket.isFail()) {
-        reader.setPos(pos);
-        return new BadAST(rbracket.getFailLog());
-      }
+      rBracket = KeywordParser.getParser("]").applyRule(reader, env);
+      if(rBracket.isFail()) return fail(rBracket, pos, reader);
 
       typeNameBuf.append("[]");
     }

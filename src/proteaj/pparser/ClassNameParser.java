@@ -3,31 +3,26 @@ package proteaj.pparser;
 import proteaj.error.*;
 import proteaj.io.*;
 import proteaj.ir.*;
-import proteaj.ir.tast.*;
 
 import javassist.*;
 
-public class ClassNameParser extends PackratParser {
+public class ClassNameParser extends PackratParser<CtClass> {
   /* ClassName
    *  : Identifier { '.' Identifier }
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<CtClass> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
-    TypedAST id = IdentifierParser.parser.applyRule(reader, env);
-    if(id.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(id.getFailLog());
-    }
+    ParseResult<String> id = IdentifierParser.parser.applyRule(reader, env);
+    if(id.isFail()) return fail(id, pos, reader);
 
-    String name = ((Identifier)id).getName();
-
+    String name = id.get();
 
     while(true) {
-      int dpos = reader.getPos();
+      final int dpos = reader.getPos();
 
-      TypedAST dot = KeywordParser.getParser(".").applyRule(reader, env);
+      final ParseResult<String> dot = KeywordParser.getParser(".").applyRule(reader, env);
       if(dot.isFail()) {
         reader.setPos(dpos);
         break;
@@ -39,7 +34,7 @@ public class ClassNameParser extends PackratParser {
         break;
       }
 
-      String lname = name + '.' + ((Identifier)id).getName();
+      String lname = name + '.' + id.get();
 
       if(env.isTypeName(name) && (! env.isTypeName(lname))) {
         reader.setPos(dpos);
@@ -50,12 +45,9 @@ public class ClassNameParser extends PackratParser {
     }
 
     try {
-      CtClass cls = env.getType(name);
-      return new ClassName(cls);
+      return success(env.getType(name));
     } catch (NotFoundError e) {
-      FailLog flog = new FailLog(e.getMessage(), reader.getPos(), reader.getLine());
-      reader.setPos(pos);
-      return new BadAST(flog);
+      return fail(e.getMessage(), pos, reader);
     }
   }
 

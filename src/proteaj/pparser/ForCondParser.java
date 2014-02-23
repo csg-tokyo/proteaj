@@ -6,18 +6,18 @@ import proteaj.ir.tast.*;
 
 import javassist.*;
 
-public class ForCondParser extends PackratParser {
+public class ForCondParser extends PackratParser<Expression> {
   /* ForCond
    *  : [ Expression ]
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
-    TypedAST expr = ExpressionParser.getParser(CtClass.booleanType, env).applyRule(reader, env);
+    ParseResult<Expression> expr = ExpressionParser.getParser(CtClass.booleanType, env).applyRule(reader, env);
     if(expr.isFail()) {
       reader.setPos(pos);
-      expr = new BooleanLiteral(true);
+      return success(new BooleanLiteral(true));
     }
 
     return expr;

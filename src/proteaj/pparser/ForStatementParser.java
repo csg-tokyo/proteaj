@@ -4,73 +4,46 @@ import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
-public class ForStatementParser extends PackratParser {
+public class ForStatementParser extends PackratParser<Statement> {
   /* ForStatement
    *  : "for" '(' ForInit ';' ForCond ';' ForUpdate ')' SingleStatement
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<Statement> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
-    TypedAST keyword = KeywordParser.getParser("for").applyRule(reader, env);
-    if(keyword.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(keyword.getFailLog());
-    }
+    ParseResult<String> keyword = KeywordParser.getParser("for").applyRule(reader, env);
+    if(keyword.isFail()) return fail(keyword, pos, reader);
 
-    TypedAST lparen = KeywordParser.getParser("(").applyRule(reader, env);
-    if(lparen.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(lparen.getFailLog());
-    }
+    ParseResult<String> lPar = KeywordParser.getParser("(").applyRule(reader, env);
+    if(lPar.isFail()) return fail(lPar, pos, reader);
 
     Environment newenv = new Environment(env);
 
-    TypedAST init = ForInitParser.parser.applyRule(reader, newenv);
-    if(init.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(init.getFailLog());
-    }
+    ParseResult<Expression> init = ForInitParser.parser.applyRule(reader, newenv);
+    if(init.isFail()) return fail(init, pos, reader);
 
-    TypedAST semicolon1 = KeywordParser.getParser(";").applyRule(reader, newenv);
-    if(semicolon1.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(semicolon1.getFailLog());
-    }
+    ParseResult<String> semicolon1 = KeywordParser.getParser(";").applyRule(reader, newenv);
+    if(semicolon1.isFail()) return fail(semicolon1, pos, reader);
 
-    TypedAST cond = ForCondParser.parser.applyRule(reader, newenv);
-    if(cond.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(cond.getFailLog());
-    }
+    ParseResult<Expression> cond = ForCondParser.parser.applyRule(reader, newenv);
+    if(cond.isFail()) return fail(cond, pos, reader);
 
-    TypedAST semicolon2 = KeywordParser.getParser(";").applyRule(reader, newenv);
-    if(semicolon2.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(semicolon2.getFailLog());
-    }
+    ParseResult<String> semicolon2 = KeywordParser.getParser(";").applyRule(reader, newenv);
+    if(semicolon2.isFail()) return fail(semicolon2, pos, reader);
 
-    TypedAST update = ForUpdateParser.parser.applyRule(reader, newenv);
-    if(update.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(update.getFailLog());
-    }
+    ParseResult<Expression> update = ForUpdateParser.parser.applyRule(reader, newenv);
+    if(update.isFail()) return fail(update, pos, reader);
 
-    TypedAST rparen = KeywordParser.getParser(")").applyRule(reader, newenv);
-    if(rparen.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(rparen.getFailLog());
-    }
+    ParseResult<String> rPar = KeywordParser.getParser(")").applyRule(reader, newenv);
+    if(rPar.isFail()) return fail(rPar, pos, reader);
 
-    TypedAST stmt = SingleStatementParser.parser.applyRule(reader, newenv);
-    if(stmt.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(stmt.getFailLog());
-    }
+    ParseResult<Statement> stmt = SingleStatementParser.parser.applyRule(reader, newenv);
+    if(stmt.isFail()) return fail(stmt, pos, reader);
 
     env.inheritExceptions(newenv);
 
-    return new ForStatement((Expression)init, (Expression)cond, (Expression)update, (Statement)stmt);
+    return success(new ForStatement(init.get(), cond.get(), update.get(), stmt.get()));
   }
 
   public static final ForStatementParser parser = new ForStatementParser();

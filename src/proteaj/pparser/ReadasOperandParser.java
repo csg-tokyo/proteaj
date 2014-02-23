@@ -1,6 +1,5 @@
 package proteaj.pparser;
 
-import proteaj.error.*;
 import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.ir.tast.*;
@@ -9,28 +8,24 @@ import java.util.*;
 import java.util.Map.Entry;
 import javassist.*;
 
-public class ReadasOperandParser extends PackratParser {
+public class ReadasOperandParser extends PackratParser<Expression> {
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
-    FailLog flog = null;
+  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
+
+    List<ParseResult<?>> fails = new ArrayList<ParseResult<?>>();
 
     for(IRPattern pattern : patterns) {
-      TypedAST op = ReadasOperationParser.getParser(type, priority, pattern).applyRule(reader, env, pos);
+      ParseResult<Expression> op = ReadasOperationParser.getParser(type, priority, pattern).applyRule(reader, env, pos);
       if(! op.isFail()) return op;
-
-      if(flog == null) flog = op.getFailLog();
-      else flog = chooseBest(flog, op.getFailLog());
+      else fails.add(op);
     }
 
-    TypedAST op = getParser(type, priority, false, env).applyRule(reader, env, pos);
+    ParseResult<Expression> op = getParser(type, priority, false, env).applyRule(reader, env, pos);
     if(! op.isFail()) return op;
+    else fails.add(op);
 
-    if(flog == null) flog = op.getFailLog();
-    else flog = chooseBest(flog, op.getFailLog());
-
-    reader.setPos(pos);
-    return new BadAST(flog);
+    return fail(fails, pos, reader);
   }
 
   public static ReadasOperandParser getParser(CtClass type, Environment env) {

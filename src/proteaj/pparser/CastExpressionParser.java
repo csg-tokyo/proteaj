@@ -2,37 +2,40 @@ package proteaj.pparser;
 
 import javassist.CtClass;
 import proteaj.error.*;
+import proteaj.io.SourceStringReader;
 import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
 import static proteaj.util.CtClassUtil.*;
 
-public class CastExpressionParser extends ComposedParser_Sequential {
+public class CastExpressionParser extends PackratParser<Expression> {
   /* CastExpression
    *  : '(' TypeName ')' JavaExpression
    */
-  private CastExpressionParser() {
-    super("CastExpressionParser");
-  }
-
   @Override
-  protected PackratParser[] getParsers(Environment env) {
-    return new PackratParser[] {
-        KeywordParser.getParser("("),
-        TypeNameParser.parser,
-        KeywordParser.getParser(")"),
-        JavaExpressionParser.parser
-    };
-  }
+  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
-  @Override
-  protected TypedAST makeAST(int pos, int line, String file, TypedAST... as) {
-    CtClass to = ((TypeName)as[1]).getType();
-    Expression e = (Expression)as[3];
+    ParseResult<String> lBrace = KeywordParser.getParser("(").applyRule(reader, env);
+    if (lBrace.isFail()) return fail(lBrace, pos, reader);
 
-    if (isCastable(e.getType(), to, file, line)) return new CastExpression(to, e);
-    else return new BadAST(new FailLog(e.getType().getName() + " cannot cast to " + to.getName(), pos, line));
+    ParseResult<CtClass> type = TypeNameParser.parser.applyRule(reader, env);
+    if (type.isFail()) return fail(type, pos, reader);
+
+    ParseResult<String> rBrace = KeywordParser.getParser(")").applyRule(reader, env);
+    if (rBrace.isFail()) return fail(rBrace, pos, reader);
+
+    ParseResult<Expression> expr = JavaExpressionParser.parser.applyRule(reader, env);
+    if (expr.isFail()) return fail(expr, pos, reader);
+
+    Expression e = expr.get();
+    CtClass to = type.get();
+
+    if (isCastable(e.getType(), to, reader.filePath, reader.getLine())) return success(new CastExpression(to, e));
+    else return fail(e.getType().getName() + " cannot cast to " + to.getName(), pos, reader);
   }
 
   public static final CastExpressionParser parser = new CastExpressionParser();
+
+  private CastExpressionParser() {}
 }

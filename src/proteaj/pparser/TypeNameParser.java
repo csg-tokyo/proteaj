@@ -3,37 +3,33 @@ package proteaj.pparser;
 import proteaj.error.*;
 import proteaj.io.*;
 import proteaj.ir.*;
-import proteaj.ir.tast.*;
 
 import javassist.*;
 
-public class TypeNameParser extends PackratParser {
+public class TypeNameParser extends PackratParser<CtClass> {
   /* TypeName
    *  : QualifiedIdentifier { '[' ']' }
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<CtClass> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
-    TypedAST qid = QualifiedIdentifierParser.parser.applyRule(reader, env);
-    if(qid.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(qid.getFailLog());
-    }
+    ParseResult<String> qid = QualifiedIdentifierParser.parser.applyRule(reader, env);
+    if(qid.isFail()) return fail(qid, pos, reader);
 
     int dim = 0;
 
     while(true) {
       int lpos = reader.getPos();
 
-      TypedAST lbracket = KeywordParser.getParser("[").applyRule(reader, env);
-      if(lbracket.isFail()) {
+      ParseResult<String> lBracket = KeywordParser.getParser("[").applyRule(reader, env);
+      if(lBracket.isFail()) {
         reader.setPos(lpos);
         break;
       }
 
-      TypedAST rbracket = KeywordParser.getParser("]").applyRule(reader, env);
-      if(rbracket.isFail()) {
+      ParseResult<String> rBracket = KeywordParser.getParser("]").applyRule(reader, env);
+      if(rBracket.isFail()) {
         reader.setPos(lpos);
         break;
       }
@@ -41,18 +37,15 @@ public class TypeNameParser extends PackratParser {
       dim++;
     }
 
-    StringBuilder buf = new StringBuilder(((QualifiedIdentifier)qid).toString());
+    StringBuilder buf = new StringBuilder(qid.get());
     for(int i = 0; i < dim; i++) buf.append("[]");
 
     String typename = buf.toString();
 
     try {
-      CtClass type = env.getType(typename);
-      return new TypeName(type);
+      return success(env.getType(typename));
     } catch (NotFoundError e) {
-      FailLog flog = new FailLog(e.getMessage(), reader.getPos(), reader.getLine());
-      reader.setPos(pos);
-      return new BadAST(flog);
+      return fail(e.getMessage(), pos, reader);
     }
   }
 

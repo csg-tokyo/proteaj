@@ -1,6 +1,5 @@
 package proteaj.pparser;
 
-import proteaj.error.*;
 import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.ir.tast.*;
@@ -13,22 +12,21 @@ public class DefaultReadasOperandParser extends ReadasOperandParser {
    *  : '(' ReadasOperand ')'
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
-    TypedAST lbrace = ReadasOperatorParser.getParser("(").applyRule(reader, env);
-    if(! lbrace.isFail()) {
-      TypedAST expr = ReadasOperandParser.getParser(type, env).applyRule(reader, env);
+    ParseResult<String> lPar = ReadasOperatorParser.getParser("(").applyRule(reader, env);
+    if(! lPar.isFail()) {
+      ParseResult<Expression> expr = ReadasOperandParser.getParser(type, env).applyRule(reader, env);
       if(! expr.isFail()) {
-        TypedAST rbrace = ReadasOperatorParser.getParser(")").applyRule(reader, env);
-        if(! rbrace.isFail()) {
+        ParseResult<String> rPar = ReadasOperatorParser.getParser(")").applyRule(reader, env);
+        if(! rPar.isFail()) {
           return expr;
         }
       }
     }
 
     reader.setPos(pos);
-    int line = reader.getLine();
 
     StringBuilder buf = new StringBuilder();
 
@@ -37,9 +35,7 @@ public class DefaultReadasOperandParser extends ReadasOperandParser {
       buf.append(reader.next());
     }
 
-    FailLog flog = new FailLog("fail to parse the readas operand : " + buf.toString(), pos, line);
-    reader.setPos(pos);
-    return new BadAST(flog);
+    return fail("fail to parse the readas operand : " + buf.toString(), pos, reader);
   }
 
   public static DefaultReadasOperandParser getParser(CtClass type) {

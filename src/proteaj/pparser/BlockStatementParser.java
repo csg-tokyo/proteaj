@@ -1,8 +1,11 @@
 package proteaj.pparser;
 
 import proteaj.ir.Environment;
+import proteaj.ir.tast.Statement;
 
-public class BlockStatementParser extends ComposedParser_Alternative {
+import java.util.*;
+
+public class BlockStatementParser extends ComposedParser_Alternative<Statement> {
   /* BlockStatement
    *  : Block
    *  | ControlFlow
@@ -14,13 +17,9 @@ public class BlockStatementParser extends ComposedParser_Alternative {
   }
 
   @Override
-  protected PackratParser[] getParsers(Environment env) {
-    return new PackratParser[] {
-        BlockParser.parser,
-        ControlFlowParser.parser,
-        LocalVarDeclStatementParser.parser,
-        ExpressionStatementParser.parser
-    };
+  protected List<PackratParser<? extends  Statement>> getParsers(Environment env) {
+    return asList(BlockParser.parser, ControlFlowParser.parser,
+        LocalVarDeclStatementParser.parser, ExpressionStatementParser.parser);
   }
 
   public static final BlockStatementParser parser = new BlockStatementParser();

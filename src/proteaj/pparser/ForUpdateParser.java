@@ -4,21 +4,17 @@ import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
-public class ForUpdateParser extends PackratParser {
+public class ForUpdateParser extends PackratParser<Expression> {
   /* ForUpdate
    *  : ExpressionList
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
-    TypedAST exprs = ExpressionListParser.parser.applyRule(reader, env);
-    if(exprs.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(exprs.getFailLog());
-    }
-
-    return exprs;
+    ParseResult<Expression> exprs = ExpressionListParser.parser.applyRule(reader, env);
+    if(exprs.isFail()) return fail(exprs, pos, reader);
+    else return exprs;
   }
 
   public static final ForUpdateParser parser = new ForUpdateParser();

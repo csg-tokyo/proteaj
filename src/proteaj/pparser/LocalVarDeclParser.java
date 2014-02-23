@@ -6,49 +6,37 @@ import proteaj.ir.tast.*;
 
 import javassist.*;
 
-public class LocalVarDeclParser extends PackratParser {
+public class LocalVarDeclParser extends PackratParser<LocalVarDecl> {
   /* LocalVarDecl
    *  : Type Identifier [ '=' Expression ]
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<LocalVarDecl> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
-    TypedAST type = TypeNameParser.parser.applyRule(reader, env);
-    if(type.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(type.getFailLog());
-    }
+    ParseResult<CtClass> type = TypeNameParser.parser.applyRule(reader, env);
+    if(type.isFail()) return fail(type, pos, reader);
 
-    TypedAST identifier = IdentifierParser.parser.applyRule(reader, env);
-    if(identifier.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(identifier.getFailLog());
-    }
+    ParseResult<String> identifier = IdentifierParser.parser.applyRule(reader, env);
+    if(identifier.isFail()) return fail(identifier, pos, reader);
 
-    CtClass cttype = ((TypeName)type).getType();
-    String name = ((Identifier)identifier).getName();
-
-    int epos = reader.getPos();
+    final int epos = reader.getPos();
     LocalVarDecl lvdecl;
 
-    TypedAST eq = KeywordParser.getParser("=").applyRule(reader, env);
+    ParseResult<String> eq = KeywordParser.getParser("=").applyRule(reader, env);
     if(eq.isFail()) {
       reader.setPos(epos);
-      lvdecl = new LocalVarDecl(cttype, name);
+      lvdecl = new LocalVarDecl(type.get(), identifier.get());
     }
     else {
-      TypedAST val = ExpressionParser.getParser(cttype, env).applyRule(reader, env);
-      if(val.isFail()) {
-        reader.setPos(pos);
-        return new BadAST(val.getFailLog());
-      }
-      lvdecl = new LocalVarDecl(cttype, name, (Expression)val);
+      ParseResult<Expression> val = ExpressionParser.getParser(type.get(), env).applyRule(reader, env);
+      if(val.isFail()) return fail(val, pos, reader);
+      else lvdecl = new LocalVarDecl(type.get(), identifier.get(), val.get());
     }
 
-    env.add(name, new LocalVariable(name, cttype));
+    env.add(identifier.get(), new LocalVariable(identifier.get(), type.get()));
 
-    return lvdecl;
+    return success(lvdecl);
   }
 
   public static final LocalVarDeclParser parser = new LocalVarDeclParser();

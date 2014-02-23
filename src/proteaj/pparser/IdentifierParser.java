@@ -1,25 +1,21 @@
 package proteaj.pparser;
 
-import proteaj.error.*;
 import proteaj.io.*;
 import proteaj.ir.*;
-import proteaj.ir.tast.*;
 
 import static java.lang.Character.isWhitespace;
 import static java.lang.Character.isJavaIdentifierPart;
 import static java.lang.Character.isJavaIdentifierStart;
 
-public class IdentifierParser extends PackratParser {
+public class IdentifierParser extends PackratParser<String> {
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<String> parse(SourceStringReader reader, Environment env) {
     int pos = reader.getPos();
 
     while(isWhitespace(reader.lookahead())) reader.next();
 
     if(! isJavaIdentifierStart(reader.lookahead())) {
-      FailLog flog = new FailLog("expected identifier, but found " + (char)reader.lookahead(), reader.getPos(), reader.getLine());
-      reader.setPos(pos);
-      return new BadAST(flog);
+      return fail("expected identifier, but found " + (char)reader.lookahead(), pos, reader);
     }
 
     StringBuilder buf = new StringBuilder();
@@ -29,7 +25,7 @@ public class IdentifierParser extends PackratParser {
       buf.append(reader.next());
     }
 
-    return new Identifier(buf.toString());
+    return success(buf.toString());
   }
 
   @Override

@@ -69,9 +69,10 @@ public class SourceStringReader {
   }
 
   private String source;
-  private String filePath;
   private int current;
 
   private TreeMap<Integer, Integer> lines;
+
+  public final String filePath;
 }
 

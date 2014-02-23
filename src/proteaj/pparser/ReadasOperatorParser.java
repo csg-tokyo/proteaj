@@ -1,31 +1,25 @@
 package proteaj.pparser;
 
-import proteaj.error.*;
 import proteaj.io.*;
 import proteaj.ir.*;
-import proteaj.ir.tast.*;
 
 import java.util.*;
 
-public class ReadasOperatorParser extends PackratParser {
-
+public class ReadasOperatorParser extends PackratParser<String> {
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    assert keyword != null && (! keyword.isEmpty());
-    int pos = reader.getPos();
+  protected ParseResult<String> parse(SourceStringReader reader, Environment env) {
+    assert keyword != null;
+
+    if (keyword.isEmpty()) return success("");
+
+    final int pos = reader.getPos();
 
     for(int i = 0; i < keyword.length(); i++) {
       if(reader.lookahead() == keyword.charAt(i)) reader.next();
-      else {
-        // fail
-        FailLog flog = new FailLog("can't found expected token : \"" + keyword + "\"", reader.getPos(), reader.getLine());
-        reader.setPos(pos);
-        return new BadAST(flog);
-      }
+      else return fail("can't found expected token : \"" + keyword + "\"", pos, reader);
     }
 
-    // success
-    return new ReadasOperator(keyword);
+    return success(keyword);
   }
 
   public static ReadasOperatorParser getParser(String keyword) {

@@ -6,21 +6,18 @@ import proteaj.ir.tast.*;
 
 import javassist.CtClass;
 
-public class FieldBodyParser extends PackratParser {
+public class FieldBodyParser extends PackratParser<FieldBody> {
   /* FieldBody
    *  : Expression
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<FieldBody> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
-    TypedAST expr = ExpressionParser.getParser(type, env).applyRule(reader, env);
-    if(expr.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(expr.getFailLog());
-    }
+    ParseResult<Expression> expr = ExpressionParser.getParser(type, env).applyRule(reader, env);
+    if(expr.isFail()) return fail(expr, pos, reader);
 
-    return new FieldBody((Expression)expr);
+    return success(new FieldBody(expr.get()));
   }
 
   public static FieldBodyParser getParser(CtClass type) {

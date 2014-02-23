@@ -1,6 +1,5 @@
 package proteaj.pparser;
 
-import proteaj.error.*;
 import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.ir.tast.*;
@@ -9,10 +8,10 @@ import proteaj.util.*;
 import java.util.*;
 import javassist.*;
 
-public class OperationParser extends PackratParser {
+public class OperationParser extends PackratParser<Operation> {
 
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<Operation> parse(SourceStringReader reader, Environment env) {
     int pos = reader.getPos();
     int length = pattern.getPatternLength();
 
@@ -20,22 +19,20 @@ public class OperationParser extends PackratParser {
 
     for(int i = 0; i < length; i++) {
       if(pattern.isOperator(i)) {
-        TypedAST operator = KeywordParser.getParser(pattern.getOperatorKeyword(i)).applyRule(reader, env);
-        if(operator.isFail()) {
-          reader.setPos(pos);
-          return new BadAST(operator.getFailLog());
-        }
+        ParseResult<String> operator = KeywordParser.getParser(pattern.getOperatorKeyword(i)).applyRule(reader, env);
+        if(operator.isFail()) return fail(operator, pos, reader);
       }
       else if(pattern.isOperand(i)) {
         int opos = reader.getPos();
         boolean inclusive = pattern.getInclusive(i);
 
-        TypedAST operand = ExpressionParser.getParser(pattern.getOperandType(i), priority, inclusive, env).applyRule(reader, env);
+        ParseResult<Expression> operand = ExpressionParser.getParser(pattern.getOperandType(i), priority, inclusive, env).applyRule(reader, env);
         if(! operand.isFail()) {
-          operands.add((Expression)operand);
+          operands.add(operand.get());
           continue;
         }
 
+        /* '*' and '+' */
         if(pattern.isVariableOperands(i) || pattern.hasMoreThanOneOperands(i)) try {
           reader.setPos(opos);
           CtClass arrayType = pattern.getOperandType(i);
@@ -43,49 +40,24 @@ public class OperationParser extends PackratParser {
           List<Expression> args = new ArrayList<Expression>();
 
           operand = ExpressionParser.getParser(componentType, priority, inclusive, env).applyRule(reader, env);
-          /*if(operand.isFail() && pattern.isReadasOperand(i)) {
+
+          if (operand.isFail() && pattern.hasMoreThanOneOperands(i)) return fail(operand, pos, reader);
+          else if (operand.isFail()) {
             reader.setPos(opos);
-            operand = ReadasExpressionParser.getParser(componentType).applyRule(reader, env);
-          }*/
-
-          if(operand.isFail()) {
-            reader.setPos(opos);
-
-            if(pattern.hasMoreThanOneOperands(i)) {
-              return new BadAST(operand.getFailLog());
-            }
-            else {
-              operands.add(new VariableOperands(args, arrayType));
-              continue;
-            }
+            operands.add(new VariableOperands(args, arrayType));
+            continue;
           }
-          else args.add((Expression)operand);
+          else args.add(operand.get());
 
-          if(pattern.hasSeparator(i)) while(true) {
+          while(true) {
             opos = reader.getPos();
-            TypedAST sep = KeywordParser.getParser(pattern.getSeparator(i)).applyRule(reader, env);
-            if(sep.isFail()) break;
+            if(pattern.hasSeparator(i)) {
+              if(KeywordParser.getParser(pattern.getSeparator(i)).applyRule(reader, env).isFail()) break;
+            }
 
-            //int epos = reader.getPos();
             operand = ExpressionParser.getParser(componentType, priority, inclusive, env).applyRule(reader, env);
-            /*if(operand.isFail() && pattern.isReadasOperand(i)) {
-              reader.setPos(epos);
-              operand = ReadasExpressionParser.getParser(componentType).applyRule(reader, env);
-            }*/
-
             if(operand.isFail()) break;
-            else args.add((Expression)operand);
-          }
-          else while(true) {
-            opos = reader.getPos();
-            operand = ExpressionParser.getParser(componentType, priority, inclusive, env).applyRule(reader, env);
-            /*if(operand.isFail() && pattern.isReadasOperand(i)) {
-              reader.setPos(opos);
-              operand = ReadasExpressionParser.getParser(componentType).applyRule(reader, env);
-            }*/
-
-            if(operand.isFail()) break;
-            else args.add((Expression)operand);
+            else args.add(operand.get());
           }
 
           reader.setPos(opos);
@@ -93,63 +65,37 @@ public class OperationParser extends PackratParser {
           continue;
 
         } catch (NotFoundException e) {
-          FailLog flog = new FailLog("not found component type of " + pattern.getOperandType(i).getName(), reader.getPos(), reader.getLine());
-          reader.setPos(pos);
-          return new BadAST(flog);
+          return fail("not found component type of " + pattern.getOperandType(i).getName(), pos, reader);
         }
 
-        /*else if(pattern.isReadasOperand(i)) {
-          reader.setPos(opos);
-          operand = ReadasExpressionParser.getParser(pattern.getOperandType(i)).applyRule(reader, env);
-
-          if(! operand.isFail()) {
-            operands.add((Expression)operand);
-            continue;
-          }
-        }*/
-
-        if(pattern.isOptionOperand(i)) try {
+        /* '?' */
+        else if(pattern.isOptionOperand(i)) try {
           reader.setPos(opos);
           StaticMethodCall mcall = new StaticMethodCall(pattern.getDefaultMethod(i), Arguments.EMPTY_ARGS);
           operands.add(mcall);
           continue;
         } catch (NotFoundException e) {
-          FailLog flog = new FailLog("not found type : " + pattern.getOperandType(i).getName(), reader.getPos(), reader.getLine());
-          reader.setPos(pos);
-          return new BadAST(flog);
+          return fail("not found type : " + pattern.getOperandType(i).getName(), pos, reader);
         }
 
-        reader.setPos(pos);
-        return new BadAST(operand.getFailLog());
+        /* else */
+        return fail(operand, pos, reader);
       }
       else if(pattern.isAndPredicate(i)) {
         int opos = reader.getPos();
         boolean inclusive = pattern.getInclusive(i);
 
-        TypedAST operand = ExpressionParser.getParser(pattern.getAndPredicateType(i), priority, inclusive, env).applyRule(reader, env);
-        if(operand.isFail()) {
-          reader.setPos(pos);
-          return new BadAST(operand.getFailLog());
-        }
-        else {
-          reader.setPos(opos);
-          continue;
-        }
+        ParseResult<Expression> operand = ExpressionParser.getParser(pattern.getAndPredicateType(i), priority, inclusive, env).applyRule(reader, env);
+        if(operand.isFail()) return fail(operand, pos, reader);
+        else reader.setPos(opos);   // continue
       }
       else if(pattern.isNotPredicate(i)) {
         int opos = reader.getPos();
         boolean inclusive = pattern.getInclusive(i);
 
-        TypedAST operand = ExpressionParser.getParser(pattern.getNotPredicateType(i), priority, inclusive, env).applyRule(reader, env);
-        if(operand.isFail()) {
-          reader.setPos(opos);
-          continue;
-        }
-        else {
-          FailLog flog = new FailLog("invalid operand", reader.getPos(), reader.getLine());
-          reader.setPos(pos);
-          return new BadAST(flog);
-        }
+        ParseResult<Expression> operand = ExpressionParser.getParser(pattern.getNotPredicateType(i), priority, inclusive, env).applyRule(reader, env);
+        if(operand.isFail()) reader.setPos(opos);          // continue
+        else return fail("invalid operand", pos, reader);
       }
     }
 
@@ -157,12 +103,10 @@ public class OperationParser extends PackratParser {
     try {
       env.addExceptions(operator.getExceptionTypes(), reader.getLine());
     } catch (NotFoundException e) {
-      FailLog flog = new FailLog("not found exception types of " + operator.getMethodName(), reader.getPos(), reader.getLine());
-      reader.setPos(pos);
-      return new BadAST(flog);
+      return fail("not found exception types of " + operator.getMethodName(), pos, reader);
     }
 
-    return new Operation(operator, operands);
+    return success(new Operation(operator, operands));
   }
 
   public static OperationParser getParser(CtClass type, int priority, IRPattern pattern) {

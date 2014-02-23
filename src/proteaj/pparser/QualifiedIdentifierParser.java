@@ -2,27 +2,23 @@ package proteaj.pparser;
 
 import proteaj.io.*;
 import proteaj.ir.*;
-import proteaj.ir.tast.*;
 
-public class QualifiedIdentifierParser extends PackratParser {
+public class QualifiedIdentifierParser extends PackratParser<String> {
   /* QualifiedIdentifier
    *  : Identifier { '.' Identifier }
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<String> parse(SourceStringReader reader, Environment env) {
     int pos = reader.getPos();
 
-    TypedAST id = IdentifierParser.parser.applyRule(reader, env);
-    if(id.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(id.getFailLog());
-    }
+    ParseResult<String> id = IdentifierParser.parser.applyRule(reader, env);
+    if(id.isFail()) return fail(id, pos, reader);
 
-    QualifiedIdentifier qid = new QualifiedIdentifier((Identifier)id);
+    StringBuilder qid = new StringBuilder(id.get());
 
     while(true) {
       int dpos = reader.getPos();
-      TypedAST dot = KeywordParser.getParser(".").applyRule(reader, env);
+      ParseResult<String> dot = KeywordParser.getParser(".").applyRule(reader, env);
 
       if(dot.isFail()) {
         reader.setPos(dpos);
@@ -35,10 +31,10 @@ public class QualifiedIdentifierParser extends PackratParser {
         break;
       }
 
-      qid.append((Identifier)id);
+      qid.append('.').append(id.get());
     }
 
-    return qid;
+    return success(qid.toString());
   }
 
   @Override

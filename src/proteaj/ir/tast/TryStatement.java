@@ -6,17 +6,17 @@ import java.util.*;
 import javassist.*;
 
 public class TryStatement extends Statement {
-  public TryStatement(Block tryBlock) {
+  public TryStatement(Statement tryBlock) {
     this.tryBlock = tryBlock;
-    this.catchBlocks = new ArrayList<Triad<CtClass,String,Block>>();
+    this.catchBlocks = new ArrayList<Triad<CtClass,String,Statement>>();
     this.finallyBlock = null;
   }
 
-  public void addCatchBlock(CtClass type, String name, Block block) {
-    catchBlocks.add(new Triad<CtClass, String, Block>(type, name, block));
+  public void addCatchBlock(CtClass type, String name, Statement block) {
+    catchBlocks.add(new Triad<CtClass, String, Statement>(type, name, block));
   }
 
-  public void setFinallyBlock(Block finallyBlock) {
+  public void setFinallyBlock(Statement finallyBlock) {
     this.finallyBlock = finallyBlock;
   }
 
@@ -29,7 +29,7 @@ public class TryStatement extends Statement {
     StringBuilder buf = new StringBuilder();
 
     buf.append("try ").append(tryBlock.toJavassistCode());
-    for(Triad<CtClass, String, Block> c : catchBlocks) {
+    for(Triad<CtClass, String, Statement> c : catchBlocks) {
       buf.append(" catch (").append(c.getFirst().getName()).append(' ').append(c.getSecond()).append(") ").append(c.getThird().toJavassistCode());
     }
     if(finallyBlock != null) buf.append(" finally ").append(finallyBlock.toJavassistCode());
@@ -37,8 +37,8 @@ public class TryStatement extends Statement {
     return buf.toString();
   }
 
-  private Block tryBlock;
-  private List<Triad<CtClass, String, Block>> catchBlocks;
-  private Block finallyBlock;
+  private Statement tryBlock;
+  private List<Triad<CtClass, String, Statement>> catchBlocks;
+  private Statement finallyBlock;
 }
 

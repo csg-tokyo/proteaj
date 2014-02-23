@@ -8,45 +8,36 @@ import proteaj.ir.tast.*;
 import java.util.*;
 import javassist.*;
 
-public class TryStatementParser extends PackratParser {
+public class TryStatementParser extends PackratParser<Statement> {
   /* TryStatement
    *  : "try" Block { "catch" '(' ClassName Identifier ')' Block }+ [ "finally" Block ]
    *  | "try" Block "finally" Block
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<Statement> parse(SourceStringReader reader, Environment env) {
     int pos = reader.getPos();
 
-    TypedAST tryKeyword = KeywordParser.getParser("try").applyRule(reader, env);
-    if(tryKeyword.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(tryKeyword.getFailLog());
-    }
+    ParseResult<String> tryKeyword = KeywordParser.getParser("try").applyRule(reader, env);
+    if(tryKeyword.isFail()) return fail(tryKeyword, pos, reader);
 
     Environment tryenv = new Environment(env);
 
-    TypedAST tryBlock = BlockParser.parser.applyRule(reader, tryenv);
-    if(tryBlock.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(tryBlock.getFailLog());
-    }
+    ParseResult<Statement> tryBlock = BlockParser.parser.applyRule(reader, tryenv);
+    if(tryBlock.isFail()) return fail(tryBlock, pos, reader);
 
     int cpos = reader.getPos();
-    TryStatement stmt = new TryStatement((Block)tryBlock);
+    TryStatement stmt = new TryStatement(tryBlock.get());
 
-    TypedAST finallyKeyword = KeywordParser.getParser("finally").applyRule(reader, env);
+    ParseResult<String> finallyKeyword = KeywordParser.getParser("finally").applyRule(reader, env);
     if(! finallyKeyword.isFail()) {
       env.inheritExceptions(tryenv);
 
-      TypedAST finallyBlock = BlockParser.parser.applyRule(reader, env);
-      if(finallyBlock.isFail()) {
-        reader.setPos(pos);
-        return new BadAST(finallyBlock.getFailLog());
-      }
+      ParseResult<Statement> finallyBlock = BlockParser.parser.applyRule(reader, env);
+      if(finallyBlock.isFail()) return fail(finallyBlock, pos, reader);
 
-      stmt.setFinallyBlock((Block)finallyBlock);
+      stmt.setFinallyBlock(finallyBlock.get());
 
-      return stmt;
+      return success(stmt);
     }
 
     reader.setPos(cpos);
@@ -54,64 +45,43 @@ public class TryStatementParser extends PackratParser {
     List<Environment> envs = new ArrayList<Environment>();
 
     while(true) {
-      TypedAST catchKeyword = KeywordParser.getParser("catch").applyRule(reader, env);
+      ParseResult<String> catchKeyword = KeywordParser.getParser("catch").applyRule(reader, env);
       if(catchKeyword.isFail()) {
         if(stmt.hasCatchBlock()) break;
-        reader.setPos(pos);
-        return new BadAST(catchKeyword.getFailLog());
+        else return fail(catchKeyword, pos, reader);
       }
 
-      TypedAST lparen = KeywordParser.getParser("(").applyRule(reader, env);
-      if(lparen.isFail()) {
-        reader.setPos(pos);
-        return new BadAST(lparen.getFailLog());
-      }
+      ParseResult<String> lPar = KeywordParser.getParser("(").applyRule(reader, env);
+      if(lPar.isFail()) return fail(lPar, pos, reader);
 
-      TypedAST type = ClassNameParser.parser.applyRule(reader, env);
-      if(type.isFail()) {
-        reader.setPos(pos);
-        return new BadAST(type.getFailLog());
-      }
+      ParseResult<CtClass> type = ClassNameParser.parser.applyRule(reader, env);
+      if(type.isFail()) return fail(type, pos, reader);
 
-      TypedAST name = IdentifierParser.parser.applyRule(reader, env);
-      if(name.isFail()) {
-        reader.setPos(pos);
-        return new BadAST(name.getFailLog());
-      }
+      ParseResult<String> name = IdentifierParser.parser.applyRule(reader, env);
+      if(name.isFail()) return fail(name, pos, reader);
 
-      TypedAST rparen = KeywordParser.getParser(")").applyRule(reader, env);
-      if(rparen.isFail()) {
-        reader.setPos(pos);
-        return new BadAST(rparen.getFailLog());
-      }
-
-      CtClass exceptionType = ((ClassName)type).getCtClass();
-      String exceptionName = ((Identifier)name).getName();
+      ParseResult<String> rPar = KeywordParser.getParser(")").applyRule(reader, env);
+      if(rPar.isFail()) return fail(rPar, pos, reader);
 
       Environment newenv = new Environment(env);
-      newenv.add(exceptionName, new LocalVariable(exceptionName, exceptionType));
+      newenv.add(name.get(), new LocalVariable(name.get(), type.get()));
 
-      TypedAST catchBlock = BlockParser.parser.applyRule(reader, newenv);
-      if(catchBlock.isFail()) {
-        reader.setPos(pos);
-        return new BadAST(catchBlock.getFailLog());
-      }
+      ParseResult<Statement> catchBlock = BlockParser.parser.applyRule(reader, newenv);
+      if(catchBlock.isFail()) return fail(catchBlock, pos, reader);
 
       try {
-        if(! exceptionType.subtypeOf(IRCommonTypes.getThrowableType())) {
-          FailLog flog = new FailLog("No exception of type " + exceptionType.getName() + " can be thrown;" +
-              " an exception type must be a subclass of Throwable", reader.getPos(), reader.getLine());
-          reader.setPos(pos);
-          return new BadAST(flog);
+        if(! type.get().subtypeOf(IRCommonTypes.getThrowableType())) {
+          String msg = "No exception of type " + type.get().getName() + " can be thrown; an exception type must be a subclass of Throwable";
+          return fail(msg, pos, reader);
         }
-        else tryenv.removeException(exceptionType);
+        else tryenv.removeException(type.get());
       } catch (NotFoundException e) {
         ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
       }
 
       envs.add(newenv);
 
-      stmt.addCatchBlock(exceptionType, exceptionName, (Block)catchBlock);
+      stmt.addCatchBlock(type.get(), name.get(), catchBlock.get());
     }
 
     env.inheritExceptions(tryenv);
@@ -121,17 +91,13 @@ public class TryStatementParser extends PackratParser {
 
     finallyKeyword = KeywordParser.getParser("finally").applyRule(reader, env);
     if(! finallyKeyword.isFail()) {
-      TypedAST finallyBlock = BlockParser.parser.applyRule(reader, env);
-      if(finallyBlock.isFail()) {
-        reader.setPos(pos);
-        return new BadAST(finallyBlock.getFailLog());
-      }
-
-      stmt.setFinallyBlock((Block)finallyBlock);
+      ParseResult<Statement> finallyBlock = BlockParser.parser.applyRule(reader, env);
+      if(finallyBlock.isFail()) return fail(finallyBlock, pos, reader);
+      else stmt.setFinallyBlock(finallyBlock.get());
     }
     else reader.setPos(fpos);
 
-    return stmt;
+    return success(stmt);
   }
 
   public static final TryStatementParser parser = new TryStatementParser();

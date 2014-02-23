@@ -4,33 +4,24 @@ import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
-public class AssignExpressionParser extends PackratParser {
+public class AssignExpressionParser extends PackratParser<Expression> {
   /* AssignExpression
    *  : JavaExpression '=' Expression
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
-    TypedAST expr = JavaExpressionParser.parser.applyRule(reader, env);
-    if(expr.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(expr.getFailLog());
-    }
+    ParseResult<Expression> expr = JavaExpressionParser.parser.applyRule(reader, env);
+    if(expr.isFail()) return fail(expr, pos, reader);
 
-    TypedAST eq = KeywordParser.getParser("=").applyRule(reader, env);
-    if(eq.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(eq.getFailLog());
-    }
+    ParseResult<String> eq = KeywordParser.getParser("=").applyRule(reader, env);
+    if(eq.isFail()) return fail(eq, pos, reader);
 
-    TypedAST val = ExpressionParser.getParser(((Expression)expr).getType(), env).applyRule(reader, env);
-    if(val.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(val.getFailLog());
-    }
+    ParseResult<Expression> val = ExpressionParser.getParser(expr.get().getType(), env).applyRule(reader, env);
+    if(val.isFail()) return fail(val, pos, reader);
 
-    return new AssignExpression((Expression)expr, (Expression)val);
+    return success(new AssignExpression(expr.get(), val.get()));
   }
 
   @Override

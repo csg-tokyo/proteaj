@@ -1,6 +1,5 @@
 package proteaj.pparser;
 
-import proteaj.error.*;
 import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.ir.tast.*;
@@ -9,30 +8,27 @@ import proteaj.util.*;
 import java.util.*;
 import javassist.*;
 
-public class ReadasOperationParser extends PackratParser {
+public class ReadasOperationParser extends PackratParser<Expression> {
 
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
-    int length = pattern.getPatternLength();
+  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
+    final int length = pattern.getPatternLength();
 
     List<Expression> operands = new ArrayList<Expression>(pattern.getOperandsLength());
 
     for(int i = 0; i < length; i++) {
       if(pattern.isOperator(i)) {
-        TypedAST operator = ReadasOperatorParser.getParser(pattern.getOperatorKeyword(i)).applyRule(reader, env);
-        if(operator.isFail()) {
-          reader.setPos(pos);
-          return new BadAST(operator.getFailLog());
-        }
+        ParseResult<String> operator = ReadasOperatorParser.getParser(pattern.getOperatorKeyword(i)).applyRule(reader, env);
+        if(operator.isFail()) return fail(operator, pos, reader);
       }
       else if(pattern.isOperand(i)) {
         int opos = reader.getPos();
         boolean inclusive = pattern.getInclusive(i);
 
-        TypedAST operand = ReadasOperandParser.getParser(pattern.getOperandType(i), priority, inclusive, env).applyRule(reader, env);
+        ParseResult<Expression> operand = ReadasOperandParser.getParser(pattern.getOperandType(i), priority, inclusive, env).applyRule(reader, env);
         if(! operand.isFail()) {
-          operands.add((Expression)operand);
+          operands.add(operand.get());
           continue;
         }
 
@@ -43,42 +39,31 @@ public class ReadasOperationParser extends PackratParser {
           List<Expression> args = new ArrayList<Expression>();
 
           operand = ReadasOperandParser.getParser(componentType, priority, inclusive, env).applyRule(reader, env);
-          if(operand.isFail()) {
+
+          if (operand.isFail() && pattern.hasMoreThanOneOperands(i)) return fail(operand, pos, reader);
+          else if (operand.isFail()) {
             reader.setPos(opos);
-
-            if(pattern.hasMoreThanOneOperands(i)) {
-              return new BadAST(operand.getFailLog());
-            }
-            else {
-              operands.add(new VariableOperands(args, arrayType));
-              continue;
-            }
+            operands.add(new VariableOperands(args, arrayType));
+            continue;
           }
-          else args.add((Expression)operand);
+          else args.add(operand.get());
 
-          if(pattern.hasSeparator(i)) while(true) {
+          while(true) {
             opos = reader.getPos();
-            TypedAST sep = ReadasOperatorParser.getParser(pattern.getSeparator(i)).applyRule(reader, env);
-            if(sep.isFail()) break;
+            if(pattern.hasSeparator(i)) {
+              if(ReadasOperatorParser.getParser(pattern.getSeparator(i)).applyRule(reader, env).isFail()) break;
+            }
 
             operand = ReadasOperandParser.getParser(componentType, priority, inclusive, env).applyRule(reader, env);
             if(operand.isFail()) break;
-            else args.add((Expression)operand);
-          }
-          else while(true) {
-            opos = reader.getPos();
-            operand = ReadasOperandParser.getParser(componentType, priority, inclusive, env).applyRule(reader, env);
-            if(operand.isFail()) break;
-            else args.add((Expression)operand);
+            else args.add(operand.get());
           }
 
           reader.setPos(opos);
           operands.add(new VariableOperands(args, arrayType));
           continue;
         } catch (NotFoundException e) {
-          FailLog flog = new FailLog("not found component type of " + pattern.getOperandType(i).getName(), reader.getPos(), reader.getLine());
-          reader.setPos(pos);
-          return new BadAST(flog);
+          return fail("not found component type of " + pattern.getOperandType(i).getName(), pos, reader);
         }
 
         else if(pattern.isOptionOperand(i)) try {
@@ -87,42 +72,26 @@ public class ReadasOperationParser extends PackratParser {
           operands.add(mcall);
           continue;
         } catch (NotFoundException e) {
-          FailLog flog = new FailLog("not found type : " + pattern.getOperandType(i).getName(), reader.getPos(), reader.getLine());
-          reader.setPos(pos);
-          return new BadAST(flog);
+          return fail("not found type : " + pattern.getOperandType(i).getName(), pos, reader);
         }
 
-        reader.setPos(pos);
-        return new BadAST(operand.getFailLog());
+        return fail(operand, pos, reader);
       }
       else if(pattern.isAndPredicate(i)) {
         int opos = reader.getPos();
         boolean inclusive = pattern.getInclusive(i);
 
-        TypedAST operand = ReadasOperandParser.getParser(pattern.getAndPredicateType(i), priority, inclusive, env).applyRule(reader, env);
-        if(operand.isFail()) {
-          reader.setPos(pos);
-          return new BadAST(operand.getFailLog());
-        }
-        else {
-          reader.setPos(opos);
-          continue;
-        }
+        ParseResult<Expression> operand = ReadasOperandParser.getParser(pattern.getAndPredicateType(i), priority, inclusive, env).applyRule(reader, env);
+        if(operand.isFail()) return fail(operand, pos, reader);
+        else reader.setPos(opos);  // continue
       }
       else if(pattern.isNotPredicate(i)) {
         int opos = reader.getPos();
         boolean inclusive = pattern.getInclusive(i);
 
-        TypedAST operand = ReadasOperandParser.getParser(pattern.getNotPredicateType(i), priority, inclusive, env).applyRule(reader, env);
-        if(operand.isFail()) {
-          reader.setPos(opos);
-          continue;
-        }
-        else {
-          FailLog flog = new FailLog("invalid operand", reader.getPos(), reader.getLine());
-          reader.setPos(pos);
-          return new BadAST(flog);
-        }
+        ParseResult<Expression> operand = ReadasOperandParser.getParser(pattern.getNotPredicateType(i), priority, inclusive, env).applyRule(reader, env);
+        if(operand.isFail()) reader.setPos(opos);          // continue
+        else return fail("invalid operand", pos, reader);
       }
     }
 
@@ -130,12 +99,10 @@ public class ReadasOperationParser extends PackratParser {
     try {
       env.addExceptions(operator.getExceptionTypes(), reader.getLine());
     } catch (NotFoundException e) {
-      FailLog flog = new FailLog("not found exception types of " + operator.getMethodName(), reader.getPos(), reader.getLine());
-      reader.setPos(pos);
-      return new BadAST(flog);
+      return fail("not found exception types of " + operator.getMethodName(), pos, reader);
     }
 
-    return new Operation(operator, operands);
+    return success(new Operation(operator, operands));
   }
 
   public static ReadasOperationParser getParser(CtClass type, int priority, IRPattern pattern) {

@@ -7,19 +7,20 @@ import proteaj.ir.tast.*;
 
 import java.util.*;
 
-abstract class ComposedParser_Sequential extends PackratParser {
+/*
+abstract class ComposedParser_Sequential<T> extends PackratParser<T> {
   protected ComposedParser_Sequential(String name) {
     this.name = name;
   }
 
-  protected abstract PackratParser[] getParsers(Environment env);
+  protected abstract PackratParser<? extends T>[] getParsers(Environment env);
   protected abstract TypedAST makeAST(int pos, int line, String file, TypedAST... as);
 
   @Override
-  protected final TypedAST parse(SourceStringReader reader, Environment env) {
+  protected final ParseResult<T> parse(SourceStringReader reader, Environment env) {
     int pos = reader.getPos();
-    PackratParser[] ps = getParsers(env);
-    TypedAST[] as = new TypedAST[ps.length];
+    PackratParser<? extends T>[] ps = getParsers(env);
+    List<ParseResult<T>> as = new ArrayList<ParseResult<T>>();
     for (int i = 0; i < ps.length; i++) {
       as[i] = ps[i].applyRule(reader, env);
       if (as[i].isFail()) {
@@ -38,29 +39,31 @@ abstract class ComposedParser_Sequential extends PackratParser {
   }
 
   private String name;
-}
+}*/
 
-abstract class ComposedParser_Alternative extends PackratParser {
+abstract class ComposedParser_Alternative<T> extends PackratParser<T> {
   protected ComposedParser_Alternative(String name) {
     this.name = name;
   }
 
-  protected abstract PackratParser[] getParsers(Environment env);
+  protected List<PackratParser<? extends  T>> asList(PackratParser<? extends  T>... parsers) {
+    return Arrays.asList(parsers);
+  }
+
+  protected abstract List<PackratParser<? extends  T>> getParsers(Environment env);
 
   @Override
-  protected final TypedAST parse(SourceStringReader reader, Environment env) {
+  protected final ParseResult<T> parse(SourceStringReader reader, Environment env) {
     int pos = reader.getPos();
-    PackratParser[] ps = getParsers(env);
-    FailLog flog = new FailLog("Suitable parser is not found", pos, reader.getLine());
+    List<ParseResult<?>> fails = new ArrayList<ParseResult<?>>();
 
-    for (PackratParser p : ps) {
-      TypedAST ret = p.applyRule(reader, env, pos);
-      if (! ret.isFail()) return ret;
-      else if (flog == null || flog.getEndPosition() < ret.getFailLog().getEndPosition()) flog = ret.getFailLog();
+    for (PackratParser<? extends  T> p : getParsers(env)) {
+      ParseResult<? extends  T> ret = p.applyRule(reader, env, pos);
+      if (! ret.isFail()) return success(ret.get());
+      else fails.add(ret);
     }
 
-    reader.setPos(pos);
-    return new BadAST(flog);
+    return fail(fails, pos, reader);
   }
 
   @Override
@@ -70,7 +73,7 @@ abstract class ComposedParser_Alternative extends PackratParser {
 
   private String name;
 }
-
+/*
 abstract class ComposedParser_Repetition extends PackratParser {
   protected ComposedParser_Repetition(String name) {
     this.name = name;
@@ -104,3 +107,4 @@ abstract class ComposedParser_Repetition extends PackratParser {
 
   private final String name;
 }
+*/

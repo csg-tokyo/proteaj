@@ -1,19 +1,19 @@
 package proteaj.pparser;
 
-import proteaj.error.*;
 import proteaj.io.*;
 import proteaj.ir.*;
-import proteaj.ir.tast.*;
 
 import java.util.*;
 
 import static java.lang.Character.isWhitespace;
 
-public class KeywordParser extends PackratParser {
+public class KeywordParser extends PackratParser<String> {
 
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    assert keyword != null && (! keyword.isEmpty());
+  protected ParseResult<String> parse(SourceStringReader reader, Environment env) {
+    assert keyword != null;
+
+    if (keyword.isEmpty()) return success("");
 
     char k0 = keyword.charAt(0);
 
@@ -26,27 +26,18 @@ public class KeywordParser extends PackratParser {
 
         for(int i = 1; i < keyword.length(); i++) {
           if(reader.lookahead() == keyword.charAt(i)) reader.next();
-          else {
-            // fail
-            FailLog flog = new FailLog("can't found expected token : \"" + keyword + "\"", reader.getPos(), reader.getLine());
-            reader.setPos(pos);
-            return new BadAST(flog);
-          }
+          else return fail("can't found expected token : \"" + keyword + "\"", pos, reader);
         }
 
         // success
-        return new Keyword(keyword);
+        return success(keyword);
       }
-      else if(isWhitespace(ch)) {
-        reader.next();
-      }
+      else if(isWhitespace(ch)) reader.next();
       else break;
     }
 
     // fail
-    reader.setPos(pos);
-    FailLog flog = new FailLog("can't found expected token : \"" + keyword + "\"", reader.getPos(), reader.getLine());
-    return new BadAST(flog);
+    return fail("can't found expected token : \"" + keyword + "\"", pos, reader);
   }
 
   public static KeywordParser getParser(String keyword) {

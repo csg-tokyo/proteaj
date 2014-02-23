@@ -9,42 +9,30 @@ import javassist.*;
 
 import static proteaj.util.Modifiers.*;
 
-public class StaticFieldAccessParser extends PackratParser {
+public class StaticFieldAccessParser extends PackratParser<Expression> {
   /* StaticFieldAccess
    *  : ClassName '.' Identifier
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
     // ClassName
-    TypedAST className = ClassNameParser.parser.applyRule(reader, env);
-    if(className.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(className.getFailLog());
-    }
+    ParseResult<CtClass> className = ClassNameParser.parser.applyRule(reader, env);
+    if(className.isFail()) return fail(className, pos, reader);
 
     // '.'
-    TypedAST dot = KeywordParser.getParser(".").applyRule(reader, env);
-    if(dot.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(dot.getFailLog());
-    }
+    ParseResult<String> dot = KeywordParser.getParser(".").applyRule(reader, env);
+    if(dot.isFail()) return fail(dot, pos, reader);
 
     // Identifier
-    TypedAST identifier = IdentifierParser.parser.applyRule(reader, env);
-    if(identifier.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(identifier.getFailLog());
-    }
+    ParseResult<String> identifier = IdentifierParser.parser.applyRule(reader, env);
+    if(identifier.isFail()) return fail(identifier, pos, reader);
 
-    CtClass ctcls = ((ClassName)className).getCtClass();
-    String name = ((Identifier)identifier).getName();
-
-    if(ctcls == env.thisClass) {
-      for(CtField field : ctcls.getDeclaredFields()) {
-        if(isStatic(field.getModifiers()) && field.getName().equals(name)) try {
-          return new StaticFieldAccess(field);
+    if(className.get() == env.thisClass) {
+      for(CtField field : className.get().getDeclaredFields()) {
+        if(isStatic(field.getModifiers()) && field.getName().equals(identifier.get())) try {
+          return success(new StaticFieldAccess(field));
         } catch (NotFoundException e) {
           ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
           break;
@@ -52,9 +40,9 @@ public class StaticFieldAccessParser extends PackratParser {
       }
     }
 
-    for(CtField field : ctcls.getFields()) {
-      if(isStatic(field.getModifiers()) && field.visibleFrom(env.thisClass) && field.getName().equals(name)) try {
-        return new StaticFieldAccess(field);
+    for(CtField field : className.get().getFields()) {
+      if(isStatic(field.getModifiers()) && field.visibleFrom(env.thisClass) && field.getName().equals(identifier.get())) try {
+        return success(new StaticFieldAccess(field));
       } catch (NotFoundException e) {
         ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
         break;
@@ -62,9 +50,7 @@ public class StaticFieldAccessParser extends PackratParser {
     }
 
     // fail
-    FailLog flog = new FailLog("undefined field : " + name, reader.getPos(), reader.getLine());
-    reader.setPos(pos);
-    return new BadAST(flog);
+    return fail("undefined field : " + identifier.get(), pos, reader);
   }
 
   @Override

@@ -4,43 +4,37 @@ import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
-public class BlockParser extends PackratParser {
+public class BlockParser extends PackratParser<Statement> {
  /* Block
   *  : '{' { BlockStatement } '}'
   */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<Statement> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
     // '{'
-    TypedAST lbrace = KeywordParser.getParser("{").applyRule(reader, env);
-    if(lbrace.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(lbrace.getFailLog());
-    }
+    ParseResult<String> lBrace = KeywordParser.getParser("{").applyRule(reader, env);
+    if(lBrace.isFail()) return fail(lBrace, pos, reader);
 
     Block block = new Block();
     Environment newenv = new Environment(env);
 
     // { BlockStatement }
-    TypedAST stmt;
+    ParseResult<Statement> stmt;
     while(true) {
       stmt = BlockStatementParser.parser.applyRule(reader, newenv);
       if(stmt.isFail()) break;
 
-      block.addStatement((Statement)stmt);
+      block.addStatement(stmt.get());
     }
 
     // '}'
-    TypedAST rbrace = KeywordParser.getParser("}").applyRule(reader, env);
-    if(rbrace.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(stmt.getFailLog());          // rbrace's error message is not suitable.
-    }
+    ParseResult<String> rBrace = KeywordParser.getParser("}").applyRule(reader, env);
+    if(rBrace.isFail()) return fail(stmt, pos, reader);   // rbrace's error message is not suitable.
 
     env.inheritExceptions(newenv);
 
-    return block;
+    return success(block);
   }
 
   public static final BlockParser parser = new BlockParser();

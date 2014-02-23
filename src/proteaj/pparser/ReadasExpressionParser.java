@@ -9,15 +9,16 @@ import javassist.*;
 
 import static java.lang.Character.isWhitespace;
 
-public class ReadasExpressionParser extends PackratParser {
+public class ReadasExpressionParser extends PackratParser<Expression> {
 
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
+
     while(isWhitespace(reader.lookahead())) reader.next();
 
-    TypedAST operand = ReadasOperandParser.getParser(type, env).applyRule(reader, env);
-    if(operand.isFail()) reader.setPos(pos);
+    ParseResult<Expression> operand = ReadasOperandParser.getParser(type, env).applyRule(reader, env);
+    if(operand.isFail()) return fail(operand, pos, reader);
 
     return operand;
   }

@@ -1,48 +1,38 @@
 package proteaj.pparser;
 
-import proteaj.error.FailLog;
 import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
 import javassist.*;
 
-public class ReturnStatementParser extends PackratParser {
+public class ReturnStatementParser extends PackratParser<Statement> {
   /* ReturnStatement
    *  : "return" [ Expression ] ';'
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<Statement> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
     if (! enable) return DISABLE;
 
     // "return"
-    TypedAST keyword = KeywordParser.getParser("return").applyRule(reader, env);
-    if(keyword.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(keyword.getFailLog());
-    }
+    ParseResult<String> keyword = KeywordParser.getParser("return").applyRule(reader, env);
+    if(keyword.isFail()) return fail(keyword, pos, reader);
 
     // [ Expression ]
-    TypedAST val = null;
+    ParseResult<Expression> val = null;
     if(! returnType.equals(CtClass.voidType)) {
       val = ExpressionParser.getParser(returnType, env).applyRule(reader, env);
-      if(val.isFail()) {
-        reader.setPos(pos);
-        return new BadAST(val.getFailLog());
-      }
+      if(val.isFail()) return fail(val, pos, reader);
     }
 
     // ';'
-    TypedAST semicolon = KeywordParser.getParser(";").applyRule(reader, env);
-    if(semicolon.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(semicolon.getFailLog());
-    }
+    ParseResult<String> semicolon = KeywordParser.getParser(";").applyRule(reader, env);
+    if(semicolon.isFail()) return fail(semicolon, pos, reader);
 
-    if(val != null) return new ReturnStatement((Expression)val);
-    else return new ReturnStatement();
+    if(val != null) return success(new ReturnStatement(val.get()));
+    else return success(new ReturnStatement());
   }
 
   public void init(CtClass returnType) {
@@ -61,5 +51,5 @@ public class ReturnStatementParser extends PackratParser {
   private CtClass returnType;
   private boolean enable;
 
-  private static final BadAST DISABLE = new BadAST(new FailLog("disable parser", 0, 0));
+  private static final Failure<Statement> DISABLE = new Failure<Statement>("disable parser", 0, 0);
 }

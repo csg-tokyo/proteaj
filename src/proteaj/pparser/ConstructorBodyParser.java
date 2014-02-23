@@ -5,52 +5,44 @@ import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
+import java.util.*;
 import javassist.*;
 
 import static proteaj.util.CtClassUtil.*;
 
-public class ConstructorBodyParser extends PackratParser {
+public class ConstructorBodyParser extends PackratParser<ConstructorBody> {
   /* ConstructorBody
    *  : '{' [ ThisConstructorCall | SuperConstructorCall ] { BlockStatement } '}'
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<ConstructorBody> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
     // '{'
-    TypedAST lbrace = KeywordParser.getParser("{").applyRule(reader, env);
-    if(lbrace.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(lbrace.getFailLog());
-    }
+    ParseResult<String> lBrace = KeywordParser.getParser("{").applyRule(reader, env);
+    if(lBrace.isFail()) return fail(lBrace, pos, reader);
 
     int bpos = reader.getPos();
     Block block = new Block();
 
-    FailLog flog = null;
-
     // [ ThisConstructorCall | SuperConstructorCall ]
-    TypedAST thisstmt = ThisConstructorCallParser.parser.applyRule(reader, env, bpos);
-    if(! thisstmt.isFail()) block.addStatement((Statement)thisstmt);
+    ParseResult<Statement> thisstmt = ThisConstructorCallParser.parser.applyRule(reader, env, bpos);
+    if(! thisstmt.isFail()) block.addStatement(thisstmt.get());
 
     else {
-      flog = thisstmt.getFailLog();
-      TypedAST superstmt = SuperConstructorCallParser.parser.applyRule(reader, env, bpos);
-      if(! superstmt.isFail()) block.addStatement((Statement)superstmt);
+      ParseResult<Statement> superstmt = SuperConstructorCallParser.parser.applyRule(reader, env, bpos);
+      if(! superstmt.isFail()) block.addStatement(superstmt.get());
       else try {
-        flog = chooseBest(flog, superstmt.getFailLog());
-
         CtClass superCls = env.thisClass.getSuperclass();
         if(! hasDefaultConstructor(superCls)) {
-          flog = chooseBest(new FailLog("implicit super constructor is undefined. Must explicitly invoke another constructor", reader.getPos(), reader.getLine()), flog);
-          reader.setPos(pos);
-          flog = chooseBest(flog, thisstmt.getFailLog(), superstmt.getFailLog());
-          return new BadAST(flog);
+          Failure<Statement> f = new Failure<Statement>("implicit super constructor is undefined. Must explicitly invoke another constructor", pos, reader.getLine(pos));
+          List<ParseResult<?>> fails = Arrays.<ParseResult<?>>asList(f, thisstmt, superstmt);
+          return fail(fails, pos, reader);
         }
         else if(! getDefaultConstructor(superCls).visibleFrom(env.thisClass)) {
-          flog = chooseBest(new FailLog("implicit super constructor is not visible. Must explicitly invoke another constructor", reader.getPos(), reader.getLine()), flog);
-          reader.setPos(pos);
-          return new BadAST(flog);
+          Failure<Statement> f = new Failure<Statement>("implicit super constructor is not visible. Must explicitly invoke another constructor", pos, reader.getLine(pos));
+          List<ParseResult<?>> fails = Arrays.<ParseResult<?>>asList(f, thisstmt, superstmt);
+          return fail(fails, pos, reader);
         }
       } catch (NotFoundException e) {
         ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
@@ -58,26 +50,21 @@ public class ConstructorBodyParser extends PackratParser {
     }
 
 
-    TypedAST stmt;
+    ParseResult<Statement> stmt;
 
     // { BlockStatement }
     while(true) {
       stmt = BlockStatementParser.parser.applyRule(reader, env);
       if(stmt.isFail()) break;
 
-      block.addStatement((Statement)stmt);
+      block.addStatement(stmt.get());
     }
 
     // '}'
-    TypedAST rbrace = KeywordParser.getParser("}").applyRule(reader, env);
-    if(rbrace.isFail()) {
-      if(flog == null) flog = chooseBest(stmt.getFailLog(), rbrace.getFailLog());
-      else flog = chooseBest(flog, stmt.getFailLog(), rbrace.getFailLog());
-      reader.setPos(pos);
-      return new BadAST(flog);
-    }
+    ParseResult<String> rBrace = KeywordParser.getParser("}").applyRule(reader, env);
+    if(rBrace.isFail()) return fail(stmt, pos, reader);
 
-    return new ConstructorBody(block);
+    return success(new ConstructorBody(block));
   }
 
   public static final ConstructorBodyParser parser = new ConstructorBodyParser();

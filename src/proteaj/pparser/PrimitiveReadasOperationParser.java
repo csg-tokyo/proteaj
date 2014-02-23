@@ -1,6 +1,5 @@
 package proteaj.pparser;
 
-import proteaj.error.*;
 import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.ir.tast.*;
@@ -15,7 +14,7 @@ import static java.lang.Character.isLetter;
 
 public abstract class PrimitiveReadasOperationParser extends ReadasOperationParser {
   @Override
-  protected abstract TypedAST parse(SourceStringReader reader, Environment env);
+  protected abstract ParseResult<Expression> parse(SourceStringReader reader, Environment env);
 
   public static PrimitiveReadasOperationParser getParser(CtClass type) {
     if(parsers.isEmpty()) {
@@ -72,9 +71,8 @@ public abstract class PrimitiveReadasOperationParser extends ReadasOperationPars
 
   private static final PrimitiveReadasOperationParser defaultParser = new PrimitiveReadasOperationParser(CtClass.voidType) {
     @Override
-    protected TypedAST parse(SourceStringReader reader, Environment env) {
+    protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
       int pos = reader.getPos();
-      int line = reader.getLine();
 
       StringBuilder buf = new StringBuilder();
 
@@ -83,9 +81,7 @@ public abstract class PrimitiveReadasOperationParser extends ReadasOperationPars
         buf.append(reader.next());
       }
 
-      FailLog flog = new FailLog("fail to parse the readas operand : " + buf.toString(), pos, line);
-      reader.setPos(pos);
-      return new BadAST(flog);
+      return fail("fail to parse the readas operand : " + buf.toString(), pos, reader);
     }
   };
 
@@ -96,14 +92,10 @@ public abstract class PrimitiveReadasOperationParser extends ReadasOperationPars
     }
 
     @Override
-    protected TypedAST parse(SourceStringReader reader, Environment env) {
-      int pos = reader.getPos();
+    protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+      final int pos = reader.getPos();
 
-      if(! isJavaIdentifierStart(reader.lookahead())) {
-        FailLog flog = new FailLog("expected identifier, but found " + (char)reader.lookahead(), reader.getPos(), reader.getLine());
-        reader.setPos(pos);
-        return new BadAST(flog);
-      }
+      if(! isJavaIdentifierStart(reader.lookahead())) return fail("expected identifier, but found " + (char)reader.lookahead(), pos, reader);
 
       StringBuilder buf = new StringBuilder();
       buf.append(reader.next());
@@ -112,7 +104,7 @@ public abstract class PrimitiveReadasOperationParser extends ReadasOperationPars
         buf.append(reader.next());
       }
 
-      return new NewExpression(constructor, new Arguments(new StringLiteral(buf.toString())));
+      return success(new NewExpression(constructor, new Arguments(new StringLiteral(buf.toString()))));
     }
 
     private CtConstructor constructor;
@@ -125,16 +117,12 @@ public abstract class PrimitiveReadasOperationParser extends ReadasOperationPars
     }
 
     @Override
-    protected TypedAST parse(SourceStringReader reader, Environment env) {
-      int pos = reader.getPos();
+    protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+      final int pos = reader.getPos();
 
-      if(! isLetter(reader.lookahead())) {
-        FailLog flog = new FailLog("expected letter, but found " + (char)reader.lookahead(), reader.getPos(), reader.getLine());
-        reader.setPos(pos);
-        return new BadAST(flog);
-      }
+      if(! isLetter(reader.lookahead())) return fail("expected letter, but found " + (char) reader.lookahead(), pos, reader);
 
-      return new NewExpression(constructor, new Arguments(new CharLiteral(reader.next())));
+      return success(new NewExpression(constructor, new Arguments(new CharLiteral(reader.next()))));
     }
 
     private CtConstructor constructor;
@@ -148,16 +136,13 @@ public abstract class PrimitiveReadasOperationParser extends ReadasOperationPars
 
 
     @Override
-    protected TypedAST parse(SourceStringReader reader, Environment env) {
-      int pos = reader.getPos();
+    protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
+      final int pos = reader.getPos();
 
-      TypedAST typename = TypeNameParser.parser.applyRule(reader, env);
-      if(typename.isFail()) {
-        reader.setPos(pos);
-        return new BadAST(typename.getFailLog());
-      }
+      ParseResult<CtClass> typename = TypeNameParser.parser.applyRule(reader, env);
+      if(typename.isFail()) return fail(typename, pos, reader);
 
-      return new NewExpression(constructor, new Arguments(new ClassLiteral(((TypeName)typename).getType())));
+      return success(new NewExpression(constructor, new Arguments(new ClassLiteral(typename.get()))));
     }
 
     private CtConstructor constructor;

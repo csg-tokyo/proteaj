@@ -7,46 +7,33 @@ import proteaj.ir.tast.*;
 
 import javassist.*;
 
-public class ThrowStatementParser extends PackratParser {
+public class ThrowStatementParser extends PackratParser<Statement> {
   /* ThrowStatement
    *  : "throw" Expression ';'
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<Statement> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
     // "throw"
-    TypedAST keyword = KeywordParser.getParser("throw").applyRule(reader, env);
-    if(keyword.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(keyword.getFailLog());
-    }
-
-    int line = reader.getLine();
+    ParseResult<String> keyword = KeywordParser.getParser("throw").applyRule(reader, env);
+    if(keyword.isFail()) return fail(keyword, pos, reader);
 
     // Expression
-    TypedAST exception = ExpressionParser.getParser(IRCommonTypes.getThrowableType(), env).applyRule(reader, env);
-    if(exception.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(exception.getFailLog());
-    }
+    ParseResult<Expression> exception = ExpressionParser.getParser(IRCommonTypes.getThrowableType(), env).applyRule(reader, env);
+    if(exception.isFail()) return fail(exception, pos, reader);
 
     // ';'
-    TypedAST semicolon = KeywordParser.getParser(";").applyRule(reader, env);
-    if(semicolon.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(semicolon.getFailLog());
-    }
-
-    Expression expr = (Expression)exception;
+    ParseResult<String> semicolon = KeywordParser.getParser(";").applyRule(reader, env);
+    if(semicolon.isFail()) return fail(semicolon, pos, reader);
 
     try {
-      env.addException(expr.getType(), line);
+      env.addException(exception.get().getType(), reader.getLine());
     } catch (NotFoundException e) {
-      ErrorList.addError(new NotFoundError(e, reader.getFilePath(), line));
+      ErrorList.addError(new NotFoundError(e, reader.filePath, reader.getLine()));
     }
 
-    return new ThrowStatement(expr);
+    return success(new ThrowStatement(exception.get()));
   }
 
   public static final ThrowStatementParser parser = new ThrowStatementParser();

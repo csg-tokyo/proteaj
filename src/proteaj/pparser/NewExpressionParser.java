@@ -9,52 +9,44 @@ import javassist.*;
 
 import static proteaj.util.Modifiers.*;
 
-public class NewExpressionParser extends PackratParser {
+public class NewExpressionParser extends PackratParser<Expression> {
   /* NewExpression
    *  : "new" ClassName Arguments
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
     int pos = reader.getPos();
 
     // "new"
-    TypedAST newkeyword = KeywordParser.getParser("new").applyRule(reader, env);
-    if(newkeyword.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(newkeyword.getFailLog());
-    }
+    ParseResult<String> newKeyword = KeywordParser.getParser("new").applyRule(reader, env);
+    if(newKeyword.isFail()) return fail(newKeyword, pos, reader);
 
     // ClassName
-    TypedAST clsName = ClassNameParser.parser.applyRule(reader, env);
-    if(clsName.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(clsName.getFailLog());
-    }
+    ParseResult<CtClass> clsName = ClassNameParser.parser.applyRule(reader, env);
+    if(clsName.isFail()) return fail(clsName, pos, reader);
 
-    CtClass type = ((ClassName)clsName).getCtClass();
+    CtClass type = clsName.get();
     int apos = reader.getPos();
 
     // Arguments
     for(CtConstructor constructor : type.getDeclaredConstructors()) try {
       if(! constructor.visibleFrom(env.thisClass)) continue;
 
-      TypedAST args = ArgumentsParser.getParser(constructor.getParameterTypes()).applyRule(reader, env, apos);
+      ParseResult<Arguments> args = ArgumentsParser.getParser(constructor.getParameterTypes()).applyRule(reader, env, apos);
       if(args.isFail() && hasVarArgs(constructor.getModifiers())) {
         args = VariableArgumentsParser.getParser(constructor.getParameterTypes()).applyRule(reader, env, apos);
       }
 
       if(! args.isFail()) {
         env.addExceptions(constructor.getExceptionTypes(), reader.getLine());
-        return new NewExpression(constructor, (Arguments)args);
+        return success(new NewExpression(constructor, args.get()));
       }
     } catch (NotFoundException e) {
       ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
     }
 
     // fail
-    FailLog flog = new FailLog("undefined constructor", reader.getPos(), reader.getLine());
-    reader.setPos(pos);
-    return new BadAST(flog);
+    return fail("undefined constructor", pos, reader);
   }
 
   @Override

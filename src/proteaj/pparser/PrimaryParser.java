@@ -1,8 +1,11 @@
 package proteaj.pparser;
 
 import proteaj.ir.Environment;
+import proteaj.ir.tast.Expression;
 
-public class PrimaryParser extends ComposedParser_Alternative {
+import java.util.*;
+
+public class PrimaryParser extends ComposedParser_Alternative<Expression> {
   /* Primary
    *  : AbbMethodCall
    *  | Variable
@@ -19,8 +22,8 @@ public class PrimaryParser extends ComposedParser_Alternative {
   }
 
   @Override
-  protected PackratParser[] getParsers(Environment env) {
-    return new PackratParser[] {
+  protected List<PackratParser<? extends  Expression>> getParsers(Environment env) {
+    return asList(
         AbbMethodCallParser.parser,
         VariableParser.parser,
         StaticMethodCallParser.parser,
@@ -30,7 +33,7 @@ public class PrimaryParser extends ComposedParser_Alternative {
         CastExpressionParser.parser,
         ParenthesizedJavaExpressionParser.parser,
         LiteralParser.parser
-    };
+    );
   }
 
   public static final PrimaryParser parser = new PrimaryParser();

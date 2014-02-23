@@ -6,66 +6,48 @@ import proteaj.ir.tast.*;
 
 import javassist.*;
 
-public class IfStatementParser extends PackratParser {
+public class IfStatementParser extends PackratParser<Statement> {
   /* IfStatement
    *  : "if" '(' Expression ')' SingleStatement [ "else" SigleStatement ]
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<Statement> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
     // "if"
-    TypedAST ifkeyword = KeywordParser.getParser("if").applyRule(reader, env);
-    if(ifkeyword.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(ifkeyword.getFailLog());
-    }
+    ParseResult<String> ifKeyword = KeywordParser.getParser("if").applyRule(reader, env);
+    if(ifKeyword.isFail()) return fail(ifKeyword, pos, reader);
 
     // '('
-    TypedAST lparen = KeywordParser.getParser("(").applyRule(reader, env);
-    if(lparen.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(lparen.getFailLog());
-    }
+    ParseResult<String> lPar = KeywordParser.getParser("(").applyRule(reader, env);
+    if(lPar.isFail()) return fail(lPar, pos, reader);
 
     // Expression
-    TypedAST condition = ExpressionParser.getParser(CtClass.booleanType, env).applyRule(reader, env);
-    if(condition.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(condition.getFailLog());
-    }
+    ParseResult<Expression> condition = ExpressionParser.getParser(CtClass.booleanType, env).applyRule(reader, env);
+    if(condition.isFail()) return fail(condition, pos, reader);
 
     // ')'
-    TypedAST rparen = KeywordParser.getParser(")").applyRule(reader, env);
-    if(rparen.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(rparen.getFailLog());
-    }
+    ParseResult<String> rPar = KeywordParser.getParser(")").applyRule(reader, env);
+    if(rPar.isFail()) return fail(rPar, pos, reader);
 
     // SingleStatement
-    TypedAST thenStmt = SingleStatementParser.parser.applyRule(reader, env);
-    if(thenStmt.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(thenStmt.getFailLog());
-    }
+    ParseResult<Statement> thenStmt = SingleStatementParser.parser.applyRule(reader, env);
+    if(thenStmt.isFail()) return fail(thenStmt, pos, reader);
 
-    int elsepos = reader.getPos();
+    int elsePos = reader.getPos();
 
     // "else"
-    TypedAST elsekeyword = KeywordParser.getParser("else").applyRule(reader, env);
-    if(elsekeyword.isFail()) {
-      reader.setPos(elsepos);
-      return new IfStatement((Expression)condition, (Statement)thenStmt);
+    ParseResult<String> elseKeyword = KeywordParser.getParser("else").applyRule(reader, env);
+    if(elseKeyword.isFail()) {
+      reader.setPos(elsePos);
+      return success(new IfStatement(condition.get(), thenStmt.get()));
     }
 
     // SingleStatement
-    TypedAST elseStmt = SingleStatementParser.parser.applyRule(reader, env);
-    if(elseStmt.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(elseStmt.getFailLog());
-    }
+    ParseResult<Statement> elseStmt = SingleStatementParser.parser.applyRule(reader, env);
+    if(elseStmt.isFail()) return fail(elseStmt, pos, reader);
 
-    return new IfStatement((Expression)condition, (Statement)thenStmt, (Statement)elseStmt);
+    return success(new IfStatement(condition.get(), thenStmt.get(), elseStmt.get()));
   }
 
   public static final IfStatementParser parser = new IfStatementParser();

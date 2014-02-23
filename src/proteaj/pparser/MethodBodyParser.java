@@ -4,21 +4,18 @@ import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.ir.tast.*;
 
-public class MethodBodyParser extends PackratParser {
+public class MethodBodyParser extends PackratParser<MethodBody> {
   /* MethodBody
    *  : Block
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+  protected ParseResult<MethodBody> parse(SourceStringReader reader, Environment env) {
+    final int pos = reader.getPos();
 
-    TypedAST block = BlockParser.parser.applyRule(reader, env);
-    if(block.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(block.getFailLog());
-    }
+    ParseResult<Statement> block = BlockParser.parser.applyRule(reader, env);
+    if(block.isFail()) return fail(block, pos, reader);
 
-    return new MethodBody((Block)block);
+    return success(new MethodBody(block.get()));
   }
 
   public static final MethodBodyParser parser = new MethodBodyParser();

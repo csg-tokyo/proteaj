@@ -1,8 +1,11 @@
 package proteaj.pparser;
 
 import proteaj.ir.Environment;
+import proteaj.ir.tast.Expression;
 
-public class JavaExpressionParser extends ComposedParser_Alternative {
+import java.util.*;
+
+public class JavaExpressionParser extends ComposedParser_Alternative<Expression> {
   /* JavaExpression
    *  : AssignExpression
    *  | ArrayLength
@@ -16,15 +19,15 @@ public class JavaExpressionParser extends ComposedParser_Alternative {
   }
 
   @Override
-  protected PackratParser[] getParsers(Environment env) {
-    return new PackratParser[] {
+  protected List<PackratParser<? extends  Expression>> getParsers(Environment env) {
+    return asList(
         AssignExpressionParser.parser,
         ArrayLengthParser.parser,
         MethodCallParser.parser,
         FieldAccessParser.parser,
         ArrayAccessParser.parser,
         PrimaryParser.parser
-    };
+    );
   }
 
   public static final JavaExpressionParser parser = new JavaExpressionParser();

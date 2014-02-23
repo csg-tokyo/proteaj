@@ -7,56 +7,41 @@ import proteaj.ir.tast.*;
 import java.util.*;
 import javassist.*;
 
-public class ArgumentsParser extends PackratParser {
+public class ArgumentsParser extends PackratParser<Arguments> {
   /* Arguments
    *  : '(' [ Expression { ',' Expression } ] ')'
    */
   @Override
-  protected TypedAST parse(SourceStringReader reader, Environment env) {
+  protected ParseResult<Arguments> parse(SourceStringReader reader, Environment env) {
     int pos = reader.getPos();
 
-    TypedAST lbrace = KeywordParser.getParser("(").applyRule(reader, env);
-    if(lbrace.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(lbrace.getFailLog());
-    }
+    ParseResult<String> lBrace = KeywordParser.getParser("(").applyRule(reader, env);
+    if(lBrace.isFail()) return fail(lBrace, pos, reader);
 
     int nargs = argTypes.size();
     List<Expression> args = new ArrayList<Expression>(nargs);
 
     if(nargs != 0) {
-      TypedAST arg = ExpressionParser.getParser(argTypes.get(0), env).applyRule(reader, env);
-      if(arg.isFail()) {
-        reader.setPos(pos);
-        return new BadAST(arg.getFailLog());
-      }
+      ParseResult<Expression> arg = ExpressionParser.getParser(argTypes.get(0), env).applyRule(reader, env);
+      if(arg.isFail()) return fail(arg, pos, reader);
 
-      args.add((Expression)arg);
+      args.add(arg.get());
 
       for(int i = 1; i < nargs; i++) {
-        TypedAST delim = KeywordParser.getParser(",").applyRule(reader, env);
-        if(delim.isFail()) {
-          reader.setPos(pos);
-          return new BadAST(delim.getFailLog());
-        }
+        ParseResult<String> delim = KeywordParser.getParser(",").applyRule(reader, env);
+        if(delim.isFail()) return fail(delim, pos, reader);
 
         arg = ExpressionParser.getParser(argTypes.get(i), env).applyRule(reader, env);
-        if(arg.isFail()) {
-          reader.setPos(pos);
-          return new BadAST(arg.getFailLog());
-        }
+        if(arg.isFail()) return fail(arg, pos, reader);
 
-        args.add((Expression)arg);
+        args.add(arg.get());
       }
     }
 
-    TypedAST rbrace = KeywordParser.getParser(")").applyRule(reader, env);
-    if(rbrace.isFail()) {
-      reader.setPos(pos);
-      return new BadAST(rbrace.getFailLog());
-    }
+    ParseResult<String> rBrace = KeywordParser.getParser(")").applyRule(reader, env);
+    if(rBrace.isFail()) return fail(rBrace, pos, reader);
 
-    return new Arguments(args);
+    return success(new Arguments(args));
   }
 
   public static ArgumentsParser getParser(CtClass[] argTypes) {

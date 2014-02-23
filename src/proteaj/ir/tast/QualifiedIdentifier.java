@@ -2,7 +2,7 @@ package proteaj.ir.tast;
 
 import java.util.*;
 
-public class QualifiedIdentifier extends TypedAST{
+public class QualifiedIdentifier extends TypedAST {
   public QualifiedIdentifier(Identifier id) {
     qid = new ArrayList<Identifier>();
     qid.add(id);

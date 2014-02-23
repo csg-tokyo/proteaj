@@ -1,8 +1,11 @@
 package proteaj.pparser;
 
 import proteaj.ir.Environment;
+import proteaj.ir.tast.Expression;
 
-public class ForInitParser extends ComposedParser_Alternative {
+import java.util.*;
+
+public class ForInitParser extends ComposedParser_Alternative<Expression> {
   /* ForInit
    *  : ExpressionList
    *  | LocalVarDecl
@@ -12,8 +15,8 @@ public class ForInitParser extends ComposedParser_Alternative {
   }
 
   @Override
-  protected PackratParser[] getParsers(Environment env) {
-    return new PackratParser[] { LocalVarDeclParser.parser, ExpressionListParser.parser };
+  protected List<PackratParser<? extends Expression>> getParsers(Environment env) {
+    return asList( LocalVarDeclParser.parser, ExpressionListParser.parser );
   }
 
   public static final ForInitParser parser = new ForInitParser();
