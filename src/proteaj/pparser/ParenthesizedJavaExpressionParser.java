@@ -2,7 +2,7 @@ package proteaj.pparser;
 
 import proteaj.io.SourceStringReader;
 import proteaj.ir.*;
-import proteaj.ir.tast.*;
+import proteaj.tast.*;
 
 public class ParenthesizedJavaExpressionParser extends PackratParser<Expression> {
   /* ParenthesizedJavaExpression

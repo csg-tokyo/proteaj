@@ -1,7 +1,7 @@
 package proteaj.ir;
 
 import proteaj.ast.OperatorPattern;
-import proteaj.ir.tast.*;
+import proteaj.tast.*;
 
 import java.util.*;
 import javassist.*;

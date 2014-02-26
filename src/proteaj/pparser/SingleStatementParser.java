@@ -1,7 +1,7 @@
 package proteaj.pparser;
 
 import proteaj.ir.Environment;
-import proteaj.ir.tast.Statement;
+import proteaj.tast.Statement;
 
 import java.util.*;
 

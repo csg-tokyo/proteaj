@@ -3,7 +3,7 @@ package proteaj.pparser;
 import javassist.CtClass;
 import proteaj.io.SourceStringReader;
 import proteaj.ir.Environment;
-import proteaj.ir.tast.Expression;
+import proteaj.tast.Expression;
 
 import java.util.HashMap;
 import java.util.Map;

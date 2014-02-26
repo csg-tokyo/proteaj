@@ -1,7 +1,7 @@
 package proteaj.ir.primitive;
 
 import proteaj.ir.*;
-import proteaj.ir.tast.*;
+import proteaj.tast.*;
 
 import java.util.*;
 import javassist.*;

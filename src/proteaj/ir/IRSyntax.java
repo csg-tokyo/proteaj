@@ -1,8 +1,16 @@
 package proteaj.ir;
 
 import java.util.*;
+import javassist.*;
 
 public class IRSyntax {
+  public IRSyntax(CtClass actualClass) {
+    this.name = actualClass.getName();
+    this.baseSyntax = null;
+    this.mixinSyntax = new ArrayList<String>();
+    this.ops = new ArrayList<IROperator>();
+  }
+
   public IRSyntax(String name) {
     this.name = name;
     this.baseSyntax = null;
@@ -42,7 +50,8 @@ public class IRSyntax {
     return ops;
   }
 
-  private String name;
+  public final String name;
+
   private String baseSyntax;
   private List<String> mixinSyntax;
   private List<IROperator> ops;

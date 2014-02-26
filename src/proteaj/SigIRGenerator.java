@@ -362,7 +362,7 @@ public class SigIRGenerator {
       SyntaxDecl syndecl = pair.getSecond();
 
       TypeResolver resolver = new TypeResolver(ir.getIRHeader(ctcl), cpool);
-      IRSyntax irsyn = new IRSyntax(ctcl.getName());
+      IRSyntax irsyn = new IRSyntax(ctcl);
 
       if(syndecl.hasBaseOperators()) try {
         String base = syndecl.getBaseOperators();

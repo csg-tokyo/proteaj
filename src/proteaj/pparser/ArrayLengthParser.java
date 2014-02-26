@@ -2,7 +2,7 @@ package proteaj.pparser;
 
 import proteaj.io.SourceStringReader;
 import proteaj.ir.Environment;
-import proteaj.ir.tast.*;
+import proteaj.tast.*;
 
 public class ArrayLengthParser extends PackratParser<ArrayLength> {
   /* ArrayLength

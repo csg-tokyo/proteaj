@@ -1,7 +1,8 @@
 package proteaj;
 
 import proteaj.error.ErrorList;
-import proteaj.ir.*;
+import proteaj.ir.IR;
+import proteaj.tast.Program;
 
 import java.util.*;
 import java.io.File;
@@ -23,8 +24,8 @@ public class Compiler {
     ErrorList.init();
 
     IR ir = new SigCompiler().compile(files);
-    ir = new BodyCompiler(ir).compile();
-    new CodeGenerator("./bin").codegen(ir);
+    Program program = new BodyCompiler(ir).compile();
+    new CodeGenerator("./bin").codegen(program);
 
     if(ErrorList.hasError()) {
       ErrorList.printAllErrors();

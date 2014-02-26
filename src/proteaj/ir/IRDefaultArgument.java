@@ -1,7 +1,5 @@
 package proteaj.ir;
 
-import proteaj.ir.tast.*;
-
 import javassist.*;
 
 public class IRDefaultArgument {
@@ -9,15 +7,6 @@ public class IRDefaultArgument {
     this.method = method;
     this.source = source;
     this.line = line;
-    this.body = null;
-  }
-
-  public boolean hasAST() {
-    return body != null;
-  }
-
-  public void setAST(DefaultValue body) {
-    this.body = body;
   }
 
   public CtMethod getCtMethod() {
@@ -32,13 +21,7 @@ public class IRDefaultArgument {
     return source;
   }
 
-  public DefaultValue getAST() {
-    return body;
-  }
-
   private int line;
   private String source;
   private CtMethod method;
-  private DefaultValue body;
 }
-

@@ -2,7 +2,7 @@ package proteaj.pparser;
 
 import proteaj.io.SourceStringReader;
 import proteaj.ir.*;
-import proteaj.ir.tast.*;
+import proteaj.tast.*;
 
 public class LocalVarDeclStatementParser extends PackratParser<LocalVarDeclStatement> {
   /* LocalVarDeclStatement

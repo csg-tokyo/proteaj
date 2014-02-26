@@ -1,7 +1,5 @@
 package proteaj.ir;
 
-import proteaj.ir.tast.*;
-
 import javassist.*;
 
 public class IRFieldBody {
@@ -9,15 +7,6 @@ public class IRFieldBody {
     this.field = field;
     this.source = source;
     this.line = line;
-    this.body = null;
-  }
-
-  public boolean hasAST() {
-    return body != null;
-  }
-
-  public void setAST(FieldBody body) {
-    this.body = body;
   }
 
   public CtField getCtField() {
@@ -32,12 +21,7 @@ public class IRFieldBody {
     return line;
   }
 
-  public FieldBody getAST() {
-    return body;
-  }
-
   private CtField field;
   private String source;
   private int line;
-  private FieldBody body;
 }

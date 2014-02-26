@@ -123,7 +123,7 @@ public class OperatorsFile {
     checkElementNode(root, "operators");
     if(! getAttr(root, "name").equals(name)) throw new FileIOError(fileName + " is broken", fileName, 0);
 
-    IRSyntax irsyn = new IRSyntax(name);
+    IRSyntax irsyn = new IRSyntax(clz);
 
     if(hasAttr(root, "super")) {
       irsyn.setBaseSyntax(getAttr(root, "super"));

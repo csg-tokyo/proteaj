@@ -1,7 +1,7 @@
 package proteaj.ir;
 
 import proteaj.error.*;
-import proteaj.ir.tast.*;
+import proteaj.tast.*;
 import proteaj.util.*;
 
 import java.util.*;
@@ -158,6 +158,7 @@ public class Environment {
   public final CtClass thisClass;
   public final CtMember thisMember;
   public final String filePath;
+
   private final TypeResolver resolver;
   private final UsingOperators operators;
   private Map<String, Expression> env;

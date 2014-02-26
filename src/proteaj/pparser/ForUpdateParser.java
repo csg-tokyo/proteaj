@@ -2,7 +2,7 @@ package proteaj.pparser;
 
 import proteaj.io.*;
 import proteaj.ir.*;
-import proteaj.ir.tast.*;
+import proteaj.tast.*;
 
 public class ForUpdateParser extends PackratParser<ExpressionList> {
   /* ForUpdate

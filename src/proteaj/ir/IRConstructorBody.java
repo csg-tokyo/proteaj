@@ -1,7 +1,5 @@
 package proteaj.ir;
 
-import proteaj.ir.tast.*;
-
 import javassist.*;
 
 public class IRConstructorBody {
@@ -10,15 +8,6 @@ public class IRConstructorBody {
     this.paramNames = paramNames;
     this.source = source;
     this.line = line;
-    this.body = null;
-  }
-
-  public boolean hasAST() {
-    return body != null;
-  }
-
-  public void setAST(ConstructorBody body) {
-    this.body = body;
   }
 
   public CtConstructor getCtConstructor() {
@@ -41,14 +30,9 @@ public class IRConstructorBody {
     return source;
   }
 
-  public ConstructorBody getAST() {
-    return body;
-  }
-
   private int line;
   private String source;
   private String[] paramNames;
   private CtConstructor smethod;
-  private ConstructorBody body;
 }
 
