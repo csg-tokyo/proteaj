@@ -5,8 +5,6 @@ import proteaj.io.*;
 import proteaj.tast.*;
 
 import java.io.*;
-import java.util.*;
-import java.util.Map.Entry;
 import javassist.*;
 
 public class CodeGenerator {
@@ -24,20 +22,20 @@ public class CodeGenerator {
   }
 
   private void codegen (ClassDeclaration clazz) {
-    for (Entry<CtMethod, MethodBody> entry : clazz.getMethods().entrySet())
-      codegen(entry.getKey(), entry.getValue());
+    for (MethodDeclaration method : clazz.getMethods())
+      codegen(method);
 
-    for (Entry<CtConstructor, ConstructorBody> entry : clazz.getConstructors().entrySet())
-      codegen(entry.getKey(), entry.getValue());
+    for (ConstructorDeclaration constructor : clazz.getConstructors())
+      codegen(constructor);
 
-    for (Entry<CtField, FieldBody> entry : clazz.getFields().entrySet())
-      codegen(entry.getKey(), entry.getValue());
+    for (FieldDeclaration field : clazz.getFields())
+      codegen(field);
 
-    for (Entry<CtMethod, DefaultValue> entry : clazz.getDefaultValues().entrySet())
-      codegen(entry.getKey(), entry.getValue());
+    for (DefaultValueDefinition d : clazz.getDefaultValues())
+      codegen(d);
 
-    for (Entry<CtConstructor, List<ClassInitializer>> entry : clazz.getInitializers().entrySet())
-      codegen(entry.getKey(), entry.getValue());
+    for (ClassInitializerDefinition clIni : clazz.getInitializers())
+      codegen(clIni);
 
     try {
       if (target != null) clazz.clazz.writeFile(target);
@@ -61,27 +59,27 @@ public class CodeGenerator {
     }
   }
 
-  private void codegen (CtMethod method, MethodBody body) {
-    try { method.setBody(body.toJavassistCode()); }
+  private void codegen (MethodDeclaration method) {
+    try { method.method.setBody(method.body.toJavassistCode()); }
     catch (CannotCompileException e) {
       assert false;
       throw new RuntimeException(e);
     }
   }
 
-  private void codegen (CtConstructor constructor, ConstructorBody body) {
-    try { constructor.setBody(body.toJavassistCode()); }
+  private void codegen (ConstructorDeclaration constructor) {
+    try { constructor.constructor.setBody(constructor.body.toJavassistCode()); }
     catch (CannotCompileException e) {
       assert false;
       throw new RuntimeException(e);
     }
   }
 
-  private void codegen (CtField field, FieldBody body) {
+  private void codegen (FieldDeclaration field) {
     try {
-      CtClass thisClass = field.getDeclaringClass();
-      thisClass.removeField(field);
-      thisClass.addField(field, body.toJavassistCode());
+      CtClass thisClass = field.field.getDeclaringClass();
+      thisClass.removeField(field.field);
+      thisClass.addField(field.field, field.body.toJavassistCode());
     } catch (NotFoundException e) {
       assert false;
       throw new RuntimeException(e);
@@ -91,17 +89,17 @@ public class CodeGenerator {
     }
   }
 
-  private void codegen (CtMethod method, DefaultValue defaultValue) {
-    try { method.setBody(defaultValue.toJavassistCode()); }
+  private void codegen (DefaultValueDefinition defaultValue) {
+    try { defaultValue.method.setBody(defaultValue.body.toJavassistCode()); }
     catch (CannotCompileException e) {
       assert false;
       throw new RuntimeException(e);
     }
   }
 
-  private void codegen (CtConstructor clIni, List<ClassInitializer> bodies) {
-    for (ClassInitializer body : bodies) try {
-      clIni.setBody(body.toJavassistCode());
+  private void codegen (ClassInitializerDefinition clIni) {
+    try {
+      clIni.clIni.insertAfter(clIni.body.toJavassistCode());
     } catch (CannotCompileException e) {
       assert false;
       throw new RuntimeException(e);

@@ -23,43 +23,43 @@ public class Program {
     return operatorModules;
   }
 
-  public void addMethod (CtMethod method, MethodBody body) {
-    getClassDeclaration(method).addMethod(method, body);
+  public void addMethod (MethodDeclaration method) {
+    getClassDeclaration(method.method).addMethod(method);
   }
 
-  public void addConstructor (CtConstructor constructor, ConstructorBody body) {
-    getClassDeclaration(constructor).addConstructor(constructor, body);
+  public void addConstructor (ConstructorDeclaration constructor) {
+    getClassDeclaration(constructor.constructor).addConstructor(constructor);
   }
 
-  public void addDefaultValue (CtMethod method, DefaultValue defaultValue) {
-    getClassDeclaration(method).addDefaultValue(method, defaultValue);
+  public void addDefaultValue (DefaultValueDefinition defaultValue) {
+    getClassDeclaration(defaultValue.method).addDefaultValue(defaultValue);
   }
 
-  public void addClassInitializer (CtConstructor clIni, ClassInitializer body) {
-    getClassDeclaration(clIni).addClassInitializer(clIni, body);
+  public void addClassInitializer (ClassInitializerDefinition clIni) {
+    getClassDeclaration(clIni.clIni).addClassInitializer(clIni);
   }
 
-  public void addField (CtField field, FieldBody body) {
-    getClassDeclaration(field).addField(field, body);
+  public void addField (FieldDeclaration field) {
+    getClassDeclaration(field.field).addField(field);
   }
 
-  public void addMethods (List<Pair<CtMethod, MethodBody>> methods) {
-    for (Pair<CtMethod, MethodBody> pair: methods) addMethod(pair.getFirst(), pair.getSecond());
+  public void addMethods (List<MethodDeclaration> methods) {
+    for (MethodDeclaration method : methods) addMethod(method);
   }
-  public void addConstructors (List<Pair<CtConstructor, ConstructorBody>> constructors) {
-    for (Pair<CtConstructor, ConstructorBody> pair: constructors) addConstructor(pair.getFirst(), pair.getSecond());
-  }
-
-  public void addFields (List<Pair<CtField, FieldBody>> fields) {
-    for (Pair<CtField, FieldBody> pair: fields) addField(pair.getFirst(), pair.getSecond());
+  public void addConstructors (List<ConstructorDeclaration> constructors) {
+    for (ConstructorDeclaration constructor : constructors) addConstructor(constructor);
   }
 
-  public void addDefaultValues (List<Pair<CtMethod, DefaultValue>> defaultValues) {
-    for (Pair<CtMethod, DefaultValue> pair: defaultValues) addDefaultValue(pair.getFirst(), pair.getSecond());
+  public void addFields (List<FieldDeclaration> fields) {
+    for (FieldDeclaration field : fields) addField(field);
   }
 
-  public void addClassInitializers (List<Pair<CtConstructor, ClassInitializer>> classInitializers) {
-    for (Pair<CtConstructor, ClassInitializer> pair: classInitializers) addClassInitializer(pair.getFirst(), pair.getSecond());
+  public void addDefaultValues (List<DefaultValueDefinition> defaultValues) {
+    for (DefaultValueDefinition d : defaultValues) addDefaultValue(d);
+  }
+
+  public void addClassInitializers (List<ClassInitializerDefinition> classInitializers) {
+    for (ClassInitializerDefinition clIni : classInitializers) addClassInitializer(clIni);
   }
 
   private ClassDeclaration getClassDeclaration (CtMember member) {

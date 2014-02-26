@@ -4,7 +4,6 @@ import proteaj.error.*;
 import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.tast.*;
-import proteaj.util.*;
 
 import java.util.*;
 import javassist.*;
@@ -27,8 +26,8 @@ public class BodyCompiler {
     return program;
   }
 
-  private List<Pair<CtMethod, MethodBody>> compileMethods() {
-    List<Pair<CtMethod, MethodBody>> methods = new ArrayList<Pair<CtMethod, MethodBody>>();
+  private List<MethodDeclaration> compileMethods() {
+    List<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
 
     for(IRMethodBody irbody : ir.getMethods()) {
       CtMethod method = irbody.getCtMethod();
@@ -43,7 +42,7 @@ public class BodyCompiler {
 
       try {
         MethodBody body = parser.parseMethodBody(method, reader, env);
-        methods.add(new Pair<CtMethod, MethodBody>(method, body));
+        methods.add(new MethodDeclaration(method, body));
       } catch (CompileError e) {
         ErrorList.addError(e);
       } catch (CompileErrors es) {
@@ -54,8 +53,8 @@ public class BodyCompiler {
     return methods;
   }
 
-  private List<Pair<CtConstructor, ConstructorBody>> compileConstructors() {
-    List<Pair<CtConstructor, ConstructorBody>> constructors = new ArrayList<Pair<CtConstructor, ConstructorBody>>();
+  private List<ConstructorDeclaration> compileConstructors() {
+    List<ConstructorDeclaration> constructors = new ArrayList<ConstructorDeclaration>();
 
     for(IRConstructorBody irbody : ir.getConstructors()) {
       CtConstructor constructor = irbody.getCtConstructor();
@@ -70,7 +69,7 @@ public class BodyCompiler {
 
       try {
         ConstructorBody body = parser.parseConstructorBody(constructor, reader, env);
-        constructors.add(new Pair<CtConstructor, ConstructorBody>(constructor, body));
+        constructors.add(new ConstructorDeclaration(constructor, body));
       } catch (CompileError e) {
         ErrorList.addError(e);
       } catch (CompileErrors es) {
@@ -81,8 +80,8 @@ public class BodyCompiler {
     return constructors;
   }
 
-  private List<Pair<CtField, FieldBody>> compileFields() {
-    List<Pair<CtField, FieldBody>> fields = new ArrayList<Pair<CtField, FieldBody>>();
+  private List<FieldDeclaration> compileFields() {
+    List<FieldDeclaration> fields = new ArrayList<FieldDeclaration>();
 
     for(IRFieldBody irbody : ir.getFields()) {
       CtField field = irbody.getCtField();
@@ -92,7 +91,7 @@ public class BodyCompiler {
       try {
         FieldBody body = parser.parseFieldBody(field, reader, env);
         //irbody.setAST(fbody);
-        fields.add(new Pair<CtField, FieldBody>(field, body));
+        fields.add(new FieldDeclaration(field, body));
       } catch (CompileError e) {
         ErrorList.addError(e);
       } catch (CompileErrors es) {
@@ -103,8 +102,8 @@ public class BodyCompiler {
     return fields;
   }
 
-  private List<Pair<CtMethod, DefaultValue>> compileDefaultArguments() {
-    List<Pair<CtMethod, DefaultValue>> map = new ArrayList<Pair<CtMethod, DefaultValue>>();
+  private List<DefaultValueDefinition> compileDefaultArguments() {
+    List<DefaultValueDefinition> map = new ArrayList<DefaultValueDefinition>();
 
     for(IRDefaultArgument irbody : ir.getDefaultArguments()) {
       CtMethod method = irbody.getCtMethod();
@@ -113,7 +112,7 @@ public class BodyCompiler {
 
       try {
         DefaultValue defval = parser.parseDefaultArgument(method, reader, env);
-        map.add(new Pair<CtMethod, DefaultValue>(method, defval));
+        map.add(new DefaultValueDefinition(method, defval));
       } catch (CompileError e) {
         ErrorList.addError(e);
       } catch (CompileErrors es) {
@@ -124,8 +123,8 @@ public class BodyCompiler {
     return map;
   }
 
-  private List<Pair<CtConstructor, ClassInitializer>> compileStaticInitializers() {
-    List<Pair<CtConstructor, ClassInitializer>> list = new ArrayList<Pair<CtConstructor, ClassInitializer>>();
+  private List<ClassInitializerDefinition> compileStaticInitializers() {
+    List<ClassInitializerDefinition> list = new ArrayList<ClassInitializerDefinition>();
 
     for(IRStaticInitializer sinit : ir.getStaticInitializers()) {
       CtConstructor clinit = sinit.getCtConstructor();
@@ -134,7 +133,7 @@ public class BodyCompiler {
 
       try {
         ClassInitializer body = parser.parseStaticInitializer(reader, env);
-        list.add(new Pair<CtConstructor, ClassInitializer>(clinit, body));
+        list.add(new ClassInitializerDefinition(clinit, body));
       } catch (CompileError e) {
         ErrorList.addError(e);
       } catch (CompileErrors es) {

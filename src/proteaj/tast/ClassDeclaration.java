@@ -8,46 +8,45 @@ public class ClassDeclaration {
     this.clazz = clazz;
     this.filePath = filePath;
 
-    this.methods = new HashMap<CtMethod, MethodBody>();
-    this.constructors = new HashMap<CtConstructor, ConstructorBody>();
-    this.fields = new HashMap<CtField, FieldBody>();
-    this.defaultValues = new HashMap<CtMethod, DefaultValue>();
-    this.initializers = new HashMap<CtConstructor, List<ClassInitializer>>();
+    this.methods = new ArrayList<MethodDeclaration>();
+    this.constructors = new ArrayList<ConstructorDeclaration>();
+    this.fields = new ArrayList<FieldDeclaration>();
+    this.defaultValues = new ArrayList<DefaultValueDefinition>();
+    this.initializers = new ArrayList<ClassInitializerDefinition>();
   }
 
-  public void addMethod (CtMethod method, MethodBody body) {
-    methods.put(method, body);
+  public void addMethod (MethodDeclaration method) {
+    methods.add(method);
   }
 
-  public void addConstructor (CtConstructor constructor, ConstructorBody body) {
-    constructors.put(constructor, body);
+  public void addConstructor (ConstructorDeclaration constructor) {
+    constructors.add(constructor);
   }
 
-  public void addField (CtField field, FieldBody body) {
-    fields.put(field, body);
+  public void addField (FieldDeclaration field) {
+    fields.add(field);
   }
 
-  public void addDefaultValue (CtMethod method, DefaultValue defaultValue) {
-    defaultValues.put(method, defaultValue);
+  public void addDefaultValue (DefaultValueDefinition defaultValue) {
+    defaultValues.add(defaultValue);
   }
 
-  public void addClassInitializer (CtConstructor clIni, ClassInitializer body) {
-    if (! initializers.containsKey(clIni)) initializers.put(clIni, new ArrayList<ClassInitializer>());
-    initializers.get(clIni).add(body);
+  public void addClassInitializer (ClassInitializerDefinition clIni) {
+    initializers.add(clIni);
   }
 
-  public Map<CtMethod, MethodBody> getMethods() { return methods; }
-  public Map<CtConstructor, ConstructorBody> getConstructors() { return constructors; }
-  public Map<CtField, FieldBody> getFields() { return fields; }
-  public Map<CtMethod, DefaultValue> getDefaultValues() { return defaultValues; }
-  public Map<CtConstructor, List<ClassInitializer>> getInitializers() { return initializers; }
+  public List<MethodDeclaration> getMethods() { return methods; }
+  public List<ConstructorDeclaration> getConstructors() { return constructors; }
+  public List<FieldDeclaration> getFields() { return fields; }
+  public List<DefaultValueDefinition> getDefaultValues() { return defaultValues; }
+  public List<ClassInitializerDefinition> getInitializers() { return initializers; }
 
   public final CtClass clazz;
   public final String filePath;
 
-  private Map<CtMethod, MethodBody> methods;
-  private Map<CtConstructor, ConstructorBody> constructors;
-  private Map<CtField, FieldBody> fields;
-  private Map<CtMethod, DefaultValue> defaultValues;
-  private Map<CtConstructor, List<ClassInitializer>> initializers;
+  private List<MethodDeclaration> methods;
+  private List<ConstructorDeclaration> constructors;
+  private List<FieldDeclaration> fields;
+  private List<DefaultValueDefinition> defaultValues;
+  private List<ClassInitializerDefinition> initializers;
 }
