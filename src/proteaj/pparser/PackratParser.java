@@ -300,31 +300,3 @@ class MemoTable<T> {
 
   private Map<SourceStringReader, Map<Integer, Pair<ParseResult<T>, Integer>>> memos;
 }
-
-class BadAST extends TypedAST {
-  public BadAST(FailLog faillog) {
-    this.faillog = faillog;
-  }
-
-  @Override
-  public boolean isFail() {
-    return true;
-  }
-
-  @Override
-  public FailLog getFailLog() {
-    return faillog;
-  }
-
-  @Override
-  public String toJavassistCode() {
-    return null;
-  }
-
-  @Override
-  public String toString() {
-    return "fail: " + faillog.getMessage();
-  }
-
-  private FailLog faillog;
-}

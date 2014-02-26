@@ -1,11 +1,10 @@
 package proteaj.tast;
 
-public class DefaultValue extends TypedAST {
+public class DefaultValue {
   public DefaultValue(Expression expr) {
     this.expr = expr;
   }
 
-  @Override
   public String toJavassistCode() {
     StringBuilder buf = new StringBuilder();
     buf.append("{\n");
@@ -14,6 +13,6 @@ public class DefaultValue extends TypedAST {
     return buf.toString();
   }
 
-  private Expression expr;
+  public final Expression expr;
 }
 

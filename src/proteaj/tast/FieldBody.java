@@ -1,19 +1,14 @@
 package proteaj.tast;
 
-public class FieldBody extends TypedAST {
+public class FieldBody {
   public FieldBody(Expression expr) {
     this.expr = expr;
   }
 
-  public Expression getExpression() {
-    return expr;
-  }
-
-  @Override
   public String toJavassistCode() {
     return expr.toJavassistCode();
   }
 
-  private Expression expr;
+  public final Expression expr;
 }
 

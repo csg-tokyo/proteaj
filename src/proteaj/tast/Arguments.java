@@ -2,7 +2,7 @@ package proteaj.tast;
 
 import java.util.*;
 
-public class Arguments extends TypedAST {
+public class Arguments {
   public static final Arguments EMPTY_ARGS = new Arguments(Collections.<Expression>emptyList());
 
   public Arguments(Expression... args) {
@@ -17,7 +17,6 @@ public class Arguments extends TypedAST {
     return args;
   }
 
-  @Override
   public String toJavassistCode() {
     if(args.isEmpty()) return "()";
 
