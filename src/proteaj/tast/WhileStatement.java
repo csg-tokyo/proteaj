@@ -1,25 +1,19 @@
 package proteaj.tast;
 
+import proteaj.tast.util.*;
+
 public class WhileStatement extends Statement {
   public WhileStatement(Expression condition, Statement stmt) {
     this.condition = condition;
     this.stmt = stmt;
   }
 
-  public Expression getCondition() {
-    return condition;
-  }
-
-  public Statement getStatement() {
-    return stmt;
-  }
-
   @Override
-  public String toJavassistCode() {
-    return "while ( " + condition.toJavassistCode() + " ) " + stmt.toJavassistCode();
+  public <T> T accept(StatementVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
   }
 
-  private Expression condition;
-  private Statement stmt;
+  public final Expression condition;
+  public final Statement stmt;
 }
 

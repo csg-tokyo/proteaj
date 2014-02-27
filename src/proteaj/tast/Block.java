@@ -1,5 +1,7 @@
 package proteaj.tast;
 
+import proteaj.tast.util.StatementVisitor;
+
 import java.util.*;
 
 public class Block extends Statement {
@@ -16,14 +18,8 @@ public class Block extends Statement {
   }
 
   @Override
-  public String toJavassistCode() {
-    StringBuilder buf = new StringBuilder();
-
-    buf.append('{');
-    for(Statement stmt : statements) buf.append('\n').append(stmt.toJavassistCode());
-    buf.append('\n').append('}');
-
-    return buf.toString();
+  public <T> T accept(StatementVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
   }
 
   private List<Statement> statements;

@@ -1,18 +1,16 @@
 package proteaj.tast;
 
+import proteaj.tast.util.*;
+
 public class ExpressionStatement extends Statement {
   public ExpressionStatement(Expression expr) {
     this.expr = expr;
   }
 
-  public Expression getExpression() {
-    return expr;
-  }
-
   @Override
-  public String toJavassistCode() {
-    return expr.toJavassistCode() + ';';
+  public <T> T accept(StatementVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
   }
 
-  private Expression expr;
+  public final Expression expr;
 }

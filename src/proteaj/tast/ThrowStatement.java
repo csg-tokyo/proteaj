@@ -1,19 +1,17 @@
 package proteaj.tast;
 
+import proteaj.tast.util.*;
+
 public class ThrowStatement extends Statement {
   public ThrowStatement(Expression e) {
     this.e = e;
   }
 
-  public Expression getThrowException() {
-    return e;
-  }
-
   @Override
-  public String toJavassistCode() {
-    return "throw " + e.toJavassistCode() + ';';
+  public <T> T accept(StatementVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
   }
 
-  private Expression e;
+  public final Expression e;
 }
 

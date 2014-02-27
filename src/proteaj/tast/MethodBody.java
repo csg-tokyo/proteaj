@@ -5,10 +5,6 @@ public class MethodBody {
     this.block = block;
   }
 
-  public String toJavassistCode() {
-    return block.toJavassistCode();
-  }
-
   public final Block block;
 }
 

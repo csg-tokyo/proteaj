@@ -7,6 +7,8 @@ import proteaj.tast.*;
 import java.io.*;
 import javassist.*;
 
+import static proteaj.codegen.javassist.BodyCodeGenerator.codeGen;
+
 public class CodeGenerator {
   public CodeGenerator() {
     this.target = null;
@@ -60,7 +62,7 @@ public class CodeGenerator {
   }
 
   private void codegen (MethodDeclaration method) {
-    try { method.method.setBody(method.body.toJavassistCode()); }
+    try { method.method.setBody(codeGen(method.body)); }
     catch (CannotCompileException e) {
       assert false;
       throw new RuntimeException(e);
@@ -68,7 +70,7 @@ public class CodeGenerator {
   }
 
   private void codegen (ConstructorDeclaration constructor) {
-    try { constructor.constructor.setBody(constructor.body.toJavassistCode()); }
+    try { constructor.constructor.setBody(codeGen(constructor.body)); }
     catch (CannotCompileException e) {
       assert false;
       throw new RuntimeException(e);
@@ -79,7 +81,7 @@ public class CodeGenerator {
     try {
       CtClass thisClass = field.field.getDeclaringClass();
       thisClass.removeField(field.field);
-      thisClass.addField(field.field, field.body.toJavassistCode());
+      thisClass.addField(field.field, codeGen(field.body));
     } catch (NotFoundException e) {
       assert false;
       throw new RuntimeException(e);
@@ -90,7 +92,7 @@ public class CodeGenerator {
   }
 
   private void codegen (DefaultValueDefinition defaultValue) {
-    try { defaultValue.method.setBody(defaultValue.body.toJavassistCode()); }
+    try { defaultValue.method.setBody(codeGen(defaultValue.body)); }
     catch (CannotCompileException e) {
       assert false;
       throw new RuntimeException(e);
@@ -99,13 +101,13 @@ public class CodeGenerator {
 
   private void codegen (ClassInitializerDefinition clIni) {
     try {
-      clIni.clIni.insertAfter(clIni.body.toJavassistCode());
+      clIni.clIni.insertAfter(codeGen(clIni.body));
     } catch (CannotCompileException e) {
       assert false;
       throw new RuntimeException(e);
     }
   }
 
-  private String target;
+  private final String target;
 }
 

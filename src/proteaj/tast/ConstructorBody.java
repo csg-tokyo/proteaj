@@ -5,10 +5,6 @@ public class ConstructorBody {
     this.block = block;
   }
 
-  public String toJavassistCode() {
-    return block.toJavassistCode();
-  }
-
   public final Block block;
 }
 

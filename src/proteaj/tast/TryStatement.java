@@ -1,5 +1,6 @@
 package proteaj.tast;
 
+import proteaj.tast.util.*;
 import proteaj.util.*;
 
 import java.util.*;
@@ -20,24 +21,18 @@ public class TryStatement extends Statement {
     this.finallyBlock = finallyBlock;
   }
 
-  public boolean hasCatchBlock() {
-    return ! catchBlocks.isEmpty();
-  }
+  public List<Triad<CtClass, String, Block>> getCatchBlocks() { return catchBlocks; }
+  public Block getFinallyBlock() { return finallyBlock; }
+
+  public boolean hasCatchBlock() { return ! catchBlocks.isEmpty(); }
+  public boolean hasFinallyBlock() { return finallyBlock != null; }
 
   @Override
-  public String toJavassistCode() {
-    StringBuilder buf = new StringBuilder();
-
-    buf.append("try ").append(tryBlock.toJavassistCode());
-    for(Triad<CtClass, String, Block> c : catchBlocks) {
-      buf.append(" catch (").append(c.getFirst().getName()).append(' ').append(c.getSecond()).append(") ").append(c.getThird().toJavassistCode());
-    }
-    if(finallyBlock != null) buf.append(" finally ").append(finallyBlock.toJavassistCode());
-
-    return buf.toString();
+  public <T> T accept(StatementVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
   }
 
-  private Block tryBlock;
+  public final Block tryBlock;
   private List<Triad<CtClass, String, Block>> catchBlocks;
   private Block finallyBlock;
 }

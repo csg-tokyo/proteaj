@@ -1,15 +1,17 @@
 package proteaj.tast;
 
+import proteaj.tast.util.*;
+
 public class LocalVarDeclStatement extends Statement {
   public LocalVarDeclStatement(LocalVarDecl lvdecl) {
     this.lvdecl = lvdecl;
   }
 
   @Override
-  public String toJavassistCode() {
-    return lvdecl.toJavassistCode() + ';';
+  public <T> T accept(StatementVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
   }
 
-  private LocalVarDecl lvdecl;
+  public final LocalVarDecl lvdecl;
 }
 

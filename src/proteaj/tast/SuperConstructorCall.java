@@ -1,5 +1,7 @@
 package proteaj.tast;
 
+import proteaj.tast.util.*;
+
 import javassist.CtConstructor;
 
 public class SuperConstructorCall extends Statement {
@@ -9,20 +11,12 @@ public class SuperConstructorCall extends Statement {
     this.args = args;
   }
 
-  public CtConstructor getConstructor() {
-    return constructor;
-  }
-
-  public Arguments getArgs() {
-    return args;
-  }
-
   @Override
-  public String toJavassistCode() {
-    return "super" + args.toJavassistCode() + ';';
+  public <T> T accept(StatementVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
   }
 
-  private CtConstructor constructor;
-  private Arguments args;
+  public final CtConstructor constructor;
+  public final Arguments args;
 }
 

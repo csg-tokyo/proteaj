@@ -1,5 +1,7 @@
 package proteaj.tast;
 
+import proteaj.tast.util.*;
+
 public class IfStatement extends Statement {
   public IfStatement(Expression condition, Statement thenStmt) {
     this.condition = condition;
@@ -13,25 +15,12 @@ public class IfStatement extends Statement {
     this.elseStmt = elseStmt;
   }
 
-  public Expression getCondition() {
-    return condition;
-  }
-
-  public Statement getThenStmt() {
-    return thenStmt;
-  }
-
-  public Statement getElseStmt() {
-    return elseStmt;
-  }
-
   @Override
-  public String toJavassistCode() {
-    if(elseStmt != null) return "if(" + condition.toJavassistCode() + ") " + thenStmt.toJavassistCode() + "\nelse " + elseStmt.toJavassistCode();
-    else return "if(" + condition.toJavassistCode() + ") " + thenStmt.toJavassistCode();
+  public <T> T accept(StatementVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
   }
 
-  private Expression condition;
-  private Statement thenStmt;
-  private Statement elseStmt;
+  public final Expression condition;
+  public final Statement thenStmt;
+  public final Statement elseStmt;
 }

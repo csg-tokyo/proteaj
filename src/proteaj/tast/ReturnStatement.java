@@ -1,24 +1,21 @@
 package proteaj.tast;
 
+import proteaj.tast.util.*;
+
 public class ReturnStatement extends Statement {
   public ReturnStatement() {
-    this.val = null;
+    this.value = null;
   }
 
   public ReturnStatement(Expression val) {
-    this.val = val;
-  }
-
-  public Expression getReturnValue() {
-    return val;
+    this.value = val;
   }
 
   @Override
-  public String toJavassistCode() {
-    if(val != null) return "return " + val.toJavassistCode() + ';';
-    else return "return;";
+  public <T> T accept(StatementVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
   }
 
-  private Expression val;
+  public final Expression value;
 }
 
