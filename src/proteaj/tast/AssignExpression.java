@@ -1,5 +1,7 @@
 package proteaj.tast;
 
+import proteaj.tast.util.ExpressionVisitor;
+
 public class AssignExpression extends Expression {
 
   public AssignExpression(Expression ref, Expression val) {
@@ -8,21 +10,18 @@ public class AssignExpression extends Expression {
     this.val = val;
   }
 
-  public Expression getLeft() {
-    return ref;
-  }
-
-  public Expression getRight() {
-    return val;
-  }
-
   @Override
   public String toJavassistCode() {
     return ref.toJavassistCode() + " = " + val.toJavassistCode();
   }
 
-  private Expression ref;
-  private Expression val;
+  @Override
+  public <T> T accept(ExpressionVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
+  }
+
+  public final Expression ref;
+  public final Expression val;
 
 }
 

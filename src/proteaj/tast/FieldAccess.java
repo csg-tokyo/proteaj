@@ -1,20 +1,13 @@
 package proteaj.tast;
 
 import javassist.*;
+import proteaj.tast.util.ExpressionVisitor;
 
 public class FieldAccess extends Expression {
   public FieldAccess(Expression expr, CtField field) throws NotFoundException {
-    super(getType(field));
+    super(field.getType());
     this.expr = expr;
     this.field = field;
-  }
-
-  public Expression getReceiver() {
-    return expr;
-  }
-
-  public CtField getField() {
-    return field;
   }
 
   @Override
@@ -22,11 +15,12 @@ public class FieldAccess extends Expression {
     return expr.toJavassistCode() + '.' + field.getName();
   }
 
-  private static CtClass getType(CtField field) throws NotFoundException {
-    return field.getType();
+  @Override
+  public <T> T accept(ExpressionVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
   }
 
-  private Expression expr;
-  private CtField field;
+  public final Expression expr;
+  public final CtField field;
 }
 

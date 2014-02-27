@@ -1,15 +1,12 @@
 package proteaj.tast;
 
 import javassist.*;
+import proteaj.tast.util.ExpressionVisitor;
 
 public class SuperExpression extends Expression {
   public SuperExpression(CtClass thisClass) throws NotFoundException {
-    super(getSuperClass(thisClass));
+    super(thisClass.getSuperclass());
     this.thisClass = thisClass;
-  }
-
-  public CtClass getThisClass() {
-    return thisClass;
   }
 
   @Override
@@ -17,10 +14,11 @@ public class SuperExpression extends Expression {
     return "super";
   }
 
-  private static CtClass getSuperClass(CtClass cls) throws NotFoundException {
-    return cls.getSuperclass();
+  @Override
+  public <T> T accept(ExpressionVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
   }
 
-  private CtClass thisClass;
+  public final CtClass thisClass;
 }
 

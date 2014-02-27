@@ -1,5 +1,7 @@
 package proteaj.tast;
 
+import proteaj.tast.util.*;
+
 import javassist.*;
 
 public class ThisExpression extends Expression {
@@ -10,6 +12,11 @@ public class ThisExpression extends Expression {
   @Override
   public String toJavassistCode() {
     return "this";
+  }
+
+  @Override
+  public <T> T accept(ExpressionVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
   }
 }
 

@@ -1,24 +1,14 @@
 package proteaj.tast;
 
+import proteaj.tast.util.*;
+
 import javassist.*;
 
 public class ArrayAccess extends Expression {
   public ArrayAccess(Expression array, Expression index) throws NotFoundException {
-    super(getComponentType(array.getType()));
+    super(array.getType().getComponentType());
     this.array = array;
     this.index = index;
-  }
-
-  public Expression getArray() {
-    return array;
-  }
-
-  public Expression getIndex() {
-    return index;
-  }
-
-  private static CtClass getComponentType(CtClass arrayType) throws NotFoundException {
-    return arrayType.getComponentType();
   }
 
   @Override
@@ -26,7 +16,12 @@ public class ArrayAccess extends Expression {
     return array.toJavassistCode() + '[' + index.toJavassistCode() + ']';
   }
 
-  private Expression array;
-  private Expression index;
+  @Override
+  public <T> T accept(ExpressionVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
+  }
+
+  public final Expression array;
+  public final Expression index;
 }
 

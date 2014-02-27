@@ -1,15 +1,12 @@
 package proteaj.tast;
 
 import javassist.CtClass;
+import proteaj.tast.util.ExpressionVisitor;
 
 public class IntLiteral extends Expression {
   public IntLiteral(int val) {
     super(CtClass.intType);
     this.val = val;
-  }
-
-  public int getValue() {
-    return val;
   }
 
   @Override
@@ -18,10 +15,15 @@ public class IntLiteral extends Expression {
   }
 
   @Override
+  public <T> T accept(ExpressionVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
+  }
+
+  @Override
   public String toString() {
     return String.valueOf(val);
   }
 
-  private int val;
+  public final int val;
 }
 

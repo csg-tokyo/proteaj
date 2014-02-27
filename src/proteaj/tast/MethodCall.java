@@ -1,25 +1,14 @@
 package proteaj.tast;
 
 import javassist.*;
+import proteaj.tast.util.ExpressionVisitor;
 
 public class MethodCall extends Expression {
   public MethodCall(Expression expr, CtMethod method, Arguments args) throws NotFoundException {
-    super(getReturnType(method));
+    super(method.getReturnType());
     this.expr = expr;
     this.method = method;
     this.args = args;
-  }
-
-  public Expression getReceiver() {
-    return expr;
-  }
-
-  public CtMethod getMethod() {
-    return method;
-  }
-
-  public Arguments getArgs() {
-    return args;
   }
 
   @Override
@@ -27,11 +16,12 @@ public class MethodCall extends Expression {
     return expr.toJavassistCode() + "." + method.getName() + args.toJavassistCode();
   }
 
-  private static CtClass getReturnType(CtMethod method) throws NotFoundException {
-    return method.getReturnType();
+  @Override
+  public <T> T accept(ExpressionVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
   }
 
-  private Expression expr;
-  private CtMethod method;
-  private Arguments args;
+  public final Expression expr;
+  public final CtMethod method;
+  public final Arguments args;
 }

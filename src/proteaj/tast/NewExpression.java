@@ -1,6 +1,7 @@
 package proteaj.tast;
 
 import javassist.CtConstructor;
+import proteaj.tast.util.ExpressionVisitor;
 
 public class NewExpression extends Expression {
   public NewExpression(CtConstructor constructor, Arguments args) {
@@ -9,19 +10,16 @@ public class NewExpression extends Expression {
     this.args = args;
   }
 
-  public CtConstructor getConstructor() {
-    return constructor;
-  }
-
-  public Arguments getArgs() {
-    return args;
-  }
-
   @Override
   public String toJavassistCode() {
     return "new " + constructor.getDeclaringClass().getName() + args.toJavassistCode();
   }
 
-  private CtConstructor constructor;
-  private Arguments args;
+  @Override
+  public <T> T accept(ExpressionVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
+  }
+
+  public final CtConstructor constructor;
+  public final Arguments args;
 }

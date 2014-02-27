@@ -1,6 +1,7 @@
 package proteaj.tast;
 
 import javassist.CtClass;
+import proteaj.tast.util.ExpressionVisitor;
 
 public class CastExpression extends Expression {
   public CastExpression(CtClass type, Expression expr) {
@@ -14,5 +15,10 @@ public class CastExpression extends Expression {
     else return "((" + this.getType().getName() + ")" + expr.toJavassistCode() + ")";
   }
 
-  private Expression expr;
+  @Override
+  public <T> T accept(ExpressionVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
+  }
+
+  public final Expression expr;
 }

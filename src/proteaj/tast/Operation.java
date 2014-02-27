@@ -1,6 +1,7 @@
 package proteaj.tast;
 
 import proteaj.ir.*;
+import proteaj.tast.util.*;
 
 import java.util.*;
 
@@ -22,6 +23,11 @@ public class Operation extends Expression {
   @Override
   public String toJavassistCode() {
     return operator.toJavassistCode(operands);
+  }
+
+  @Override
+  public <T> T accept(ExpressionVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
   }
 
   @Override

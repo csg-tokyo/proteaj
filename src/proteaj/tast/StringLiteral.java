@@ -1,6 +1,7 @@
 package proteaj.tast;
 
 import proteaj.ir.*;
+import proteaj.tast.util.ExpressionVisitor;
 
 import static proteaj.util.Escape.*;
 
@@ -10,13 +11,14 @@ public class StringLiteral extends Expression {
     this.str = str;
   }
 
-  public String getString() {
-    return str;
-  }
-
   @Override
   public String toJavassistCode() {
     return '"' + escape(str) + '"';
+  }
+
+  @Override
+  public <T> T accept(ExpressionVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
   }
 
   @Override
@@ -24,6 +26,6 @@ public class StringLiteral extends Expression {
     return "\"" + str + "\"";
   }
 
-  private String str;
+  public final String str;
 }
 

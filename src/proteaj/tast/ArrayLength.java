@@ -1,5 +1,7 @@
 package proteaj.tast;
 
+import proteaj.tast.util.ExpressionVisitor;
+
 import javassist.CtClass;
 
 public class ArrayLength extends Expression {
@@ -8,15 +10,16 @@ public class ArrayLength extends Expression {
     this.array = array;
   }
 
-  public Expression getArray() {
-    return array;
-  }
-
   @Override
   public String toJavassistCode() {
     return array.toJavassistCode() + ".length";
   }
 
-  private Expression array;
+  @Override
+  public <T> T accept(ExpressionVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
+  }
+
+  public final Expression array;
 }
 

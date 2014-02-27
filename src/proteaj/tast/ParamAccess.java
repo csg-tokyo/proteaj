@@ -1,6 +1,7 @@
 package proteaj.tast;
 
 import javassist.CtClass;
+import proteaj.tast.util.ExpressionVisitor;
 
 public class ParamAccess extends Expression {
   public ParamAccess(String name, CtClass type, int index) {
@@ -9,20 +10,17 @@ public class ParamAccess extends Expression {
     this.index = index;
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public int getIndex() {
-    return index;
-  }
-
   @Override
   public String toJavassistCode() {
     return "$" + (index + 1);
   }
 
-  private String name;
-  private int index;
+  @Override
+  public <T> T accept(ExpressionVisitor<T> visitor, T t) {
+    return visitor.visit(this, t);
+  }
+
+  public final String name;
+  public final int index;
 }
 
