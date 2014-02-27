@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 import javassist.*;
 
 public class BodyParser {
-  public MethodBody parseMethodBody(CtMethod method, SourceStringReader reader, Environment env) throws CompileError, CompileErrors {
+  public MethodBody parseMethodBody(CtMethod method, SourceStringReader reader, Environment env) throws CompileErrors {
     try {
       CtClass returnType = method.getReturnType();
       CtClass[] exceptionTypes = method.getExceptionTypes();
@@ -28,13 +28,13 @@ public class BodyParser {
         return mbody.get();
       }
 
-      throw new ParseError(mbody.getFailLog().getMessage(), reader.getFilePath(), mbody.getFailLog().getLine());
+      throw new CompileErrors(new ParseError(mbody.getFailLog().getMessage(), reader.filePath, mbody.getFailLog().getLine()));
     } catch (NotFoundException e) {
-      throw new NotFoundError(e, reader.getFilePath(), 0);
+      throw new CompileErrors(new NotFoundError(e, reader.filePath, 0));
     }
   }
 
-  public ConstructorBody parseConstructorBody(CtConstructor constructor, SourceStringReader reader, Environment env) throws CompileError, CompileErrors {
+  public ConstructorBody parseConstructorBody(CtConstructor constructor, SourceStringReader reader, Environment env) throws CompileErrors {
     try {
       CtClass[] exceptionTypes = constructor.getExceptionTypes();
       initParser_Statement();
@@ -50,13 +50,13 @@ public class BodyParser {
         return cbody.get();
       }
 
-      throw new ParseError(cbody.getFailLog().getMessage(), reader.getFilePath(), cbody.getFailLog().getLine());
+      throw new CompileErrors(new ParseError(cbody.getFailLog().getMessage(), reader.filePath, cbody.getFailLog().getLine()));
     } catch (NotFoundException e) {
-      throw new NotFoundError(e, reader.getFilePath(), 0);
+      throw new CompileErrors(new NotFoundError(e, reader.filePath, 0));
     }
   }
 
-  public FieldBody parseFieldBody(CtField field, SourceStringReader reader, Environment env) throws CompileError, CompileErrors {
+  public FieldBody parseFieldBody(CtField field, SourceStringReader reader, Environment env) throws CompileErrors {
     try {
       ParseResult<FieldBody> fbody = FieldBodyParser.getParser(field.getType()).applyRule(reader, env);
       if(! fbody.isFail()) {
@@ -66,13 +66,13 @@ public class BodyParser {
         return fbody.get();
       }
 
-      throw new ParseError(fbody.getFailLog().getMessage(), reader.getFilePath(), fbody.getFailLog().getLine());
+      throw new CompileErrors(new ParseError(fbody.getFailLog().getMessage(), reader.filePath, fbody.getFailLog().getLine()));
     } catch (NotFoundException e) {
-      throw new NotFoundError(e, reader.getFilePath(), 0);
+      throw new CompileErrors(new NotFoundError(e, reader.filePath, 0));
     }
   }
 
-  public DefaultValue parseDefaultArgument(CtMethod method, SourceStringReader reader, Environment env) throws CompileError, CompileErrors {
+  public DefaultValue parseDefaultArgument(CtMethod method, SourceStringReader reader, Environment env) throws CompileErrors {
     try {
       ParseResult<DefaultValue> defval = DefaultArgumentParser.getParser(method.getReturnType()).applyRule(reader, env);
       if(! defval.isFail()) {
@@ -82,13 +82,13 @@ public class BodyParser {
         return defval.get();
       }
 
-      throw new ParseError(defval.getFailLog().getMessage(), reader.getFilePath(), defval.getFailLog().getLine());
+      throw new CompileErrors(new ParseError(defval.getFailLog().getMessage(), reader.filePath, defval.getFailLog().getLine()));
     } catch (NotFoundException e) {
-      throw new NotFoundError(e, reader.getFilePath(), 0);
+      throw new CompileErrors(new NotFoundError(e, reader.filePath, 0));
     }
   }
 
-  public ClassInitializer parseStaticInitializer(SourceStringReader reader, Environment env) throws CompileError, CompileErrors {
+  public ClassInitializer parseStaticInitializer(SourceStringReader reader, Environment env) throws CompileErrors {
     initParser_Statement();
 
     ParseResult<ClassInitializer> sibody = StaticInitializerParser.parser.applyRule(reader, env);
@@ -100,7 +100,7 @@ public class BodyParser {
       return sibody.get();
     }
 
-    throw new ParseError(sibody.getFailLog().getMessage(), reader.getFilePath(), sibody.getFailLog().getLine());
+    throw new CompileErrors(new ParseError(sibody.getFailLog().getMessage(), reader.filePath, sibody.getFailLog().getLine()));
   }
 
   private CompileErrors createUnhandledExceptions(SourceStringReader reader, Environment env) {
@@ -108,7 +108,7 @@ public class BodyParser {
     for(Entry<CtClass, List<Integer>> entry : env.getExceptionsData().entrySet()) {
       CtClass exception = entry.getKey();
       for(int line : entry.getValue()) {
-        errors.add(new ParseError("unhandled exception type " + exception.getName(), reader.getFilePath(), line));
+        errors.add(new ParseError("unhandled exception type " + exception.getName(), reader.filePath, line));
       }
     }
     return new CompileErrors(errors);

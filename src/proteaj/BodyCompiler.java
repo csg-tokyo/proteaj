@@ -43,8 +43,6 @@ public class BodyCompiler {
       try {
         MethodBody body = parser.parseMethodBody(method, reader, env);
         methods.add(new MethodDeclaration(method, body));
-      } catch (CompileError e) {
-        ErrorList.addError(e);
       } catch (CompileErrors es) {
         for(CompileError e : es.getErrors()) ErrorList.addError(e);
       }
@@ -70,8 +68,6 @@ public class BodyCompiler {
       try {
         ConstructorBody body = parser.parseConstructorBody(constructor, reader, env);
         constructors.add(new ConstructorDeclaration(constructor, body));
-      } catch (CompileError e) {
-        ErrorList.addError(e);
       } catch (CompileErrors es) {
         for(CompileError e : es.getErrors()) ErrorList.addError(e);
       }
@@ -92,8 +88,6 @@ public class BodyCompiler {
         FieldBody body = parser.parseFieldBody(field, reader, env);
         //irbody.setAST(fbody);
         fields.add(new FieldDeclaration(field, body));
-      } catch (CompileError e) {
-        ErrorList.addError(e);
       } catch (CompileErrors es) {
         for(CompileError e : es.getErrors()) ErrorList.addError(e);
       }
@@ -113,8 +107,6 @@ public class BodyCompiler {
       try {
         DefaultValue defval = parser.parseDefaultArgument(method, reader, env);
         map.add(new DefaultValueDefinition(method, defval));
-      } catch (CompileError e) {
-        ErrorList.addError(e);
       } catch (CompileErrors es) {
         for(CompileError e : es.getErrors()) ErrorList.addError(e);
       }
@@ -134,8 +126,6 @@ public class BodyCompiler {
       try {
         ClassInitializer body = parser.parseStaticInitializer(reader, env);
         list.add(new ClassInitializerDefinition(clinit, body));
-      } catch (CompileError e) {
-        ErrorList.addError(e);
       } catch (CompileErrors es) {
         for(CompileError e : es.getErrors()) ErrorList.addError(e);
       }
