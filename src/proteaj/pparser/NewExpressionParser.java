@@ -42,7 +42,7 @@ public class NewExpressionParser extends PackratParser<NewExpression> {
         return success(new NewExpression(constructor, args.get()));
       }
     } catch (NotFoundException e) {
-      ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
+      ErrorList.addError(new NotFoundError(e, reader.filePath, reader.getLine()));
     }
 
     // fail

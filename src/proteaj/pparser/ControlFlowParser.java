@@ -9,6 +9,7 @@ public class ControlFlowParser extends ComposedParser_Alternative<Statement> {
   /* ControlFlow
    *  : IfStatement
    *  | WhileStatement
+   *  | DoWhileStatement
    *  | ForStatement
    *  | ThrowStatement
    *  | TryStatement
@@ -23,6 +24,7 @@ public class ControlFlowParser extends ComposedParser_Alternative<Statement> {
     return asList(
         IfStatementParser.parser,
         WhileStatementParser.parser,
+        DoWhileStatementParser.parser,
         ForStatementParser.parser,
         ThrowStatementParser.parser,
         TryStatementParser.parser,

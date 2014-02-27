@@ -39,7 +39,7 @@ public class DefaultExpressionParser extends ExpressionParser {
         fails.add(new Failure<Expression>(msg, reader.getPos(), reader.getLine()));
       }
     } catch (NotFoundException e) {
-      ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
+      ErrorList.addError(new NotFoundError(e, reader.filePath, reader.getLine()));
     }
     else fails.add(expr);
 

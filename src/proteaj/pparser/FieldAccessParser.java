@@ -34,7 +34,7 @@ public class FieldAccessParser extends PackratParser<FieldAccess> {
         if((! isStatic(field.getModifiers())) && field.getName().equals(identifier.get())) try {
           return success(new FieldAccess(expr.get(), field));
         } catch (NotFoundException e) {
-          ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
+          ErrorList.addError(new NotFoundError(e, reader.filePath, reader.getLine()));
           break;
         }
       }
@@ -44,7 +44,7 @@ public class FieldAccessParser extends PackratParser<FieldAccess> {
       if((! isStatic(field.getModifiers())) && field.visibleFrom(env.thisClass) && field.getName().equals(identifier.get())) try {
         return success(new FieldAccess(expr.get(), field));
       } catch (NotFoundException e) {
-        ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
+        ErrorList.addError(new NotFoundError(e, reader.filePath, reader.getLine()));
         break;
       }
     }

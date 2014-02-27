@@ -62,7 +62,7 @@ public class BodyCompiler {
       try {
         env.addParams(irbody.getParamNames(), irbody.getParamTypes());
       } catch (NotFoundException e) {
-        ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
+        ErrorList.addError(new NotFoundError(e, reader.filePath, reader.getLine()));
       }
 
       try {

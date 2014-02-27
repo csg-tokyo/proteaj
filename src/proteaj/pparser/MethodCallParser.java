@@ -46,7 +46,7 @@ public class MethodCallParser extends PackratParser<MethodCall> {
         return success(new MethodCall(expr.get(), method, args.get()));
       }
     } catch (NotFoundException e) {
-      ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
+      ErrorList.addError(new NotFoundError(e, reader.filePath, reader.getLine()));
     }
 
     // fail

@@ -40,7 +40,7 @@ public class AbbMethodCallParser extends PackratParser<Expression> {
         }
       }
     } catch (NotFoundException e) {
-      ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
+      ErrorList.addError(new NotFoundError(e, reader.filePath, reader.getLine()));
     }
 
     // TODO static import

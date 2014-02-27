@@ -64,6 +64,15 @@ public class StatementCodeGenerator extends StatementVisitor<StringBuilder> {
   }
 
   @Override
+  public StringBuilder visit(DoWhileStatement doWhileStmt, StringBuilder buf) {
+    buf = buf.append("do ");
+    buf = visit(doWhileStmt.stmt, buf);
+    buf = buf.append("while ").append('(');
+    buf = visit(doWhileStmt.condition, buf);
+    return buf.append(')').append(';');
+  }
+
+  @Override
   public StringBuilder visit(ForStatement forStmt, StringBuilder buf) {
     buf = buf.append("for ").append('(');
     buf = visit(forStmt.init, buf).append(';');

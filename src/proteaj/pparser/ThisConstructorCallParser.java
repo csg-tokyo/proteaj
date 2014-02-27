@@ -38,7 +38,7 @@ public class ThisConstructorCallParser extends PackratParser<ThisConstructorCall
       env.addExceptions(c.getExceptionTypes(), reader.getLine());
       return success(new ThisConstructorCall(c, args.get()));
     } catch (NotFoundException e) {
-      ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
+      ErrorList.addError(new NotFoundError(e, reader.filePath, reader.getLine()));
     }
 
     return fail("undefined constructor", pos, reader);

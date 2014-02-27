@@ -11,10 +11,6 @@ public class SourceStringReader {
     this.lines = createLinesMap(line);
   }
 
-  public String getFilePath() {
-    return filePath;
-  }
-
   public int getLine() {
     return getLine(current);
   }
@@ -68,10 +64,10 @@ public class SourceStringReader {
     return map;
   }
 
-  private String source;
   private int current;
 
-  private TreeMap<Integer, Integer> lines;
+  private final String source;
+  private final TreeMap<Integer, Integer> lines;
 
   public final String filePath;
 }

@@ -11,6 +11,7 @@ public abstract class StatementVisitor<T> {
   public abstract T visit (LocalVarDeclStatement localDecl, T t);
   public abstract T visit (IfStatement ifStmt, T t);
   public abstract T visit (WhileStatement whileStmt, T t);
+  public abstract T visit (DoWhileStatement doWhileStmt, T t);
   public abstract T visit (ForStatement forStmt, T t);
   public abstract T visit (TryStatement tryStmt, T t);
   public abstract T visit (ThrowStatement throwStmt, T t);

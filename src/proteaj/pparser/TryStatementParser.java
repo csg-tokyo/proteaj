@@ -76,7 +76,7 @@ public class TryStatementParser extends PackratParser<Statement> {
         }
         else tryenv.removeException(type.get());
       } catch (NotFoundException e) {
-        ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
+        ErrorList.addError(new NotFoundError(e, reader.filePath, reader.getLine()));
       }
 
       envs.add(newenv);

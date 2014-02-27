@@ -46,7 +46,7 @@ public class StaticMethodCallParser extends PackratParser<StaticMethodCall> {
         return success(new StaticMethodCall(method, args.get()));
       }
     } catch (NotFoundException e) {
-      ErrorList.addError(new NotFoundError(e, reader.getFilePath(), reader.getLine()));
+      ErrorList.addError(new NotFoundError(e, reader.filePath, reader.getLine()));
     }
 
     // fail
