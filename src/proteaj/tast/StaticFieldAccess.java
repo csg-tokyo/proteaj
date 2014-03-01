@@ -1,17 +1,12 @@
 package proteaj.tast;
 
 import javassist.*;
-import proteaj.tast.util.ExpressionVisitor;
+import proteaj.tast.util.*;
 
 public class StaticFieldAccess extends Expression {
   public StaticFieldAccess(CtField field) throws NotFoundException {
     super(field.getType());
     this.field = field;
-  }
-
-  @Override
-  public String toJavassistCode() {
-    return field.getDeclaringClass().getName() + '.' + field.getName();
   }
 
   @Override

@@ -11,11 +11,6 @@ public class ParamAccess extends Expression {
   }
 
   @Override
-  public String toJavassistCode() {
-    return "$" + (index + 1);
-  }
-
-  @Override
   public <T> T accept(ExpressionVisitor<T> visitor, T t) {
     return visitor.visit(this, t);
   }

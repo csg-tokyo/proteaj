@@ -2,10 +2,8 @@ package proteaj.ir.primitive;
 
 import proteaj.ast.*;
 import proteaj.ir.*;
-import proteaj.tast.*;
 import proteaj.util.*;
 
-import java.util.*;
 import javassist.*;
 
 public class PrefixOperator extends PrimitiveOperator {
@@ -17,12 +15,6 @@ public class PrefixOperator extends PrimitiveOperator {
   public static final PrefixOperator incv  = new PrefixOperator(CtClass.voidType, "++", CtClass.intType, 1400);
   public static final PrefixOperator decv  = new PrefixOperator(CtClass.voidType, "--", CtClass.intType, 1400);
   public static final PrefixOperator not   = new PrefixOperator(CtClass.booleanType, "!", 1400);
-
-  @Override
-  public String toJavassistCode(List<Expression> operands) {
-    assert operands.size() == 1;
-    return '(' + operator + operands.get(0).toJavassistCode() + ')';
-  }
 
   private static IRPattern getPrefixOperatorPattern(String operator, CtClass type) {
     OperatorPattern pattern = new OperatorPattern(-1);
@@ -46,7 +38,7 @@ public class PrefixOperator extends PrimitiveOperator {
     this.operator = operator;
   }
 
-  private String operator;
+  public final String operator;
   private static final int MOD_RASSOC = Modifiers.PUBLIC | Modifiers.STATIC | Modifiers.RIGHT_ASSOC;
 }
 

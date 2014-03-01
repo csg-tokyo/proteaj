@@ -12,11 +12,6 @@ public class ClassLiteral extends Expression {
   }
 
   @Override
-  public String toJavassistCode() {
-    return cls.getName() + ".class";
-  }
-
-  @Override
   public <T> T accept(ExpressionVisitor<T> visitor, T t) {
     return visitor.visit(this, t);
   }

@@ -1,0 +1,17 @@
+package natural;
+
+public class Digit {
+  public Digit(int i) {
+    this.val = i;
+  }
+  
+  public int getValue() {
+    return val;
+  }
+  
+  public char toChar() {
+    return String.valueOf(val).charAt(0);
+  }
+
+  private int val;
+}

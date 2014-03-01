@@ -1,0 +1,30 @@
+package natural;
+
+public operators NaturalNumberOperators {
+  //public NaturalNumber num (NaturalNumber num) { return num; }
+  
+  public readas NaturalNumber !Zero digits+ (Digit... digits) : priority = 0 {
+    int val = 0;
+    for(int i = 0; i < digits.length; i++) {
+      val = val * 10 + digits[i].getValue();
+    }
+    return new NaturalNumber(val);
+  }
+  
+  public readas Digit "0" () : priority = 100 { return new Digit(0); }
+  public readas Digit "1" () : priority = 100 { return new Digit(1); }
+  public readas Digit "2" () : priority = 100 { return new Digit(2); }
+  public readas Digit "3" () : priority = 100 { return new Digit(3); }
+  public readas Digit "4" () : priority = 100 { return new Digit(4); }
+  public readas Digit "5" () : priority = 100 { return new Digit(5); }
+  public readas Digit "6" () : priority = 100 { return new Digit(6); }
+  public readas Digit "7" () : priority = 100 { return new Digit(7); }
+  public readas Digit "8" () : priority = 100 { return new Digit(8); }
+  public readas Digit "9" () : priority = 100 { return new Digit(9); }
+  
+  public readas Zero "0" () : priority = 100 { return null; }
+}
+
+
+
+class Zero {}

@@ -1,17 +1,12 @@
 package proteaj.tast;
 
 import javassist.*;
-import proteaj.tast.util.ExpressionVisitor;
+import proteaj.tast.util.*;
 
 public class SuperExpression extends Expression {
   public SuperExpression(CtClass thisClass) throws NotFoundException {
     super(thisClass.getSuperclass());
     this.thisClass = thisClass;
-  }
-
-  @Override
-  public String toJavassistCode() {
-    return "super";
   }
 
   @Override

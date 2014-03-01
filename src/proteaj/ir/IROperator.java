@@ -58,23 +58,6 @@ public class IROperator {
     else return new CtClass[0];
   }
 
-  public String toJavassistCode(List<Expression> operands) {
-    StringBuilder buf = new StringBuilder();
-    buf.append(getClassName()).append('.').append(getMethodName()).append('(');
-
-    if(! operands.isEmpty()) {
-      buf.append(operands.get(0).toJavassistCode());
-
-      for(int i = 1; i < operands.size(); i++) {
-        buf.append(',').append(operands.get(i).toJavassistCode());
-      }
-    }
-
-    buf.append(')');
-
-    return  buf.toString();
-  }
-
   public String toString(List<Expression> operands) {
     StringBuilder buf = new StringBuilder();
 

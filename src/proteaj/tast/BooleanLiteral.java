@@ -1,18 +1,12 @@
 package proteaj.tast;
 
 import javassist.CtClass;
-import proteaj.tast.util.ExpressionVisitor;
+import proteaj.tast.util.*;
 
 public class BooleanLiteral extends Expression {
   public BooleanLiteral(boolean val) {
     super(CtClass.booleanType);
     this.val = val;
-  }
-
-  @Override
-  public String toJavassistCode() {
-    if(val == true) return "true";
-    else return "false";
   }
 
   @Override

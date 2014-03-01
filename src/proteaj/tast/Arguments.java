@@ -17,21 +17,5 @@ public class Arguments {
     return args;
   }
 
-  public String toJavassistCode() {
-    if(args.isEmpty()) return "()";
-
-    StringBuilder buf = new StringBuilder();
-    buf.append("(");
-    buf.append(args.get(0).toJavassistCode());
-
-    for(int i = 1; i < args.size(); i++) {
-      buf.append(',').append(args.get(i).toJavassistCode());
-    }
-
-    buf.append(')');
-
-    return buf.toString();
-  }
-
   private List<Expression> args;
 }

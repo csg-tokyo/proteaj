@@ -1,19 +1,13 @@
 package proteaj.tast;
 
-import javassist.*;
-import proteaj.tast.util.ExpressionVisitor;
+import proteaj.tast.util.*;
 
-import static proteaj.util.Escape.*;
+import javassist.*;
 
 public class CharLiteral extends Expression {
   public CharLiteral(char val) {
     super(CtClass.charType);
     this.val = val;
-  }
-
-  @Override
-  public String toJavassistCode() {
-    return "\'" + escape(val) + "\'";
   }
 
   @Override

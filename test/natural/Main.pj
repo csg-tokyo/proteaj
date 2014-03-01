@@ -1,0 +1,11 @@
+package natural;
+
+using natural.NaturalNumberOperators;
+
+public class Main {
+  public static void main(String[] args) {
+    NaturalNumber num = 12345;
+    // NaturalNumber num = 012345;         // error!
+    System.out.println(num.getValue());
+  }
+}

@@ -1,0 +1,13 @@
+package natural;
+
+public class NaturalNumber {
+  public NaturalNumber(int i) {
+    this.val = i;
+  }
+  
+  public int getValue() {
+    return val;
+  }
+  
+  private int val;
+}

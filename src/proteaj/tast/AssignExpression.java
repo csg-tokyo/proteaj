@@ -1,6 +1,6 @@
 package proteaj.tast;
 
-import proteaj.tast.util.ExpressionVisitor;
+import proteaj.tast.util.*;
 
 public class AssignExpression extends Expression {
 
@@ -8,11 +8,6 @@ public class AssignExpression extends Expression {
     super(ref.getType());
     this.ref = ref;
     this.val = val;
-  }
-
-  @Override
-  public String toJavassistCode() {
-    return ref.toJavassistCode() + " = " + val.toJavassistCode();
   }
 
   @Override

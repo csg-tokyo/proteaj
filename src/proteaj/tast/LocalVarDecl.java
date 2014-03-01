@@ -1,7 +1,8 @@
 package proteaj.tast;
 
+import proteaj.tast.util.*;
+
 import javassist.CtClass;
-import proteaj.tast.util.ExpressionVisitor;
 
 public class LocalVarDecl extends Expression {
   public LocalVarDecl(CtClass type, String name) {
@@ -16,12 +17,6 @@ public class LocalVarDecl extends Expression {
     this.type = type;
     this.name = name;
     this.val = val;
-  }
-
-  @Override
-  public String toJavassistCode() {
-    if(val != null) return type.getName() + " " + name + " = " + val.toJavassistCode();
-    else return type.getName() + " " + name;
   }
 
   @Override

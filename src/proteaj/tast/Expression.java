@@ -13,8 +13,6 @@ public abstract class Expression {
     return type;
   }
 
-  public abstract String toJavassistCode();
-
   public abstract <T> T accept (ExpressionVisitor<T> visitor, T t);
 
   private final CtClass type;

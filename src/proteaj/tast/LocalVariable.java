@@ -1,17 +1,13 @@
 package proteaj.tast;
 
+import proteaj.tast.util.*;
+
 import javassist.CtClass;
-import proteaj.tast.util.ExpressionVisitor;
 
 public class LocalVariable extends Expression {
   public LocalVariable(String name, CtClass type) {
     super(type);
     this.name = name;
-  }
-
-  @Override
-  public String toJavassistCode() {
-    return name;
   }
 
   @Override

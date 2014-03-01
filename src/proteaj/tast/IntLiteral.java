@@ -1,17 +1,13 @@
 package proteaj.tast;
 
+import proteaj.tast.util.*;
+
 import javassist.CtClass;
-import proteaj.tast.util.ExpressionVisitor;
 
 public class IntLiteral extends Expression {
   public IntLiteral(int val) {
     super(CtClass.intType);
     this.val = val;
-  }
-
-  @Override
-  public String toJavassistCode() {
-    return String.valueOf(val);
   }
 
   @Override

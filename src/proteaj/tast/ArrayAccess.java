@@ -12,11 +12,6 @@ public class ArrayAccess extends Expression {
   }
 
   @Override
-  public String toJavassistCode() {
-    return array.toJavassistCode() + '[' + index.toJavassistCode() + ']';
-  }
-
-  @Override
   public <T> T accept(ExpressionVisitor<T> visitor, T t) {
     return visitor.visit(this, t);
   }

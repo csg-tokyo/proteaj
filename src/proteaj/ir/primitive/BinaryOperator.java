@@ -2,10 +2,8 @@ package proteaj.ir.primitive;
 
 import proteaj.ast.*;
 import proteaj.ir.*;
-import proteaj.tast.*;
 import proteaj.util.*;
 
-import java.util.*;
 import javassist.*;
 
 public class BinaryOperator extends PrimitiveOperator {
@@ -32,12 +30,6 @@ public class BinaryOperator extends PrimitiveOperator {
     return new BinaryOperator(CtClass.booleanType, IRCommonTypes.getObjectType(), "!=", IRCommonTypes.getObjectType(), 600);
   }
 
-  @Override
-  public String toJavassistCode(List<Expression> operands) {
-    assert operands.size() == 2;
-    return '(' + operands.get(0).toJavassistCode() + " " + operator + " " + operands.get(1).toJavassistCode() + ')';
-  }
-
   private static IRPattern getBinaryOperatorPattern(CtClass left, String operator, CtClass right) {
     OperatorPattern pattern = new OperatorPattern(-1);
 
@@ -61,7 +53,7 @@ public class BinaryOperator extends PrimitiveOperator {
     this.operator = operator;
   }
 
-  private String operator;
+  public final String operator;
   private static final int MOD_LASSOC = Modifiers.PUBLIC | Modifiers.STATIC;
 }
 

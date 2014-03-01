@@ -1,6 +1,6 @@
 package proteaj.tast;
 
-import proteaj.tast.util.ExpressionVisitor;
+import proteaj.tast.util.*;
 
 import javassist.CtClass;
 
@@ -8,11 +8,6 @@ public class ArrayLength extends Expression {
   public ArrayLength(Expression array) {
     super(CtClass.intType);
     this.array = array;
-  }
-
-  @Override
-  public String toJavassistCode() {
-    return array.toJavassistCode() + ".length";
   }
 
   @Override

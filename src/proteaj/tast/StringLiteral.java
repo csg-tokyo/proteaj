@@ -1,19 +1,12 @@
 package proteaj.tast;
 
 import proteaj.ir.*;
-import proteaj.tast.util.ExpressionVisitor;
-
-import static proteaj.util.Escape.*;
+import proteaj.tast.util.*;
 
 public class StringLiteral extends Expression {
   public StringLiteral(String str) {
     super(IRCommonTypes.getStringType());
     this.str = str;
-  }
-
-  @Override
-  public String toJavassistCode() {
-    return '"' + escape(str) + '"';
   }
 
   @Override

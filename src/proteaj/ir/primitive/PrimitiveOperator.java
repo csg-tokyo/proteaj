@@ -1,9 +1,7 @@
 package proteaj.ir.primitive;
 
 import proteaj.ir.*;
-import proteaj.tast.*;
 
-import java.util.*;
 import javassist.*;
 
 public abstract class PrimitiveOperator extends IROperator {
@@ -18,8 +16,5 @@ public abstract class PrimitiveOperator extends IROperator {
   }
 
   private static CtClass[] emptyCtClassArray = null;
-
-  @Override
-  public abstract String toJavassistCode(List<Expression> operands);
 }
 
