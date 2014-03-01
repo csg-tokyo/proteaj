@@ -43,7 +43,7 @@ public class ReadasOperationParser extends PackratParser<Expression> {
           if (operand.isFail() && pattern.hasMoreThanOneOperands(i)) return fail(operand, pos, reader);
           else if (operand.isFail()) {
             reader.setPos(opos);
-            operands.add(new VariableOperands(args, arrayType));
+            operands.add(new VariableArguments(args, arrayType));
             continue;
           }
           else args.add(operand.get());
@@ -60,7 +60,7 @@ public class ReadasOperationParser extends PackratParser<Expression> {
           }
 
           reader.setPos(opos);
-          operands.add(new VariableOperands(args, arrayType));
+          operands.add(new VariableArguments(args, arrayType));
           continue;
         } catch (NotFoundException e) {
           return fail("not found component type of " + pattern.getOperandType(i).getName(), pos, reader);
@@ -68,7 +68,7 @@ public class ReadasOperationParser extends PackratParser<Expression> {
 
         else if(pattern.isOptionOperand(i)) try {
           reader.setPos(opos);
-          StaticMethodCall mcall = new StaticMethodCall(pattern.getDefaultMethod(i), Arguments.EMPTY_ARGS);
+          StaticMethodCall mcall = new StaticMethodCall(pattern.getDefaultMethod(i), Collections.<Expression>emptyList());
           operands.add(mcall);
           continue;
         } catch (NotFoundException e) {

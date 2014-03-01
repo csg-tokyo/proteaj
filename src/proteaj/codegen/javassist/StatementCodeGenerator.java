@@ -4,7 +4,8 @@ import proteaj.tast.*;
 import proteaj.tast.util.*;
 import proteaj.util.*;
 
-import javassist.CtClass;
+import java.util.*;
+import javassist.*;
 
 public class StatementCodeGenerator extends StatementVisitor<StringBuilder> {
   public static final StatementCodeGenerator instance = new StatementCodeGenerator();
@@ -23,16 +24,26 @@ public class StatementCodeGenerator extends StatementVisitor<StringBuilder> {
 
   @Override
   public StringBuilder visit(ThisConstructorCall thisStmt, StringBuilder buf) {
-    buf = buf.append("this");
-    buf = visit(thisStmt.args, buf);
-    return buf.append(';');
+    buf = buf.append("this").append('(');
+
+    List<Expression> args = thisStmt.args;
+
+    if (! args.isEmpty()) buf = visit(args.get(0), buf);
+    for (int i = 1; i < args.size(); i++) buf = visit(args.get(i), buf.append(','));
+
+    return buf.append(')').append(';');
   }
 
   @Override
   public StringBuilder visit(SuperConstructorCall superStmt, StringBuilder buf) {
-    buf = buf.append("super");
-    buf = visit(superStmt.args, buf);
-    return buf.append(';');
+    buf = buf.append("super").append('(');
+
+    List<Expression> args = superStmt.args;
+
+    if (! args.isEmpty()) buf = visit(args.get(0), buf);
+    for (int i = 1; i < args.size(); i++) buf = visit(args.get(i), buf.append(','));
+
+    return buf.append(')').append(';');
   }
 
   @Override
@@ -121,10 +132,6 @@ public class StatementCodeGenerator extends StatementVisitor<StringBuilder> {
   public StringBuilder visit(ExpressionStatement exprStmt, StringBuilder buf) {
     buf = visit(exprStmt.expr, buf);
     return buf.append(';');
-  }
-
-  private StringBuilder visit(Arguments args, StringBuilder buf) {
-    return ArgumentsCodeGenerator.instance.visit(args, buf);
   }
 
   private StringBuilder visit(Expression expr, StringBuilder buf) {

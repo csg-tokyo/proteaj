@@ -5,9 +5,8 @@ import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.tast.*;
 
+import java.util.*;
 import javassist.*;
-
-import static proteaj.util.Modifiers.*;
 
 public class NewExpressionParser extends PackratParser<NewExpression> {
   /* NewExpression
@@ -32,11 +31,7 @@ public class NewExpressionParser extends PackratParser<NewExpression> {
     for(CtConstructor constructor : type.getDeclaredConstructors()) try {
       if(! constructor.visibleFrom(env.thisClass)) continue;
 
-      ParseResult<Arguments> args = ArgumentsParser.getParser(constructor.getParameterTypes()).applyRule(reader, env, apos);
-      if(args.isFail() && hasVarArgs(constructor.getModifiers())) {
-        args = VariableArgumentsParser.getParser(constructor.getParameterTypes()).applyRule(reader, env, apos);
-      }
-
+      ParseResult<List<Expression>> args = ArgumentsParser.getParser(constructor).applyRule(reader, env, apos);
       if(! args.isFail()) {
         env.addExceptions(constructor.getExceptionTypes(), reader.getLine());
         return success(new NewExpression(constructor, args.get()));

@@ -5,9 +5,8 @@ import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.tast.*;
 
+import java.util.*;
 import javassist.*;
-
-import static proteaj.util.Modifiers.hasVarArgs;
 
 public class SuperConstructorCallParser extends PackratParser<SuperConstructorCall> {
   /* SuperConstructorCall
@@ -28,11 +27,7 @@ public class SuperConstructorCallParser extends PackratParser<SuperConstructorCa
       for(CtConstructor constructor : superCls.getDeclaredConstructors()) {
         if(! constructor.visibleFrom(env.thisClass)) continue;
 
-        ParseResult<Arguments> args = ArgumentsParser.getParser(constructor.getParameterTypes()).applyRule(reader, env, apos);
-        if(args.isFail() && hasVarArgs(constructor.getModifiers())) {
-          args = VariableArgumentsParser.getParser(constructor.getParameterTypes()).applyRule(reader, env, apos);
-        }
-
+        ParseResult<List<Expression>> args = ArgumentsParser.getParser(constructor).applyRule(reader, env, apos);
         if(args.isFail()) continue;
 
         ParseResult<String> semicolon = KeywordParser.getParser(";").applyRule(reader, env);

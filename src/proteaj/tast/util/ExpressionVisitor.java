@@ -22,7 +22,7 @@ public abstract class ExpressionVisitor<T> {
   public abstract T visit (ParamAccess paramAccess, T t);
   public abstract T visit (LocalVariable local, T t);
   public abstract T visit (CastExpression castExpr, T t);
-  public abstract T visit (VariableOperands variableOperands, T t);
+  public abstract T visit (VariableArguments varArgs, T t);
 
   public abstract T visit (StringLiteral stringLiteral, T t);
   public abstract T visit (CharLiteral charLiteral, T t);

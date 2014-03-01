@@ -5,6 +5,7 @@ import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.tast.*;
 
+import java.util.*;
 import javassist.*;
 
 import static proteaj.util.Modifiers.*;
@@ -29,10 +30,7 @@ public class AbbMethodCallParser extends PackratParser<Expression> {
     for(CtMethod method : getMethods(env.thisClass)) try {
       if(! method.getName().equals(name)) continue;
       if(isStatic(method.getModifiers()) || ! env.isStatic()) {
-        ParseResult<Arguments> args = ArgumentsParser.getParser(method.getParameterTypes()).applyRule(reader, env, apos);
-        if(args.isFail() && hasVarArgs(method.getModifiers())) {
-          args = VariableArgumentsParser.getParser(method.getParameterTypes()).applyRule(reader, env, apos);
-        }
+        ParseResult<List<Expression>> args = ArgumentsParser.getParser(method).applyRule(reader, env, apos);
         if(! args.isFail()) {
           env.addExceptions(method.getExceptionTypes(), reader.getLine());
           if(isStatic(method.getModifiers())) return success(new StaticMethodCall(method, args.get()));

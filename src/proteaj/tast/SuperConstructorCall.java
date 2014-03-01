@@ -2,11 +2,12 @@ package proteaj.tast;
 
 import proteaj.tast.util.*;
 
-import javassist.CtConstructor;
+import java.util.*;
+import javassist.*;
 
 public class SuperConstructorCall extends Statement {
 
-  public SuperConstructorCall(CtConstructor constructor, Arguments args) {
+  public SuperConstructorCall(CtConstructor constructor, List<Expression> args) {
     this.constructor = constructor;
     this.args = args;
   }
@@ -17,6 +18,6 @@ public class SuperConstructorCall extends Statement {
   }
 
   public final CtConstructor constructor;
-  public final Arguments args;
+  public final List<Expression> args;
 }
 

@@ -1,10 +1,12 @@
 package proteaj.tast;
 
-import javassist.CtConstructor;
 import proteaj.tast.util.*;
 
+import java.util.*;
+import javassist.*;
+
 public class NewExpression extends Expression {
-  public NewExpression(CtConstructor constructor, Arguments args) {
+  public NewExpression(CtConstructor constructor, List<Expression> args) {
     super(constructor.getDeclaringClass());
     this.constructor = constructor;
     this.args = args;
@@ -16,5 +18,5 @@ public class NewExpression extends Expression {
   }
 
   public final CtConstructor constructor;
-  public final Arguments args;
+  public final List<Expression> args;
 }

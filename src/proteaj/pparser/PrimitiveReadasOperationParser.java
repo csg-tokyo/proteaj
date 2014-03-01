@@ -104,7 +104,7 @@ public abstract class PrimitiveReadasOperationParser extends ReadasOperationPars
         buf.append(reader.next());
       }
 
-      return success(new NewExpression(constructor, new Arguments(new StringLiteral(buf.toString()))));
+      return success(new NewExpression(constructor, Arrays.<Expression>asList(new StringLiteral(buf.toString()))));
     }
 
     private CtConstructor constructor;
@@ -122,7 +122,7 @@ public abstract class PrimitiveReadasOperationParser extends ReadasOperationPars
 
       if(! isLetter(reader.lookahead())) return fail("expected letter, but found " + (char) reader.lookahead(), pos, reader);
 
-      return success(new NewExpression(constructor, new Arguments(new CharLiteral(reader.next()))));
+      return success(new NewExpression(constructor, Arrays.<Expression>asList(new CharLiteral(reader.next()))));
     }
 
     private CtConstructor constructor;
@@ -142,7 +142,7 @@ public abstract class PrimitiveReadasOperationParser extends ReadasOperationPars
       ParseResult<CtClass> typename = TypeNameParser.parser.applyRule(reader, env);
       if(typename.isFail()) return fail(typename, pos, reader);
 
-      return success(new NewExpression(constructor, new Arguments(new ClassLiteral(typename.get()))));
+      return success(new NewExpression(constructor, Arrays.<Expression>asList(new ClassLiteral(typename.get()))));
     }
 
     private CtConstructor constructor;

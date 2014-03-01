@@ -63,17 +63,27 @@ public class ExpressionCodeGenerator extends ExpressionVisitor<StringBuilder> {
   @Override
   public StringBuilder visit(MethodCall methodCall, StringBuilder buf) {
     buf = visit(methodCall.expr, buf);
-    buf = buf.append('.').append(methodCall.method.getName());
-    buf = visit(methodCall.args, buf);
-    return buf;
+    buf = buf.append('.').append(methodCall.method.getName()).append('(');
+
+    List<Expression> args = methodCall.args;
+
+    if (! args.isEmpty()) buf = visit(args.get(0), buf);
+    for (int i = 1; i < args.size(); i++) buf = visit(args.get(i), buf.append(','));
+
+    return buf.append(')');
   }
 
   @Override
   public StringBuilder visit(StaticMethodCall methodCall, StringBuilder buf) {
     buf = buf.append(methodCall.method.getDeclaringClass().getName());
-    buf = buf.append('.').append(methodCall.method.getName());
-    buf = visit(methodCall.args, buf);
-    return buf;
+    buf = buf.append('.').append(methodCall.method.getName()).append('(');
+
+    List<Expression> args = methodCall.args;
+
+    if (! args.isEmpty()) buf = visit(args.get(0), buf);
+    for (int i = 1; i < args.size(); i++) buf = visit(args.get(i), buf.append(','));
+
+    return buf.append(')');
   }
 
   @Override
@@ -92,9 +102,14 @@ public class ExpressionCodeGenerator extends ExpressionVisitor<StringBuilder> {
 
   @Override
   public StringBuilder visit(NewExpression newExpression, StringBuilder buf) {
-    buf = buf.append("new ").append(newExpression.constructor.getDeclaringClass().getName());
-    buf = visit(newExpression.args, buf);
-    return buf;
+    buf = buf.append("new ").append(newExpression.constructor.getDeclaringClass().getName()).append('(');
+
+    List<Expression> args = newExpression.args;
+
+    if (! args.isEmpty()) buf = visit(args.get(0), buf);
+    for (int i = 1; i < args.size(); i++) buf = visit(args.get(i), buf.append(','));
+
+    return buf.append(')');
   }
 
   @Override
@@ -173,7 +188,7 @@ public class ExpressionCodeGenerator extends ExpressionVisitor<StringBuilder> {
   }
 
   @Override
-  public StringBuilder visit(VariableOperands operands, StringBuilder buf) {
+  public StringBuilder visit(VariableArguments operands, StringBuilder buf) {
     buf = buf.append("new ").append(operands.getType().getName());
     buf = buf.append('{');
 
@@ -243,10 +258,6 @@ public class ExpressionCodeGenerator extends ExpressionVisitor<StringBuilder> {
     }
     buf = buf.append(')');
     return buf;
-  }
-
-  private StringBuilder visit(Arguments args, StringBuilder buf) {
-    return ArgumentsCodeGenerator.instance.visit(args, buf);
   }
 
   private ExpressionCodeGenerator() {}

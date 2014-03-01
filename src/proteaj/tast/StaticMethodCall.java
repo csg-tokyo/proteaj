@@ -1,10 +1,12 @@
 package proteaj.tast;
 
-import javassist.*;
 import proteaj.tast.util.*;
 
+import java.util.*;
+import javassist.*;
+
 public class StaticMethodCall extends Expression {
-  public StaticMethodCall(CtMethod method, Arguments args) throws NotFoundException {
+  public StaticMethodCall(CtMethod method, List<Expression> args) throws NotFoundException {
     super(method.getReturnType());
     this.method = method;
     this.args = args;
@@ -16,6 +18,6 @@ public class StaticMethodCall extends Expression {
   }
 
   public final CtMethod method;
-  public final Arguments args;
+  public final List<Expression> args;
 }
 
