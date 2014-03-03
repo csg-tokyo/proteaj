@@ -13,6 +13,18 @@ public class TryStatement extends Statement {
     this.finallyBlock = null;
   }
 
+  public TryStatement(Block tryBlock, List<Triad<CtClass, String, Block>> catchBlocks) {
+    this.tryBlock = tryBlock;
+    this.catchBlocks = catchBlocks;
+    this.finallyBlock = null;
+  }
+
+  public TryStatement(Block tryBlock, List<Triad<CtClass, String, Block>> catchBlocks, Block finallyBlock) {
+    this.tryBlock = tryBlock;
+    this.catchBlocks = catchBlocks;
+    this.finallyBlock = finallyBlock;
+  }
+
   public void addCatchBlock(CtClass type, String name, Block block) {
     catchBlocks.add(new Triad<CtClass, String, Block>(type, name, block));
   }

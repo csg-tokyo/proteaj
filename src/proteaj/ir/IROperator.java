@@ -75,6 +75,7 @@ public class IROperator {
   private CtClass returnType;
   private IRPattern pattern;
   private CtClass declCls;
-  private CtMethod actualMethod;
+
+  public final CtMethod actualMethod;
 }
 

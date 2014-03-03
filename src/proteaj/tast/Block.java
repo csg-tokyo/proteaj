@@ -9,6 +9,10 @@ public class Block extends Statement {
     this.statements = new ArrayList<Statement>();
   }
 
+  public Block(List<Statement> statements) {
+    this.statements = statements;
+  }
+
   public void addStatement(Statement stmt) {
     statements.add(stmt);
   }

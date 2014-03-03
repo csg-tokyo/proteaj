@@ -28,6 +28,10 @@ public class Modifiers {
     return (mod & READAS) == READAS;
   }
 
+  public static boolean isLazy(int mod) {
+    return (mod & LAZY) == LAZY;
+  }
+
   public static boolean isOption(int mod) {
     return (mod & OPTION) == OPTION;
   }

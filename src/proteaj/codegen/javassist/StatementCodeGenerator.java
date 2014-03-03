@@ -7,11 +7,15 @@ import proteaj.util.*;
 import java.util.*;
 import javassist.*;
 
-public class StatementCodeGenerator extends StatementVisitor<StringBuilder> {
+public class StatementCodeGenerator implements StatementVisitor<StringBuilder> {
   public static final StatementCodeGenerator instance = new StatementCodeGenerator();
 
   public StringBuilder codeGen (Statement stmt, StringBuilder buf) {
     return visit(stmt, buf);
+  }
+
+  public StringBuilder visit(Statement stmt, StringBuilder buf) {
+    return stmt.accept(this, buf);
   }
 
   @Override

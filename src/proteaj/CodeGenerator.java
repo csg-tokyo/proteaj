@@ -1,5 +1,6 @@
 package proteaj;
 
+import proteaj.codegen.lazy.ProgramTranslator;
 import proteaj.error.*;
 import proteaj.io.*;
 import proteaj.tast.*;
@@ -19,6 +20,9 @@ public class CodeGenerator {
   }
 
   public void codegen (Program program) {
+    ProgramTranslator translator = new ProgramTranslator(program);
+    program = translator.translate();
+
     for (ClassDeclaration clazz : program.getClasses()) codegen(clazz);
     for (OperatorModuleDeclaration syntax : program.getOperatorsModules()) codegen(syntax);
   }

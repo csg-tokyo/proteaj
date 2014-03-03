@@ -2,9 +2,7 @@ package proteaj.tast.util;
 
 import proteaj.tast.*;
 
-public abstract class ExpressionVisitor<T> {
-  public T visit (Expression e, T t) { return e.accept(this, t); }
-
+public interface ExpressionVisitor<T> {
   public abstract T visit (Operation operation, T t);
   public abstract T visit (LocalVarDecl local, T t);
   public abstract T visit (ExpressionList list, T t);

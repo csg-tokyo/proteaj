@@ -15,12 +15,20 @@ public class Program {
     for (IRSyntax syntax: ir.getSyntax()) operatorModules.add(new OperatorModuleDeclaration(syntax));
   }
 
+  public ClassDeclaration getClass(CtClass clazz) {
+    return classes.get(clazz);
+  }
+
   public Collection<ClassDeclaration> getClasses() {
     return classes.values();
   }
 
   public Collection<OperatorModuleDeclaration> getOperatorsModules() {
     return operatorModules;
+  }
+
+  public void addClass (ClassDeclaration clazz) {
+    classes.put(clazz.clazz, clazz);
   }
 
   public void addMethod (MethodDeclaration method) {
@@ -41,6 +49,10 @@ public class Program {
 
   public void addField (FieldDeclaration field) {
     getClassDeclaration(field.field).addField(field);
+  }
+
+  public void addClasses (List<ClassDeclaration> classes) {
+    for (ClassDeclaration clazz : classes) addClass(clazz);
   }
 
   public void addMethods (List<MethodDeclaration> methods) {

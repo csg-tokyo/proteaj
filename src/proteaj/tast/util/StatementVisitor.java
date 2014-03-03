@@ -2,9 +2,7 @@ package proteaj.tast.util;
 
 import proteaj.tast.*;
 
-public abstract class StatementVisitor<T> {
-  public T visit (Statement stmt, T t) { return stmt.accept(this, t); }
-
+public interface StatementVisitor<T> {
   public abstract T visit (Block block, T t);
   public abstract T visit (ThisConstructorCall thisStmt, T t);
   public abstract T visit (SuperConstructorCall superStmt, T t);

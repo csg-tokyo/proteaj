@@ -10,8 +10,12 @@ import javassist.*;
 
 import static proteaj.util.Escape.*;
 
-public class ExpressionCodeGenerator extends ExpressionVisitor<StringBuilder> {
+public class ExpressionCodeGenerator implements ExpressionVisitor<StringBuilder> {
   public static final ExpressionCodeGenerator instance = new ExpressionCodeGenerator();
+
+  public StringBuilder visit(Expression expr, StringBuilder buf) {
+    return expr.accept(this, buf);
+  }
 
   @Override
   public StringBuilder visit(Operation operation, StringBuilder buf) {

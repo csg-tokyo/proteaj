@@ -8,7 +8,7 @@ public class ClassDeclaration {
     this.clazz = clazz;
     this.filePath = filePath;
 
-    this.methods = new ArrayList<MethodDeclaration>();
+    this.methods = new HashMap<CtMethod, MethodDeclaration>();
     this.constructors = new ArrayList<ConstructorDeclaration>();
     this.fields = new ArrayList<FieldDeclaration>();
     this.defaultValues = new ArrayList<DefaultValueDefinition>();
@@ -16,7 +16,7 @@ public class ClassDeclaration {
   }
 
   public void addMethod (MethodDeclaration method) {
-    methods.add(method);
+    methods.put(method.method, method);
   }
 
   public void addConstructor (ConstructorDeclaration constructor) {
@@ -35,7 +35,11 @@ public class ClassDeclaration {
     initializers.add(clIni);
   }
 
-  public List<MethodDeclaration> getMethods() { return methods; }
+  public MethodDeclaration getMethod(CtMethod method) {
+    return methods.get(method);
+  }
+
+  public Collection<MethodDeclaration> getMethods() { return methods.values(); }
   public List<ConstructorDeclaration> getConstructors() { return constructors; }
   public List<FieldDeclaration> getFields() { return fields; }
   public List<DefaultValueDefinition> getDefaultValues() { return defaultValues; }
@@ -44,7 +48,7 @@ public class ClassDeclaration {
   public final CtClass clazz;
   public final String filePath;
 
-  private List<MethodDeclaration> methods;
+  private Map<CtMethod, MethodDeclaration> methods;
   private List<ConstructorDeclaration> constructors;
   private List<FieldDeclaration> fields;
   private List<DefaultValueDefinition> defaultValues;

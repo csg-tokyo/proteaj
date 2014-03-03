@@ -25,6 +25,10 @@ public class IROperandAttribute {
     return Modifiers.isReadas(mod);
   }
 
+  public boolean isLazy() {
+    return Modifiers.isLazy(mod);
+  }
+
   public boolean isOption() {
     return Modifiers.isOption(mod);
   }

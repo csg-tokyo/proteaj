@@ -141,7 +141,7 @@ public class IRPattern {
   }
 
   public boolean isOperand(int i) {
-    assert 0 <= i && i < getPatternLength();
+    assert 0 <= i && i < pattern.length;
     return (pattern[i] & PATTERN_OPERAND) == PATTERN_OPERAND;
   }
 
@@ -151,7 +151,7 @@ public class IRPattern {
   }
 
   public boolean isAndPredicate(int i) {
-    assert 0 <= i && i < getPatternLength();
+    assert 0 <= i && i < pattern.length;
     return (pattern[i] & PATTERN_ANDPRED) == PATTERN_ANDPRED;
   }
 
@@ -182,6 +182,10 @@ public class IRPattern {
 
   public CtMethod getDefaultMethod(int i) {
     return getOperandModifier(i).getDefaultMethod();
+  }
+
+  public boolean isLazy(int i) {
+    return getOperandModifier(i).isLazy();
   }
 
   public IROperandAttribute getOperandModifier(int i) {
