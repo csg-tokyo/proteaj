@@ -1,6 +1,6 @@
 package proteaj.lang;
 
-public class Identifier {
+public pure class Identifier {
   public Identifier(String id) {
     this.id = id;
   }

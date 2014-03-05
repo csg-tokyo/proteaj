@@ -44,6 +44,10 @@ public class Modifiers {
     return (mod & NON_ASSOC) == NON_ASSOC;
   }
 
+  public static boolean isPure(int mod) {
+    return (mod & PURE) == PURE;
+  }
+
   public static String toString(int mod) {
     StringBuilder buf = new StringBuilder();
     boolean isEmpty = true;
@@ -84,6 +88,7 @@ public class Modifiers {
   public static final int LAZY         = 0x008000;
   public static final int RIGHT_ASSOC  = 0x010000;
   public static final int NON_ASSOC    = 0x020000;
+  public static final int PURE         = 0x040000;
 
   private static final Map<String, Integer> modifiers = new HashMap<String, Integer>();
   private static final Map<Integer, String> modNames = new HashMap<Integer, String>();
@@ -104,6 +109,7 @@ public class Modifiers {
     modifiers.put("lazy", LAZY);
     modifiers.put("rassoc", RIGHT_ASSOC);
     modifiers.put("nonassoc", NON_ASSOC);
+    modifiers.put("pure", PURE);
 
     modNames.put(PUBLIC, "public");
     modNames.put(PROTECTED, "protected");
@@ -120,6 +126,7 @@ public class Modifiers {
     modNames.put(LAZY, "lazy");
     modNames.put(RIGHT_ASSOC, "rassoc");
     modNames.put(NON_ASSOC, "nonassoc");
+    modNames.put(PURE, "pure");
   }
 }
 

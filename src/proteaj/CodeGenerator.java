@@ -8,7 +8,7 @@ import proteaj.tast.*;
 import java.io.*;
 import javassist.*;
 
-import static proteaj.codegen.javassist.BodyCodeGenerator.codeGen;
+import static proteaj.codegen.JavassistCodeGenerator.codeGen;
 
 public class CodeGenerator {
   public CodeGenerator() {

@@ -378,7 +378,7 @@ public class SigSemanticsChecker {
 
   private CompilationUnit cunit;
 
-  private static final int CLASS_MODIFIER = ABSTRACT | FINAL | PUBLIC | STRICT;
+  private static final int CLASS_MODIFIER = ABSTRACT | FINAL | PUBLIC | STRICT | PURE;
   private static final int INTERFACE_MODIFIER = ABSTRACT | PUBLIC | STRICT;
   private static final int SYNTAX_MODIFIER = PUBLIC | STRICT;
   private static final int CONSTRUCTOR_MODIFIER = PUBLIC | PROTECTED | PRIVATE;
@@ -387,8 +387,8 @@ public class SigSemanticsChecker {
   private static final int METHOD_MODIFIER = ABSTRACT | FINAL | NATIVE | PUBLIC | PROTECTED | PRIVATE | STATIC | STRICT | SYNCHRONIZED;
   private static final int ABSTRACT_METHOD_MODIFIER = PUBLIC | ABSTRACT;
   private static final int CONCRETE_METHOD_MODIFIER = FINAL | NATIVE | PUBLIC | PROTECTED | PRIVATE | STATIC | STRICT | SYNCHRONIZED;
-  private static final int OPERATOR_MODIFIER = NON_ASSOC | PUBLIC | READAS | RIGHT_ASSOC | STRICT | SYNCHRONIZED;
-  private static final int OPERAND_MODIFIER = VARARGS | LAZY;
+  private static final int OPERATOR_MODIFIER = NON_ASSOC | PUBLIC | READAS | RIGHT_ASSOC | STRICT | SYNCHRONIZED | PURE;
+  private static final int OPERAND_MODIFIER = VARARGS | LAZY | PURE;
   private static final int PARAMETER_MODIFIER = FINAL | VARARGS;
 }
 

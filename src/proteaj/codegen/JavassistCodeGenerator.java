@@ -1,17 +1,171 @@
-package proteaj.codegen.javassist;
+package proteaj.codegen;
 
 import proteaj.ir.*;
 import proteaj.ir.primitive.*;
 import proteaj.tast.*;
 import proteaj.tast.util.*;
+import proteaj.util.*;
 
 import java.util.*;
 import javassist.*;
 
-import static proteaj.util.Escape.*;
+import static proteaj.util.Escape.escape;
 
-public class ExpressionCodeGenerator implements ExpressionVisitor<StringBuilder> {
-  public static final ExpressionCodeGenerator instance = new ExpressionCodeGenerator();
+public class JavassistCodeGenerator implements ExpressionVisitor<StringBuilder>, StatementVisitor<StringBuilder> {
+  public static String codeGen (MethodBody body)       { return instance.visit(body, new StringBuilder()).toString(); }
+  public static String codeGen (ConstructorBody body)  { return instance.visit(body, new StringBuilder()).toString(); }
+  public static String codeGen (FieldBody body)        { return instance.visit(body, new StringBuilder()).toString(); }
+  public static String codeGen (DefaultValue body)     { return instance.visit(body, new StringBuilder()).toString(); }
+  public static String codeGen (ClassInitializer body) { return instance.visit(body, new StringBuilder()).toString(); }
+
+  public static final JavassistCodeGenerator instance = new JavassistCodeGenerator();
+
+  public StringBuilder visit (MethodBody body, StringBuilder buf) {
+    return visit(body.block, buf);
+  }
+
+  public StringBuilder visit (ConstructorBody body, StringBuilder buf) {
+    return visit(body.block, buf);
+  }
+
+  public StringBuilder visit (FieldBody body, StringBuilder buf) {
+    return visit(body.expr, buf);
+  }
+
+  public StringBuilder visit (DefaultValue body, StringBuilder buf) {
+    buf = buf.append('{').append('\n').append("return ");
+    buf = visit(body.expr, buf);
+    buf = buf.append(';').append('\n').append('}');
+    return buf;
+  }
+
+  public StringBuilder visit (ClassInitializer body, StringBuilder buf) {
+    return visit(body.block, buf);
+  }
+
+  public StringBuilder visit(Statement stmt, StringBuilder buf) {
+    return stmt.accept(this, buf);
+  }
+
+  @Override
+  public StringBuilder visit(Block block, StringBuilder buf) {
+    buf = buf.append('{');
+    for (Statement s : block.getStatements()) buf = visit(s, buf.append('\n'));
+    buf = buf.append('}');
+    return buf;
+  }
+
+  @Override
+  public StringBuilder visit(ThisConstructorCall thisStmt, StringBuilder buf) {
+    buf = buf.append("this").append('(');
+
+    List<Expression> args = thisStmt.args;
+
+    if (! args.isEmpty()) buf = visit(args.get(0), buf);
+    for (int i = 1; i < args.size(); i++) buf = visit(args.get(i), buf.append(','));
+
+    return buf.append(')').append(';');
+  }
+
+  @Override
+  public StringBuilder visit(SuperConstructorCall superStmt, StringBuilder buf) {
+    buf = buf.append("super").append('(');
+
+    List<Expression> args = superStmt.args;
+
+    if (! args.isEmpty()) buf = visit(args.get(0), buf);
+    for (int i = 1; i < args.size(); i++) buf = visit(args.get(i), buf.append(','));
+
+    return buf.append(')').append(';');
+  }
+
+  @Override
+  public StringBuilder visit(LocalVarDeclStatement localDecl, StringBuilder buf) {
+    buf = visit(localDecl.lvdecl, buf);
+    return buf.append(';');
+  }
+
+  @Override
+  public StringBuilder visit(IfStatement ifStmt, StringBuilder buf) {
+    buf = buf.append("if ").append('(');
+    buf = visit(ifStmt.condition, buf);
+    buf = buf.append(')');
+    buf = visit(ifStmt.thenStmt, buf);
+    if (ifStmt.elseStmt != null) {
+      buf = buf.append("else ");
+      buf = visit(ifStmt.elseStmt, buf);
+    }
+    return buf;
+  }
+
+  @Override
+  public StringBuilder visit(WhileStatement whileStmt, StringBuilder buf) {
+    buf = buf.append("while ").append('(');
+    buf = visit(whileStmt.condition, buf);
+    buf = buf.append(')');
+    buf = visit(whileStmt.stmt, buf);
+    return buf;
+  }
+
+  @Override
+  public StringBuilder visit(DoWhileStatement doWhileStmt, StringBuilder buf) {
+    buf = buf.append("do ");
+    buf = visit(doWhileStmt.stmt, buf);
+    buf = buf.append("while ").append('(');
+    buf = visit(doWhileStmt.condition, buf);
+    return buf.append(')').append(';');
+  }
+
+  @Override
+  public StringBuilder visit(ForStatement forStmt, StringBuilder buf) {
+    buf = buf.append("for ").append('(');
+    buf = visit(forStmt.init, buf).append(';');
+    buf = visit(forStmt.cond, buf).append(';');
+    buf = visit(forStmt.update, buf);
+    buf = buf.append(')');
+    buf = visit(forStmt.stmt, buf);
+    return buf;
+  }
+
+  @Override
+  public StringBuilder visit(TryStatement tryStmt, StringBuilder buf) {
+    buf = buf.append("try ");
+    buf = visit(tryStmt.tryBlock, buf);
+    for(Triad<CtClass, String, Block> c : tryStmt.getCatchBlocks()) {
+      buf = buf.append("catch ").append('(');
+      buf = buf.append(c.getFirst().getName()).append(' ').append(c.getSecond());
+      buf = buf.append(')');
+      buf = visit(c.getThird(), buf);
+    }
+    if (tryStmt.hasFinallyBlock()) {
+      buf = buf.append("finally ");
+      buf = visit(tryStmt.getFinallyBlock(), buf);
+    }
+    return buf;
+  }
+
+  @Override
+  public StringBuilder visit(ThrowStatement throwStmt, StringBuilder buf) {
+    buf = buf.append("throw ");
+    buf = visit(throwStmt.e, buf);
+    return buf.append(';');
+  }
+
+  @Override
+  public StringBuilder visit(ReturnStatement returnStmt, StringBuilder buf) {
+    if (returnStmt.value != null) {
+      buf = buf.append("return ");
+      buf = visit(returnStmt.value, buf);
+      return buf.append(';');
+    }
+    else return buf.append("return;");
+  }
+
+  @Override
+  public StringBuilder visit(ExpressionStatement exprStmt, StringBuilder buf) {
+    buf = visit(exprStmt.expr, buf);
+    return buf.append(';');
+  }
 
   public StringBuilder visit(Expression expr, StringBuilder buf) {
     return expr.accept(this, buf);
@@ -264,5 +418,5 @@ public class ExpressionCodeGenerator implements ExpressionVisitor<StringBuilder>
     return buf;
   }
 
-  private ExpressionCodeGenerator() {}
+  private JavassistCodeGenerator() {}
 }
