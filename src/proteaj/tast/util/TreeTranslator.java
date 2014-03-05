@@ -7,6 +7,38 @@ import java.util.*;
 import javassist.*;
 
 public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVisitor<Expression>  {
+  public ClassDeclaration translate(ClassDeclaration declaration) {
+    ClassDeclaration ret = new ClassDeclaration(declaration.clazz, declaration.filePath);
+
+    for (MethodDeclaration method       : declaration.getMethods())       ret.addMethod(translate(method));
+    for (ConstructorDeclaration cons    : declaration.getConstructors())  ret.addConstructor(translate(cons));
+    for (FieldDeclaration field         : declaration.getFields())        ret.addField(translate(field));
+    for (DefaultValueDefinition def     : declaration.getDefaultValues()) ret.addDefaultValue(translate(def));
+    for (ClassInitializerDefinition def : declaration.getInitializers())  ret.addClassInitializer(translate(def));
+
+    return ret;
+  }
+
+  public MethodDeclaration translate(MethodDeclaration declaration) {
+    return new MethodDeclaration(declaration.method, translate(declaration.body));
+  }
+
+  public ConstructorDeclaration translate(ConstructorDeclaration declaration) {
+    return new ConstructorDeclaration(declaration.constructor, translate(declaration.body));
+  }
+
+  public FieldDeclaration translate(FieldDeclaration declaration) {
+    return new FieldDeclaration(declaration.field, translate(declaration.body));
+  }
+
+  public DefaultValueDefinition translate(DefaultValueDefinition definition) {
+    return new DefaultValueDefinition(definition.method, translate(definition.body));
+  }
+
+  public ClassInitializerDefinition translate(ClassInitializerDefinition definition) {
+    return new ClassInitializerDefinition(definition.clIni, translate(definition.body));
+  }
+
   public MethodBody translate(MethodBody body) {
     return new MethodBody(translate(body.block));
   }

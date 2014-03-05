@@ -15,6 +15,13 @@ public class Program {
     for (IRSyntax syntax: ir.getSyntax()) operatorModules.add(new OperatorModuleDeclaration(syntax));
   }
 
+  public Program(List<ClassDeclaration> classes, List<OperatorModuleDeclaration> operatorModules) {
+    this.classes = new HashMap<CtClass, ClassDeclaration>();
+    this.operatorModules = operatorModules;
+
+    for(ClassDeclaration c : classes) this.classes.put(c.clazz, c);
+  }
+
   public ClassDeclaration getClass(CtClass clazz) {
     return classes.get(clazz);
   }
@@ -23,7 +30,7 @@ public class Program {
     return classes.values();
   }
 
-  public Collection<OperatorModuleDeclaration> getOperatorsModules() {
+  public List<OperatorModuleDeclaration> getOperatorsModules() {
     return operatorModules;
   }
 

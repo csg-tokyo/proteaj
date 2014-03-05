@@ -1,0 +1,15 @@
+package lazy;
+
+using lazy.LazyOperators;
+using print.PrintOperators;
+
+public class Main {
+  public static void main(String[] args) {
+    int a = unless true foo();
+  }
+
+  public static int foo() {
+    System.out.println("then");
+    return 1;
+  }
+}

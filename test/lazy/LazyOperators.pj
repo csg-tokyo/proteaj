@@ -3,6 +3,9 @@ package lazy;
 public operators LazyOperators {
   public int "unless" cond expr (lazy boolean cond, lazy int expr) {
     if (! cond) return expr;
-    else return 0;
+    else {
+      System.out.println("else");
+      return 0;
+    }
   }
 }

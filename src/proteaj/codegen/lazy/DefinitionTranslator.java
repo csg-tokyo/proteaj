@@ -11,6 +11,7 @@ public class DefinitionTranslator extends TreeTranslator {
     this.lazyMap = lazyMap;
   }
 
+  @Override
   public Expression translate(ParamAccess paramAccess) {
     if (lazyMap.containsKey(paramAccess.index)) try {
       CtMethod method = lazyMap.get(paramAccess.index);
