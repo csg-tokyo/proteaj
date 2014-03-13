@@ -79,7 +79,7 @@ public class TranslateLazy {
       MethodBody body = new DefinitionTranslator(lazyMap).translate(methodDcl.body);
       program.addMethod(new MethodDeclaration(method, body));
 
-      methods.put(operator, new Pair<CtMethod, Map<Integer, CtMethod>>(method, lazyMap));
+      methods.put(operator, Pair.make(method, lazyMap));
     } catch (NotFoundException e) {
       assert false;
       throw new RuntimeException(e);

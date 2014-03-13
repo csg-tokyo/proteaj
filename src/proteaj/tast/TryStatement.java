@@ -13,6 +13,12 @@ public class TryStatement extends Statement {
     this.finallyBlock = null;
   }
 
+  public TryStatement(Block tryBlock, Block finallyBlock) {
+    this.tryBlock = tryBlock;
+    this.catchBlocks = new ArrayList<Triad<CtClass,String,Block>>();
+    this.finallyBlock = finallyBlock;
+  }
+
   public TryStatement(Block tryBlock, List<Triad<CtClass, String, Block>> catchBlocks) {
     this.tryBlock = tryBlock;
     this.catchBlocks = catchBlocks;

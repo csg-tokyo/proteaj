@@ -19,8 +19,8 @@ public class ProgramTranslator extends TreeTranslator {
   public Expression translate(Operation operation) {
     if (methods.containsKey(operation.operator)) {
       Pair<CtMethod, Map<Integer, CtMethod>> pair = methods.get(operation.operator);
-      CtMethod method = pair.getFirst();
-      Map<Integer, CtMethod> lazyMap = pair.getSecond();
+      CtMethod method = pair._1;
+      Map<Integer, CtMethod> lazyMap = pair._2;
 
       List<Expression> operands = new ArrayList<Expression>();
 
@@ -42,7 +42,7 @@ public class ProgramTranslator extends TreeTranslator {
             args.add(local);
           }
 
-          CtConstructor constructor = new CtConstructor(params.toArray(new CtClass[0]), thunk);
+          CtConstructor constructor = new CtConstructor(params.toArray(new CtClass[params.size()]), thunk);
           thunk.addConstructor(constructor);
 
           Block block = new Block();

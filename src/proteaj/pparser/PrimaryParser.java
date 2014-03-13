@@ -1,11 +1,10 @@
 package proteaj.pparser;
 
-import proteaj.ir.Environment;
 import proteaj.tast.Expression;
 
-import java.util.*;
+import static proteaj.pparser.PackratParserCombinators.*;
 
-public class PrimaryParser extends ComposedParser_Alternative<Expression> {
+public class PrimaryParser {
   /* Primary
    *  : AbbMethodCall
    *  | Variable
@@ -17,24 +16,9 @@ public class PrimaryParser extends ComposedParser_Alternative<Expression> {
    *  | Literal
    *  | ParenthesizedJavaExpression
    */
-  private PrimaryParser() {
-    super("PrimaryParser");
-  }
-
-  @Override
-  protected List<PackratParser<? extends  Expression>> getParsers(Environment env) {
-    return asList(
-        AbbMethodCallParser.parser,
-        VariableParser.parser,
-        StaticMethodCallParser.parser,
-        StaticFieldAccessParser.parser,
-        NewExpressionParser.parser,
-        NewArrayExpressionParser.parser,
-        CastExpressionParser.parser,
-        ParenthesizedJavaExpressionParser.parser,
-        LiteralParser.parser
-    );
-  }
-
-  public static final PrimaryParser parser = new PrimaryParser();
+  public static final PackratParser<Expression> parser =
+      choice(AbbMethodCallParser.parser, VariableParser.parser, StaticMethodCallParser.parser,
+          StaticFieldAccessParser.parser, NewExpressionParser.parser, NewArrayExpressionParser.parser,
+          CastExpressionParser.parser, ParenthesizedJavaExpressionParser.parser, LiteralParser.parser);
 }
+

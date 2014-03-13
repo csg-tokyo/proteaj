@@ -38,14 +38,14 @@ public abstract class PackratParser<T> {
       }
     }
     else {
-      reader.setPos(m.getSecond());
+      reader.setPos(m._2);
 
-      if(m.getFirst() instanceof LR) {
-        LR<T> lr = (LR<T>)m.getFirst();
+      if(m._1 instanceof LR) {
+        LR<T> lr = (LR<T>)m._1;
         setupLR(reader, lr);
         return lr.getSeed();
       }
-      else return m.getFirst();
+      else return m._1;
     }
   }
 
@@ -60,10 +60,10 @@ public abstract class PackratParser<T> {
       Pair<ParseResult<T>, Integer> m = mtable.lookup(reader, pos);
       int position = reader.getPos();
 
-      if(ans.isFail() || position <= m.getSecond()) {
+      if(ans.isFail() || position <= m._2) {
         getState(reader).heads.remove(pos);
-        reader.setPos(m.getSecond());
-        return m.getFirst();
+        reader.setPos(m._2);
+        return m._1;
       }
       else mtable.memoize(reader, pos, ans, position);
     }
@@ -82,15 +82,15 @@ public abstract class PackratParser<T> {
 
   private ParseResult<T> lrAnswer(SourceStringReader reader, Environment env, int pos) {
     Pair<ParseResult<T>, Integer> m = mtable.lookup(reader, pos);
-    assert m.getFirst() instanceof LR;
+    assert m._1 instanceof LR;
 
-    LR<T> lr = (LR<T>)m.getFirst();
+    LR<T> lr = (LR<T>)m._1;
     Head h = lr.getHead();
 
     if(h.getParser() != this) return lr.getSeed();
-    mtable.memoize(reader, pos, lr.getSeed(), m.getSecond());
+    mtable.memoize(reader, pos, lr.getSeed(), m._2);
 
-    if(m.getFirst().isFail()) return FAIL;
+    if(m._1.isFail()) return FAIL;
     else return growLR(h, reader, env, pos);
   }
 
@@ -281,7 +281,7 @@ class MemoTable<T> {
     Map<Integer, Pair<ParseResult<T>, Integer>> map = memos.get(reader);
 
     if (map.containsKey(bPos)) {
-      ParseResult<T> memo = map.get(bPos).getFirst();
+      ParseResult<T> memo = map.get(bPos)._1;
 
       if (! memo.isFail() && ! (memo instanceof LR) && ast.isFail()) return;
     }

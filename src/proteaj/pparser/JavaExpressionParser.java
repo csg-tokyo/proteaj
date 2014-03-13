@@ -1,11 +1,10 @@
 package proteaj.pparser;
 
-import proteaj.ir.Environment;
-import proteaj.tast.Expression;
+import proteaj.tast.*;
 
-import java.util.*;
+import static proteaj.pparser.PackratParserCombinators.*;
 
-public class JavaExpressionParser extends ComposedParser_Alternative<Expression> {
+public class JavaExpressionParser {
   /* JavaExpression
    *  : AssignExpression
    *  | ArrayLength
@@ -14,22 +13,7 @@ public class JavaExpressionParser extends ComposedParser_Alternative<Expression>
    *  | ArrayAccess
    *  | Primary
    */
-  private JavaExpressionParser() {
-    super("JavaExpressionParser");
-  }
-
-  @Override
-  protected List<PackratParser<? extends  Expression>> getParsers(Environment env) {
-    return asList(
-        AssignExpressionParser.parser,
-        ArrayLengthParser.parser,
-        MethodCallParser.parser,
-        FieldAccessParser.parser,
-        ArrayAccessParser.parser,
-        PrimaryParser.parser
-    );
-  }
-
-  public static final JavaExpressionParser parser = new JavaExpressionParser();
+  public static final PackratParser<Expression> parser =
+      choice(AssignExpressionParser.parser, ArrayLengthParser.parser, MethodCallParser.parser,
+          FieldAccessParser.parser, ArrayAccessParser.parser, PrimaryParser.parser);
 }
-

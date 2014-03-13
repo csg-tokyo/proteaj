@@ -99,6 +99,10 @@ public class Environment {
     env.put(name, expr);
   }
 
+  public void declareLocal (String name, CtClass type) {
+    env.put(name, new LocalVariable(name, type));
+  }
+
   public void addExceptions(CtClass[] exceptions, int line) throws NotFoundException {
     for(CtClass e : exceptions) addException(e, line);
   }
@@ -136,7 +140,7 @@ public class Environment {
     return ! exceptions.isEmpty();
   }
 
-  public Map<CtClass, List<Integer>> getExceptionsData() {
+  public Map<CtClass, List<Integer>> getExceptions() {
     return exceptions;
   }
 

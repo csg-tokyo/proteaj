@@ -15,9 +15,8 @@ public class BodyParser {
     try {
       CtClass returnType = method.getReturnType();
       CtClass[] exceptionTypes = method.getExceptionTypes();
-      initParser_Statement(returnType);
 
-      ParseResult<MethodBody> mbody = MethodBodyParser.parser.applyRule(reader, env);
+      ParseResult<MethodBody> mbody = new StatementParsers(returnType).methodBody.applyRule(reader, env);
       if(! mbody.isFail()) {
         env.removeExceptions(exceptionTypes);
 
@@ -37,9 +36,8 @@ public class BodyParser {
   public ConstructorBody parseConstructorBody(CtConstructor constructor, SourceStringReader reader, Environment env) throws CompileErrors {
     try {
       CtClass[] exceptionTypes = constructor.getExceptionTypes();
-      initParser_Statement();
 
-      ParseResult<ConstructorBody> cbody = ConstructorBodyParser.parser.applyRule(reader, env);
+      ParseResult<ConstructorBody> cbody = new StatementParsers().constructorBody.applyRule(reader, env);
       if(! cbody.isFail()) {
         env.removeExceptions(exceptionTypes);
 
@@ -89,9 +87,7 @@ public class BodyParser {
   }
 
   public ClassInitializer parseStaticInitializer(SourceStringReader reader, Environment env) throws CompileErrors {
-    initParser_Statement();
-
-    ParseResult<ClassInitializer> sibody = StaticInitializerParser.parser.applyRule(reader, env);
+    ParseResult<ClassInitializer> sibody = new StatementParsers().classInitializer.applyRule(reader, env);
     if(! sibody.isFail()) {
       if(env.hasException()) {
         throw createUnhandledExceptions(reader, env);
@@ -105,20 +101,12 @@ public class BodyParser {
 
   private CompileErrors createUnhandledExceptions(SourceStringReader reader, Environment env) {
     List<CompileError> errors = new ArrayList<CompileError>();
-    for(Entry<CtClass, List<Integer>> entry : env.getExceptionsData().entrySet()) {
+    for(Entry<CtClass, List<Integer>> entry : env.getExceptions().entrySet()) {
       CtClass exception = entry.getKey();
       for(int line : entry.getValue()) {
         errors.add(new ParseError("unhandled exception type " + exception.getName(), reader.filePath, line));
       }
     }
     return new CompileErrors(errors);
-  }
-
-  private void initParser_Statement() {
-    ReturnStatementParser.parser.disable();
-  }
-
-  private void initParser_Statement(CtClass returnType) {
-    ReturnStatementParser.parser.init(returnType);
   }
 }

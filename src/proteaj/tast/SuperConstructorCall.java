@@ -6,6 +6,10 @@ import java.util.*;
 import javassist.*;
 
 public class SuperConstructorCall extends Statement {
+  public SuperConstructorCall(CtConstructor constructor) {
+    this.constructor = constructor;
+    this.args = Collections.emptyList();
+  }
 
   public SuperConstructorCall(CtConstructor constructor, List<Expression> args) {
     this.constructor = constructor;

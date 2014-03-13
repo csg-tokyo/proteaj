@@ -1,8 +1,10 @@
 package proteaj.pparser;
 
-import proteaj.io.SourceStringReader;
-import proteaj.ir.Environment;
+import proteaj.io.*;
+import proteaj.ir.*;
 import proteaj.tast.*;
+
+import static proteaj.pparser.PackratParserCombinators.*;
 
 public class ArrayLengthParser extends PackratParser<ArrayLength> {
   /* ArrayLength
@@ -12,21 +14,20 @@ public class ArrayLengthParser extends PackratParser<ArrayLength> {
   protected ParseResult<ArrayLength> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
-    ParseResult<Expression> expr = JavaExpressionParser.parser.applyRule(reader, env);
+    ParseResult<Expression> expr = expr_dot_length.applyRule(reader, env);
     if (expr.isFail()) return fail(expr, pos, reader);
-
-    ParseResult<String> dot = KeywordParser.getParser(".").applyRule(reader, env);
-    if (dot.isFail()) return fail(dot, pos, reader);
-
-    ParseResult<String> len = KeywordParser.getParser("length").applyRule(reader, env);
-    if (len.isFail()) return fail(len, pos, reader);
 
     if (expr.get().getType().isArray()) return success(new ArrayLength(expr.get()));
     else return fail("not array type", pos, reader);
   }
 
+  private static final PackratParser<Expression> expr_dot_length =
+      postfix(postfix(ref(new ParserThunk<Expression>() {
+    @Override
+    public PackratParser<Expression> getParser() { return JavaExpressionParser.parser; }
+  }), "."), "length");
+
   public static final ArrayLengthParser parser = new ArrayLengthParser();
 
   private ArrayLengthParser() {}
 }
-

@@ -70,8 +70,8 @@ public class SigIRGenerator {
     Collection<Pair<CtClass, ClassDecl>> classes = new ArrayList<Pair<CtClass,ClassDecl>>();
 
     for(Pair<IRHeader, FileBody> pair : files) {
-      IRHeader hdata = pair.getFirst();
-      FileBody body = pair.getSecond();
+      IRHeader hdata = pair._1;
+      FileBody body = pair._2;
       String packageName = hdata.getPackageName();
 
       for(ClassDecl cdecl : body.getClasses()) {
@@ -94,8 +94,8 @@ public class SigIRGenerator {
     ClassPool cpool = ir.getClassPool();
 
     for(Pair<IRHeader, FileBody> pair : files) {
-      IRHeader hdata = pair.getFirst();
-      FileBody body = pair.getSecond();
+      IRHeader hdata = pair._1;
+      FileBody body = pair._2;
       String packageName = hdata.getPackageName();
 
       for(InterfaceDecl idecl : body.getInterfaces()) {
@@ -118,7 +118,7 @@ public class SigIRGenerator {
     Collection<Pair<CtClass, SyntaxDecl>> syntax = new ArrayList<Pair<CtClass,SyntaxDecl>>();
 
     for(Pair<IRHeader, FileBody> pair : files) {
-      IRHeader header = pair.getFirst();
+      IRHeader header = pair._1;
 
       for(String ops : header.getUsingSyntax()) try {
         loadOperatorsFile(ops, ir);
@@ -128,8 +128,8 @@ public class SigIRGenerator {
     }
 
     for(Pair<IRHeader, FileBody> pair : files) {
-      IRHeader hdata = pair.getFirst();
-      FileBody body = pair.getSecond();
+      IRHeader hdata = pair._1;
+      FileBody body = pair._2;
       String packageName = hdata.getPackageName();
 
       for(SyntaxDecl syn : body.getSyntax()) {
@@ -155,8 +155,8 @@ public class SigIRGenerator {
     ClassPool cpool = ir.getClassPool();
 
     for(Pair<CtClass, ClassDecl> pair : classes) try {
-      CtClass ctcl = pair.getFirst();
-      ClassDecl cdecl = pair.getSecond();
+      CtClass ctcl = pair._1;
+      ClassDecl cdecl = pair._2;
       TypeResolver resolver = new TypeResolver(ir.getIRHeader(ctcl), cpool);
 
       ctcl.setSuperclass(resolver.getType(cdecl.getSuperClass()));
@@ -166,14 +166,14 @@ public class SigIRGenerator {
     } catch (NotFoundError e) {
       ErrorList.addError(e);
     } catch (CannotCompileException e) {
-      ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(pair.getFirst()).getFilePath(), pair.getSecond().getLine()));
+      ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(pair._1).getFilePath(), pair._2.getLine()));
     }
   }
 
   private void registerStaticInitializer(Collection<Pair<CtClass, ClassDecl>> classes, IR ir) {
     for(Pair<CtClass, ClassDecl> pair : classes) {
-      CtClass ctcl = pair.getFirst();
-      ClassDecl cdecl = pair.getSecond();
+      CtClass ctcl = pair._1;
+      ClassDecl cdecl = pair._2;
 
       for(StaticInitializer sinit : cdecl.getStaticInitializers()) try {
         IRStaticInitializer irsinit = new IRStaticInitializer(ctcl.makeClassInitializer(), sinit.getBody(), sinit.getBodyLine());
@@ -187,8 +187,8 @@ public class SigIRGenerator {
   private void registerConstructor(Collection<Pair<CtClass, ClassDecl>> classes, IR ir) {
     ClassPool cpool = ir.getClassPool();
     for(Pair<CtClass, ClassDecl> pair : classes) {
-      CtClass ctcl = pair.getFirst();
-      ClassDecl cdecl = pair.getSecond();
+      CtClass ctcl = pair._1;
+      ClassDecl cdecl = pair._2;
       TypeResolver resolver = new TypeResolver(ir.getIRHeader(ctcl), cpool);
 
       // default constructor
@@ -231,8 +231,8 @@ public class SigIRGenerator {
     ClassPool cpool = ir.getClassPool();
 
     for(Pair<CtClass, ClassDecl> pair : classes) {
-      CtClass ctcl = pair.getFirst();
-      ClassDecl cdecl = pair.getSecond();
+      CtClass ctcl = pair._1;
+      ClassDecl cdecl = pair._2;
       TypeResolver resolver = new TypeResolver(ir.getIRHeader(ctcl), cpool);
 
       for(MethodDecl method : cdecl.getMethods()) try {
@@ -267,8 +267,8 @@ public class SigIRGenerator {
     ClassPool cpool = ir.getClassPool();
 
     for(Pair<CtClass, ClassDecl> pair : classes) {
-      CtClass ctcl = pair.getFirst();
-      ClassDecl cdecl = pair.getSecond();
+      CtClass ctcl = pair._1;
+      ClassDecl cdecl = pair._2;
       TypeResolver resolver = new TypeResolver(ir.getIRHeader(ctcl), cpool);
 
       for(FieldDecl field : cdecl.getFields()) try {
@@ -292,8 +292,8 @@ public class SigIRGenerator {
     ClassPool cpool = ir.getClassPool();
 
     for(Pair<CtClass, InterfaceDecl> pair : interfaces) {
-      CtClass iface = pair.getFirst();
-      InterfaceDecl idecl = pair.getSecond();
+      CtClass iface = pair._1;
+      InterfaceDecl idecl = pair._2;
       TypeResolver resolver = new TypeResolver(ir.getIRHeader(iface), cpool);
 
       for(String ifaceName : idecl.getInterfaces()) try {
@@ -308,8 +308,8 @@ public class SigIRGenerator {
     ClassPool cpool = ir.getClassPool();
 
     for(Pair<CtClass, InterfaceDecl> pair : interfaces) {
-      CtClass iface = pair.getFirst();
-      InterfaceDecl idecl = pair.getSecond();
+      CtClass iface = pair._1;
+      InterfaceDecl idecl = pair._2;
       TypeResolver resolver = new TypeResolver(ir.getIRHeader(iface), cpool);
 
       for(MethodDecl method : idecl.getMethods()) try {
@@ -333,8 +333,8 @@ public class SigIRGenerator {
     ClassPool cpool = ir.getClassPool();
 
     for(Pair<CtClass, InterfaceDecl> pair : interfaces) {
-      CtClass iface = pair.getFirst();
-      InterfaceDecl idecl = pair.getSecond();
+      CtClass iface = pair._1;
+      InterfaceDecl idecl = pair._2;
       TypeResolver resolver = new TypeResolver(ir.getIRHeader(iface), cpool);
 
       for(FieldDecl field : idecl.getFields()) try {
@@ -358,8 +358,8 @@ public class SigIRGenerator {
     OperatorPool opool = ir.getOperatorPool();
 
     for(Pair<CtClass, SyntaxDecl> pair : operators) {
-      CtClass ctcl = pair.getFirst();
-      SyntaxDecl syndecl = pair.getSecond();
+      CtClass ctcl = pair._1;
+      SyntaxDecl syndecl = pair._2;
 
       TypeResolver resolver = new TypeResolver(ir.getIRHeader(ctcl), cpool);
       IRSyntax irsyn = new IRSyntax(ctcl);

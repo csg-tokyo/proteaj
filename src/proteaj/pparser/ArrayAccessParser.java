@@ -1,42 +1,34 @@
 package proteaj.pparser;
 
-import proteaj.error.*;
-import proteaj.io.SourceStringReader;
 import proteaj.ir.*;
 import proteaj.tast.*;
 
 import javassist.*;
 
-public class ArrayAccessParser extends PackratParser<ArrayAccess> {
+import static proteaj.pparser.PackratParserCombinators.*;
+
+public class ArrayAccessParser {
   /* ArrayAccess
    *  : JavaExpression '[' Expression ']'
    */
-  @Override
-  protected ParseResult<ArrayAccess> parse(SourceStringReader reader, Environment env) {
-    final int pos = reader.getPos();
-
-    ParseResult<Expression> expr = JavaExpressionParser.parser.applyRule(reader, env);
-    if(expr.isFail()) return fail(expr, pos, reader);
-
-    ParseResult<String> lBracket = KeywordParser.getParser("[").applyRule(reader, env);
-    if(lBracket.isFail()) return fail(lBracket, pos, reader);
-
-    ParseResult<Expression> index = ExpressionParser.getParser(CtClass.intType, env).applyRule(reader, env);
-    if(index.isFail()) return fail(index, pos, reader);
-
-    ParseResult<String> rBracket = KeywordParser.getParser("]").applyRule(reader, env);
-    if(rBracket.isFail()) return fail(rBracket, pos, reader);
-
-    if (expr.get().getType().isArray()) try {
-      return success(new ArrayAccess(expr.get(), index.get()));
-    } catch (NotFoundException e) {
-      ErrorList.addError(new NotFoundError(e, reader.filePath, reader.getLine()));
-    }
-    return fail("not array type", pos, reader);
-  }
-
-  public static final ArrayAccessParser parser = new ArrayAccessParser();
-
-  private ArrayAccessParser() {}
+  public static final PackratParser<ArrayAccess> parser =
+      bind(ref(new ParserThunk<Expression>() {
+        @Override
+        public PackratParser<Expression> getParser() { return JavaExpressionParser.parser; }
+      }), new Function<Expression, PackratParser<ArrayAccess>>() {
+        @Override
+        public PackratParser<ArrayAccess> apply(final Expression array) {
+          return bind(enclosed("[", depends(new Function<Environment, PackratParser<Expression>>() {
+            @Override
+            public PackratParser<Expression> apply(Environment env) { return ExpressionParser.getParser(CtClass.intType, env); }
+          }), "]"), new Function<Expression, PackratParser<ArrayAccess>>() {
+            @Override
+            public PackratParser<ArrayAccess> apply(Expression index) {
+              if (array.getType().isArray()) try { return unit(new ArrayAccess(array, index)); }
+              catch (NotFoundException e) { return failure(e.getMessage()); }
+              else return failure("not array type");
+            }
+          });
+        }
+      });
 }
-

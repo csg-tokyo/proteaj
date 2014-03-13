@@ -9,7 +9,7 @@ public class QualifiedIdentifierParser extends PackratParser<String> {
    */
   @Override
   protected ParseResult<String> parse(SourceStringReader reader, Environment env) {
-    int pos = reader.getPos();
+    final int pos = reader.getPos();
 
     ParseResult<String> id = IdentifierParser.parser.applyRule(reader, env);
     if(id.isFail()) return fail(id, pos, reader);
