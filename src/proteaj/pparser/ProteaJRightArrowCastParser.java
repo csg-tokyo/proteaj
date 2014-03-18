@@ -20,7 +20,7 @@ public class ProteaJRightArrowCastParser extends PackratParser<CastExpression> {
     ParseResult<String> lPar = KeywordParser.getParser("(").applyRule(reader, env);
     if (lPar.isFail()) return fail(lPar, pos, reader);
 
-    ParseResult<CtClass> from = TypeNameParser.parser.applyRule(reader, env);
+    ParseResult<CtClass> from = CommonParsers.typeName.applyRule(reader, env);
     if (from.isFail()) return fail(from, pos, reader);
 
     ParseResult<String> arrow = KeywordParser.getParser("->").applyRule(reader, env);
@@ -28,7 +28,7 @@ public class ProteaJRightArrowCastParser extends PackratParser<CastExpression> {
 
     int tPos = reader.getPos();
 
-    ParseResult<CtClass> to = TypeNameParser.parser.applyRule(reader, env);
+    ParseResult<CtClass> to = CommonParsers.typeName.applyRule(reader, env);
     if (to.isFail()) reader.setPos(tPos);
     else if (! isSubtype(to.get(), type, reader.filePath, reader.getLine())) {
       return fail("type mismatch: expected " + type.getName() + " but found " + to.get().getName(), pos, reader);

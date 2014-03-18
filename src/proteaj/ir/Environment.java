@@ -44,7 +44,7 @@ public class Environment {
 
     else {
       for(CtField field : thisClass.getDeclaredFields()) try {
-        if(Modifiers.isStatic(field.getModifiers())) {
+        if(Modifiers.isStatic(field)) {
           add(field.getName(), new StaticFieldAccess(field));
         }
       } catch (NotFoundException e) {
@@ -64,7 +64,7 @@ public class Environment {
   }
 
   public boolean isStatic() {
-    return Modifiers.isStatic(thisMember.getModifiers());
+    return Modifiers.isStatic(thisMember);
   }
 
   public boolean isVisible(CtMember member) {

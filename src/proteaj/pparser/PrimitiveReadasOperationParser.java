@@ -139,7 +139,7 @@ public abstract class PrimitiveReadasOperationParser extends ReadasOperationPars
     protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
       final int pos = reader.getPos();
 
-      ParseResult<CtClass> typename = TypeNameParser.parser.applyRule(reader, env);
+      ParseResult<CtClass> typename = CommonParsers.typeName.applyRule(reader, env);
       if(typename.isFail()) return fail(typename, pos, reader);
 
       return success(new NewExpression(constructor, Arrays.<Expression>asList(new ClassLiteral(typename.get()))));
