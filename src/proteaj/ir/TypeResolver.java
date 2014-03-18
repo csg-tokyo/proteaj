@@ -85,6 +85,21 @@ public class TypeResolver {
     throw new NotFoundError("class " + name + " is not found", hdata.getFilePath(), 0);
   }
 
+  public CtClass getArrayType (String name, int dim) throws NotFoundError {
+    return getArrayType(getType(name), dim);
+  }
+
+  public CtClass getArrayType (CtClass component, int dim) throws NotFoundError {
+    StringBuilder buf = new StringBuilder(component.getName());
+    for (int i = 0; i < dim; i++) buf.append("[]");
+    try {
+      return cpool.get(buf.toString());
+    } catch (NotFoundException e) {
+      assert false;
+      throw new RuntimeException("array type " + buf.toString() + " is not found");
+    }
+  }
+
   private String appendPackageName(String name) {
     String packageName = hdata.getPackageName();
     if(packageName.equals("")) return name;

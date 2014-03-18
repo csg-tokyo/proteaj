@@ -17,7 +17,7 @@ public class ExpressionParser extends PackratParser<Expression> {
       ParseResult<Operation> op = OperationParser.getParser(type, priority, pattern).applyRule(reader, env, pos);
       if(! op.isFail()) return success(op.get());
 
-      // The translation for supporting sub-type arguments described in our paper creates a lot of operators.
+      // The translation for supporting sub-type arguments is described in our paper creates a lot of operators.
       // Because it causes overhead, I take another solution.
       //
       // if "type" is a super type of "rtype" and "pattern" has a left recursion, first time analysis will always fail.

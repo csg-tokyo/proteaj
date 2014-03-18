@@ -8,6 +8,7 @@ import java.util.*;
 import javassist.*;
 
 import static proteaj.pparser.PackratParserCombinators.*;
+import static proteaj.pparser.CommonParsers.*;
 import static proteaj.util.CtClassUtil.*;
 
 public class StatementParsers {
@@ -18,8 +19,6 @@ public class StatementParsers {
   public StatementParsers(CtClass expected) {
     this.returnType = expected;
   }
-
-  private final CtClass returnType;
 
   private PackratParser<Expression> expression (final CtClass expected) {
     return depends(new Function<Environment, PackratParser<Expression>>() {
@@ -36,9 +35,11 @@ public class StatementParsers {
   });
 
   private final PackratParser<Block> block =
-      map(scope(enclosed("{", repetition(ref(new ParserThunk<Statement>() {
+      map(scope(enclosed("{", rep(ref(new ParserThunk<Statement>() {
         @Override
-        public PackratParser<Statement> getParser() { return blockStatement; }
+        public PackratParser<Statement> getParser() {
+          return blockStatement;
+        }
       })), "}")),
           new Function<List<Statement>, Block>() {
         @Override
@@ -48,7 +49,7 @@ public class StatementParsers {
       });
 
   private final PackratParser<LocalVarDecl> simpleLocalDecl =
-      map(seq(TypeNameParser.parser, IdentifierParser.parser),
+      map(seq(typeName, identifier),
           new Function<Pair<CtClass, String>, LocalVarDecl>() {
             @Override
             public LocalVarDecl apply(Pair<CtClass, String> pair) {
@@ -57,7 +58,7 @@ public class StatementParsers {
           });
 
   private final PackratParser<LocalVarDecl> localDeclAndInit =
-      bind(postfix(seq(TypeNameParser.parser, IdentifierParser.parser), "="), new Function<Pair<CtClass, String>, PackratParser<LocalVarDecl>>() {
+      bind(postfix(seq(typeName, identifier), "="), new Function<Pair<CtClass, String>, PackratParser<LocalVarDecl>>() {
         @Override
         public PackratParser<LocalVarDecl> apply(final Pair<CtClass, String> pair) {
           return map(expression(pair._1), new Function<Expression, LocalVarDecl>() {
@@ -123,7 +124,7 @@ public class StatementParsers {
           });
 
   private final PackratParser<ExpressionList> expressionList =
-      map(repetition(expression(CtClass.voidType), ","),
+      map(rep(expression(CtClass.voidType), ","),
           new Function<List<Expression>, ExpressionList>() {
             @Override
             public ExpressionList apply(List<Expression> expressions) {
@@ -166,7 +167,7 @@ public class StatementParsers {
   private final PackratParser<Block> finallyBlock = prefix("finally", block);
 
   private final PackratParser<Pair<CtClass, String>> catchTypeAndName =
-      withEffect(prefix("catch", enclosed("(", seq(ClassNameParser.parser, IdentifierParser.parser), ")")),
+      withEffect(prefix("catch", enclosed("(", seq(className, identifier), ")")),
           new Function<Pair<CtClass, String>, Effect>() {
             @Override
             public Effect apply(Pair<CtClass, String> pair) {
@@ -186,10 +187,12 @@ public class StatementParsers {
       }));
 
   private final PackratParser<List<Triad<CtClass,String,Block>>> catchClauses =
-      map(withEffect(unzip(repetition(
+      map(withEffect(unzip(rep1(
           withEffect(catchClause, new Function<Pair<Triad<CtClass, String, Block>, Environment>, Effect>() {
             @Override
-            public Effect apply(Pair<Triad<CtClass, String, Block>, Environment> pair) { return catching(pair._1._1); }
+            public Effect apply(Pair<Triad<CtClass, String, Block>, Environment> pair) {
+              return catching(pair._1._1);
+            }
           }))),
           new Function<Pair<List<Triad<CtClass, String, Block>>, List<Environment>>, Effect>() {
             @Override
@@ -279,7 +282,7 @@ public class StatementParsers {
     });
   }
 
-  private PackratParser<SuperConstructorCall> superConstructorArgs (final Environment env, final CtConstructor constructor) {
+  private PackratParser<SuperConstructorCall> superConstructorArgs (final CtConstructor constructor) {
     return bind(ArgumentsParser.getParser(constructor), new Function<List<Expression>, PackratParser<SuperConstructorCall>>() {
       @Override
       public PackratParser<SuperConstructorCall> apply(List<Expression> expressions) {
@@ -292,10 +295,12 @@ public class StatementParsers {
       enclosed("this", depends(new Function<Environment, PackratParser<ThisConstructorCall>>() {
         @Override
         public PackratParser<ThisConstructorCall> apply(final Environment env) {
-          return foreach(env.thisClass.getDeclaredConstructors(), new Function<CtConstructor, PackratParser<ThisConstructorCall>>() {
+          return foreach(env.thisClass.getDeclaredConstructors(),
+              new Function<CtConstructor, PackratParser<ThisConstructorCall>>() {
             @Override
             public PackratParser<ThisConstructorCall> apply(final CtConstructor c) { return thisConstructorArgs(env, c); }
-          });
+          },
+              "suitable constructor is not found");
         }
       }), ";");
 
@@ -304,10 +309,12 @@ public class StatementParsers {
         @Override
         public PackratParser<SuperConstructorCall> apply(final Environment env) {
           try {
-            return foreach(env.thisClass.getSuperclass().getDeclaredConstructors(), new Function<CtConstructor, PackratParser<SuperConstructorCall>>() {
+            return foreach(env.thisClass.getSuperclass().getDeclaredConstructors(),
+                new Function<CtConstructor, PackratParser<SuperConstructorCall>>() {
               @Override
-              public PackratParser<SuperConstructorCall> apply(CtConstructor c) { return superConstructorArgs(env, c); }
-            });
+              public PackratParser<SuperConstructorCall> apply(CtConstructor c) { return superConstructorArgs(c); }
+            },
+                "suitable super constructor is not found");
           } catch (NotFoundException e) { return error(e); }
         }
       }), ";");
@@ -338,7 +345,7 @@ public class StatementParsers {
       });
 
   public final PackratParser<ConstructorBody> constructorBody =
-      map(enclosed("{", seq(anotherConstructorCall, repetition(blockStatement)), "}"), new Function<Pair<Statement, List<Statement>>, ConstructorBody>() {
+      map(enclosed("{", seq(anotherConstructorCall, rep(blockStatement)), "}"), new Function<Pair<Statement, List<Statement>>, ConstructorBody>() {
         @Override
         public ConstructorBody apply(Pair<Statement, List<Statement>> pair) {
           List<Statement> list = pair._2;
@@ -352,4 +359,6 @@ public class StatementParsers {
         @Override
         public ClassInitializer apply(Block b) { return new ClassInitializer(b); }
       });
+
+  private final CtClass returnType;
 }

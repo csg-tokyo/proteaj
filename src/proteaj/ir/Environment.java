@@ -67,12 +67,61 @@ public class Environment {
     return Modifiers.isStatic(thisMember.getModifiers());
   }
 
+  public boolean isVisible(CtMember member) {
+    return member.visibleFrom(thisClass);
+  }
+
   public CtClass getType(String name) throws NotFoundError {
     return resolver.getType(name);
   }
 
+  public CtClass getArrayType (String name, int dim) throws NotFoundError {
+    return resolver.getArrayType(name, dim);
+  }
+
+  public CtClass getArrayType (CtClass component, int dim) throws NotFoundError {
+    return resolver.getArrayType(component, dim);
+  }
+
   public boolean isTypeName(String name) {
     return resolver.isTypeName(name);
+  }
+
+  public List<CtMethod> getInstanceMethods (CtClass clazz, String name) {
+    List<CtMethod> methods = new ArrayList<CtMethod>();
+
+    for (CtMethod method : getVisibleMethods(clazz)) {
+      if (method.getName().equals(name) && (! Modifiers.isStatic(method))) methods.add(method);
+    }
+
+    return methods;
+  }
+
+  public List<CtMethod> getStaticMethods (CtClass clazz, String name) {
+    List<CtMethod> methods = new ArrayList<CtMethod>();
+
+    for (CtMethod method : getVisibleMethods(clazz)) {
+      if (method.getName().equals(name) && Modifiers.isStatic(method)) methods.add(method);
+    }
+
+    return methods;
+  }
+
+  private List<CtMethod> getVisibleMethods (CtClass clazz) {
+    if (! visibleMethodsCache.containsKey(clazz)) {
+      List<CtMethod> methods = new ArrayList<CtMethod>();
+
+      if (clazz == thisClass) {
+        Collections.addAll(methods, clazz.getDeclaredMethods());
+      }
+
+      for (CtMethod method : clazz.getMethods()) {
+        if (isVisible(method) && (! methods.contains(method))) methods.add(method);
+      }
+
+      visibleMethodsCache.put(clazz, methods);
+    }
+    return visibleMethodsCache.get(clazz);
   }
 
   public NavigableMap<Integer, List<IRPattern>> getPatterns(CtClass type) {
@@ -167,5 +216,7 @@ public class Environment {
   private final UsingOperators operators;
   private Map<String, Expression> env;
   private Map<CtClass, List<Integer>> exceptions;
+
+  private Map<CtClass, List<CtMethod>> visibleMethodsCache = new HashMap<CtClass, List<CtMethod>>();
 }
 

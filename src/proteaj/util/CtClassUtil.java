@@ -37,6 +37,10 @@ public class CtClassUtil {
   }
 
   // not perfect
+  public static boolean isCastable (CtClass from, CtClass to) throws NotFoundException {
+    return from.isPrimitive() || to.isPrimitive() || from.subtypeOf(to) || to.subtypeOf(from) || to == CtClass.voidType;
+  }
+
   public static boolean isCastable (CtClass from, CtClass to, String file, int line) {
     return from.isPrimitive() || to.isPrimitive() || isSubtype(from, to, file, line) || isSubtype(to, from, file, line) || to == CtClass.voidType;
   }

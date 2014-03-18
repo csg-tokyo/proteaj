@@ -29,7 +29,7 @@ public class DefaultExpressionParser extends ExpressionParser {
     if (! cast.isFail()) return success(cast.get());
     else fails.add(cast);
 
-    ParseResult<Expression> expr = JavaExpressionParser.parser.applyRule(reader, env);
+    ParseResult<Expression> expr = JavaExpressionParsers.javaExpression.applyRule(reader, env);
     if(! expr.isFail()) try {
       CtClass exprType = expr.get().getType();
 

@@ -1,6 +1,7 @@
 package proteaj.util;
 
 import java.util.*;
+import javassist.*;
 
 public class Modifiers {
   public static boolean isModifier(String mod) {
@@ -14,6 +15,10 @@ public class Modifiers {
 
   public static boolean isStatic(int mod) {
     return (mod & STATIC) == STATIC;
+  }
+
+  public static boolean isStatic(CtMember member) {
+    return isStatic(member.getModifiers());
   }
 
   public static boolean hasVarArgs(int mod) {
