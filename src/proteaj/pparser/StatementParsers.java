@@ -12,14 +12,54 @@ import static proteaj.pparser.CommonParsers.*;
 import static proteaj.pparser.ExpressionParsers.*;
 import static proteaj.util.CtClassUtil.*;
 
-public class StatementParsers {
-  public StatementParsers() {
-    this.returnType = null;
+public abstract class StatementParsers {
+  public static PackratParser<MethodBody> methodBody (final CtClass returnType) {
+    return makeMethodBodyParsers(returnType).methodBodyParser;
   }
 
-  public StatementParsers(CtClass expected) {
-    this.returnType = expected;
+  public static PackratParser<ConstructorBody> constructorBody () {
+    return constructorBodyParsers.constructorBodyParser;
   }
+
+  public static PackratParser<ClassInitializer> classInitializer () {
+    return constructorBodyParsers.classInitializerParser;
+  }
+
+  private static StatementParsers constructorBodyParsers =
+    new StatementParsers() {
+      @Override
+      protected PackratParser<ReturnStatement> getReturnStatementParser() {
+        return failure("return statement cannot be used here");
+      }
+    };
+
+  private static StatementParsers makeMethodBodyParsers (final CtClass returnType) {
+    if (returnType == CtClass.voidType) return new StatementParsers() {
+      @Override
+      protected PackratParser<ReturnStatement> getReturnStatementParser() {
+        return returnVoidStatement;
+      }
+    };
+    else return new StatementParsers() {
+      @Override
+      protected PackratParser<ReturnStatement> getReturnStatementParser() {
+        return returnStatementParser;
+      }
+      private final PackratParser<ReturnStatement> returnStatementParser =
+          map(enclosed("return", expression(returnType), ";"), new Function<Expression, ReturnStatement>() {
+            @Override
+            public ReturnStatement apply(Expression expr) { return new ReturnStatement(expr); }
+          });
+    };
+  }
+
+  private static final PackratParser<ReturnStatement> returnVoidStatement =
+      map(keywords("return", ";"), new Function<String[], ReturnStatement>() {
+        @Override
+        public ReturnStatement apply(String[] s) { return new ReturnStatement(); }
+      });
+
+  protected abstract PackratParser<ReturnStatement> getReturnStatementParser();
 
   private final PackratParser<Statement> ref_SingleStatement = ref(new ParserThunk<Statement>() {
     @Override
@@ -225,19 +265,9 @@ public class StatementParsers {
       choice(tryCatchFinallyStatement, tryCatchStatement, tryFinallyStatement);
 
   private final PackratParser<ReturnStatement> returnStatement =
-      bind(keyword("return"), new Function<String, PackratParser<ReturnStatement>>() {
+      ref(new ParserThunk<ReturnStatement>() {
         @Override
-        public PackratParser<ReturnStatement> apply(String s) {
-          if (returnType == null) return failure("return statement cannot be used here");
-          else if (returnType.equals(CtClass.voidType)) return map(keyword(";"), new Function<String, ReturnStatement>() {
-            @Override
-            public ReturnStatement apply(String s) { return new ReturnStatement(); }
-          });
-          else return map(postfix(expression(returnType), ";"), new Function<Expression, ReturnStatement>() {
-              @Override
-              public ReturnStatement apply(Expression expr) { return new ReturnStatement(expr); }
-            });
-        }
+        public PackratParser<ReturnStatement> evaluate() { return getReturnStatementParser(); }
       });
 
   private final PackratParser<Statement> controlFlow =
@@ -330,13 +360,13 @@ public class StatementParsers {
   private final PackratParser<Statement> anotherConstructorCall =
       choice(thisConstructorCall, superConstructorCall, defaultConstructorCall);
 
-  public final PackratParser<MethodBody> methodBody =
+  private final PackratParser<MethodBody> methodBodyParser =
       map(block, new Function<Block, MethodBody>() {
         @Override
         public MethodBody apply(Block b) { return new MethodBody(b); }
       });
 
-  public final PackratParser<ConstructorBody> constructorBody =
+  private final PackratParser<ConstructorBody> constructorBodyParser =
       map(enclosed("{", seq(anotherConstructorCall, rep(blockStatement)), "}"), new Function<Pair<Statement, List<Statement>>, ConstructorBody>() {
         @Override
         public ConstructorBody apply(Pair<Statement, List<Statement>> pair) {
@@ -346,11 +376,9 @@ public class StatementParsers {
         }
       });
 
-  public final PackratParser<ClassInitializer> classInitializer =
+  private final PackratParser<ClassInitializer> classInitializerParser =
       map(block, new Function<Block, ClassInitializer>() {
         @Override
         public ClassInitializer apply(Block b) { return new ClassInitializer(b); }
       });
-
-  private final CtClass returnType;
 }

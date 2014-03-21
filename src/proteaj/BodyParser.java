@@ -16,7 +16,7 @@ public class BodyParser {
       CtClass returnType = method.getReturnType();
       CtClass[] exceptionTypes = method.getExceptionTypes();
 
-      ParseResult<MethodBody> mbody = new StatementParsers(returnType).methodBody.applyRule(reader, env);
+      ParseResult<MethodBody> mbody = StatementParsers.methodBody(returnType).applyRule(reader, env);
       if(! mbody.isFail()) {
         env.removeExceptions(exceptionTypes);
 
@@ -37,7 +37,7 @@ public class BodyParser {
     try {
       CtClass[] exceptionTypes = constructor.getExceptionTypes();
 
-      ParseResult<ConstructorBody> cbody = new StatementParsers().constructorBody.applyRule(reader, env);
+      ParseResult<ConstructorBody> cbody = StatementParsers.constructorBody().applyRule(reader, env);
       if(! cbody.isFail()) {
         env.removeExceptions(exceptionTypes);
 
@@ -87,7 +87,7 @@ public class BodyParser {
   }
 
   public ClassInitializer parseStaticInitializer(SourceStringReader reader, Environment env) throws CompileErrors {
-    ParseResult<ClassInitializer> sibody = new StatementParsers().classInitializer.applyRule(reader, env);
+    ParseResult<ClassInitializer> sibody = StatementParsers.classInitializer().applyRule(reader, env);
     if(! sibody.isFail()) {
       if(env.hasException()) {
         throw createUnhandledExceptions(reader, env);
