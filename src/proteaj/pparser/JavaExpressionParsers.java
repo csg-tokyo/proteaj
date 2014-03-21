@@ -43,7 +43,7 @@ public class JavaExpressionParsers {
       });
 
   private static final PackratParser<MethodCall> methodCall =
-      bind(seq(ref_JavaExpression, prefix(".", identifier)), new Function<Pair<Expression, String>, PackratParser<MethodCall>>() {
+      bind(infix(ref_JavaExpression, ".", identifier), new Function<Pair<Expression, String>, PackratParser<MethodCall>>() {
         @Override
         public PackratParser<MethodCall> apply(final Pair<Expression, String> pair) {
           return depends(new Function<Environment, PackratParser<MethodCall>>() {
@@ -67,7 +67,7 @@ public class JavaExpressionParsers {
       });
 
   private static final PackratParser<FieldAccess> fieldAccess =
-      bind(seq(ref_JavaExpression, prefix(".", identifier)), new Function<Pair<Expression, String>, PackratParser<FieldAccess>>() {
+      bind(infix(ref_JavaExpression, ".", identifier), new Function<Pair<Expression, String>, PackratParser<FieldAccess>>() {
         @Override
         public PackratParser<FieldAccess> apply(final Pair<Expression, String> pair) {
           return depends(new Function<Environment, PackratParser<FieldAccess>>() {
@@ -177,7 +177,7 @@ public class JavaExpressionParsers {
       });
 
   private static final PackratParser<StaticMethodCall> staticMethodCall =
-      bind(seq(className, prefix(".", identifier)), new Function<Pair<CtClass, String>, PackratParser<StaticMethodCall>>() {
+      bind(infix(className, ".", identifier), new Function<Pair<CtClass, String>, PackratParser<StaticMethodCall>>() {
         @Override
         public PackratParser<StaticMethodCall> apply(final Pair<CtClass, String> pair) {
           return depends(new Function<Environment, PackratParser<StaticMethodCall>>() {
@@ -201,7 +201,7 @@ public class JavaExpressionParsers {
       });
 
   private static final PackratParser<StaticFieldAccess> staticFieldAccess =
-      bind(seq(className, prefix(".", identifier)), new Function<Pair<CtClass, String>, PackratParser<StaticFieldAccess>>() {
+      bind(infix(className, ".", identifier), new Function<Pair<CtClass, String>, PackratParser<StaticFieldAccess>>() {
         @Override
         public PackratParser<StaticFieldAccess> apply(final Pair<CtClass, String> pair) {
           return depends(new Function<Environment, PackratParser<StaticFieldAccess>>() {

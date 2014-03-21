@@ -12,6 +12,56 @@ import static java.lang.Character.*;
 import static proteaj.pparser.PackratParserCombinators.*;
 
 public class CommonParsers {
+  private static Map<String, PackratParser<String>> elementParsers = new HashMap<>();
+  private static Map<String, PackratParser<String>> keywordParsers = new HashMap<>();
+
+  public static final PackratParser<?> whitespaces =
+      new PackratParser<String>() {
+        @Override
+        protected ParseResult<String> parse(SourceStringReader reader, Environment env) {
+          while(isWhitespace(reader.lookahead())) reader.next();
+          return dummyResult;
+        }
+      };
+
+  public static PackratParser<String> element (final String word) {
+    if (! elementParsers.containsKey(word)) elementParsers.put(word, makeElementParser(word));
+    return elementParsers.get(word);
+  }
+
+  public static PackratParser<String> keyword (final String word) {
+    if (! keywordParsers.containsKey(word)) keywordParsers.put(word, PackratParserCombinators.prefix(whitespaces, element(word)));
+    return keywordParsers.get(word);
+  }
+
+  public static <T> PackratParser<T> prefix (String prefix, PackratParser<T> parser) {
+    return PackratParserCombinators.prefix(keyword(prefix), parser);
+  }
+
+  public static <T> PackratParser<T> postfix (PackratParser<T> parser, String postfix) {
+    return PackratParserCombinators.postfix(parser, keyword(postfix));
+  }
+
+  public static <T> PackratParser<T> enclosed (String prefix, PackratParser<T> parser, String postfix) {
+    return PackratParserCombinators.enclosed(keyword(prefix), parser, keyword(postfix));
+  }
+
+  public static <T1, T2> PackratParser<Pair<T1, T2>> infix (PackratParser<T1> parser1, String infix, PackratParser<T2> parser2) {
+    return PackratParserCombinators.infix(parser1, keyword(infix), parser2);
+  }
+
+  public static <T> PackratParser<List<T>> rep (PackratParser<T> parser, String sep) {
+    return PackratParserCombinators.rep(parser, keyword(sep));
+  }
+
+  public static <T> PackratParser<List<T>> rep1 (PackratParser<T> parser, String sep) {
+    return PackratParserCombinators.rep1(parser, keyword(sep));
+  }
+
+  public static <T> PackratParser<List<T>> sequence (List<PackratParser<T>> parsers, String sep) {
+    return PackratParserCombinators.sequence(parsers, keyword(sep));
+  }
+
   public static final PackratParser<String> identifier =
       new PackratParser<String>() {
         @Override
@@ -131,7 +181,7 @@ public class CommonParsers {
       });
 
   private static final PackratParser<Integer> arrayBrackets =
-      map(rep(seq(keyword("["), keyword("]"))), new Function<List<Pair<String, String>>, Integer>() {
+      map(PackratParserCombinators.rep(seq(keyword("["), keyword("]"))), new Function<List<Pair<String, String>>, Integer>() {
         @Override
         public Integer apply(List<Pair<String, String>> pairs) {
           return pairs.size();
@@ -192,7 +242,7 @@ public class CommonParsers {
     else return -1;
   }
 
-  private static final Map<Character, Character> escapedChars = new HashMap<Character, Character>();
+  private static final Map<Character, Character> escapedChars = new HashMap<>();
 
   static {
     escapedChars.put('b', '\b');
@@ -204,4 +254,25 @@ public class CommonParsers {
     escapedChars.put('\"', '\"');
     escapedChars.put('\\', '\\');
   }
+
+  private static PackratParser<String> makeElementParser (final String word) {
+    assert word != null;
+    if (word.isEmpty()) return unit(word);
+    else return new PackratParser<String>() {
+      @Override
+      protected ParseResult<String> parse(SourceStringReader reader, Environment env) {
+        final int pos = reader.getPos();
+        final int len = word.length();
+
+        for (int i = 0; i < len; i++) {
+          if (reader.lookahead() == word.charAt(i)) reader.next();
+          else return fail("expected token \"" + word + "\" is not found", pos, reader);
+        }
+
+        return success(word);
+      }
+    };
+  }
+
+  private static final ParseResult<String> dummyResult = new Success<>("");
 }

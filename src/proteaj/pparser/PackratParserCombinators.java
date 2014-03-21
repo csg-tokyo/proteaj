@@ -9,14 +9,6 @@ import java.util.*;
 import javassist.*;
 
 class PackratParserCombinators {
-  public static PackratParser<String> keyword (final String word) {
-    return KeywordParser.getParser(word);
-  }
-
-  public static <T> PackratParser<T> prefix (final String prefix, final PackratParser<T> parser) {
-    return prefix(keyword(prefix), parser);
-  }
-
   public static <T> PackratParser<T> prefix (final PackratParser<?> prefix, final PackratParser<T> parser) {
     return new PackratParser<T>() {
       @Override
@@ -32,10 +24,6 @@ class PackratParserCombinators {
         return result;
       }
     };
-  }
-
-  public static <T> PackratParser<T> postfix (final PackratParser<T> parser, final String postfix) {
-    return postfix(parser, keyword(postfix));
   }
 
   public static <T> PackratParser<T> postfix (final PackratParser<T> parser, final PackratParser<?> postfix) {
@@ -55,22 +43,42 @@ class PackratParserCombinators {
     };
   }
 
-  public static <T> PackratParser<T> enclosed (final String prefix, final PackratParser<T> parser, final String postfix) {
+  public static <T> PackratParser<T> enclosed (final PackratParser<?> prefix, final PackratParser<T> parser, final PackratParser<?> postfix) {
     return new PackratParser<T>() {
       @Override
       protected ParseResult<T> parse(SourceStringReader reader, Environment env) {
         final int pos = reader.getPos();
 
-        ParseResult<String> prefixResult = KeywordParser.getParser(prefix).applyRule(reader, env);
+        ParseResult<?> prefixResult = prefix.applyRule(reader, env);
         if (prefixResult.isFail()) return fail(prefixResult, pos, reader);
 
         ParseResult<T> result = parser.applyRule(reader, env);
         if (result.isFail()) return fail(result, pos, reader);
 
-        ParseResult<String> postfixResult = KeywordParser.getParser(postfix).applyRule(reader, env);
+        ParseResult<?> postfixResult = postfix.applyRule(reader, env);
         if (postfixResult.isFail()) return fail(postfixResult, pos, reader);
 
         return result;
+      }
+    };
+  }
+
+  public static <T1, T2> PackratParser<Pair<T1, T2>> infix (final PackratParser<T1> parser1, final PackratParser<?> infix, final PackratParser<T2> parser2) {
+    return new PackratParser<Pair<T1, T2>>() {
+      @Override
+      protected ParseResult<Pair<T1, T2>> parse(SourceStringReader reader, Environment env) {
+        final int pos = reader.getPos();
+
+        ParseResult<T1> result1 = parser1.applyRule(reader, env);
+        if (result1.isFail()) return fail(result1, pos, reader);
+
+        ParseResult<?> infixResult = infix.applyRule(reader, env);
+        if (infixResult.isFail()) return fail(infixResult, pos, reader);
+
+        ParseResult<T2> result2 = parser2.applyRule(reader, env);
+        if (result2.isFail()) return fail(result2, pos, reader);
+
+        return success(Pair.make(result1.get(), result2.get()));
       }
     };
   }
@@ -96,7 +104,7 @@ class PackratParserCombinators {
       @Override
       protected ParseResult<List<T>> parse(SourceStringReader reader, Environment env) {
         int pos;
-        List<T> list = new ArrayList<T>();
+        List<T> list = new ArrayList<>();
 
         while(true) {
           pos = reader.getPos();
@@ -120,7 +128,7 @@ class PackratParserCombinators {
         ParseResult<T> result = parser.applyRule(reader, env);
         if (result.isFail()) return fail(result, pos, reader);
 
-        List<T> list = new ArrayList<T>();
+        List<T> list = new ArrayList<>();
         list.add(result.get());
 
         while(true) {
@@ -136,14 +144,13 @@ class PackratParserCombinators {
     };
   }
 
-  public static <T> PackratParser<List<T>> rep (final PackratParser<T> parser, final String sep) {
+  public static <T> PackratParser<List<T>> rep (final PackratParser<T> parser, final PackratParser<?> sep) {
     return new PackratParser<List<T>>() {
       @Override
       protected ParseResult<List<T>> parse(SourceStringReader reader, Environment env) {
         final int pos = reader.getPos();
-        final PackratParser<String> sepParser = KeywordParser.getParser(sep);
 
-        List<T> list = new ArrayList<T>();
+        List<T> list = new ArrayList<>();
 
         ParseResult<T> result = parser.applyRule(reader, env);
         if (result.isFail()) {
@@ -154,7 +161,7 @@ class PackratParserCombinators {
 
         while (true) {
           int sPos = reader.getPos();
-          ParseResult<String> separator = sepParser.applyRule(reader, env);
+          ParseResult<?> separator = sep.applyRule(reader, env);
           if (separator.isFail()) {
             reader.setPos(sPos);
             break;
@@ -170,22 +177,21 @@ class PackratParserCombinators {
     };
   }
 
-  public static <T> PackratParser<List<T>> rep1 (final PackratParser<T> parser, final String sep) {
+  public static <T> PackratParser<List<T>> rep1 (final PackratParser<T> parser, final PackratParser<?> sep) {
     return new PackratParser<List<T>>() {
       @Override
       protected ParseResult<List<T>> parse(SourceStringReader reader, Environment env) {
         final int pos = reader.getPos();
-        final PackratParser<String> sepParser = KeywordParser.getParser(sep);
 
         ParseResult<T> result = parser.applyRule(reader, env);
         if (result.isFail()) return fail(result, pos, reader);
 
-        List<T> list = new ArrayList<T>();
+        List<T> list = new ArrayList<>();
         list.add(result.get());
 
         while (true) {
           final int sPos = reader.getPos();
-          ParseResult<String> separator = sepParser.applyRule(reader, env);
+          ParseResult<?> separator = sep.applyRule(reader, env);
           if (separator.isFail()) {
             reader.setPos(sPos);
             break;
@@ -207,7 +213,7 @@ class PackratParserCombinators {
       @Override
       protected ParseResult<T> parse(SourceStringReader reader, Environment env) {
         final int pos = reader.getPos();
-        List<ParseResult<?>> fails = new ArrayList<ParseResult<?>>();
+        List<ParseResult<?>> fails = new ArrayList<>();
 
         for (PackratParser<? extends T> parser : parsers) {
           ParseResult<? extends  T> result = parser.applyRule(reader, env, pos);
@@ -224,7 +230,7 @@ class PackratParserCombinators {
       @Override
       protected ParseResult<T> parse(SourceStringReader reader, Environment env) {
         final int pos = reader.getPos();
-        List<ParseResult<?>> fails = new ArrayList<ParseResult<?>>();
+        List<ParseResult<?>> fails = new ArrayList<>();
 
         for (PackratParser<? extends T> parser : parsers) {
           ParseResult<? extends  T> result = parser.applyRule(reader, env, pos);
@@ -378,7 +384,7 @@ class PackratParserCombinators {
     };
   }
 
-  public static <T> PackratParser<List<T>> sequence (final List<PackratParser<T>> parsers, final String sep) {
+  public static <T> PackratParser<List<T>> sequence (final List<PackratParser<T>> parsers, final PackratParser<?> sep) {
     return new PackratParser<List<T>>() {
       @Override
       protected ParseResult<List<T>> parse(SourceStringReader reader, Environment env) {
@@ -393,10 +399,8 @@ class PackratParserCombinators {
         if (result.isFail()) return fail(result, pos, reader);
         else results.add(result.get());
 
-        final PackratParser<String> sepParser = keyword(sep);
-
         for (int i = 1; i < length; i++) {
-          ParseResult<?> separator = sepParser.applyRule(reader, env);
+          ParseResult<?> separator = sep.applyRule(reader, env);
           if (separator.isFail()) return fail(separator, pos, reader);
 
           result = parsers.get(i).applyRule(reader, env);
@@ -438,7 +442,7 @@ class PackratParserCombinators {
     return new PackratParser<T>() {
       @Override
       protected ParseResult<T> parse(SourceStringReader reader, Environment env) {
-        return new Success<T>(t);
+        return new Success<>(t);
       }
     };
   }
@@ -469,7 +473,7 @@ class PackratParserCombinators {
     return new PackratParser<T>() {
       @Override
       protected ParseResult<T> parse(SourceStringReader reader, Environment env) {
-        return new Failure<T>(msg, reader.getPos(), reader.getLine());
+        return new Failure<>(msg, reader.getPos(), reader.getLine());
       }
     };
   }
@@ -479,7 +483,7 @@ class PackratParserCombinators {
       @Override
       protected ParseResult<T> parse(SourceStringReader reader, Environment env) {
         ErrorList.addError(new NotFoundError(e, reader.filePath, reader.getLine()));
-        return new Failure<T>(e.getMessage(), reader.getPos(), reader.getLine());
+        return new Failure<>(e.getMessage(), reader.getPos(), reader.getLine());
       }
     };
   }
@@ -489,7 +493,7 @@ class PackratParserCombinators {
       @Override
       protected ParseResult<T> parse(SourceStringReader reader, Environment env) {
         ErrorList.addError(new NotFoundError(e.getMessage(), reader.filePath, reader.getLine()));
-        return new Failure<T>(e.getMessage(), reader.getPos(), reader.getLine());
+        return new Failure<>(e.getMessage(), reader.getPos(), reader.getLine());
       }
     };
   }
@@ -502,8 +506,8 @@ class PackratParserCombinators {
         ParseResult<List<Pair<S, T>>> result = parser.applyRule(reader, env);
         if (result.isFail()) return fail(result, pos, reader);
 
-        List<S> ss = new ArrayList<S>();
-        List<T> ts = new ArrayList<T>();
+        List<S> ss = new ArrayList<>();
+        List<T> ts = new ArrayList<>();
 
         for (Pair<S, T> pair : result.get()) {
           ss.add(pair._1);

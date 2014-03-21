@@ -2,6 +2,7 @@
   <dictionary name="ichikawa">
     <words>
       <w>initializers</w>
+      <w>packrat</w>
     </words>
   </dictionary>
 </component>

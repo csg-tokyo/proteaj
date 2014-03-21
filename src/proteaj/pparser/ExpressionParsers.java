@@ -23,8 +23,7 @@ public class ExpressionParsers {
   }
 
   public static PackratParser<Expression> expression (CtClass expected, AvailableOperators operators) {
-    if (! instances.containsKey(operators)) instances.put(operators, new ExpressionParsers(operators));
-    return instances.get(operators).getParser(expected);
+    return getInstance(operators).getParser(expected);
   }
 
   public static PackratParser<DefaultValue> defaultArgument (final CtClass expected) {
@@ -51,8 +50,14 @@ public class ExpressionParsers {
   }
 
   public static PackratParser<List<Expression>> arguments (final CtBehavior behavior, AvailableOperators operators) {
+    return getInstance(operators).getArgumentsParserFromCache(behavior);
+  }
+
+  /* Multiton pattern */
+
+  private static ExpressionParsers getInstance (AvailableOperators operators) {
     if (! instances.containsKey(operators)) instances.put(operators, new ExpressionParsers(operators));
-    return instances.get(operators).getArgumentsParserFromCache(behavior);
+    return instances.get(operators);
   }
 
   private static Map<AvailableOperators, ExpressionParsers> instances = new WeakHashMap<>();
@@ -65,6 +70,8 @@ public class ExpressionParsers {
     this.defaultParsers = new HashMap<>();
     this.argumentsParsers = new HashMap<>();
   }
+
+  /* */
 
   private PackratParser<Expression> getParser (CtClass clazz) {
     TreeMap<Integer, PackratParser<Expression>> tree = getExpressionParsersFromCache(clazz);
@@ -220,7 +227,7 @@ public class ExpressionParsers {
   private PackratParser<Expression> makeDefaultParser (final CtClass clazz) {
     PackratParser<Expression> parenthesized = enclosed("(", getParser_Ref(clazz), ")");
 
-    PackratParser<CastExpression> rCast = bind(enclosed("(", seq(postfix(typeName, "->"), optional(typeName, clazz)), ")"),
+    PackratParser<CastExpression> rCast = bind(enclosed("(", infix(typeName, "->", optional(typeName, clazz)), ")"),
         new Function<Pair<CtClass, CtClass>, PackratParser<CastExpression>>() {
           @Override
           public PackratParser<CastExpression> apply(final Pair<CtClass, CtClass> pair) {
@@ -228,7 +235,7 @@ public class ExpressionParsers {
           }
         });
 
-    PackratParser<CastExpression> lCast = bind(enclosed("(", seq(optional(typeName, clazz), prefix("<-", typeName)), ")"),
+    PackratParser<CastExpression> lCast = bind(enclosed("(", infix(optional(typeName, clazz), "<-", typeName), ")"),
         new Function<Pair<CtClass, CtClass>, PackratParser<CastExpression>>() {
           @Override
           public PackratParser<CastExpression> apply(Pair<CtClass, CtClass> pair) {
@@ -306,7 +313,7 @@ public class ExpressionParsers {
         PackratParser<List<Expression>> otherArgsParser = sequence(argParsers.subList(0, length - 1), ",");
 
         PackratParser<List<Expression>> varArgsNParser =
-            map(seq(postfix(otherArgsParser, ","), rep1(getParser_Ref(componentType), ",")), new Function<Pair<List<Expression>, List<Expression>>, List<Expression>>() {
+            map(infix(otherArgsParser, ",", rep1(getParser_Ref(componentType), ",")), new Function<Pair<List<Expression>, List<Expression>>, List<Expression>>() {
               @Override
               public List<Expression> apply(Pair<List<Expression>, List<Expression>> pair) {
                 List<Expression> args = new ArrayList<>(pair._1);

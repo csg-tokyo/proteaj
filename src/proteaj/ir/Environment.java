@@ -90,7 +90,7 @@ public class Environment {
   }
 
   public List<CtMethod> getInstanceMethods (CtClass clazz, String name) {
-    List<CtMethod> methods = new ArrayList<CtMethod>();
+    List<CtMethod> methods = new ArrayList<>();
 
     for (CtMethod method : getVisibleMethods(clazz)) {
       if (method.getName().equals(name) && (! Modifiers.isStatic(method))) methods.add(method);
@@ -100,7 +100,7 @@ public class Environment {
   }
 
   public List<CtMethod> getStaticMethods (CtClass clazz, String name) {
-    List<CtMethod> methods = new ArrayList<CtMethod>();
+    List<CtMethod> methods = new ArrayList<>();
 
     for (CtMethod method : getVisibleMethods(clazz)) {
       if (method.getName().equals(name) && Modifiers.isStatic(method)) methods.add(method);
@@ -111,7 +111,7 @@ public class Environment {
 
   private List<CtMethod> getVisibleMethods (CtClass clazz) {
     if (! visibleMethodsCache.containsKey(clazz)) {
-      List<CtMethod> methods = new ArrayList<CtMethod>();
+      List<CtMethod> methods = new ArrayList<>();
 
       if (clazz == thisClass) {
         Collections.addAll(methods, clazz.getDeclaredMethods());
@@ -126,16 +126,8 @@ public class Environment {
     return visibleMethodsCache.get(clazz);
   }
 
-  public NavigableMap<Integer, List<IRPattern>> getPatterns(CtClass type) {
-    return operators.getPatterns(type);
-  }
-
   public NavigableMap<Integer, List<IRPattern>> getReadasPatterns(CtClass type) {
     return operators.getReadasPatterns(type);
-  }
-
-  public IROperator getOperator(CtClass type, int priority, IRPattern pattern) {
-    return operators.getIROperator(type, priority, pattern);
   }
 
   public IROperator getReadasOperator(CtClass type, int priority, IRPattern pattern) {
@@ -173,7 +165,7 @@ public class Environment {
   }
 
   public void removeException(CtClass clz) {
-    Set<CtClass> removeExceptions = new HashSet<CtClass>();
+    Set<CtClass> removeExceptions = new HashSet<>();
 
     for(CtClass exception : exceptions.keySet()) try {
       if(exception.subtypeOf(clz)) removeExceptions.add(exception);
@@ -220,6 +212,6 @@ public class Environment {
   private Map<String, Expression> env;
   private Map<CtClass, List<Integer>> exceptions;
 
-  private Map<CtClass, List<CtMethod>> visibleMethodsCache = new HashMap<CtClass, List<CtMethod>>();
+  private Map<CtClass, List<CtMethod>> visibleMethodsCache = new HashMap<>();
 }
 
