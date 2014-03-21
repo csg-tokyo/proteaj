@@ -15,8 +15,9 @@ public class Environment {
     this.filePath = header.getFilePath();
     this.resolver = new TypeResolver(header, ir.getClassPool());
     this.operators = new UsingOperators(header, ir.getOperatorPool());
-    this.env = new HashMap<String, Expression>();
-    this.exceptions = new HashMap<CtClass, List<Integer>>();
+    this.availableOperators = new AvailableOperators(header, ir.getOperatorPool());
+    this.env = new HashMap<>();
+    this.exceptions = new HashMap<>();
 
     if(! isStatic()) {
       Expression thisExpr = new ThisExpression(thisClass);
@@ -59,8 +60,9 @@ public class Environment {
     this.filePath = env.filePath;
     this.resolver = env.resolver;
     this.operators = env.operators;
-    this.env = new HashMap<String, Expression>(env.env);
-    this.exceptions = new HashMap<CtClass, List<Integer>>();
+    this.availableOperators = env.availableOperators;
+    this.env = new HashMap<>(env.env);
+    this.exceptions = new HashMap<>();
   }
 
   public boolean isStatic() {
@@ -211,6 +213,7 @@ public class Environment {
   public final CtClass thisClass;
   public final CtMember thisMember;
   public final String filePath;
+  public final AvailableOperators availableOperators;
 
   private final TypeResolver resolver;
   private final UsingOperators operators;

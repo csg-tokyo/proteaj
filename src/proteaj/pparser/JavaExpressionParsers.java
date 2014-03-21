@@ -10,26 +10,14 @@ import proteaj.util.*;
 
 import static proteaj.pparser.PackratParserCombinators.*;
 import static proteaj.pparser.CommonParsers.*;
+import static proteaj.pparser.ExpressionParsers.*;
 import static proteaj.util.CtClassUtil.*;
 import static proteaj.util.Modifiers.*;
 
 public class JavaExpressionParsers {
-  private static PackratParser<Expression> expression (final CtClass expected) {
-    return depends(new Function<Environment, PackratParser<Expression>>() {
-      @Override
-      public PackratParser<Expression> apply(Environment env) {
-        return ExpressionParser.getParser(expected, env);
-      }
-    });
-  }
-
-  private static PackratParser<List<Expression>> arguments (final CtBehavior behavior) {
-    return ArgumentsParser.getParser(behavior);
-  }
-
   private static final PackratParser<Expression> ref_JavaExpression = ref(new ParserThunk<Expression>() {
     @Override
-    public PackratParser<Expression> getParser() { return javaExpression; }
+    public PackratParser<Expression> evaluate() { return javaExpression; }
   });
 
   private static final PackratParser<AssignExpression> assignment =

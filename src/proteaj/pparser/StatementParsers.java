@@ -9,6 +9,7 @@ import javassist.*;
 
 import static proteaj.pparser.PackratParserCombinators.*;
 import static proteaj.pparser.CommonParsers.*;
+import static proteaj.pparser.ExpressionParsers.*;
 import static proteaj.util.CtClassUtil.*;
 
 public class StatementParsers {
@@ -20,24 +21,15 @@ public class StatementParsers {
     this.returnType = expected;
   }
 
-  private PackratParser<Expression> expression (final CtClass expected) {
-    return depends(new Function<Environment, PackratParser<Expression>>() {
-      @Override
-      public PackratParser<Expression> apply(Environment env) {
-        return ExpressionParser.getParser(expected, env);
-      }
-    });
-  }
-
   private final PackratParser<Statement> ref_SingleStatement = ref(new ParserThunk<Statement>() {
     @Override
-    public PackratParser<Statement> getParser() { return singleStatement; }
+    public PackratParser<Statement> evaluate() { return singleStatement; }
   });
 
   private final PackratParser<Block> block =
       map(scope(enclosed("{", rep(ref(new ParserThunk<Statement>() {
         @Override
-        public PackratParser<Statement> getParser() {
+        public PackratParser<Statement> evaluate() {
           return blockStatement;
         }
       })), "}")),
@@ -273,7 +265,7 @@ public class StatementParsers {
       choice(block, controlFlow, localVarDeclStatement, expressionStatement);
 
   private PackratParser<ThisConstructorCall> thisConstructorArgs (final Environment env, final CtConstructor constructor) {
-    return bind(ArgumentsParser.getParser(constructor), new Function<List<Expression>, PackratParser<ThisConstructorCall>>() {
+    return bind(arguments(constructor), new Function<List<Expression>, PackratParser<ThisConstructorCall>>() {
       @Override
       public PackratParser<ThisConstructorCall> apply(List<Expression> expressions) {
         if (constructor == env.thisMember) return failure("recursive constructor invocation");
@@ -283,7 +275,7 @@ public class StatementParsers {
   }
 
   private PackratParser<SuperConstructorCall> superConstructorArgs (final CtConstructor constructor) {
-    return bind(ArgumentsParser.getParser(constructor), new Function<List<Expression>, PackratParser<SuperConstructorCall>>() {
+    return bind(arguments(constructor), new Function<List<Expression>, PackratParser<SuperConstructorCall>>() {
       @Override
       public PackratParser<SuperConstructorCall> apply(List<Expression> expressions) {
         return effect(unit(new SuperConstructorCall(constructor, expressions)), throwing(constructor));

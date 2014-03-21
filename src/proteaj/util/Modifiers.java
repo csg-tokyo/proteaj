@@ -25,6 +25,10 @@ public class Modifiers {
     return (mod & VARARGS) == VARARGS;
   }
 
+  public static boolean hasVarArgs(CtBehavior behavior) {
+    return hasVarArgs(behavior.getModifiers());
+  }
+
   public static boolean hasMoreThanOneArgs(int mod) {
     return (mod & PLUSARGS) == PLUSARGS;
   }

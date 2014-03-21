@@ -14,12 +14,16 @@ class PackratParserCombinators {
   }
 
   public static <T> PackratParser<T> prefix (final String prefix, final PackratParser<T> parser) {
+    return prefix(keyword(prefix), parser);
+  }
+
+  public static <T> PackratParser<T> prefix (final PackratParser<?> prefix, final PackratParser<T> parser) {
     return new PackratParser<T>() {
       @Override
       protected ParseResult<T> parse(SourceStringReader reader, Environment env) {
         final int pos = reader.getPos();
 
-        ParseResult<String> prefixResult = KeywordParser.getParser(prefix).applyRule(reader, env);
+        ParseResult<?> prefixResult = prefix.applyRule(reader, env);
         if (prefixResult.isFail()) return fail(prefixResult, pos, reader);
 
         ParseResult<T> result = parser.applyRule(reader, env);
@@ -31,6 +35,10 @@ class PackratParserCombinators {
   }
 
   public static <T> PackratParser<T> postfix (final PackratParser<T> parser, final String postfix) {
+    return postfix(parser, keyword(postfix));
+  }
+
+  public static <T> PackratParser<T> postfix (final PackratParser<T> parser, final PackratParser<?> postfix) {
     return new PackratParser<T>() {
       @Override
       protected ParseResult<T> parse(SourceStringReader reader, Environment env) {
@@ -39,7 +47,7 @@ class PackratParserCombinators {
         ParseResult<T> result = parser.applyRule(reader, env);
         if (result.isFail()) return fail(result, pos, reader);
 
-        ParseResult<String> postfixResult = KeywordParser.getParser(postfix).applyRule(reader, env);
+        ParseResult<?> postfixResult = postfix.applyRule(reader, env);
         if (postfixResult.isFail()) return fail(postfixResult, pos, reader);
 
         return result;
@@ -211,6 +219,23 @@ class PackratParserCombinators {
     };
   }
 
+  public static <T> PackratParser<T> choice (final List<PackratParser<? extends T>> parsers) {
+    return new PackratParser<T>() {
+      @Override
+      protected ParseResult<T> parse(SourceStringReader reader, Environment env) {
+        final int pos = reader.getPos();
+        List<ParseResult<?>> fails = new ArrayList<ParseResult<?>>();
+
+        for (PackratParser<? extends T> parser : parsers) {
+          ParseResult<? extends  T> result = parser.applyRule(reader, env, pos);
+          if (result.isFail()) fails.add(result);
+          else return success(result.get());
+        }
+        return fail(fails, pos, reader);
+      }
+    };
+  }
+
   public static <S, T> PackratParser<T> foreach (final S[] c, final Function<S, PackratParser<T>> function, final String failMsg) {
     return new PackratParser<T>() {
       @Override
@@ -353,6 +378,62 @@ class PackratParserCombinators {
     };
   }
 
+  public static <T> PackratParser<List<T>> sequence (final List<PackratParser<T>> parsers, final String sep) {
+    return new PackratParser<List<T>>() {
+      @Override
+      protected ParseResult<List<T>> parse(SourceStringReader reader, Environment env) {
+        final int pos = reader.getPos();
+        final int length = parsers.size();
+
+        List<T> results = new ArrayList<>();
+
+        if (length == 0) return success(results);
+
+        ParseResult<T> result = parsers.get(0).applyRule(reader, env);
+        if (result.isFail()) return fail(result, pos, reader);
+        else results.add(result.get());
+
+        final PackratParser<String> sepParser = keyword(sep);
+
+        for (int i = 1; i < length; i++) {
+          ParseResult<?> separator = sepParser.applyRule(reader, env);
+          if (separator.isFail()) return fail(separator, pos, reader);
+
+          result = parsers.get(i).applyRule(reader, env);
+          if (result.isFail()) return fail(result, pos, reader);
+          else results.add(result.get());
+        }
+
+        return success(results);
+      }
+    };
+  }
+
+  public static <T> PackratParser<T> andPredicate (final PackratParser<T> predicate) {
+    return new PackratParser<T>() {
+      @Override
+      protected ParseResult<T> parse(SourceStringReader reader, Environment env) {
+        final int pos = reader.getPos();
+        ParseResult<T> result = predicate.applyRule(reader, env);
+        reader.setPos(pos);
+        return result;
+      }
+    };
+  }
+
+  public static PackratParser<ParseResult<?>> notPredicate (final PackratParser<?> predicate) {
+    return new PackratParser<ParseResult<?>>() {
+      @Override
+      protected ParseResult<ParseResult<?>> parse(SourceStringReader reader, Environment env) {
+        final int pos = reader.getPos();
+        ParseResult<?> result = predicate.applyRule(reader, env);
+        reader.setPos(pos);
+        if (result.isFail()) return success(result);
+        else return fail("success at not predicate", pos, reader);
+      }
+    };
+  }
+
   public static <T> PackratParser<T> unit (final T t) {
     return new PackratParser<T>() {
       @Override
@@ -442,6 +523,11 @@ class PackratParserCombinators {
     return new ThrowExceptions(behavior);
   }
 
+  public static Effect throwing (IROperator operator) {
+    if (operator.actualMethod != null) return new ThrowExceptions(operator.actualMethod);
+    else return NoEffect.instance;
+  }
+
   public static Effect throwing (List<Environment> environments) {
     return new InheritExceptions(environments);
   }
@@ -455,11 +541,11 @@ class PackratParserCombinators {
   }
 
   public static abstract class ParserThunk<T> extends PackratParser<T> {
-    public abstract PackratParser<T> getParser();
+    public abstract PackratParser<T> evaluate();
 
     @Override
     protected ParseResult<T> parse(SourceStringReader reader, Environment env) {
-      return getParser().applyRule(reader, env);
+      return evaluate().applyRule(reader, env);
     }
   }
 
@@ -546,6 +632,15 @@ class PackratParserCombinators {
 
     private final String name;
     private final CtClass type;
+  }
+
+  private static class NoEffect implements Effect {
+    public static final NoEffect instance = new NoEffect();
+
+    @Override
+    public void perform(SourceStringReader reader, Environment env) {}
+
+    private NoEffect() {}
   }
 
   public interface Effect {

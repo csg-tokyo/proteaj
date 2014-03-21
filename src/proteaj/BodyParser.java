@@ -56,7 +56,7 @@ public class BodyParser {
 
   public FieldBody parseFieldBody(CtField field, SourceStringReader reader, Environment env) throws CompileErrors {
     try {
-      ParseResult<FieldBody> fbody = FieldBodyParser.getParser(field.getType()).applyRule(reader, env);
+      ParseResult<FieldBody> fbody = ExpressionParsers.fieldBody(field.getType()).applyRule(reader, env);
       if(! fbody.isFail()) {
         if(env.hasException()) {
           throw createUnhandledExceptions(reader, env);
@@ -72,7 +72,7 @@ public class BodyParser {
 
   public DefaultValue parseDefaultArgument(CtMethod method, SourceStringReader reader, Environment env) throws CompileErrors {
     try {
-      ParseResult<DefaultValue> defval = DefaultArgumentParser.getParser(method.getReturnType()).applyRule(reader, env);
+      ParseResult<DefaultValue> defval = ExpressionParsers.defaultArgument(method.getReturnType()).applyRule(reader, env);
       if(! defval.isFail()) {
         if(env.hasException()) {
           throw createUnhandledExceptions(reader, env);
