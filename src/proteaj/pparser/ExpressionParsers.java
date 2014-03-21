@@ -284,9 +284,9 @@ public class ExpressionParsers {
     try { argTypes = behavior.getParameterTypes(); } catch (NotFoundException e) { return error(e); }
 
     final int length = argTypes.length;
-    if (length == 0) return map(seq(keyword("("), keyword(")")), new Function<Pair<String, String>, List<Expression>>() {
+    if (length == 0) return map(keywords("(", ")"), new Function<String[], List<Expression>>() {
       @Override
-      public List<Expression> apply(Pair<String, String> pair) { return Collections.emptyList(); }
+      public List<Expression> apply(String[] pair) { return Collections.emptyList(); }
     });
 
     List<PackratParser<Expression>> argParsers = getParsers(argTypes);

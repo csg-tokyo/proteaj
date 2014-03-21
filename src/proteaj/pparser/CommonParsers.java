@@ -34,6 +34,22 @@ public class CommonParsers {
     return keywordParsers.get(word);
   }
 
+  public static PackratParser<String[]> keywords (final String... words) {
+    return new PackratParser<String[]>() {
+      @Override
+      protected ParseResult<String[]> parse(SourceStringReader reader, Environment env) {
+        final int pos = reader.getPos();
+
+        for (String word : words) {
+          ParseResult<String> result = keyword(word).applyRule(reader, env);
+          if (result.isFail()) return fail(result, pos, reader);
+        }
+
+        return success(words);
+      }
+    };
+  }
+
   public static <T> PackratParser<T> prefix (String prefix, PackratParser<T> parser) {
     return PackratParserCombinators.prefix(keyword(prefix), parser);
   }
@@ -181,9 +197,9 @@ public class CommonParsers {
       });
 
   private static final PackratParser<Integer> arrayBrackets =
-      map(PackratParserCombinators.rep(seq(keyword("["), keyword("]"))), new Function<List<Pair<String, String>>, Integer>() {
+      map(PackratParserCombinators.rep(keywords("[", "]")), new Function<List<String[]>, Integer>() {
         @Override
-        public Integer apply(List<Pair<String, String>> pairs) {
+        public Integer apply(List<String[]> pairs) {
           return pairs.size();
         }
       });

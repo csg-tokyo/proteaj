@@ -242,10 +242,10 @@ public class JavaExpressionParsers {
       });
 
   private static final PackratParser<NewArrayExpression> newArray =
-      bind(seq(prefix("new", className), rep1(arrayIndex), rep(seq(keyword("["), keyword("]")))),
-          new Function<Triad<CtClass, List<Expression>, List<Pair<String, String>>>, PackratParser<NewArrayExpression>>() {
+      bind(seq(prefix("new", className), rep1(arrayIndex), rep(keywords("[", "]"))),
+          new Function<Triad<CtClass, List<Expression>, List<String[]>>, PackratParser<NewArrayExpression>>() {
             @Override
-            public PackratParser<NewArrayExpression> apply(final Triad<CtClass, List<Expression>, List<Pair<String, String>>> triad) { return depends(new Function<Environment, PackratParser<NewArrayExpression>>() {
+            public PackratParser<NewArrayExpression> apply(final Triad<CtClass, List<Expression>, List<String[]>> triad) { return depends(new Function<Environment, PackratParser<NewArrayExpression>>() {
               @Override
               public PackratParser<NewArrayExpression> apply(Environment env) {
                 try {
