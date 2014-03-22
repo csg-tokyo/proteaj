@@ -15,11 +15,11 @@ public class DefaultReadasOperandParser extends ReadasOperandParser {
   protected ParseResult<Expression> parse(SourceStringReader reader, Environment env) {
     final int pos = reader.getPos();
 
-    ParseResult<String> lPar = ReadasOperatorParser.getParser("(").applyRule(reader, env);
+    ParseResult<String> lPar = CommonParsers.element("(").applyRule(reader, env);//ReadasOperatorParser.getParser("(").applyRule(reader, env);
     if(! lPar.isFail()) {
       ParseResult<Expression> expr = ReadasOperandParser.getParser(type, env).applyRule(reader, env);
       if(! expr.isFail()) {
-        ParseResult<String> rPar = ReadasOperatorParser.getParser(")").applyRule(reader, env);
+        ParseResult<String> rPar = CommonParsers.element(")").applyRule(reader, env);//ReadasOperatorParser.getParser(")").applyRule(reader, env);
         if(! rPar.isFail()) {
           return expr;
         }

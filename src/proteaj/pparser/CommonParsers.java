@@ -238,12 +238,12 @@ public class CommonParsers {
       };
 
   public static final PackratParser<CtClass> typeName =
-      depends(new Function<Environment, PackratParser<CtClass>>() {
+      bind(seq(qualifiedIdentifier, arrayBrackets), new Function<Pair<String, Integer>, PackratParser<CtClass>>() {
         @Override
-        public PackratParser<CtClass> apply(final Environment env) {
-          return bind(seq(qualifiedIdentifier, arrayBrackets), new Function<Pair<String, Integer>, PackratParser<CtClass>>() {
+        public PackratParser<CtClass> apply(final Pair<String, Integer> pair) {
+          return depends(new Function<Environment, PackratParser<CtClass>>() {
             @Override
-            public PackratParser<CtClass> apply(Pair<String, Integer> pair) {
+            public PackratParser<CtClass> apply(Environment env) {
               try { return unit(env.getArrayType(pair._1, pair._2)); }
               catch (NotFoundError e) { return failure(e.getMessage()); }
             }

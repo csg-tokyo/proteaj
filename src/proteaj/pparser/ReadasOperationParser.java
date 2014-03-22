@@ -19,7 +19,7 @@ public class ReadasOperationParser extends PackratParser<Expression> {
 
     for(int i = 0; i < length; i++) {
       if(pattern.isOperator(i)) {
-        ParseResult<String> operator = ReadasOperatorParser.getParser(pattern.getOperatorKeyword(i)).applyRule(reader, env);
+        ParseResult<String> operator = CommonParsers.element(pattern.getOperatorKeyword(i)).applyRule(reader, env);//ReadasOperatorParser.getParser(pattern.getOperatorKeyword(i)).applyRule(reader, env);
         if(operator.isFail()) return fail(operator, pos, reader);
       }
       else if(pattern.isOperand(i)) {
@@ -51,7 +51,8 @@ public class ReadasOperationParser extends PackratParser<Expression> {
           while(true) {
             opos = reader.getPos();
             if(pattern.hasSeparator(i)) {
-              if(ReadasOperatorParser.getParser(pattern.getSeparator(i)).applyRule(reader, env).isFail()) break;
+//              if(ReadasOperatorParser.getParser(pattern.getSeparator(i)).applyRule(reader, env).isFail()) break;
+              if (CommonParsers.element(pattern.getSeparator(i)).applyRule(reader, env).isFail()) break;
             }
 
             operand = ReadasOperandParser.getParser(componentType, priority, inclusive, env).applyRule(reader, env);
