@@ -14,7 +14,6 @@ public class Environment {
     IRHeader header = ir.getIRHeader(thisClass);
     this.filePath = header.getFilePath();
     this.resolver = new TypeResolver(header, ir.getClassPool());
-    this.operators = new UsingOperators(header, ir.getOperatorPool());
     this.availableOperators = new AvailableOperators(header, ir.getOperatorPool());
     this.env = new HashMap<>();
     this.exceptions = new HashMap<>();
@@ -59,7 +58,6 @@ public class Environment {
     this.thisMember = env.thisMember;
     this.filePath = env.filePath;
     this.resolver = env.resolver;
-    this.operators = env.operators;
     this.availableOperators = env.availableOperators;
     this.env = new HashMap<>(env.env);
     this.exceptions = new HashMap<>();
@@ -124,14 +122,6 @@ public class Environment {
       visibleMethodsCache.put(clazz, methods);
     }
     return visibleMethodsCache.get(clazz);
-  }
-
-  public NavigableMap<Integer, List<IRPattern>> getReadasPatterns(CtClass type) {
-    return operators.getReadasPatterns(type);
-  }
-
-  public IROperator getReadasOperator(CtClass type, int priority, IRPattern pattern) {
-    return operators.getIRReadasOperator(type, priority, pattern);
   }
 
   public void inheritExceptions(Environment env) {
@@ -208,7 +198,6 @@ public class Environment {
   public final AvailableOperators availableOperators;
 
   private final TypeResolver resolver;
-  private final UsingOperators operators;
   private Map<String, Expression> env;
   private Map<CtClass, List<Integer>> exceptions;
 

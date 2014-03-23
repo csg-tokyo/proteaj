@@ -10,7 +10,7 @@ public class Main {
     FilePath path3 = ../../workspace/ProteaJ/test/file/FilePathExtension.lj;
     FilePath path4 = ~/workspace/ProteaJ/test/file/FilePath.lj;
     FilePath path5 = a/a/a/a/a/a/a/a/a/a/a/a/a/a/a/a/a/a/a/a/a.a;
-    
+
     p "--------------------------";
     p "absolute path";
     p "--------------------------";
