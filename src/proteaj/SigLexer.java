@@ -105,7 +105,7 @@ public class SigLexer {
   }
 
   private List<Token> tokenizeAll(SourceFileReader reader) throws FileIOError {
-    List<Token> tokens = new ArrayList<Token>();
+    List<Token> tokens = new ArrayList<>();
 
     while(reader.hasNext()) try {
       int c = reader.lookahead();
@@ -273,7 +273,7 @@ public class SigLexer {
 
   private String filePath;
 
-  private static final Map<Character, Character> escapedChars = new HashMap<Character, Character>();
+  private static final Map<Character, Character> escapedChars = new HashMap<>();
 
   static {
     escapedChars.put('b', '\b');

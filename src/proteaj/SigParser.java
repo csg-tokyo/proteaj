@@ -550,10 +550,13 @@ public class SigParser {
   }
 
   /* OperatorDecl
-   *  : Type OperatorPattern Parameters ThrowsClause [ ':' "priority" '=' IntValue ] ( MethodBody | ';' )
+   *  : TypeParameters Type OperatorPattern Parameters ThrowsClause [ ':' "priority" '=' IntValue ] ( MethodBody | ';' )
    */
   public OperatorDecl parseOperatorDecl() throws ParseError {
     int line = lexer.lookahead().getLine();
+
+    // TypeParameters
+    List<TypeParameter> typeParams = parseTypeParameters();
 
     // Type
     if(! lexer.lookahead().isIdentifier()) {
@@ -582,7 +585,7 @@ public class SigParser {
       priority = Integer.parseInt(lexer.next(3).toString());
     }
 
-    OperatorDecl operator = new OperatorDecl(type, pattern, params, priority, exceptions, line);
+    OperatorDecl operator = new OperatorDecl(typeParams, type, pattern, params, priority, exceptions, line);
 
     // ( MethodBody | ';' )
     if(lexer.lookahead().is('{')) {
@@ -718,11 +721,45 @@ public class SigParser {
     return mods;
   }
 
+  /* TypeParameters
+   *  : [ '<' TypeParameter { ',' TypeParameter } '>' ]
+   */
+  private List<TypeParameter> parseTypeParameters() throws ParseError {
+    List<TypeParameter> params = new ArrayList<>();
+
+    if (! lexer.lookahead().is('<')) return params;
+    lexer.next();
+
+    params.add(parseTypeParameter());
+
+    while (lexer.lookahead().is(',')) {
+      lexer.next();
+      params.add(parseTypeParameter());
+    }
+
+    if (! lexer.lookahead().is('>')) throw new ParseError("invalid type parameters : expected '>', but found '" + lexer.lookahead().toString() + "'", filePath, lexer.lookahead().getLine());
+    lexer.next();
+
+    return params;
+  }
+
+  /* TypeParameter
+   *  : Identifier
+   */
+  private TypeParameter parseTypeParameter() throws ParseError {
+    if(! lexer.lookahead().isIdentifier()) {
+      throw new ParseError("invalid type parameter : expected type name, but found " + lexer.lookahead().toString(), filePath, lexer.lookahead().getLine());
+    }
+    Token id = lexer.next();
+
+    return new TypeParameter(id.toString(), id.getLine());
+  }
+
   /* Parameters
    *  : '(' [ Parameter { ',' Parameter } ] ')'
    */
   private List<Parameter> parseParameters() throws ParseError {
-    List<Parameter> params = new ArrayList<Parameter>();
+    List<Parameter> params = new ArrayList<>();
 
     assert lexer.lookahead().is('(');
     Token lParen = lexer.next();
@@ -789,7 +826,7 @@ public class SigParser {
    *  : [ "throws" QualifiedIdentifier { ',' QualifiedIdentifier } ]
    */
   private List<String> parseThrowsClause() throws ParseError {
-    List<String> exceptions = new ArrayList<String>();
+    List<String> exceptions = new ArrayList<>();
 
     if(lexer.lookahead().is("throws")) {
       lexer.next();
@@ -922,8 +959,8 @@ public class SigParser {
 
   private Map<Token, Integer> createCorrespondsMap() throws ParseError {
     lexer.init();
-    Map<Token, Integer> corresponds = new HashMap<Token, Integer>();
-    Deque<Token> stack = new ArrayDeque<Token>();
+    Map<Token, Integer> corresponds = new HashMap<>();
+    Deque<Token> stack = new ArrayDeque<>();
 
     while(lexer.hasNext()) {
       Token token = lexer.lookahead();

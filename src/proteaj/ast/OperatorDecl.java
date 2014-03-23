@@ -3,10 +3,11 @@ package proteaj.ast;
 import java.util.List;
 
 public class OperatorDecl extends AST {
-  public OperatorDecl(String type, OperatorPattern pattern, List<Parameter> params, int priority, List<String> exceptions, int line) {
+  public OperatorDecl(List<TypeParameter> typeParams, String type, OperatorPattern pattern, List<Parameter> params, int priority, List<String> exceptions, int line) {
     super(line);
     this.name = null;
     this.modifiers = 0;
+    this.typeParams = typeParams;
     this.type = type;
     this.pattern = pattern;
     this.params = params;
@@ -49,6 +50,8 @@ public class OperatorDecl extends AST {
     return modifiers;
   }
 
+  public List<TypeParameter> getTypeParams() { return typeParams; }
+
   public String getType() {
     return type;
   }
@@ -79,11 +82,13 @@ public class OperatorDecl extends AST {
 
   private String name;
   private int modifiers;
-  private String type;
-  private OperatorPattern pattern;
-  private List<Parameter> params;
-  private int priority;
-  private List<String> exceptions;
+
+  private final List<TypeParameter> typeParams;
+  private final String type;
+  private final OperatorPattern pattern;
+  private final List<Parameter> params;
+  private final int priority;
+  private final List<String> exceptions;
   private String body;
   private int bodyLine;
 }

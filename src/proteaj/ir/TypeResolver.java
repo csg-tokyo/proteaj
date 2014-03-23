@@ -1,7 +1,6 @@
 package proteaj.ir;
 
 import proteaj.error.*;
-import proteaj.ir.*;
 
 import java.util.*;
 import javassist.*;
@@ -113,7 +112,7 @@ public class TypeResolver {
   private ClassPool cpool;
   private IRHeader hdata;
 
-  private static final Map<String, CtClass> primTypes = new HashMap<String, CtClass>();
+  private static final Map<String, CtClass> primTypes = new HashMap<>();
 
   static {
     primTypes.put("boolean", CtClass.booleanType);
