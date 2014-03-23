@@ -26,6 +26,11 @@ public class AvailableOperators {
     else return emptyMap;
   }
 
+  public TreeMap<Integer, List<IROperator>> getReadAsOperators (CtClass clazz) {
+    if (readAsMap.containsKey(clazz)) return readAsMap.get(clazz);
+    else return emptyMap;
+  }
+
   private void printForDebug () {
     System.out.println("===========================================");
     for (Map.Entry<CtClass, TreeMap<Integer, List<IROperator>>> entry : normalMap.entrySet()) {

@@ -78,6 +78,15 @@ public class CommonParsers {
     return PackratParserCombinators.sequence(parsers, keyword(sep));
   }
 
+  public static final PackratParser<Character> letter =
+      new PackratParser<Character>() {
+        @Override
+        protected ParseResult<Character> parse(SourceStringReader reader, Environment env) {
+          if (isLetter(reader.lookahead())) return success(reader.next());
+          else return fail("expected letter, but found " + (char)reader.lookahead(), reader.getPos(), reader);
+        }
+      };
+
   public static final PackratParser<String> identifier =
       new PackratParser<String>() {
         @Override
@@ -250,6 +259,21 @@ public class CommonParsers {
           });
         }
       });
+
+  public static final PackratParser<String> untilWhitespace =
+      new PackratParser<String>() {
+        @Override
+        protected ParseResult<String> parse(SourceStringReader reader, Environment env) {
+          StringBuilder buf = new StringBuilder();
+
+          while(reader.hasNext()) {
+            if(Character.isWhitespace(reader.lookahead())) break;
+            buf.append(reader.next());
+          }
+
+          return success(buf.toString());
+        }
+      };
 
   private static int readEscapedChar(SourceStringReader reader) {
     char ch = reader.next();

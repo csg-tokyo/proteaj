@@ -22,36 +22,9 @@ public class CtClassUtil {
     return cls.getDeclaredConstructor(new CtClass[0]);
   }
 
-  public static List<CtMethod> getMethods(CtClass cls) {
-    if(cache.containsKey(cls)) return cache.get(cls);
-
-    List<CtMethod> methods = new ArrayList<CtMethod>(Arrays.asList(cls.getDeclaredMethods()));
-
-    for(CtMethod method : cls.getMethods()) {
-      if(! methods.contains(method)) methods.add(method);
-    }
-
-    cache.put(cls, methods);
-
-    return methods;
-  }
-
   // not perfect
   public static boolean isCastable (CtClass from, CtClass to) throws NotFoundException {
     return from.isPrimitive() || to.isPrimitive() || from.subtypeOf(to) || to.subtypeOf(from) || to == CtClass.voidType;
-  }
-
-  public static boolean isCastable (CtClass from, CtClass to, String file, int line) {
-    return from.isPrimitive() || to.isPrimitive() || isSubtype(from, to, file, line) || isSubtype(to, from, file, line) || to == CtClass.voidType;
-  }
-
-  public static boolean isSubtype (CtClass sub, CtClass sup, String file, int line) {
-    try {
-      return sub.subtypeOf(sup);
-    } catch (NotFoundException e) {
-      ErrorList.addError(new NotFoundError(e, file, line));
-      return false;
-    }
   }
 
   public static boolean hasTypeParameter (CtClass clazz, String file, int line) {
