@@ -744,15 +744,19 @@ public class SigParser {
   }
 
   /* TypeParameter
-   *  : Identifier
+   *  : Identifier [ "extends" Type ]
    */
   private TypeParameter parseTypeParameter() throws ParseError {
-    if(! lexer.lookahead().isIdentifier()) {
+    if (! lexer.lookahead().isIdentifier()) {
       throw new ParseError("invalid type parameter : expected type name, but found " + lexer.lookahead().toString(), filePath, lexer.lookahead().getLine());
     }
     Token id = lexer.next();
 
-    return new TypeParameter(id.toString(), id.getLine());
+    if (lexer.lookahead().is("extends")) {
+      lexer.next();
+      return new TypeParameter(id.toString(), parseType(), id.getLine());
+    }
+    else return new TypeParameter(id.toString(), id.getLine());
   }
 
   /* Parameters

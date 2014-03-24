@@ -41,7 +41,7 @@ public class SigIRGenerator {
   }
 
   private Collection<Pair<IRHeader, FileBody>> analyzeHeaders(Collection<CompilationUnit> cunits, IR ir) {
-    Collection<Pair<IRHeader, FileBody>> files = new ArrayList<Pair<IRHeader,FileBody>>();
+    Collection<Pair<IRHeader, FileBody>> files = new ArrayList<>();
 
     ClassPool cpool = ir.getClassPool();
 
@@ -60,14 +60,14 @@ public class SigIRGenerator {
         cpool.importPackage(pack);
       }
 
-      files.add(new Pair<IRHeader, FileBody>(hdata, body));
+      files.add(Pair.make(hdata, body));
     }
 
     return files;
   }
 
   private Collection<Pair<CtClass, ClassDecl>> registerClasses(Collection<Pair<IRHeader, FileBody>> files, IR ir) {
-    Collection<Pair<CtClass, ClassDecl>> classes = new ArrayList<Pair<CtClass,ClassDecl>>();
+    Collection<Pair<CtClass, ClassDecl>> classes = new ArrayList<>();
 
     for(Pair<IRHeader, FileBody> pair : files) {
       IRHeader hdata = pair._1;
@@ -82,7 +82,7 @@ public class SigIRGenerator {
         ir.addClass(ctcl, hdata);
 
         hdata.addAbbName(shortName, longName);
-        classes.add(new Pair<CtClass, ClassDecl>(ctcl, cdecl));
+        classes.add(Pair.make(ctcl, cdecl));
       }
     }
 
@@ -90,7 +90,7 @@ public class SigIRGenerator {
   }
 
   private Collection<Pair<CtClass, InterfaceDecl>> registerInterfaces(Collection<Pair<IRHeader, FileBody>> files, IR ir) {
-    Collection<Pair<CtClass, InterfaceDecl>> ifaces = new ArrayList<Pair<CtClass,InterfaceDecl>>();
+    Collection<Pair<CtClass, InterfaceDecl>> ifaces = new ArrayList<>();
     ClassPool cpool = ir.getClassPool();
 
     for(Pair<IRHeader, FileBody> pair : files) {
@@ -107,7 +107,7 @@ public class SigIRGenerator {
         ir.addInterface(iface, hdata);
 
         hdata.addAbbName(shortName, longName);
-        ifaces.add(new Pair<CtClass, InterfaceDecl>(iface, idecl));
+        ifaces.add(Pair.make(iface, idecl));
       }
     }
 
@@ -115,7 +115,7 @@ public class SigIRGenerator {
   }
 
   private Collection<Pair<CtClass, SyntaxDecl>> registerSyntax(Collection<Pair<IRHeader, FileBody>> files, IR ir) {
-    Collection<Pair<CtClass, SyntaxDecl>> syntax = new ArrayList<Pair<CtClass,SyntaxDecl>>();
+    Collection<Pair<CtClass, SyntaxDecl>> syntax = new ArrayList<>();
 
     for(Pair<IRHeader, FileBody> pair : files) {
       IRHeader header = pair._1;
@@ -136,7 +136,7 @@ public class SigIRGenerator {
         String longName = appendPackageName(packageName, syn.getName());
         CtClass ctcl = ir.makeClass(longName, syn.getModifiers());
         ir.addClass(ctcl, hdata);
-        syntax.add(new Pair<CtClass, SyntaxDecl>(ctcl, syn));
+        syntax.add(Pair.make(ctcl, syn));
       }
     }
 
