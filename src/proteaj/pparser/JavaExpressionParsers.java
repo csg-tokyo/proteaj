@@ -23,7 +23,7 @@ public class JavaExpressionParsers {
       bind(postfix(ref_JavaExpression, "="), new Function<Expression, PackratParser<AssignExpression>>() {
         @Override
         public PackratParser<AssignExpression> apply(final Expression left) {
-          return map(expression(left.getType()), new Function<Expression, AssignExpression>() {
+          return map(expression(left.type), new Function<Expression, AssignExpression>() {
             @Override
             public AssignExpression apply(Expression right) {
               return new AssignExpression(left, right);
@@ -36,7 +36,7 @@ public class JavaExpressionParsers {
       bind(postfix(postfix(ref_JavaExpression, "."), "length"), new Function<Expression, PackratParser<ArrayLength>>() {
         @Override
         public PackratParser<ArrayLength> apply(Expression expr) {
-          if (expr.getType().isArray()) return unit(new ArrayLength(expr));
+          if (expr.type.isArray()) return unit(new ArrayLength(expr));
           else return failure("not array type");
         }
       });
@@ -48,7 +48,7 @@ public class JavaExpressionParsers {
           return depends(new Function<Environment, PackratParser<MethodCall>>() {
             @Override
             public PackratParser<MethodCall> apply(Environment env) {
-              return foreach(env.getInstanceMethods(pair._1.getType(), pair._2), new Function<CtMethod, PackratParser<MethodCall>>() {
+              return foreach(env.getInstanceMethods(pair._1.type, pair._2), new Function<CtMethod, PackratParser<MethodCall>>() {
                 @Override
                 public PackratParser<MethodCall> apply(final CtMethod method) {
                   return effect(bind(arguments(method), new Function<List<Expression>, PackratParser<MethodCall>>() {
@@ -59,7 +59,7 @@ public class JavaExpressionParsers {
                     }
                   }), throwing(method));
                 }
-              }, "method " + pair._2 + " is not found in " + pair._1.getType().getName());
+              }, "method " + pair._2 + " is not found in " + pair._1.type.getName());
             }
           });
         }
@@ -73,18 +73,18 @@ public class JavaExpressionParsers {
             @Override
             public PackratParser<FieldAccess> apply(Environment env) {
               final CtField field;
-              try { field = pair._1.getType().getField(pair._2); }
+              try { field = pair._1.type.getField(pair._2); }
               catch (NotFoundException e) {
-                return failure("field " + pair._2 + " is not found in " + pair._1.getType().getName());
+                return failure("field " + pair._2 + " is not found in " + pair._1.type.getName());
               }
 
               if (env.isVisible(field)) {
                 if (! isStatic(field)) try {
                   return unit(new FieldAccess(pair._1, field));
                 } catch (NotFoundException e) { return error(e); }
-                else return failure("field " + pair._1.getType().getName() + '.' + pair._2 + " is a static field");
+                else return failure("field " + pair._1.type.getName() + '.' + pair._2 + " is a static field");
               }
-              else return failure("field " + pair._1.getType().getName() + '.' + pair._2 + " is not visible from " + env.thisClass.getName());
+              else return failure("field " + pair._1.type.getName() + '.' + pair._2 + " is not visible from " + env.thisClass.getName());
             }
           });
         }
@@ -96,7 +96,7 @@ public class JavaExpressionParsers {
       bind(seq(ref_JavaExpression, arrayIndex), new Function<Pair<Expression, Expression>, PackratParser<ArrayAccess>>() {
         @Override
         public PackratParser<ArrayAccess> apply(Pair<Expression, Expression> pair) {
-          if (pair._1.getType().isArray()) try {
+          if (pair._1.type.isArray()) try {
             return unit(new ArrayAccess(pair._1, pair._2));
           } catch (NotFoundException e) { return error(e); }
           else return failure("not array type");
@@ -260,8 +260,8 @@ public class JavaExpressionParsers {
         @Override
         public PackratParser<CastExpression> apply(Pair<CtClass, Expression> pair) {
           try {
-            if (isCastable(pair._2.getType(), pair._1)) return unit(new CastExpression(pair._1, pair._2));
-            else return failure(pair._2.getType().getName() + " cannot cast to " + pair._1.getName());
+            if (isCastable(pair._2.type, pair._1)) return unit(new CastExpression(pair._1, pair._2));
+            else return failure(pair._2.type.getName() + " cannot cast to " + pair._1.getName());
           } catch (NotFoundException e) { return error(e); }
         }
       });

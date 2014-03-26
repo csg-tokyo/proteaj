@@ -97,9 +97,9 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   }
 
   public Statement translate(TryStatement tryStmt) {
-    List<Triad<CtClass, String, Block>> catches = new ArrayList<Triad<CtClass, String, Block>>();
+    List<Triad<CtClass, String, Block>> catches = new ArrayList<>();
     for (Triad<CtClass, String, Block> triad : tryStmt.getCatchBlocks()) {
-      catches.add(new Triad<CtClass, String, Block>(triad._1, triad._2, translate(triad._3)));
+      catches.add(Triad.make(triad._1, triad._2, translate(triad._3)));
     }
     if (! tryStmt.hasFinallyBlock()) return new TryStatement(translate(tryStmt.tryBlock), catches);
     else return new TryStatement(translate(tryStmt.tryBlock), catches, translate(tryStmt.getFinallyBlock()));
@@ -172,7 +172,7 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   }
 
   public Expression translate(NewArrayExpression newArray) {
-    return new NewArrayExpression(newArray.getType(), translateExprs(newArray.args));
+    return new NewArrayExpression(newArray.type, translateExprs(newArray.args));
   }
 
   public Expression translate(ArrayAccess arrayAccess) {
@@ -204,11 +204,11 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   }
 
   public Expression translate(CastExpression cast) {
-    return new CastExpression(cast.getType(), translate(cast.expr));
+    return new CastExpression(cast.type, translate(cast.expr));
   }
 
   public Expression translate(VariableArguments varArgs) {
-    return new VariableArguments(translateExprs(varArgs.args), varArgs.getType());
+    return new VariableArguments(translateExprs(varArgs.args), varArgs.type);
   }
 
   public Expression translate(StringLiteral stringLiteral) {
@@ -238,13 +238,13 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   /* utility */
 
   private List<Expression> translateExprs(List<Expression> list) {
-    List<Expression> es = new ArrayList<Expression>();
+    List<Expression> es = new ArrayList<>();
     for (Expression e : list) es.add(translate(e));
     return es;
   }
 
   private List<Statement> translateStmts(List<Statement> list) {
-    List<Statement> ss = new ArrayList<Statement>();
+    List<Statement> ss = new ArrayList<>();
     for (Statement s : list) ss.add(translate(s));
     return ss;
   }

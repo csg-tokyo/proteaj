@@ -9,11 +9,7 @@ public abstract class Expression {
     this.type = type;
   }
 
-  public CtClass getType() {
-    return type;
-  }
-
   public abstract <T> T accept (ExpressionVisitor<T> visitor, T t);
 
-  private final CtClass type;
+  public final CtClass type;
 }

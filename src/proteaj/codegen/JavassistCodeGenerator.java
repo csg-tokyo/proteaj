@@ -275,7 +275,7 @@ public class JavassistCodeGenerator implements ExpressionVisitor<StringBuilder>,
     buf = buf.append("new ");
 
     int dim = 0;
-    CtClass t = newArray.getType();
+    CtClass t = newArray.type;
     while (t.isArray()) try {
       t = t.getComponentType();
       dim++;
@@ -336,7 +336,7 @@ public class JavassistCodeGenerator implements ExpressionVisitor<StringBuilder>,
 
   @Override
   public StringBuilder visit(CastExpression castExpr, StringBuilder buf) {
-    CtClass type = castExpr.getType();
+    CtClass type = castExpr.type;
     if (type == CtClass.voidType) return visit(castExpr.expr, buf);
 
     buf = buf.append('(').append('(').append(type.getName()).append(')');
@@ -347,7 +347,7 @@ public class JavassistCodeGenerator implements ExpressionVisitor<StringBuilder>,
 
   @Override
   public StringBuilder visit(VariableArguments operands, StringBuilder buf) {
-    buf = buf.append("new ").append(operands.getType().getName());
+    buf = buf.append("new ").append(operands.type.getName());
     buf = buf.append('{');
 
     List<Expression> args = operands.args;

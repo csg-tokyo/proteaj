@@ -191,7 +191,7 @@ public abstract class StatementParsers {
           }), new Function<ThrowStatement, Effect>() {
         @Override
         public Effect apply(ThrowStatement throwStatement) {
-          return throwing(throwStatement.e.getType());
+          return throwing(throwStatement.e.type);
         }
       });
 

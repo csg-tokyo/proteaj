@@ -38,7 +38,7 @@ public class ProgramTranslator extends TreeTranslator {
           List<Expression> args = new ArrayList<Expression>();
 
           for (Expression local : locals) {
-            params.add(local.getType());
+            params.add(local.type);
             args.add(local);
           }
 

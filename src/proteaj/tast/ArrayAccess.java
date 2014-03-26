@@ -6,7 +6,7 @@ import javassist.*;
 
 public class ArrayAccess extends Expression {
   public ArrayAccess(Expression array, Expression index) throws NotFoundException {
-    super(array.getType().getComponentType());
+    super(array.type.getComponentType());
     this.array = array;
     this.index = index;
   }

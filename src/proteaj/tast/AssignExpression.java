@@ -5,7 +5,7 @@ import proteaj.tast.util.*;
 public class AssignExpression extends Expression {
 
   public AssignExpression(Expression ref, Expression val) {
-    super(ref.getType());
+    super(ref.type);
     this.ref = ref;
     this.val = val;
   }

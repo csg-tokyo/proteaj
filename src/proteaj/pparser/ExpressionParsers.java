@@ -303,8 +303,8 @@ public class ExpressionParsers {
       @Override
       public PackratParser<Expression> apply(Expression expr) {
         try {
-          if (expr.getType().subtypeOf(clazz) || clazz == CtClass.voidType) return unit(expr);
-          else return failure("type mismatch: expected " + clazz.getName() + " but found " + expr.getType().getName());
+          if (expr.type.subtypeOf(clazz) || clazz == CtClass.voidType) return unit(expr);
+          else return failure("type mismatch: expected " + clazz.getName() + " but found " + expr.type.getName());
         } catch (NotFoundException e) { return error(e); }
       }
     });
