@@ -1,11 +1,9 @@
 package proteaj.pparser;
 
-import java.util.*;
 import javassist.*;
 
-import proteaj.error.NotFoundError;
+import proteaj.error.*;
 import proteaj.tast.*;
-import proteaj.util.*;
 
 import static proteaj.pparser.PackratParserCombinators.*;
 import static proteaj.pparser.CommonParsers.*;
@@ -109,8 +107,9 @@ public class JavaExpressionParsers {
 
   private static final PackratParser<NewArrayExpression> newArray =
       bind(seq(prefix("new", className), rep1(arrayIndex), rep(keywords("[", "]"))), triad -> depends(env -> {
+        int dim = triad._2.size() + triad._3.size();
         CtClass arrayType;
-        try { arrayType = env.getArrayType(triad._1, triad._2.size() + triad._3.size()); } catch (NotFoundError e) { return error(e); }
+        try { arrayType = env.getArrayType(triad._1, dim); } catch (NotFoundError e) { return error(e); }
         return unit(new NewArrayExpression(arrayType, triad._2));
       }));
 
@@ -125,7 +124,7 @@ public class JavaExpressionParsers {
   private static final PackratParser<Expression> parenthesized =
       enclosed("(", ref_JavaExpression, ")");
 
-  private static final PackratParser<IntLiteral> intLiteral = map(integer, v -> new IntLiteral(v));
+  private static final PackratParser<IntLiteral> intLiteral = map(integer, IntLiteral::new);
 
   private static final PackratParser<BooleanLiteral> trueLiteral = map(keyword("true"), s -> new BooleanLiteral(true));
 
@@ -133,9 +132,9 @@ public class JavaExpressionParsers {
 
   private static final PackratParser<BooleanLiteral> booleanLiteral = choice(trueLiteral, falseLiteral);
 
-  private static final PackratParser<StringLiteral> stringLiteral = map(string, s -> new StringLiteral(s));
+  private static final PackratParser<StringLiteral> stringLiteral = map(string, StringLiteral::new);
 
-  private static final PackratParser<CharLiteral> charLiteral = map(character, ch -> new CharLiteral(ch));
+  private static final PackratParser<CharLiteral> charLiteral = map(character, CharLiteral::new);
 
   private static final PackratParser<Expression> literal =
       choice(intLiteral, booleanLiteral, stringLiteral, charLiteral);

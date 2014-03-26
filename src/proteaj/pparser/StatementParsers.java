@@ -163,26 +163,24 @@ public abstract class StatementParsers {
   private final PackratParser<Statement> blockStatement =
       choice(block, controlFlow, localVarDeclStatement, expressionStatement);
 
-  private PackratParser<ThisConstructorCall> thisConstructorArgs (final Environment env, final CtConstructor constructor) {
-    return bind(arguments(constructor), es -> {
-      if (constructor == env.thisMember) return failure("recursive constructor invocation");
-      else return effect(unit(new ThisConstructorCall(constructor, es)), throwing(constructor));
-    });
-  }
-
-  private PackratParser<SuperConstructorCall> superConstructorArgs (final CtConstructor constructor) {
-    return bind(arguments(constructor), es -> effect(unit(new SuperConstructorCall(constructor, es)), throwing(constructor)));
-  }
+  private final PackratParser<ThisConstructorCall> thisConstructorCall_Args =
+      depends(env -> foreach(env.thisClass.getDeclaredConstructors(), c -> bind(arguments(c), args -> {
+        if (c == env.thisMember) return failure("recursive constructor invocation");
+        else return unit(new ThisConstructorCall(c, args));
+      }), "suitable constructor is not found"));
 
   private final PackratParser<ThisConstructorCall> thisConstructorCall =
-      enclosed("this", depends(env -> foreach(env.thisClass.getDeclaredConstructors(), c -> thisConstructorArgs(env, c), "suitable constructor is not found")), ";");
+      withEffect(enclosed("this", thisConstructorCall_Args, ";"), e -> throwing(e.constructor));
+
+  private final PackratParser<SuperConstructorCall> superConstructorCall_Args =
+      depends(env -> {
+        CtClass sup;
+        try { sup = env.thisClass.getSuperclass(); } catch (NotFoundException e) { return error(e); }
+        return foreach(sup.getConstructors(), c -> map(arguments(c), args -> new SuperConstructorCall(c, args)), "suitable super constructor is not found");
+      });
 
   private final PackratParser<SuperConstructorCall> superConstructorCall =
-      enclosed("super", depends(env -> {
-        try {
-          return foreach(env.thisClass.getSuperclass().getDeclaredConstructors(), c -> superConstructorArgs(c), "suitable super constructor is not found");
-        } catch (NotFoundException e) { return error(e); }
-      }), ";");
+      withEffect(enclosed("super", superConstructorCall_Args, ";"), e -> throwing(e.constructor));
 
   private final PackratParser<SuperConstructorCall> defaultConstructorCall =
       depends(env -> {

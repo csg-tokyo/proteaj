@@ -22,11 +22,11 @@ public class ExpressionParsers {
   }
 
   public static PackratParser<DefaultValue> defaultArgument (CtClass expected) {
-    return map(expression(expected), expr -> new DefaultValue(expr));
+    return map(expression(expected), DefaultValue::new);
   }
 
   public static PackratParser<FieldBody> fieldBody (CtClass expected) {
-    return map(expression(expected), expr -> new FieldBody(expr));
+    return map(expression(expected), FieldBody::new);
   }
 
   public static PackratParser<List<Expression>> arguments (CtBehavior behavior){
