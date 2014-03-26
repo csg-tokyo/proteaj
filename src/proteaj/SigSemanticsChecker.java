@@ -18,7 +18,7 @@ public class SigSemanticsChecker {
   }
 
   private boolean checkCompilationUnit(CompilationUnit cunit) {
-    return checkFileHeader(cunit.getHeader()) && checkFileBody(cunit.getBody());
+    return checkFileHeader(cunit.header) && checkFileBody(cunit.body);
   }
 
   private boolean checkFileHeader(FileHeader header) {
@@ -37,7 +37,7 @@ public class SigSemanticsChecker {
     boolean ret = true;
     int mod = cdecl.getModifiers();
     int line = cdecl.getLine();
-    String file = cunit.getFilePath();
+    String file = cunit.filePath;
 
     if((mod & ~CLASS_MODIFIER) > 0) {
       ErrorList.addError(new SemanticsError("invalid modifier : " + Modifiers.toString(mod), file, line));
@@ -73,7 +73,7 @@ public class SigSemanticsChecker {
     boolean ret = true;
     int mod = idecl.getModifiers();
     int line = idecl.getLine();
-    String file = cunit.getFilePath();
+    String file = cunit.filePath;
 
     if((mod & ~INTERFACE_MODIFIER) > 0) {
       ErrorList.addError(new SemanticsError("invalid modifier : " + Modifiers.toString(mod), file, line));
@@ -102,7 +102,7 @@ public class SigSemanticsChecker {
     boolean ret = true;
     int mod = sdecl.getModifiers();
     int line = sdecl.getLine();
-    String file = cunit.getFilePath();
+    String file = cunit.filePath;
 
     if((mod & ~SYNTAX_MODIFIER) > 0) {
       ErrorList.addError(new SemanticsError("invalid modifier : " + Modifiers.toString(mod), file, line));
@@ -130,7 +130,7 @@ public class SigSemanticsChecker {
     boolean ret = true;
     int mod = cdecl.getModifiers();
     int line = cdecl.getLine();
-    String file = cunit.getFilePath();
+    String file = cunit.filePath;
 
     if((mod & ~CONSTRUCTOR_MODIFIER) > 0 || ! isValidAccessModifier(mod)) {
       ErrorList.addError(new SemanticsError("invalid modifier : " + Modifiers.toString(mod), file, line));
@@ -150,7 +150,7 @@ public class SigSemanticsChecker {
   private boolean checkFieldDecl(FieldDecl fdecl) {
     int mod = fdecl.getModifiers();
     int line = fdecl.getLine();
-    String file = cunit.getFilePath();
+    String file = cunit.filePath;
 
     if((mod & ~FIELD_MODIFIER) > 0 || ! isValidAccessModifier(mod)) {
       ErrorList.addError(new SemanticsError("invalid modifier : " + Modifiers.toString(mod), file, line));
@@ -164,7 +164,7 @@ public class SigSemanticsChecker {
     boolean ret = true;
     int mod = mdecl.getModifiers();
     int line = mdecl.getLine();
-    String file = cunit.getFilePath();
+    String file = cunit.filePath;
 
     if((mod & ~METHOD_MODIFIER) > 0 || ! isValidAccessModifier(mod) || (((mod & ABSTRACT) > 0) && ((mod & PRIVATE) > 0))) {
       ErrorList.addError(new SemanticsError("invalid modifier : " + Modifiers.toString(mod), file, line));
@@ -185,7 +185,7 @@ public class SigSemanticsChecker {
     boolean ret = true;
     int mod = mdecl.getModifiers();
     int line = mdecl.getLine();
-    String file = cunit.getFilePath();
+    String file = cunit.filePath;
 
     if((mod & ~CONCRETE_METHOD_MODIFIER) > 0 || ! isValidAccessModifier(mod)) {
       ErrorList.addError(new SemanticsError("invalid modifier : " + Modifiers.toString(mod), file, line));
@@ -201,7 +201,7 @@ public class SigSemanticsChecker {
     boolean ret = true;
     int mod = fdecl.getModifiers();
     int line = fdecl.getLine();
-    String file = cunit.getFilePath();
+    String file = cunit.filePath;
 
     if((mod & ~CONSTANT_MODIFIER) > 0) {
       ErrorList.addError(new SemanticsError("invalid modifier : " + Modifiers.toString(mod), file, line));
@@ -220,7 +220,7 @@ public class SigSemanticsChecker {
     boolean ret = true;
     int mod = mdecl.getModifiers();
     int line = mdecl.getLine();
-    String file = cunit.getFilePath();
+    String file = cunit.filePath;
 
     if((mod & ~ABSTRACT_METHOD_MODIFIER) > 0) {
       ErrorList.addError(new SemanticsError("invalid modifier : " + Modifiers.toString(mod), file, line));
@@ -241,7 +241,7 @@ public class SigSemanticsChecker {
     boolean ret = true;
     int mod = odecl.getModifiers();
     int line = odecl.getLine();
-    String file = cunit.getFilePath();
+    String file = cunit.filePath;
 
     if((mod & ~OPERATOR_MODIFIER) > 0) {
       ErrorList.addError(new SemanticsError("invalid modifier : " + Modifiers.toString(mod), file, line));
@@ -260,7 +260,7 @@ public class SigSemanticsChecker {
   private boolean checkMethodParameter(Parameter param) {
     int mod = param.getModifiers();
     int line = param.getLine();
-    String file = cunit.getFilePath();
+    String file = cunit.filePath;
 
     if((mod & ~PARAMETER_MODIFIER) > 0) {
       ErrorList.addError(new SemanticsError("invalid modifier : " + Modifiers.toString(mod), file, line));
@@ -277,9 +277,9 @@ public class SigSemanticsChecker {
     boolean ret = true;
     int length = pattern.getLength();
     int line = pattern.getLine();
-    String file = cunit.getFilePath();
+    String file = cunit.filePath;
 
-    Deque<Integer> stack = new ArrayDeque<Integer>();
+    Deque<Integer> stack = new ArrayDeque<>();
 
     for(int i = 0, j = 0; i < length; i++) {
       if(pattern.isOperand(i)) {
@@ -332,7 +332,7 @@ public class SigSemanticsChecker {
     boolean ret = true;
     int mod = param.getModifiers();
     int line = operand.getLine();
-    String file = cunit.getFilePath();
+    String file = cunit.filePath;
 
     if((mod & ~OPERAND_MODIFIER) > 0) {
       ErrorList.addError(new SemanticsError("invalid modifier : " + Modifiers.toString(mod), file, line));

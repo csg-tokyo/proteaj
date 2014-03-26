@@ -193,24 +193,16 @@ public class CommonParsers {
       };
 
   public static final PackratParser<String> qualifiedIdentifier =
-      map(rep1(identifier, "."), new Function<List<String>, String>() {
-        @Override
-        public String apply(List<String> strings) {
-          StringBuilder buf = new StringBuilder(strings.get(0));
-          for (int i = 1; i < strings.size(); i++) {
-            buf.append('.').append(strings.get(i));
-          }
-          return buf.toString();
+      map(rep1(identifier, "."), strings -> {
+        StringBuilder buf = new StringBuilder(strings.get(0));
+        for (int i = 1; i < strings.size(); i++) {
+          buf.append('.').append(strings.get(i));
         }
+        return buf.toString();
       });
 
   private static final PackratParser<Integer> arrayBrackets =
-      map(PackratParserCombinators.rep(keywords("[", "]")), new Function<List<String[]>, Integer>() {
-        @Override
-        public Integer apply(List<String[]> pairs) {
-          return pairs.size();
-        }
-      });
+      map(PackratParserCombinators.rep(keywords("[", "]")), pairs -> pairs.size());
 
   public static final PackratParser<CtClass> className =
       new PackratParser<CtClass>() {
@@ -246,18 +238,10 @@ public class CommonParsers {
       };
 
   public static final PackratParser<CtClass> typeName =
-      bind(seq(qualifiedIdentifier, arrayBrackets), new Function<Pair<String, Integer>, PackratParser<CtClass>>() {
-        @Override
-        public PackratParser<CtClass> apply(final Pair<String, Integer> pair) {
-          return depends(new Function<Environment, PackratParser<CtClass>>() {
-            @Override
-            public PackratParser<CtClass> apply(Environment env) {
-              try { return unit(env.getArrayType(pair._1, pair._2)); }
-              catch (NotFoundError e) { return failure(e.getMessage()); }
-            }
-          });
-        }
-      });
+      bind(seq(qualifiedIdentifier, arrayBrackets), pair -> depends(env -> {
+        try { return unit(env.getArrayType(pair._1, pair._2)); }
+        catch (NotFoundError e) { return failure(e.getMessage()); }
+      }));
 
   public static final PackratParser<String> untilWhitespace =
       new PackratParser<String>() {

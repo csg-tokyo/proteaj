@@ -6,10 +6,10 @@ public class FileHeader extends AST {
   public FileHeader(int line) {
     super(line);
     this.packName = null;
-    this.importPack = new ArrayList<String>();
-    this.importCls = new ArrayList<String>();
-    this.usingSyn = new ArrayList<String>();
-    this.unusingSyn = new HashSet<String>();
+    this.importPack = new ArrayList<>();
+    this.importCls = new ArrayList<>();
+    this.usingSyn = new ArrayList<>();
+    this.unusingSyn = new HashSet<>();
   }
 
   public void setPackageName(String pack) {

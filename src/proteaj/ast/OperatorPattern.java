@@ -5,7 +5,7 @@ import java.util.*;
 public class OperatorPattern extends AST {
   public OperatorPattern(int line) {
     super(line);
-    this.pattern = new ArrayList<OperatorPatternElement>();
+    this.pattern = new ArrayList<>();
   }
 
   public void append(OperatorPatternElement elem) {

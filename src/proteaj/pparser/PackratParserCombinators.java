@@ -6,6 +6,7 @@ import proteaj.ir.*;
 import proteaj.util.*;
 
 import java.util.*;
+import java.util.function.*;
 import javassist.*;
 
 class PackratParserCombinators {
@@ -551,10 +552,6 @@ class PackratParserCombinators {
     protected ParseResult<T> parse(SourceStringReader reader, Environment env) {
       return evaluate().applyRule(reader, env);
     }
-  }
-
-  public interface Function<T, R> {
-    public R apply (T t);
   }
 
   private static class InheritExceptions implements Effect {

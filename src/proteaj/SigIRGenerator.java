@@ -46,10 +46,10 @@ public class SigIRGenerator {
     ClassPool cpool = ir.getClassPool();
 
     for(CompilationUnit cunit : cunits) {
-      FileHeader header = cunit.getHeader();
-      FileBody body = cunit.getBody();
+      FileHeader header = cunit.header;
+      FileBody body = cunit.body;
 
-      IRHeader hdata = new IRHeader(cunit.getFilePath(), header.getPackName(),
+      IRHeader hdata = new IRHeader(cunit.filePath, header.getPackName(),
           header.getImportPackages(), header.getUsingSyntax(), header.getUnusingSyntax());
 
       for(String icls : header.getImportClasses()) {

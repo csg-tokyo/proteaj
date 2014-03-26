@@ -8,20 +8,8 @@ public class CompilationUnit extends AST {
     this.body = body;
   }
 
-  public String getFilePath() {
-    return filePath;
-  }
-
-  public FileHeader getHeader() {
-    return header;
-  }
-
-  public FileBody getBody() {
-    return body;
-  }
-
-  private String filePath;
-  private FileHeader header;
-  private FileBody body;
+  public final String filePath;
+  public final FileHeader header;
+  public final FileBody body;
 }
 
