@@ -2,7 +2,6 @@ package proteaj.pparser;
 
 import proteaj.error.*;
 import proteaj.io.*;
-import proteaj.ir.*;
 import proteaj.util.*;
 
 import java.util.*;

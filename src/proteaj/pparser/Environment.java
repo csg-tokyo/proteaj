@@ -1,6 +1,10 @@
-package proteaj.ir;
+package proteaj.pparser;
 
 import proteaj.error.*;
+import proteaj.ir.ClassResolver;
+import proteaj.ir.IR;
+import proteaj.ir.IRCommonTypes;
+import proteaj.ir.IRHeader;
 import proteaj.tast.*;
 import proteaj.util.*;
 
@@ -12,8 +16,8 @@ public class Environment {
     this.thisClass = thisMember.getDeclaringClass();
     this.thisMember = thisMember;
     IRHeader header = ir.getIRHeader(thisClass);
-    this.filePath = header.getFilePath();
-    this.resolver = new TypeResolver(header, ir.getClassPool());
+    this.filePath = header.filePath;
+    this.classResolver = new ClassResolver(header, ir.getClassPool());
     this.availableOperators = new AvailableOperators(header, ir.getOperatorPool());
     this.env = new HashMap<>();
     this.exceptions = new HashMap<>();
@@ -57,7 +61,7 @@ public class Environment {
     this.thisClass = env.thisClass;
     this.thisMember = env.thisMember;
     this.filePath = env.filePath;
-    this.resolver = env.resolver;
+    this.classResolver = env.classResolver;
     this.availableOperators = env.availableOperators;
     this.env = new HashMap<>(env.env);
     this.exceptions = new HashMap<>();
@@ -72,19 +76,19 @@ public class Environment {
   }
 
   public CtClass getType(String name) throws NotFoundError {
-    return resolver.getType(name);
+    return classResolver.getType(name);
   }
 
   public CtClass getArrayType (String name, int dim) throws NotFoundError {
-    return resolver.getArrayType(name, dim);
+    return classResolver.getArrayType(name, dim);
   }
 
   public CtClass getArrayType (CtClass component, int dim) throws NotFoundError {
-    return resolver.getArrayType(component, dim);
+    return classResolver.getArrayType(component, dim);
   }
 
   public boolean isTypeName(String name) {
-    return resolver.isTypeName(name);
+    return classResolver.isTypeName(name);
   }
 
   public List<CtMethod> getInstanceMethods (CtClass clazz, String name) {
@@ -197,7 +201,7 @@ public class Environment {
   public final String filePath;
   public final AvailableOperators availableOperators;
 
-  private final TypeResolver resolver;
+  private final ClassResolver classResolver;
   private Map<String, Expression> env;
   private Map<CtClass, List<Integer>> exceptions;
 

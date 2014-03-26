@@ -1,9 +1,13 @@
-package proteaj.ir;
+package proteaj.pparser;
 
 import proteaj.error.*;
 
 import java.util.*;
 import javassist.*;
+import proteaj.ir.IRHeader;
+import proteaj.ir.IROperator;
+import proteaj.ir.IRSyntax;
+import proteaj.ir.OperatorPool;
 
 public class AvailableOperators {
   public AvailableOperators (IRHeader header, OperatorPool pool) {
@@ -46,7 +50,7 @@ public class AvailableOperators {
 
   /* private methods for initializing */
   private int loadSyntax (IRSyntax syntax, int basePriority) {
-    if (header.getUnusingSyntax().contains(syntax.getName())) return basePriority;
+    if (header.unusingSyntax.contains(syntax.getName())) return basePriority;
 
     int maxPriority = basePriority;
     if (syntax.hasBaseSyntax()) try {
@@ -83,7 +87,7 @@ public class AvailableOperators {
   private void loadRef_SuperClass (CtClass clazz, int priority, IROperator operator, Map<CtClass, TreeMap<Integer, List<IROperator>>> map) {
     final CtClass sup;
     try { sup = clazz.getSuperclass(); } catch (NotFoundException e) {
-      ErrorList.addError(new NotFoundError(e, header.getFilePath(), 0));
+      ErrorList.addError(new NotFoundError(e, header.filePath, 0));
       return;
     }
     if (sup != null) loadRef_Class(sup, priority, operator, map);
@@ -92,7 +96,7 @@ public class AvailableOperators {
   private void loadRef_Interfaces (CtClass clazz, int priority, IROperator operator, Map<CtClass, TreeMap<Integer, List<IROperator>>> map) {
     final CtClass[] interfaces;
     try { interfaces = clazz.getInterfaces(); } catch (NotFoundException e) {
-      ErrorList.addError(new NotFoundError(e, header.getFilePath(), 0));
+      ErrorList.addError(new NotFoundError(e, header.filePath, 0));
       return;
     }
     for (CtClass ifc : interfaces) loadRef_Interface(ifc, priority, operator, map);
@@ -110,7 +114,7 @@ public class AvailableOperators {
 
   private List<IRSyntax> getUsingList () {
     List<IRSyntax> list = new ArrayList<>();
-    for (String name : header.getUsingSyntax()) try {
+    for (String name : header.usingSyntax) try {
       list.add(getSyntaxFromPool(name));
     } catch (NotFoundError e) {
       ErrorList.addError(e);
@@ -121,7 +125,7 @@ public class AvailableOperators {
 
   private IRSyntax getSyntaxFromPool (String name) throws NotFoundError {
     if (pool.containsSyntax(name)) return pool.getSyntax(name);
-    else throw new NotFoundError("operators module " + name + " is not found", header.getFilePath(), 0);
+    else throw new NotFoundError("operators module " + name + " is not found", header.filePath, 0);
   }
 
   /* utility methods for manipulating operators map */

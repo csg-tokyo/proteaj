@@ -3,6 +3,7 @@ package proteaj;
 import proteaj.error.*;
 import proteaj.io.*;
 import proteaj.ir.*;
+import proteaj.pparser.Environment;
 import proteaj.tast.*;
 
 import java.util.*;

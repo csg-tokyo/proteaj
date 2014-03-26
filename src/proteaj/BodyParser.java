@@ -2,7 +2,6 @@ package proteaj;
 
 import proteaj.error.*;
 import proteaj.io.*;
-import proteaj.ir.*;
 import proteaj.tast.*;
 import proteaj.pparser.*;
 

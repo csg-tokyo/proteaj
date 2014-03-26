@@ -5,8 +5,8 @@ import proteaj.error.*;
 import java.util.*;
 import javassist.*;
 
-public class TypeResolver {
-  public TypeResolver(IRHeader hdata, ClassPool cpool) {
+public class ClassResolver {
+  public ClassResolver(IRHeader hdata, ClassPool cpool) {
     this.cpool = cpool;
     this.hdata = hdata;
   }
@@ -23,7 +23,7 @@ public class TypeResolver {
       return true;
     }
 
-    for(String pack : hdata.getImportPackages()) {
+    for(String pack : hdata.importPackages) {
       ctcl = cpool.getOrNull(pack + '.' + name);
 
       if(ctcl != null) {
@@ -43,7 +43,7 @@ public class TypeResolver {
     if(hdata.containsAbbName(name)) try {
       return cpool.get(hdata.getLongName(name));
     } catch (NotFoundException e) {
-      throw new NotFoundError("class " + name + " is not found", hdata.getFilePath(), 0);
+      throw new NotFoundError("class " + name + " is not found", hdata.filePath, 0);
     }
     if(name.contains(".")) {
       CtClass ctcl = cpool.getOrNull(name);
@@ -70,7 +70,7 @@ public class TypeResolver {
       return ctcl;
     }
 
-    for(String pack : hdata.getImportPackages()) {
+    for(String pack : hdata.importPackages) {
       ctcl = cpool.getOrNull(pack + '.' + name);
 
       if(ctcl != null) {
@@ -81,7 +81,7 @@ public class TypeResolver {
     }
 
 
-    throw new NotFoundError("class " + name + " is not found", hdata.getFilePath(), 0);
+    throw new NotFoundError("class " + name + " is not found", hdata.filePath, 0);
   }
 
   public CtClass getArrayType (String name, int dim) throws NotFoundError {
@@ -100,7 +100,7 @@ public class TypeResolver {
   }
 
   private String appendPackageName(String name) {
-    String packageName = hdata.getPackageName();
+    String packageName = hdata.packageName;
     if(packageName.equals("")) return name;
     else return packageName + '.' + name;
   }
@@ -109,8 +109,8 @@ public class TypeResolver {
     return name.endsWith("[]");
   }
 
-  private ClassPool cpool;
-  private IRHeader hdata;
+  private final ClassPool cpool;
+  private final IRHeader hdata;
 
   private static final Map<String, CtClass> primTypes = new HashMap<>();
 

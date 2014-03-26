@@ -4,7 +4,6 @@ import java.util.*;
 import javassist.*;
 
 import proteaj.error.NotFoundError;
-import proteaj.ir.*;
 import proteaj.tast.*;
 import proteaj.util.*;
 

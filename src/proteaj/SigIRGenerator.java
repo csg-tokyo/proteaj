@@ -72,7 +72,7 @@ public class SigIRGenerator {
     for(Pair<IRHeader, FileBody> pair : files) {
       IRHeader hdata = pair._1;
       FileBody body = pair._2;
-      String packageName = hdata.getPackageName();
+      String packageName = hdata.packageName;
 
       for(ClassDecl cdecl : body.getClasses()) {
         String shortName = cdecl.getName();
@@ -96,7 +96,7 @@ public class SigIRGenerator {
     for(Pair<IRHeader, FileBody> pair : files) {
       IRHeader hdata = pair._1;
       FileBody body = pair._2;
-      String packageName = hdata.getPackageName();
+      String packageName = hdata.packageName;
 
       for(InterfaceDecl idecl : body.getInterfaces()) {
         String shortName = idecl.getName();
@@ -120,7 +120,7 @@ public class SigIRGenerator {
     for(Pair<IRHeader, FileBody> pair : files) {
       IRHeader header = pair._1;
 
-      for(String ops : header.getUsingSyntax()) try {
+      for(String ops : header.usingSyntax) try {
         loadOperatorsFile(ops, ir);
       } catch (FileIOError e) {
         ErrorList.addError(e);
@@ -130,7 +130,7 @@ public class SigIRGenerator {
     for(Pair<IRHeader, FileBody> pair : files) {
       IRHeader hdata = pair._1;
       FileBody body = pair._2;
-      String packageName = hdata.getPackageName();
+      String packageName = hdata.packageName;
 
       for(SyntaxDecl syn : body.getSyntax()) {
         String longName = appendPackageName(packageName, syn.getName());
@@ -157,7 +157,7 @@ public class SigIRGenerator {
     for(Pair<CtClass, ClassDecl> pair : classes) try {
       CtClass ctcl = pair._1;
       ClassDecl cdecl = pair._2;
-      TypeResolver resolver = new TypeResolver(ir.getIRHeader(ctcl), cpool);
+      ClassResolver resolver = new ClassResolver(ir.getIRHeader(ctcl), cpool);
 
       ctcl.setSuperclass(resolver.getType(cdecl.getSuperClass()));
       for(String iface : cdecl.getInterfaces()) {
@@ -166,7 +166,7 @@ public class SigIRGenerator {
     } catch (NotFoundError e) {
       ErrorList.addError(e);
     } catch (CannotCompileException e) {
-      ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(pair._1).getFilePath(), pair._2.getLine()));
+      ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(pair._1).filePath, pair._2.getLine()));
     }
   }
 
@@ -179,7 +179,7 @@ public class SigIRGenerator {
         IRStaticInitializer irsinit = new IRStaticInitializer(ctcl.makeClassInitializer(), sinit.getBody(), sinit.getBodyLine());
         ir.addStaticInitializer(irsinit);
       } catch (CannotCompileException e) {
-        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(ctcl).getFilePath(), sinit.getLine()));
+        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(ctcl).filePath, sinit.getLine()));
       }
     }
   }
@@ -189,7 +189,7 @@ public class SigIRGenerator {
     for(Pair<CtClass, ClassDecl> pair : classes) {
       CtClass ctcl = pair._1;
       ClassDecl cdecl = pair._2;
-      TypeResolver resolver = new TypeResolver(ir.getIRHeader(ctcl), cpool);
+      ClassResolver resolver = new ClassResolver(ir.getIRHeader(ctcl), cpool);
 
       // default constructor
       if(cdecl.getConstructors().isEmpty()) try {
@@ -211,7 +211,7 @@ public class SigIRGenerator {
         if(constructor.hasThrowsException()) try {
           ctconstructor.setExceptionTypes(getExceptionTypes(constructor.getThrowsExceptions(), resolver));
         } catch (NotFoundException e) {
-          ErrorList.addError(new NotFoundError(e, ir.getIRHeader(ctcl).getFilePath(), constructor.getLine()));
+          ErrorList.addError(new NotFoundError(e, ir.getIRHeader(ctcl).filePath, constructor.getLine()));
         }
 
         if(constructor.hasBody()) {
@@ -222,7 +222,7 @@ public class SigIRGenerator {
       } catch (NotFoundError e) {
         ErrorList.addError(e);
       } catch (CannotCompileException e) {
-        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(ctcl).getFilePath(), constructor.getLine()));
+        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(ctcl).filePath, constructor.getLine()));
       }
     }
   }
@@ -233,7 +233,7 @@ public class SigIRGenerator {
     for(Pair<CtClass, ClassDecl> pair : classes) {
       CtClass ctcl = pair._1;
       ClassDecl cdecl = pair._2;
-      TypeResolver resolver = new TypeResolver(ir.getIRHeader(ctcl), cpool);
+      ClassResolver resolver = new ClassResolver(ir.getIRHeader(ctcl), cpool);
 
       for(MethodDecl method : cdecl.getMethods()) try {
         CtClass returnType = resolver.getType(method.getReturnType());
@@ -247,7 +247,7 @@ public class SigIRGenerator {
         if(method.hasThrowsException()) try {
           ctmethod.setExceptionTypes(getExceptionTypes(method.getThrowsExceptions(), resolver));
         } catch (NotFoundException e) {
-          ErrorList.addError(new NotFoundError(e, ir.getIRHeader(ctcl).getFilePath(), method.getLine()));
+          ErrorList.addError(new NotFoundError(e, ir.getIRHeader(ctcl).filePath, method.getLine()));
         }
 
         ctcl.addMethod(ctmethod);
@@ -258,7 +258,7 @@ public class SigIRGenerator {
       } catch (NotFoundError e) {
         ErrorList.addError(e);
       } catch (CannotCompileException e) {
-        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(ctcl).getFilePath(), method.getLine()));
+        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(ctcl).filePath, method.getLine()));
       }
     }
   }
@@ -269,7 +269,7 @@ public class SigIRGenerator {
     for(Pair<CtClass, ClassDecl> pair : classes) {
       CtClass ctcl = pair._1;
       ClassDecl cdecl = pair._2;
-      TypeResolver resolver = new TypeResolver(ir.getIRHeader(ctcl), cpool);
+      ClassResolver resolver = new ClassResolver(ir.getIRHeader(ctcl), cpool);
 
       for(FieldDecl field : cdecl.getFields()) try {
         CtField ctfield = new CtField(resolver.getType(field.getType()), field.getName(), ctcl);
@@ -283,7 +283,7 @@ public class SigIRGenerator {
       } catch (NotFoundError e) {
         ErrorList.addError(e);
       } catch (CannotCompileException e) {
-        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(ctcl).getFilePath(), field.getLine()));
+        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(ctcl).filePath, field.getLine()));
       }
     }
   }
@@ -294,7 +294,7 @@ public class SigIRGenerator {
     for(Pair<CtClass, InterfaceDecl> pair : interfaces) {
       CtClass iface = pair._1;
       InterfaceDecl idecl = pair._2;
-      TypeResolver resolver = new TypeResolver(ir.getIRHeader(iface), cpool);
+      ClassResolver resolver = new ClassResolver(ir.getIRHeader(iface), cpool);
 
       for(String ifaceName : idecl.getInterfaces()) try {
         iface.addInterface(resolver.getType(ifaceName));
@@ -310,7 +310,7 @@ public class SigIRGenerator {
     for(Pair<CtClass, InterfaceDecl> pair : interfaces) {
       CtClass iface = pair._1;
       InterfaceDecl idecl = pair._2;
-      TypeResolver resolver = new TypeResolver(ir.getIRHeader(iface), cpool);
+      ClassResolver resolver = new ClassResolver(ir.getIRHeader(iface), cpool);
 
       for(MethodDecl method : idecl.getMethods()) try {
         CtClass returnType = resolver.getType(method.getReturnType());
@@ -324,7 +324,7 @@ public class SigIRGenerator {
       } catch (NotFoundError e) {
         ErrorList.addError(e);
       } catch (CannotCompileException e) {
-        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(iface).getFilePath(), method.getLine()));
+        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(iface).filePath, method.getLine()));
       }
     }
   }
@@ -335,7 +335,7 @@ public class SigIRGenerator {
     for(Pair<CtClass, InterfaceDecl> pair : interfaces) {
       CtClass iface = pair._1;
       InterfaceDecl idecl = pair._2;
-      TypeResolver resolver = new TypeResolver(ir.getIRHeader(iface), cpool);
+      ClassResolver resolver = new ClassResolver(ir.getIRHeader(iface), cpool);
 
       for(FieldDecl field : idecl.getFields()) try {
         CtField ctfield = new CtField(resolver.getType(field.getType()), field.getName(), iface);
@@ -348,7 +348,7 @@ public class SigIRGenerator {
       } catch (NotFoundError e) {
         ErrorList.addError(e);
       } catch (CannotCompileException e) {
-        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(iface).getFilePath(), field.getLine()));
+        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(iface).filePath, field.getLine()));
       }
     }
   }
@@ -361,7 +361,7 @@ public class SigIRGenerator {
       CtClass ctcl = pair._1;
       SyntaxDecl syndecl = pair._2;
 
-      TypeResolver resolver = new TypeResolver(ir.getIRHeader(ctcl), cpool);
+      ClassResolver resolver = new ClassResolver(ir.getIRHeader(ctcl), cpool);
       IRSyntax irsyn = new IRSyntax(ctcl);
 
       if(syndecl.hasBaseOperators()) try {
@@ -397,7 +397,7 @@ public class SigIRGenerator {
         if(odecl.hasThrowsException()) try {
           smethod.setExceptionTypes(getExceptionTypes(odecl.getThrowsExceptions(), resolver));
         } catch (NotFoundException e) {
-          ErrorList.addError(new NotFoundError(e, ir.getIRHeader(ctcl).getFilePath(), odecl.getLine()));
+          ErrorList.addError(new NotFoundError(e, ir.getIRHeader(ctcl).filePath, odecl.getLine()));
         }
 
         ctcl.addMethod(smethod);
@@ -411,7 +411,7 @@ public class SigIRGenerator {
       } catch (NotFoundError e) {
         ErrorList.addError(e);
       } catch (CannotCompileException e) {
-        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(ctcl).getFilePath(), odecl.getLine()));
+        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(ctcl).filePath, odecl.getLine()));
       }
 
       opool.addSyntax(irsyn);
@@ -467,7 +467,7 @@ public class SigIRGenerator {
     return ret;
   }
 
-  private CtClass[] getExceptionTypes(List<String> exceptions, TypeResolver resolver) throws NotFoundError {
+  private CtClass[] getExceptionTypes(List<String> exceptions, ClassResolver resolver) throws NotFoundError {
     CtClass[] eTypes = new CtClass[exceptions.size()];
     for(int i = 0; i < eTypes.length; i++) {
       eTypes[i] = resolver.getType(exceptions.get(i));
@@ -483,7 +483,7 @@ public class SigIRGenerator {
     return paramNames;
   }
 
-  private CtClass[] getParamTypes(List<Parameter> params, TypeResolver resolver) throws NotFoundError {
+  private CtClass[] getParamTypes(List<Parameter> params, ClassResolver resolver) throws NotFoundError {
     CtClass[] paramTypes = new CtClass[params.size()];
     for(int i = 0; i < paramTypes.length; i++) {
       paramTypes[i] = resolver.getType(params.get(i).getType());
@@ -491,7 +491,7 @@ public class SigIRGenerator {
     return paramTypes;
   }
 
-  private CtClass[] getAndPredicateTypes(OperatorPattern pattern, TypeResolver resolver) throws NotFoundError {
+  private CtClass[] getAndPredicateTypes(OperatorPattern pattern, ClassResolver resolver) throws NotFoundError {
     CtClass[] preds = new CtClass[pattern.getAndPredicateLength()];
     for(int i = 0, j = 0; i < pattern.getLength(); i++) {
       if(pattern.isAndPredicate(i)) preds[j++] = resolver.getType(pattern.getPredicateTypeName(i));
@@ -499,7 +499,7 @@ public class SigIRGenerator {
     return preds;
   }
 
-  private CtClass[] getNotPredicateTypes(OperatorPattern pattern, TypeResolver resolver) throws NotFoundError {
+  private CtClass[] getNotPredicateTypes(OperatorPattern pattern, ClassResolver resolver) throws NotFoundError {
     CtClass[] preds = new CtClass[pattern.getNotPredicateLength()];
     for(int i = 0, j = 0; i < pattern.getLength(); i++) {
       if(pattern.isNotPredicate(i)) preds[j++] = resolver.getType(pattern.getPredicateTypeName(i));

@@ -1,22 +1,21 @@
 package proteaj.tast;
 
 import proteaj.ir.*;
-import proteaj.util.*;
 
 import java.util.*;
 import javassist.*;
 
 public class Program {
   public Program(IR ir) {
-    this.classes = new HashMap<CtClass, ClassDeclaration>();
-    this.operatorModules = new ArrayList<OperatorModuleDeclaration>();
+    this.classes = new HashMap<>();
+    this.operatorModules = new ArrayList<>();
 
-    for (CtClass clazz: ir.getClasses()) classes.put(clazz, new ClassDeclaration(clazz, ir.getIRHeader(clazz).getFilePath()));
+    for (CtClass clazz: ir.getClasses()) classes.put(clazz, new ClassDeclaration(clazz, ir.getIRHeader(clazz).filePath));
     for (IRSyntax syntax: ir.getSyntax()) operatorModules.add(new OperatorModuleDeclaration(syntax));
   }
 
   public Program(List<ClassDeclaration> classes, List<OperatorModuleDeclaration> operatorModules) {
-    this.classes = new HashMap<CtClass, ClassDeclaration>();
+    this.classes = new HashMap<>();
     this.operatorModules = operatorModules;
 
     for(ClassDeclaration c : classes) this.classes.put(c.clazz, c);

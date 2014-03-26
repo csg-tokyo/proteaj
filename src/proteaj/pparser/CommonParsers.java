@@ -5,7 +5,6 @@ import javassist.*;
 
 import proteaj.error.*;
 import proteaj.io.*;
-import proteaj.ir.*;
 import proteaj.util.*;
 
 import static java.lang.Character.*;
@@ -267,7 +266,7 @@ public class CommonParsers {
           StringBuilder buf = new StringBuilder();
 
           while(reader.hasNext()) {
-            if(Character.isWhitespace(reader.lookahead())) break;
+            if(isWhitespace(reader.lookahead())) break;
             buf.append(reader.next());
           }
 
