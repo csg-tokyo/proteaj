@@ -128,7 +128,7 @@ public class ExpressionParsers {
   private List<PackratParser<? extends Expression>> getOperationParsersFromCache (Integer priority, List<IROperator> list) {
     List<PackratParser<? extends Expression>> parsers = new ArrayList<>();
 
-    if (! operationParsers.containsKey(priority)) operationParsers.put(priority, new HashMap<IROperator, PackratParser<Operation>>());
+    if (! operationParsers.containsKey(priority)) operationParsers.put(priority, new HashMap<>());
     Map<IROperator, PackratParser<Operation>> operationParsersCache = operationParsers.get(priority);
 
     for (IROperator operator : list) {

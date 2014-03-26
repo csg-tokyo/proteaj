@@ -521,91 +521,44 @@ class PackratParserCombinators {
   }
 
   public static Effect throwing (CtClass exceptionType) {
-    return new ThrowException(exceptionType);
-  }
-
-  public static Effect throwing (CtBehavior behavior) {
-    return new ThrowExceptions(behavior);
-  }
-
-  public static Effect throwing (IROperator operator) {
-    if (operator.actualMethod != null) return new ThrowExceptions(operator.actualMethod);
-    else return NoEffect.instance;
-  }
-
-  public static Effect throwing (List<Environment> environments) {
-    return new InheritExceptions(environments);
-  }
-
-  public static Effect catching (CtClass exceptionType) {
-    return new CatchException(exceptionType);
-  }
-
-  public static Effect declareLocal (String name, CtClass type) {
-    return new DeclareLocal(name, type);
-  }
-
-  public static abstract class ParserThunk<T> extends PackratParser<T> {
-    public abstract PackratParser<T> evaluate();
-
-    @Override
-    protected ParseResult<T> parse(SourceStringReader reader, Environment env) {
-      return evaluate().applyRule(reader, env);
-    }
-  }
-
-  private static class InheritExceptions implements Effect {
-    public InheritExceptions(List<Environment> environments) {
-      this.environments = environments;
-    }
-
-    @Override
-    public void perform(SourceStringReader reader, Environment env) {
-      for (Environment e : environments) env.inheritExceptions(e);
-    }
-
-    private final List<Environment> environments;
-  }
-
-  private static class ThrowExceptions implements Effect {
-    public ThrowExceptions(CtBehavior behavior) {
-      this.behavior = behavior;
-    }
-
-    public void perform (SourceStringReader reader, Environment env) {
-      try {
-        env.addExceptions(behavior.getExceptionTypes(), reader.getLine());
-      } catch (NotFoundException e) {
-        ErrorList.addError(new NotFoundError(e, reader.filePath, reader.getLine()));
-      }
-    }
-
-    private final CtBehavior behavior;
-  }
-
-  private static class ThrowException implements Effect {
-    public ThrowException(CtClass exceptionType) {
-      this.exceptionType = exceptionType;
-    }
-
-    public void perform (SourceStringReader reader, Environment env) {
+    return (reader, env) -> {
       try {
         env.addException(exceptionType, reader.getLine());
       } catch (NotFoundException e) {
         ErrorList.addError(new NotFoundError(e, reader.filePath, reader.getLine()));
       }
-    }
-
-    private final CtClass exceptionType;
+    };
   }
 
-  private static class CatchException implements Effect {
-    public CatchException(CtClass exceptionType) {
-      this.exceptionType = exceptionType;
-    }
+  public static Effect throwing (CtBehavior behavior) {
+    return (reader, env) -> {
+      try {
+        env.addExceptions(behavior.getExceptionTypes(), reader.getLine());
+      } catch (NotFoundException e) {
+        ErrorList.addError(new NotFoundError(e, reader.filePath, reader.getLine()));
+      }
+    };
+  }
 
-    @Override
-    public void perform(SourceStringReader reader, Environment env) {
+  public static Effect throwing (IROperator operator) {
+    if (operator.actualMethod != null) return (reader, env) -> {
+      try {
+        env.addExceptions(operator.actualMethod.getExceptionTypes(), reader.getLine());
+      } catch (NotFoundException e) {
+        ErrorList.addError(new NotFoundError(e, reader.filePath, reader.getLine()));
+      }
+    };
+    else return (reader, env) -> {};
+  }
+
+  public static Effect throwing (List<Environment> environments) {
+    return (reader, env) -> {
+      for (Environment e : environments) env.inheritExceptions(e);
+    };
+  }
+
+  public static Effect catching (CtClass exceptionType) {
+    return (reader, env) -> {
       try {
         if (! exceptionType.subtypeOf(IRCommonTypes.getThrowableType())) {
           String msg = "No exception of type " + exceptionType.getName() + " can be thrown; an exception type must be a subclass of Throwable";
@@ -615,33 +568,20 @@ class PackratParserCombinators {
       } catch (NotFoundException e) {
         ErrorList.addError(new NotFoundError(e, reader.filePath, reader.getLine()));
       }
-    }
-
-    private final CtClass exceptionType;
+    };
   }
 
-  private static class DeclareLocal implements Effect {
-    public DeclareLocal(String name, CtClass type) {
-      this.name = name;
-      this.type = type;
-    }
-
-    @Override
-    public void perform(SourceStringReader reader, Environment env) {
-      env.declareLocal(name, type);
-    }
-
-    private final String name;
-    private final CtClass type;
+  public static Effect declareLocal (String name, CtClass type) {
+    return (reader, env) -> { env.declareLocal(name, type); };
   }
 
-  private static class NoEffect implements Effect {
-    public static final NoEffect instance = new NoEffect();
+  public static abstract class ParserThunk<T> extends PackratParser<T> {
+    public abstract PackratParser<T> evaluate();
 
     @Override
-    public void perform(SourceStringReader reader, Environment env) {}
-
-    private NoEffect() {}
+    protected ParseResult<T> parse(SourceStringReader reader, Environment env) {
+      return evaluate().applyRule(reader, env);
+    }
   }
 
   public interface Effect {

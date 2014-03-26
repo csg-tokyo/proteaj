@@ -17,6 +17,5 @@ public class AssignExpression extends Expression {
 
   public final Expression ref;
   public final Expression val;
-
 }
 

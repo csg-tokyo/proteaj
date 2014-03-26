@@ -77,7 +77,7 @@ public class JavaExpressionParsers {
       bind(identifier, s -> depends(env -> env.isStatic() ? failure("cannot abbreviate a receiver of an instance method") : foreach(env.getInstanceMethods(env.thisClass, s), method -> methodCallArgs(env.get("this"), method), "undefined method: " + s)));
 
   private static final PackratParser<Expression> abbMethodCall =
-    choice(abbStaticMethodCall, abbInstanceMethodCall);
+      choice(abbStaticMethodCall, abbInstanceMethodCall);
 
   private static final PackratParser<Expression> variable =
       bind(identifier, s -> depends(env -> env.contains(s) ? unit(env.get(s)) : failure("unknown variable: " + s)));
