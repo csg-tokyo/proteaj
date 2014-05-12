@@ -8,18 +8,18 @@ public operators StringOperators {
   }
   
   public String left "+" right (String left, int right) : priority = 300 {
-    return left.concat(String.valueOf(right));
+    return left.concat(Integer.toString(right));
   }
   
   public String left "+" right (int left, String right) : priority = 300 {
-    return String.valueOf(left).concat(right);
+    return Integer.toString(left).concat(right);
   }
   
   public String left "+" right (String left, char right) : priority = 300 {
-    return left.concat(String.valueOf(right));
+    return left.concat(Character.toString(right));
   }
   
   public String left "+" right (char left, String right) : priority = 300 {
-    return String.valueOf(left).concat(right);
+    return Character.toString(left).concat(right);
   }
 }

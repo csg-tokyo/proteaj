@@ -1,0 +1,99 @@
+package regex;
+
+import java.util.regex.*;
+import natural.*;
+
+public operators RegexOperators {
+  public Pattern regexp (Regex regexp) : priority = 0 {
+    return Pattern.compile(regexp.toString());
+  }
+  
+  public Regex left "|" right (Regex left, Regex right) : priority = 100 {
+    return new RE_Or(left, right);
+  }
+  
+  public Regex regexp (Regex regexp) : priority = 150 {
+    return regexp;
+  }
+  
+  public readas Regex left "|" right (Regex left, Regex right) : priority = 100 {
+    return new RE_Or(left, right);
+  }
+  
+  public readas Regex regexps+ (Regex... regexps) : priority = 200 {
+    return new RE_List(regexps);
+  }
+  
+  public readas nonassoc Regex regexp "?+" (Regex regexp) : priority = 250 {
+    return new RE_Possessive_Question(regexp);
+  }
+  
+  public readas nonassoc Regex regexp "*+" (Regex regexp) : priority = 250 {
+    return new RE_Possessive_Star(regexp);
+  }
+  
+  public readas nonassoc Regex regexp "++" (Regex regexp) : priority = 250 {
+    return new RE_Possessive_Plus(regexp);
+  }
+  
+  public readas nonassoc Regex regexp "??" (Regex regexp) : priority = 250 {
+    return new RE_Reluctant_Question(regexp);
+  }
+  
+  public readas nonassoc Regex regexp "*?" (Regex regexp) : priority = 250 {
+    return new RE_Reluctant_Star(regexp);
+  }
+  
+  public readas nonassoc Regex regexp "+?" (Regex regexp) : priority = 250 {
+    return new RE_Reluctant_Plus(regexp);
+  }
+  
+  public readas nonassoc Regex regexp "?" (Regex regexp) : priority = 250 {
+    return new RE_Question(regexp);
+  }
+  
+  public readas nonassoc Regex regexp "*" (Regex regexp) : priority = 250 {
+    return new RE_Star(regexp);
+  }
+  
+  public readas nonassoc Regex regexp "+" (Regex regexp) : priority = 250 {
+    return new RE_Plus(regexp);
+  }
+
+  public readas nonassoc Regex regexp "{" nat "}" (Regex regexp, NaturalNumber nat) : priority = 250 {
+    return new RE_Repeat(regexp, nat.getValue());
+  }
+
+  
+  public readas Regex "[" elements+ "]" (RE_ClassElement... elements) : priority = 270 {
+    return new RE_Class(elements);
+  }
+  
+  public readas RE_ClassElement from "-" to (RE_Letter from, RE_Letter to) : priority = 280 {
+    return new RE_Range(from.getLetter(), to.getLetter());
+  }
+  
+  public readas Regex "." () : priority = 300 {
+    return RE_AnyLetter.instance;
+  }
+  
+//  public readas RE_Letter letter (Letter letter) : priority = 300 {
+//    return new RE_Letter(letter.toChar());
+//  }
+  
+  public readas Regex l (RE_Letter l): priority = 300 {
+    return l;
+  }
+
+  public readas RE_ClassElement letter (Letter letter) : priority = 300 {
+    return new RE_Letter(letter.toChar());
+  }
+  
+  public readas RE_Letter letter (Letter letter) : priority = 350 {
+    return new RE_Letter(letter.toChar());
+  }
+
+  public readas RE_Letter digit (Digit digit) : priority = 350 {
+    return new RE_Letter(digit.toChar());
+  }
+}

@@ -1,0 +1,233 @@
+package regex;
+
+using optimize.ExStringOperators;
+
+interface Regex {
+  String toString();
+}
+
+class RE_List implements Regex {
+  public RE_List(Regex... regexps) {
+    this.regexps = regexps;
+  }
+
+  public String toString() {
+    StringBuilder buf = new StringBuilder();
+    for(int i = 0; i < regexps.length; i++) {
+      buf.append(regexps[i]);
+    }
+    return buf.toString();
+  }
+
+  private Regex[] regexps;
+}
+
+class RE_Or implements Regex {
+  public RE_Or(Regex left, Regex right) {
+    this.left = left;
+    this.right = right;
+  }
+
+  public String toString() {
+    return "(" + left.toString() + "|" + right.toString() + ")";
+  }
+
+  private Regex left;
+  private Regex right;
+}
+
+class RE_Question implements Regex {
+  public RE_Question(Regex regexp) {
+    this.regexp = regexp;
+  }
+
+  public String toString() {
+    return regexp.toString() + "?";
+  }
+
+  private Regex regexp;
+}
+
+class RE_Star implements Regex {
+  public RE_Star(Regex regexp) {
+    this.regexp = regexp;
+  }
+
+  public String toString() {
+    return regexp.toString() + "*";
+  }
+
+  private Regex regexp;
+}
+
+class RE_Plus implements Regex {
+  public RE_Plus(Regex regexp) {
+    this.regexp = regexp;
+  }
+
+  public String toString() {
+    return regexp.toString() + "+";
+  }
+
+  private Regex regexp;
+}
+
+class RE_Repeat implements Regex {
+  public RE_Repeat(Regex regexp, int n) {
+    this.regexp = regexp;
+    this.n = n;
+  }
+
+  public String toString() {
+    return regexp.toString() + "{" + n + "}";
+  }
+
+  private Regex regexp;
+  private int n;
+}
+
+class RE_Reluctant_Question implements Regex {
+  public RE_Reluctant_Question(Regex regexp) {
+    this.regexp = regexp;
+  }
+
+  public String toString() {
+    return regexp.toString() + "??";
+  }
+
+  private Regex regexp;
+}
+
+class RE_Reluctant_Star implements Regex {
+  public RE_Reluctant_Star(Regex regexp) {
+    this.regexp = regexp;
+  }
+
+  public String toString() {
+    return regexp.toString() + "*?";
+  }
+
+  private Regex regexp;
+}
+
+class RE_Reluctant_Plus implements Regex {
+  public RE_Reluctant_Plus(Regex regexp) {
+    this.regexp = regexp;
+  }
+
+  public String toString() {
+    return regexp.toString() + "+?";
+  }
+
+  private Regex regexp;
+}
+
+class RE_Possessive_Question implements Regex {
+  public RE_Possessive_Question(Regex regexp) {
+    this.regexp = regexp;
+  }
+
+  public String toString() {
+    return regexp.toString() + "?+";
+  }
+
+  private Regex regexp;
+}
+
+class RE_Possessive_Star implements Regex {
+  public RE_Possessive_Star(Regex regexp) {
+    this.regexp = regexp;
+  }
+
+  public String toString() {
+    return regexp.toString() + "*+";
+  }
+
+  private Regex regexp;
+}
+
+class RE_Possessive_Plus implements Regex {
+  public RE_Possessive_Plus(Regex regexp) {
+    this.regexp = regexp;
+  }
+
+  public String toString() {
+    return regexp.toString() + "++";
+  }
+
+  private Regex regexp;
+}
+
+class RE_Class implements Regex {
+  public RE_Class(RE_ClassElement... elements) {
+    this.elements = elements;
+  }
+
+  public String toString() {
+    StringBuilder buf = new StringBuilder();
+    buf = buf + '[';
+    for(int i = 0; i < elements.length; i++) {
+      buf = buf + elements[i].toString();
+    }
+    buf = buf + ']';
+    return buf;
+  }
+
+  private RE_ClassElement[] elements;
+}
+
+interface RE_ClassElement {
+  String toString();
+}
+
+class RE_Range implements RE_ClassElement {
+  public RE_Range(char from, char to) {
+    this.from = from;
+    this.to = to;
+  }
+
+  public String toString() {
+    return Character.toString(from) + "-" + Character.toString(to);
+  }
+
+  private char from;
+  private char to;
+}
+
+class RE_AnyLetter implements Regex {
+  public static final RE_AnyLetter instance = new RE_AnyLetter();
+
+  public String toString() {
+    return ".";
+  }
+
+  private RE_AnyLetter() {}
+}
+
+class RE_Letter implements Regex, RE_ClassElement {
+  public RE_Letter(char ch) {
+    this.ch = ch;
+  }
+
+  public char getLetter() {
+    return ch;
+  }
+
+  public String toString() {
+    return Character.toString(ch);
+  }
+
+  private char ch;
+}
+
+class RE_Digit implements Regex, RE_ClassElement {
+  public RE_Digit(int ch) {
+    this.ch = ch;
+  }
+
+  public String toString() {
+    return Integer.toString(ch);
+  }
+
+  private int ch;
+}

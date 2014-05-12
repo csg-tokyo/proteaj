@@ -1,0 +1,28 @@
+package optimize;
+
+public operators ExStringOperators extends proteaj.lang.StringOperators {
+  // escape
+  public String "null" () : priority = 200 {
+    return null;
+  }
+a:
+  public String buf (StringBuilder buf) : priority = 200 {
+    return buf.toString();
+  }
+b:
+  public StringBuilder left "+" right (StringBuilder left, char right) : priority = 250 {
+    left.append(Character.toString(right));
+    return left;
+  }
+c:
+  public StringBuilder left "+" right (StringBuilder left, String right) : priority = 250 {
+    left.append(right);
+    return left;
+  }
+d:
+  public StringBuilder s1 "+" s2 "+" s3 (String s1, String s2, String s3) : priority = 350 {
+    StringBuilder buf = new StringBuilder();
+    buf.append(s1).append(s2).append(s3);
+    return buf;
+  }
+}

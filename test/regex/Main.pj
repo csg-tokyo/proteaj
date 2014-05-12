@@ -1,0 +1,24 @@
+package regex;
+
+import java.util.regex.*;
+
+using natural.NaturalNumberOperators;
+using regex.RegexOperators;
+
+class Main {
+  public static void main(String[] args) {
+    Pattern p = [a-zA-Z][a-zA-Z0-9]*;
+//    Pattern p = [0-9]{2}(B|M|D)[0-9]{5};
+    Matcher m = p.matcher("a11M37011");
+
+    System.out.println("pattern : " + p.toString());
+    System.out.print("result : ");
+
+    if(m.find()) {
+      System.out.println("match : " + m.group());
+    }
+    else {
+      System.out.println("not match");
+    }
+  }
+}

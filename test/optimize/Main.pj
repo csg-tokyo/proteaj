@@ -1,0 +1,12 @@
+package optimize;
+
+using optimize.ExStringOperators;
+
+public class Main {
+  public static void main(String... args) {
+    String str = "hoge" + "huga" + "foo" + "bar";
+    String str2 = "aaa" + "bbb";
+    System.out.println(str);
+    System.out.println(str2);
+  }
+}
