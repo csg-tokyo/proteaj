@@ -1,0 +1,14 @@
+#!/bin/bash
+
+cat /dev/null > log.txt
+
+for n in `seq 1 1000`
+do
+    echo "----" >> log.txt
+    echo "size ${n}" >> log.txt
+
+    for i in `seq 1 10`
+    do
+        ( time ../../pjc src/Test${n}.pj ) &>> log.txt
+    done
+done

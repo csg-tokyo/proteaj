@@ -1,3 +1,4 @@
 #!/bin/bash
 
-java -classpath lib/javassist.jar:out/production/proteaj:bin proteaj.Compiler $@
+script_dir=`dirname $0`
+java -classpath ${script_dir}/lib/javassist.jar:${script_dir}/out/production/proteaj:${script_dir}/bin proteaj.Compiler $@
