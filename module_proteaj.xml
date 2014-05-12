@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_proteaj" default="compile.module.proteaj">
+  <dirname property="module.proteaj.basedir" file="${ant.file.module_proteaj}"/>
+  
+  <property name="module.jdk.home.proteaj" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.proteaj" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.proteaj" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.proteaj" value="-encoding UTF-8 -source 8 ${compiler.args}"/>
+  
+  <property name="proteaj.output.dir" value="${module.proteaj.basedir}/out/production/proteaj"/>
+  <property name="proteaj.testoutput.dir" value="${module.proteaj.basedir}/out/test/proteaj"/>
+  
+  <path id="proteaj.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="proteaj.module.production.classpath">
+    <path refid="${module.jdk.classpath.proteaj}"/>
+    <path refid="library.javassist.classpath"/>
+    <path refid="library.bin.classpath"/>
+  </path>
+  
+  <path id="proteaj.runtime.production.module.classpath">
+    <pathelement location="${proteaj.output.dir}"/>
+    <path refid="library.javassist.classpath"/>
+    <path refid="library.bin.classpath"/>
+  </path>
+  
+  <path id="proteaj.module.classpath">
+    <path refid="${module.jdk.classpath.proteaj}"/>
+    <pathelement location="${proteaj.output.dir}"/>
+    <path refid="library.javassist.classpath"/>
+    <path refid="library.bin.classpath"/>
+  </path>
+  
+  <path id="proteaj.runtime.module.classpath">
+    <pathelement location="${proteaj.testoutput.dir}"/>
+    <pathelement location="${proteaj.output.dir}"/>
+    <path refid="library.javassist.classpath"/>
+    <path refid="library.bin.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.proteaj">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.proteaj">
+    <patternset refid="excluded.from.module.proteaj"/>
+  </patternset>
+  
+  <path id="proteaj.module.sourcepath">
+    <dirset dir="${module.proteaj.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  <path id="proteaj.module.test.sourcepath">
+    <dirset dir="${module.proteaj.basedir}">
+      <include name="test"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.proteaj" depends="compile.module.proteaj.production,compile.module.proteaj.tests" description="Compile module proteaj"/>
+  
+  <target name="compile.module.proteaj.production" description="Compile module proteaj; production classes">
+    <mkdir dir="${proteaj.output.dir}"/>
+    <javac destdir="${proteaj.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.proteaj}/javac">
+      <compilerarg line="${compiler.args.proteaj}"/>
+      <bootclasspath refid="proteaj.module.bootclasspath"/>
+      <classpath refid="proteaj.module.production.classpath"/>
+      <src refid="proteaj.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.proteaj"/>
+    </javac>
+    
+    <copy todir="${proteaj.output.dir}">
+      <fileset dir="${module.proteaj.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.proteaj.tests" depends="compile.module.proteaj.production" description="compile module proteaj; test classes" unless="skip.tests">
+    <mkdir dir="${proteaj.testoutput.dir}"/>
+    <javac destdir="${proteaj.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.proteaj}/javac">
+      <compilerarg line="${compiler.args.proteaj}"/>
+      <bootclasspath refid="proteaj.module.bootclasspath"/>
+      <classpath refid="proteaj.module.classpath"/>
+      <src refid="proteaj.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.proteaj"/>
+    </javac>
+    
+    <copy todir="${proteaj.testoutput.dir}">
+      <fileset dir="${module.proteaj.basedir}/test">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.proteaj" description="cleanup module">
+    <delete dir="${proteaj.output.dir}"/>
+    <delete dir="${proteaj.testoutput.dir}"/>
+  </target>
+</project>
