@@ -1,7 +1,5 @@
 package proteaj.ir;
 
-import javassist.CtClass;
-
 import java.util.*;
 
 public class IRHeader {

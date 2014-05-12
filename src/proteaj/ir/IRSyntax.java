@@ -7,15 +7,15 @@ public class IRSyntax {
   public IRSyntax(CtClass actualClass) {
     this.name = actualClass.getName();
     this.baseSyntax = null;
-    this.mixinSyntax = new ArrayList<String>();
-    this.ops = new ArrayList<IROperator>();
+    this.mixinSyntax = new ArrayList<>();
+    this.ops = new ArrayList<>();
   }
 
   public IRSyntax(String name) {
     this.name = name;
     this.baseSyntax = null;
-    this.mixinSyntax = new ArrayList<String>();
-    this.ops = new ArrayList<IROperator>();
+    this.mixinSyntax = new ArrayList<>();
+    this.ops = new ArrayList<>();
   }
 
   public void setBaseSyntax(String baseSyntax) {

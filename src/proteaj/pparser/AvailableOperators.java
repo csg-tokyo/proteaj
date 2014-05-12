@@ -54,7 +54,7 @@ public class AvailableOperators {
 
     int maxPriority = basePriority;
     if (syntax.hasBaseSyntax()) try {
-      maxPriority = loadSyntax(getSyntaxFromPool(syntax.name), basePriority);
+      maxPriority = loadSyntax(getSyntaxFromPool(syntax.getBaseSyntax()), basePriority);
     } catch (NotFoundError e) {
       ErrorList.addError(e);
       return basePriority;
@@ -113,8 +113,18 @@ public class AvailableOperators {
   }
 
   private List<IRSyntax> getUsingList () {
-    List<IRSyntax> list = new ArrayList<>();
+    List<String> using = new ArrayList<>(header.usingSyntax);
     for (String name : header.usingSyntax) try {
+      IRSyntax syntax = getSyntaxFromPool(name);
+      while (syntax.hasBaseSyntax()) {
+        String base = syntax.getBaseSyntax();
+        if (using.contains(base)) using.remove(base);
+        syntax = getSyntaxFromPool(base);
+      }
+    } catch (NotFoundError e) {}
+
+    List<IRSyntax> list = new ArrayList<>();
+    for (String name : using) try {
       list.add(getSyntaxFromPool(name));
     } catch (NotFoundError e) {
       ErrorList.addError(e);
