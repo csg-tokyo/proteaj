@@ -19,6 +19,9 @@ public class BinaryOperator extends PrimitiveOperator {
   public static final BinaryOperator geq    = new BinaryOperator(CtClass.booleanType, CtClass.intType, ">=", CtClass.intType, 700);
   public static final BinaryOperator equal  = new BinaryOperator(CtClass.booleanType, CtClass.intType, "==", CtClass.intType, 600);
   public static final BinaryOperator noteq  = new BinaryOperator(CtClass.booleanType, CtClass.intType, "!=", CtClass.intType, 600);
+  public static final BinaryOperator bitand = new BinaryOperator(CtClass.intType, "&", 500);
+  public static final BinaryOperator bitxor = new BinaryOperator(CtClass.intType, "^", 400);
+  public static final BinaryOperator bitor  = new BinaryOperator(CtClass.intType, "|", 300);
   public static final BinaryOperator and    = new BinaryOperator(CtClass.booleanType, CtClass.booleanType, "&&", CtClass.booleanType, 200);
   public static final BinaryOperator or     = new BinaryOperator(CtClass.booleanType, CtClass.booleanType, "||", CtClass.booleanType, 100);
 

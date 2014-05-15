@@ -15,6 +15,7 @@ public class PrefixOperator extends PrimitiveOperator {
   public static final PrefixOperator incv  = new PrefixOperator(CtClass.voidType, "++", CtClass.intType, 1400);
   public static final PrefixOperator decv  = new PrefixOperator(CtClass.voidType, "--", CtClass.intType, 1400);
   public static final PrefixOperator not   = new PrefixOperator(CtClass.booleanType, "!", 1400);
+  public static final PrefixOperator compl = new PrefixOperator(CtClass.intType, "~", 1400);
 
   private static IRPattern getPrefixOperatorPattern(String operator, CtClass type) {
     OperatorPattern pattern = new OperatorPattern(-1);

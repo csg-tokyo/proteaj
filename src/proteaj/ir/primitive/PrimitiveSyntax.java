@@ -24,6 +24,9 @@ public class PrimitiveSyntax extends IRSyntax {
     addOperator(BinaryOperator.geq);
     addOperator(BinaryOperator.equal);
     addOperator(BinaryOperator.noteq);
+    addOperator(BinaryOperator.bitand);
+    addOperator(BinaryOperator.bitxor);
+    addOperator(BinaryOperator.bitor);
     addOperator(BinaryOperator.getObjEqOperator());
     addOperator(BinaryOperator.getObjNeqOperator());
     addOperator(BinaryOperator.and);
@@ -35,6 +38,7 @@ public class PrimitiveSyntax extends IRSyntax {
     addOperator(PrefixOperator.incv);
     addOperator(PrefixOperator.decv);
     addOperator(PrefixOperator.not);
+    addOperator(PrefixOperator.compl);
     addOperator(PostfixOperator.inc);
     addOperator(PostfixOperator.dec);
     addOperator(PostfixOperator.incv);
