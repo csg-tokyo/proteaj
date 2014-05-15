@@ -273,7 +273,14 @@ public class ExpressionParsers {
 
     PackratParser<Expression> readAs = prefix(whitespaces, getLiteralParser(clazz));
 
-    return choice(parenthesized, rCast, lCast, javaExpr, nullLiteral, readAs);
+    if (clazz.isArray()) {
+      final CtClass componentType;
+      try { componentType = clazz.getComponentType(); } catch (NotFoundException e) { return error(e); }
+      PackratParser<ArrayInitializer> arrayInit = map(enclosed("{", rep(expression(componentType), ","), "}"), list -> new ArrayInitializer(clazz, list));
+      return choice(parenthesized, rCast, lCast, arrayInit, javaExpr, nullLiteral, readAs);
+    }
+
+    else return choice(parenthesized, rCast, lCast, javaExpr, nullLiteral, readAs);
   }
 
   private PackratParser<CastExpression> castBody (final CtClass clazz, final CtClass from, final CtClass to) {

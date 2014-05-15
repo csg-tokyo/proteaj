@@ -14,6 +14,7 @@ public interface ExpressionVisitor<T> {
   public abstract T visit (NewExpression newExpression, T t);
   public abstract T visit (NewArrayExpression newArray, T t);
   public abstract T visit (ArrayAccess arrayAccess, T t);
+  public abstract T visit (ArrayInitializer arrayInitializer, T t);
   public abstract T visit (ArrayLength arrayLength, T t);
   public abstract T visit (ThisExpression thisExpr, T t);
   public abstract T visit (SuperExpression superExpr, T t);

@@ -83,6 +83,12 @@ public class LocalCollector implements ExpressionVisitor<Set<Expression>> {
   }
 
   @Override
+  public Set<Expression> visit(ArrayInitializer arrayInitializer, Set<Expression> localVariables) {
+    for (Expression e : arrayInitializer.expressions) localVariables = visit(e, localVariables);
+    return localVariables;
+  }
+
+  @Override
   public Set<Expression> visit(ArrayLength arrayLength, Set<Expression> localVariables) {
     return visit(arrayLength.array, localVariables);
   }

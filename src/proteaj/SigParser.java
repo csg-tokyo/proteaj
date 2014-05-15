@@ -367,36 +367,6 @@ public class SigParser {
     return method;
   }
 
-  /* FieldDecl
-   *  : Type Identifier [ '=' Expression ] ';'
-   */
-/*  public FieldDecl parseFieldDecl() throws ParseError {
-    int line = lexer.lookahead().getLine();
-
-    // Type
-    assert lexer.lookahead().isIdentifier();
-    String type = parseType();
-
-    // Identifier
-    assert lexer.lookahead().isIdentifier();
-    String name = lexer.next().toString();
-
-    FieldDecl fdecl = new FieldDecl(type, name, line);
-
-    // [ '=' Expression ]
-    if(lexer.lookahead().is('=')) {
-      int lbody = lexer.lookahead().getLine();
-      fdecl.setBody(parseFieldBody(), lbody);
-    }
-
-    if(! lexer.lookahead().is(';')) {
-      throw new ParseError("invalid field declaration : expected ';', but found '" + lexer.lookahead().toString() + "'", filePath, lexer.lookahead().getLine());
-    }
-    lexer.next();
-
-    return fdecl;
-  }*/
-
   /* FieldsDecl
    *  : Type Identifier [ '=' Expression ] { ',' Identifier [ '=' Expression ] } ';'
    */

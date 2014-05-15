@@ -310,6 +310,20 @@ public class JavassistCodeGenerator implements ExpressionVisitor<StringBuilder>,
   }
 
   @Override
+  public StringBuilder visit(ArrayInitializer arrayInitializer, StringBuilder buf) {
+    buf = buf.append("new ").append(arrayInitializer.type.getName()).append('{');
+    if (! arrayInitializer.expressions.isEmpty()) {
+      buf = visit(arrayInitializer.expressions.get(0), buf);
+      for (int i = 1; i < arrayInitializer.expressions.size(); i++) {
+        buf = buf.append(',');
+        buf = visit(arrayInitializer.expressions.get(i), buf);
+      }
+    }
+    buf = buf.append('}');
+    return buf;
+  }
+
+  @Override
   public StringBuilder visit(ArrayLength arrayLength, StringBuilder buf) {
     return visit(arrayLength.array, buf).append(".length");
   }

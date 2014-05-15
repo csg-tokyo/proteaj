@@ -183,6 +183,12 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
     }
   }
 
+  public Expression translate(ArrayInitializer arrayInitializer) {
+    List<Expression> es = new ArrayList<>();
+    for (Expression e : arrayInitializer.expressions) es.add(translate(e));
+    return new ArrayInitializer(arrayInitializer.type, es);
+  }
+
   public Expression translate(ArrayLength arrayLength) {
     return new ArrayLength(translate(arrayLength.array));
   }
@@ -305,6 +311,9 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   public final Expression visit(ArrayAccess arrayAccess, Expression expression) {
     return translate(arrayAccess);
   }
+
+  @Override
+  public Expression visit(ArrayInitializer arrayInitializer, Expression expression) { return translate(arrayInitializer); }
 
   @Override
   public final Expression visit(ArrayLength arrayLength, Expression expression) {
