@@ -1,5 +1,6 @@
 package proteaj.pparser;
 
+import proteaj.error.*;
 import proteaj.ir.*;
 import proteaj.tast.*;
 import proteaj.util.*;
@@ -69,10 +70,13 @@ public abstract class StatementParsers {
       })), "}")), Block::new);
 
   private final PackratParser<LocalVarDecl> simpleLocalDecl =
-      map(seq(typeName, identifier), pair -> new LocalVarDecl(pair._1, pair._2));
+      bind(seq(qualifiedIdentifier, arrayBrackets, identifier, arrayBrackets), quad -> depends(env -> {
+        try { return unit(new LocalVarDecl(env.getArrayType(quad._1, quad._2 + quad._4), quad._3)); }
+        catch (NotFoundError e) { return failure(e.getMessage()); }
+      }));
 
   private final PackratParser<LocalVarDecl> localDeclAndInit =
-      bind(postfix(seq(typeName, identifier), "="), pair -> map(expression(pair._1), expr -> new LocalVarDecl(pair._1, pair._2, expr)));
+      bind(postfix(simpleLocalDecl, "="), local -> map(expression(local.type), expr -> new LocalVarDecl(local.type, local.name, expr)));
 
   private final PackratParser<LocalVarDecl> localVarDecl =
       withEffect(choice(localDeclAndInit, simpleLocalDecl), local -> declareLocal(local.name, local.type));

@@ -228,7 +228,7 @@ public class CommonParsers {
         return buf.toString();
       });
 
-  private static final PackratParser<Integer> arrayBrackets =
+  public static final PackratParser<Integer> arrayBrackets =
       map(PackratParserCombinators.rep(keywords("[", "]")), pairs -> pairs.size());
 
   public static final PackratParser<CtClass> className =

@@ -368,7 +368,7 @@ public class SigParser {
   }
 
   /* FieldsDecl
-   *  : Type Identifier [ '=' Expression ] { ',' Identifier [ '=' Expression ] } ';'
+   *  : Type Identifier { '[' ']' } [ '=' Expression ] { ',' Identifier { '[' ']' } [ '=' Expression ] } ';'
    */
   public List<FieldDecl> parseFieldsDecl() throws ParseError {
     int line = lexer.lookahead().getLine();
@@ -380,6 +380,9 @@ public class SigParser {
     // Identifier
     assert lexer.lookahead().isIdentifier();
     String name = lexer.next().toString();
+
+    // { '[' ']' }
+    type = type + parseBrackets();
 
     FieldDecl fdecl = new FieldDecl(type, name, line);
 
@@ -398,6 +401,9 @@ public class SigParser {
       // Identifier
       assert lexer.lookahead().isIdentifier();
       String id = lexer.next().toString();
+
+      // { '[' ']' }
+      type = type + parseBrackets();
 
       FieldDecl field = new FieldDecl(type, id, line);
 
@@ -884,14 +890,20 @@ public class SigParser {
    *  : QualifiedIdentifier { '[' ']' }
    */
   private String parseType() {
-    StringBuilder buf = new StringBuilder();
-    buf.append(parseQualifiedIdentifier());
+    return parseQualifiedIdentifier() + parseBrackets();
+  }
 
+  /* Brackets
+   *  : { '[' ']' }
+   */
+  private String parseBrackets() {
+    if (! lexer.lookahead().is('[')) return "";
+
+    StringBuilder buf = new StringBuilder();
     while(lexer.lookahead().is('[') && lexer.lookahead(1).is(']')) {
       lexer.next(1);
       buf.append("[]");
     }
-
     return buf.toString();
   }
 
