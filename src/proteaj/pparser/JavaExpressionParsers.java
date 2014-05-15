@@ -126,6 +126,8 @@ public class JavaExpressionParsers {
 
   private static final PackratParser<IntLiteral> intLiteral = map(integer, IntLiteral::new);
 
+  private static final PackratParser<IntLiteral> hexLiteral = map(hexadecimal, IntLiteral::new);
+
   private static final PackratParser<BooleanLiteral> trueLiteral = map(keyword("true"), s -> new BooleanLiteral(true));
 
   private static final PackratParser<BooleanLiteral> falseLiteral = map(keyword("false"), s -> new BooleanLiteral(false));
@@ -137,7 +139,7 @@ public class JavaExpressionParsers {
   private static final PackratParser<CharLiteral> charLiteral = map(character, CharLiteral::new);
 
   private static final PackratParser<Expression> literal =
-      choice(intLiteral, booleanLiteral, stringLiteral, charLiteral);
+      choice(intLiteral, hexLiteral, booleanLiteral, stringLiteral, charLiteral);
 
   private static final PackratParser<Expression> primary =
       choice(abbMethodCall, variable, staticMethodCall, staticFieldAccess, newObject, newArray, cast, parenthesized, literal);

@@ -117,7 +117,7 @@ public class CommonParsers {
 
           while(isWhitespace(reader.lookahead())) reader.next();
 
-          if(isDigit(reader.lookahead())) {
+          if (isDigit(reader.lookahead())) {
             if(reader.lookahead() == 0) {
               reader.next();
               return success(0);
@@ -132,7 +132,34 @@ public class CommonParsers {
             return success(val);
           }
 
-          return fail("digits is not found", pos, reader);
+          return fail("digit is not found", pos, reader);
+        }
+      };
+
+  public static final PackratParser<Integer> hexadecimal =
+      new PackratParser<Integer>() {
+        @Override
+        protected ParseResult<Integer> parse(SourceStringReader reader, Environment env) {
+          final int pos = reader.getPos();
+
+          // 0x
+          ParseResult<String> bdq = keyword("0x").applyRule(reader, env);
+          if(bdq.isFail()) return fail(bdq, pos, reader);
+
+          if (! reader.hasNext()) return fail("digit is not found", pos, reader);
+
+          int val = digit(reader.next(), 16);
+          if (val == -1) return fail("invalid hexadecimal", pos, reader);
+
+          while (reader.hasNext()) {
+            int d = digit(reader.lookahead(), 16);
+            if (d == -1) break;
+
+            reader.next();
+            val = val * 16 + d;
+          }
+
+          return success(val);
         }
       };
 
