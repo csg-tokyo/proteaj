@@ -17,8 +17,19 @@ public class BinaryOperator extends PrimitiveOperator {
   public static final BinaryOperator gthan  = new BinaryOperator(CtClass.booleanType, CtClass.intType, ">", CtClass.intType, 700);
   public static final BinaryOperator leq    = new BinaryOperator(CtClass.booleanType, CtClass.intType, "<=", CtClass.intType, 700);
   public static final BinaryOperator geq    = new BinaryOperator(CtClass.booleanType, CtClass.intType, ">=", CtClass.intType, 700);
-  public static final BinaryOperator equal  = new BinaryOperator(CtClass.booleanType, CtClass.intType, "==", CtClass.intType, 600);
-  public static final BinaryOperator noteq  = new BinaryOperator(CtClass.booleanType, CtClass.intType, "!=", CtClass.intType, 600);
+
+  public static final BinaryOperator bequal = new BinaryOperator(CtClass.booleanType, CtClass.byteType, "==", CtClass.byteType, 600);
+  public static final BinaryOperator cequal = new BinaryOperator(CtClass.booleanType, CtClass.charType, "==", CtClass.charType, 600);
+  public static final BinaryOperator sequal = new BinaryOperator(CtClass.booleanType, CtClass.shortType, "==", CtClass.shortType, 600);
+  public static final BinaryOperator iequal = new BinaryOperator(CtClass.booleanType, CtClass.intType, "==", CtClass.intType, 600);
+  public static final BinaryOperator lequal = new BinaryOperator(CtClass.booleanType, CtClass.longType, "==", CtClass.longType, 600);
+
+  public static final BinaryOperator bneq  = new BinaryOperator(CtClass.booleanType, CtClass.byteType, "!=", CtClass.byteType, 600);
+  public static final BinaryOperator cneq  = new BinaryOperator(CtClass.booleanType, CtClass.charType, "!=", CtClass.charType, 600);
+  public static final BinaryOperator sneq  = new BinaryOperator(CtClass.booleanType, CtClass.shortType, "!=", CtClass.shortType, 600);
+  public static final BinaryOperator ineq  = new BinaryOperator(CtClass.booleanType, CtClass.intType, "!=", CtClass.intType, 600);
+  public static final BinaryOperator lneq  = new BinaryOperator(CtClass.booleanType, CtClass.longType, "!=", CtClass.longType, 600);
+
   public static final BinaryOperator bitand = new BinaryOperator(CtClass.intType, "&", 500);
   public static final BinaryOperator bitxor = new BinaryOperator(CtClass.intType, "^", 400);
   public static final BinaryOperator bitor  = new BinaryOperator(CtClass.intType, "|", 300);

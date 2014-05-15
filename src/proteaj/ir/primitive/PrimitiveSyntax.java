@@ -22,8 +22,16 @@ public class PrimitiveSyntax extends IRSyntax {
     addOperator(BinaryOperator.gthan);
     addOperator(BinaryOperator.leq);
     addOperator(BinaryOperator.geq);
-    addOperator(BinaryOperator.equal);
-    addOperator(BinaryOperator.noteq);
+    addOperator(BinaryOperator.bequal);
+    addOperator(BinaryOperator.cequal);
+    addOperator(BinaryOperator.sequal);
+    addOperator(BinaryOperator.iequal);
+    addOperator(BinaryOperator.lequal);
+    addOperator(BinaryOperator.bneq);
+    addOperator(BinaryOperator.cneq);
+    addOperator(BinaryOperator.sneq);
+    addOperator(BinaryOperator.ineq);
+    addOperator(BinaryOperator.lneq);
     addOperator(BinaryOperator.bitand);
     addOperator(BinaryOperator.bitxor);
     addOperator(BinaryOperator.bitor);
