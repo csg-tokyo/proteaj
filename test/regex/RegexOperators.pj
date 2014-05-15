@@ -8,10 +8,6 @@ public operators RegexOperators {
     return Pattern.compile(regexp.toString());
   }
   
-  public Regex left "|" right (Regex left, Regex right) : priority = 100 {
-    return new RE_Or(left, right);
-  }
-  
   public Regex regexp (Regex regexp) : priority = 150 {
     return regexp;
   }

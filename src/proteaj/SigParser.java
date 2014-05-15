@@ -264,9 +264,11 @@ public class SigParser {
       }
       // FieldDecl
       else {
-        FieldDecl field = parseFieldDecl();
-        field.setModifiers(mods);
-        cdecl.addField(field);
+        List<FieldDecl> fields = parseFieldsDecl();
+        for (FieldDecl field : fields) {
+          field.setModifiers(mods);
+          cdecl.addField(field);
+        }
       }
     } catch (ParseError e) {
       assert corresponds.containsKey(lBrace);
@@ -368,7 +370,7 @@ public class SigParser {
   /* FieldDecl
    *  : Type Identifier [ '=' Expression ] ';'
    */
-  public FieldDecl parseFieldDecl() throws ParseError {
+/*  public FieldDecl parseFieldDecl() throws ParseError {
     int line = lexer.lookahead().getLine();
 
     // Type
@@ -393,6 +395,57 @@ public class SigParser {
     lexer.next();
 
     return fdecl;
+  }*/
+
+  /* FieldsDecl
+   *  : Type Identifier [ '=' Expression ] { ',' Identifier [ '=' Expression ] } ';'
+   */
+  public List<FieldDecl> parseFieldsDecl() throws ParseError {
+    int line = lexer.lookahead().getLine();
+
+    // Type
+    assert lexer.lookahead().isIdentifier();
+    String type = parseType();
+
+    // Identifier
+    assert lexer.lookahead().isIdentifier();
+    String name = lexer.next().toString();
+
+    FieldDecl fdecl = new FieldDecl(type, name, line);
+
+    // [ '=' Expression ]
+    if(lexer.lookahead().is('=')) {
+      int lbody = lexer.lookahead().getLine();
+      fdecl.setBody(parseFieldBody(), lbody);
+    }
+
+    List<FieldDecl> list = new ArrayList<>();
+    list.add(fdecl);
+
+    while(lexer.lookahead().is(',')) {
+      lexer.next();
+
+      // Identifier
+      assert lexer.lookahead().isIdentifier();
+      String id = lexer.next().toString();
+
+      FieldDecl field = new FieldDecl(type, id, line);
+
+      // [ '=' Expression ]
+      if(lexer.lookahead().is('=')) {
+        int lbody = lexer.lookahead().getLine();
+        field.setBody(parseFieldBody(), lbody);
+      }
+
+      list.add(field);
+    }
+
+    if(! lexer.lookahead().is(';')) {
+      throw new ParseError("invalid field declaration : expected ';', but found '" + lexer.lookahead().toString() + "'", filePath, lexer.lookahead().getLine());
+    }
+    lexer.next();
+
+    return list;
   }
 
   /* InterfaceDecl
@@ -457,9 +510,11 @@ public class SigParser {
       }
       // FieldDecl
       else {
-        FieldDecl field = parseFieldDecl();
-        field.setModifiers(mods);
-        idecl.addField(field);
+        List<FieldDecl> fields = parseFieldsDecl();
+        for (FieldDecl field : fields) {
+          field.setModifiers(mods);
+          idecl.addField(field);
+        }
       }
     } catch (ParseError e) {
       assert corresponds.containsKey(lBrace);

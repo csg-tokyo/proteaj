@@ -4,6 +4,7 @@ import java.util.regex.*;
 
 using natural.NaturalNumberOperators;
 using regex.RegexOperators;
+using print.PrintOperators;
 
 class Main {
   public static void main(String[] args) {
@@ -11,14 +12,13 @@ class Main {
 //    Pattern p = [0-9]{2}(B|M|D)[0-9]{5};
     Matcher m = p.matcher("a11M37011");
 
-    System.out.println("pattern : " + p.toString());
-    System.out.print("result : ");
+    p "pattern : " + p.toString();
 
     if(m.find()) {
-      System.out.println("match : " + m.group());
+      p "match : " + m.group();
     }
     else {
-      System.out.println("not match");
+      p "not match";
     }
   }
 }
