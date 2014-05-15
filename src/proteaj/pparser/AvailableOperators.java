@@ -109,16 +109,14 @@ public class AvailableOperators {
 
   private void loadPrimitive (CtClass clazz, int priority, IROperator operator, Map<CtClass, TreeMap<Integer, List<IROperator>>> map) {
     addOperatorToMap(clazz, priority, operator, map);
-
+/*
     if (clazz == CtClass.byteType) loadPrimitive(CtClass.shortType, priority, operator, map);
     else if (clazz == CtClass.charType) loadPrimitive(CtClass.intType, priority, operator, map);
-    else if (clazz == CtClass.shortType) loadPrimitive(CtClass.shortType, priority, operator, map);
+    else if (clazz == CtClass.shortType) loadPrimitive(CtClass.intType, priority, operator, map);
     else if (clazz == CtClass.intType) loadPrimitive(CtClass.longType, priority, operator, map);
     else if (clazz == CtClass.longType) loadPrimitive(CtClass.floatType, priority, operator, map);
-    else if (clazz == CtClass.floatType) loadPrimitive(CtClass.doubleType, priority, operator, map);
+    else if (clazz == CtClass.floatType) loadPrimitive(CtClass.doubleType, priority, operator, map);*/
   }
-
-
 
   private List<IRSyntax> getUsingList () {
     List<String> using = new ArrayList<>(header.usingSyntax);

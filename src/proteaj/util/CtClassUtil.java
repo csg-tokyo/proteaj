@@ -27,6 +27,24 @@ public class CtClassUtil {
     return from.isPrimitive() || to.isPrimitive() || from.subtypeOf(to) || to.subtypeOf(from) || to == CtClass.voidType;
   }
 
+  public static boolean isAssignable (CtClass from, CtClass to) throws NotFoundException {
+    if (to == CtClass.voidType) return true;
+    if (from.isPrimitive()) return isAssignable_Primitive(from, to);
+    else return from.subtypeOf(to);
+  }
+
+  private static boolean isAssignable_Primitive (CtClass from, CtClass to) {
+    if (from == to) return true;
+    if (from == CtClass.byteType) return to == CtClass.shortType || to == CtClass.intType || to == CtClass.longType || to == CtClass.floatType || to == CtClass.doubleType;
+    if (from == CtClass.charType) return to == CtClass.intType || to == CtClass.longType || to == CtClass.floatType || to == CtClass.doubleType;
+    if (from == CtClass.shortType) return to == CtClass.intType || to == CtClass.longType || to == CtClass.floatType || to == CtClass.doubleType;
+    if (from == CtClass.intType) return to == CtClass.longType || to == CtClass.floatType || to == CtClass.doubleType;
+    if (from == CtClass.longType) return to == CtClass.floatType || to == CtClass.doubleType;
+    if (from == CtClass.floatType) return to == CtClass.doubleType;
+    return false;
+  }
+
+
   public static boolean hasTypeParameter (CtClass clazz, String file, int line) {
     SignatureAttribute sig = (SignatureAttribute)clazz.getClassFile2().getAttribute("Signature");
     if (sig == null) return false;

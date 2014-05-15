@@ -8,11 +8,45 @@ import javassist.*;
 
 public class BinaryOperator extends PrimitiveOperator {
 
-  public static final BinaryOperator plus   = new BinaryOperator(CtClass.intType, "+", 900);
-  public static final BinaryOperator minus  = new BinaryOperator(CtClass.intType, "-", 900);
-  public static final BinaryOperator mul    = new BinaryOperator(CtClass.intType, "*", 1000);
-  public static final BinaryOperator div    = new BinaryOperator(CtClass.intType, "/", 1000);
-  public static final BinaryOperator mod    = new BinaryOperator(CtClass.intType, "%", 1000);
+  public static final BinaryOperator badd = new BinaryOperator(CtClass.byteType, "+", 900);
+  public static final BinaryOperator cadd = new BinaryOperator(CtClass.charType, "+", 900);
+  public static final BinaryOperator sadd = new BinaryOperator(CtClass.shortType, "+", 900);
+  public static final BinaryOperator iadd = new BinaryOperator(CtClass.intType, "+", 900);
+  public static final BinaryOperator ladd = new BinaryOperator(CtClass.longType, "+", 900);
+  public static final BinaryOperator fadd = new BinaryOperator(CtClass.floatType, "+", 900);
+  public static final BinaryOperator dadd = new BinaryOperator(CtClass.doubleType, "+", 900);
+
+  public static final BinaryOperator bsub = new BinaryOperator(CtClass.byteType, "-", 900);
+  public static final BinaryOperator csub = new BinaryOperator(CtClass.charType, "-", 900);
+  public static final BinaryOperator ssub = new BinaryOperator(CtClass.shortType, "-", 900);
+  public static final BinaryOperator isub = new BinaryOperator(CtClass.intType, "-", 900);
+  public static final BinaryOperator lsub = new BinaryOperator(CtClass.longType, "-", 900);
+  public static final BinaryOperator fsub = new BinaryOperator(CtClass.floatType, "-", 900);
+  public static final BinaryOperator dsub = new BinaryOperator(CtClass.doubleType, "-", 900);
+
+  public static final BinaryOperator bmul = new BinaryOperator(CtClass.byteType, "*", 1000);
+  public static final BinaryOperator cmul = new BinaryOperator(CtClass.charType, "*", 1000);
+  public static final BinaryOperator smul = new BinaryOperator(CtClass.shortType, "*", 1000);
+  public static final BinaryOperator imul = new BinaryOperator(CtClass.intType, "*", 1000);
+  public static final BinaryOperator lmul = new BinaryOperator(CtClass.longType, "*", 1000);
+  public static final BinaryOperator fmul = new BinaryOperator(CtClass.floatType, "*", 1000);
+  public static final BinaryOperator dmul = new BinaryOperator(CtClass.doubleType, "*", 1000);
+
+  public static final BinaryOperator bdiv = new BinaryOperator(CtClass.byteType, "/", 1000);
+  public static final BinaryOperator cdiv = new BinaryOperator(CtClass.charType, "/", 1000);
+  public static final BinaryOperator sdiv = new BinaryOperator(CtClass.shortType, "/", 1000);
+  public static final BinaryOperator idiv = new BinaryOperator(CtClass.intType, "/", 1000);
+  public static final BinaryOperator ldiv = new BinaryOperator(CtClass.longType, "/", 1000);
+  public static final BinaryOperator fdiv = new BinaryOperator(CtClass.floatType, "/", 1000);
+  public static final BinaryOperator ddiv = new BinaryOperator(CtClass.doubleType, "/", 1000);
+
+  public static final BinaryOperator brem = new BinaryOperator(CtClass.byteType, "%", 1000);
+  public static final BinaryOperator crem = new BinaryOperator(CtClass.charType, "%", 1000);
+  public static final BinaryOperator srem = new BinaryOperator(CtClass.shortType, "%", 1000);
+  public static final BinaryOperator irem = new BinaryOperator(CtClass.intType, "%", 1000);
+  public static final BinaryOperator lrem = new BinaryOperator(CtClass.longType, "%", 1000);
+  public static final BinaryOperator frem = new BinaryOperator(CtClass.floatType, "%", 1000);
+  public static final BinaryOperator drem = new BinaryOperator(CtClass.doubleType, "%", 1000);
 
   public static final BinaryOperator blt  = new BinaryOperator(CtClass.booleanType, CtClass.byteType, "<", CtClass.byteType, 700);
   public static final BinaryOperator clt  = new BinaryOperator(CtClass.booleanType, CtClass.charType, "<", CtClass.charType, 700);

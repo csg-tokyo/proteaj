@@ -264,7 +264,7 @@ public class ExpressionParsers {
 
     PackratParser<Expression> javaExpr = bind(javaExpression, expr -> {
       try {
-        if (expr.type.subtypeOf(clazz) || clazz == CtClass.voidType) return unit(expr);
+        if (isAssignable(expr.type, clazz)) return unit(expr);
         else return failure("type mismatch: expected " + clazz.getName() + " but found " + expr.type.getName());
       } catch (NotFoundException e) { return error(e); }
     });
