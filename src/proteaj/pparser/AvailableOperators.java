@@ -74,12 +74,12 @@ public class AvailableOperators {
   private void loadOperator (IROperator operator, int priority, Map<CtClass, TreeMap<Integer, List<IROperator>>> map) {
     final CtClass clazz = operator.getReturnType();
 
-    addOperatorToMap(clazz, priority, operator, map);
-
-    if (clazz != CtClass.voidType) loadRef(clazz, priority, operator, map);
+    if (clazz.isPrimitive()) loadPrimitive(clazz, priority, operator, map);
+    else loadRef(clazz, priority, operator, map);
   }
 
   private void loadRef (CtClass clazz, int priority, IROperator operator, Map<CtClass, TreeMap<Integer, List<IROperator>>> map) {
+    addOperatorToMap(clazz, priority, operator, map);
     loadRef_SuperClass(clazz, priority, operator, map);
     loadRef_Interfaces(clazz, priority, operator, map);
   }
@@ -90,7 +90,7 @@ public class AvailableOperators {
       ErrorList.addError(new NotFoundError(e, header.filePath, 0));
       return;
     }
-    if (sup != null) loadRef_Class(sup, priority, operator, map);
+    if (sup != null) loadRef(sup, priority, operator, map);
   }
 
   private void loadRef_Interfaces (CtClass clazz, int priority, IROperator operator, Map<CtClass, TreeMap<Integer, List<IROperator>>> map) {
@@ -102,15 +102,23 @@ public class AvailableOperators {
     for (CtClass ifc : interfaces) loadRef_Interface(ifc, priority, operator, map);
   }
 
-  private void loadRef_Class(CtClass clazz, int priority, IROperator operator, Map<CtClass, TreeMap<Integer, List<IROperator>>> map) {
-    addOperatorToMap(clazz, priority, operator, map);
-    loadRef(clazz, priority, operator, map);
-  }
-
   private void loadRef_Interface(CtClass clazz, int priority, IROperator operator, Map<CtClass, TreeMap<Integer, List<IROperator>>> map) {
     addOperatorToMap(clazz, priority, operator, map);
     loadRef_Interfaces(clazz, priority, operator, map);
   }
+
+  private void loadPrimitive (CtClass clazz, int priority, IROperator operator, Map<CtClass, TreeMap<Integer, List<IROperator>>> map) {
+    addOperatorToMap(clazz, priority, operator, map);
+
+    if (clazz == CtClass.byteType) loadPrimitive(CtClass.shortType, priority, operator, map);
+    else if (clazz == CtClass.charType) loadPrimitive(CtClass.intType, priority, operator, map);
+    else if (clazz == CtClass.shortType) loadPrimitive(CtClass.shortType, priority, operator, map);
+    else if (clazz == CtClass.intType) loadPrimitive(CtClass.longType, priority, operator, map);
+    else if (clazz == CtClass.longType) loadPrimitive(CtClass.floatType, priority, operator, map);
+    else if (clazz == CtClass.floatType) loadPrimitive(CtClass.doubleType, priority, operator, map);
+  }
+
+
 
   private List<IRSyntax> getUsingList () {
     List<String> using = new ArrayList<>(header.usingSyntax);
