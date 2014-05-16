@@ -145,6 +145,12 @@ public abstract class StatementParsers {
   private final PackratParser<TryStatement> tryStatement =
       choice(tryCatchFinallyStatement, tryCatchStatement, tryFinallyStatement);
 
+  private final PackratParser<BreakStatement> breakStatement =
+      map(keywords("break", ";"), ss -> new BreakStatement());
+
+  private final PackratParser<ContinueStatement> continueStatement =
+      map(keywords("continue", ";"), ss -> new ContinueStatement());
+
   private final PackratParser<ReturnStatement> returnStatement =
       ref(new ParserThunk<ReturnStatement>() {
         @Override
@@ -153,7 +159,8 @@ public abstract class StatementParsers {
 
   private final PackratParser<Statement> controlFlow =
       choice(ifStatement, whileStatement, doWhileStatement,
-          forStatement, throwStatement, tryStatement, returnStatement);
+          forStatement, throwStatement, tryStatement,
+          breakStatement, continueStatement, returnStatement);
 
   private final PackratParser<Statement> localVarDeclStatement =
       map(postfix(localVarDecl, ";"), LocalVarDeclStatement::new);

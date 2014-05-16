@@ -152,6 +152,16 @@ public class JavassistCodeGenerator implements ExpressionVisitor<StringBuilder>,
   }
 
   @Override
+  public StringBuilder visit(BreakStatement breakStmt, StringBuilder buf) {
+    return buf.append("break").append(';');
+  }
+
+  @Override
+  public StringBuilder visit(ContinueStatement continueStmt, StringBuilder buf) {
+    return buf.append("continue").append(';');
+  }
+
+  @Override
   public StringBuilder visit(ReturnStatement returnStmt, StringBuilder buf) {
     if (returnStmt.value != null) {
       buf = buf.append("return ");

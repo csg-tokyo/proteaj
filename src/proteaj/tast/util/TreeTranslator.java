@@ -109,6 +109,14 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
     return new ThrowStatement(translate(throwStmt.e));
   }
 
+  public Statement translate(BreakStatement breakStmt) {
+    return breakStmt;
+  }
+
+  public Statement translate(ContinueStatement continueStmt) {
+    return continueStmt;
+  }
+
   public Statement translate(ReturnStatement returnStmt) {
     if (returnStmt.value == null) return returnStmt;
     else return new ReturnStatement(translate(returnStmt.value));
@@ -313,7 +321,7 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   }
 
   @Override
-  public Expression visit(ArrayInitializer arrayInitializer, Expression expression) { return translate(arrayInitializer); }
+  public final Expression visit(ArrayInitializer arrayInitializer, Expression expression) { return translate(arrayInitializer); }
 
   @Override
   public final Expression visit(ArrayLength arrayLength, Expression expression) {
@@ -428,6 +436,16 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   @Override
   public final Statement visit(ThrowStatement throwStmt, Statement statement) {
     return translate(throwStmt);
+  }
+
+  @Override
+  public final Statement visit(BreakStatement breakStmt, Statement statement) {
+    return translate(breakStmt);
+  }
+
+  @Override
+  public final Statement visit(ContinueStatement continueStmt, Statement statement) {
+    return translate(continueStmt);
   }
 
   @Override

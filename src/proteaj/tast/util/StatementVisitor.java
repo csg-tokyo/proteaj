@@ -13,6 +13,8 @@ public interface StatementVisitor<T> {
   public abstract T visit (ForStatement forStmt, T t);
   public abstract T visit (TryStatement tryStmt, T t);
   public abstract T visit (ThrowStatement throwStmt, T t);
+  public abstract T visit (BreakStatement breakStmt, T t);
+  public abstract T visit (ContinueStatement continueStmt, T t);
   public abstract T visit (ReturnStatement returnStmt, T t);
   public abstract T visit (ExpressionStatement exprStmt, T t);
 }
