@@ -264,7 +264,7 @@ public class ExpressionParsers {
 
     PackratParser<Expression> javaExpr = bind(javaExpression, expr -> {
       try {
-        if (isAssignable(expr.type, clazz)) return unit(expr);
+        if (isAssignableTo(expr, clazz)) return unit(expr);
         else return failure("type mismatch: expected " + clazz.getName() + " but found " + expr.type.getName());
       } catch (NotFoundException e) { return error(e); }
     });
@@ -281,6 +281,21 @@ public class ExpressionParsers {
     }
 
     else return choice(parenthesized, rCast, lCast, javaExpr, nullLiteral, readAs);
+  }
+
+  private boolean isAssignableTo (Expression e, CtClass clazz) throws NotFoundException {
+    if (isAssignable(e.type, clazz)) return true;
+    if (e instanceof IntLiteral) {
+      int value = ((IntLiteral)e).val;
+      if (clazz == CtClass.byteType) return Byte.MIN_VALUE <= value && value <= Byte.MAX_VALUE;
+      else if (clazz == CtClass.charType) return Character.MIN_VALUE <= value && value <= Character.MAX_VALUE;
+      else if (clazz == CtClass.shortType) return Short.MIN_VALUE <= value && value <= Short.MAX_VALUE;
+      else if (clazz == CtClass.intType) return Integer.MIN_VALUE <= value && value <= Integer.MAX_VALUE;
+      else if (clazz == CtClass.longType) return Long.MIN_VALUE <= value && value <= Long.MAX_VALUE;
+      else if (clazz == CtClass.floatType) return Float.MIN_VALUE <= value && value <= Float.MAX_VALUE;
+      else if (clazz == CtClass.doubleType) return Double.MIN_VALUE <= value && value <= Double.MAX_VALUE;
+    }
+    return false;
   }
 
   private PackratParser<CastExpression> castBody (final CtClass clazz, final CtClass from, final CtClass to) {
