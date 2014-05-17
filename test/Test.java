@@ -16,8 +16,5 @@ public class Test {
     ClassResolver resolver = new ClassResolver(header, pool);
 
     CtClass strList = resolver.getParameterizedClass(list, Arrays.asList(string));
-
-
-    System.out.println(strList);
   }
 }

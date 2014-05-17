@@ -23,12 +23,14 @@ public class Compiler {
   public void compile(Collection<File> files) {
     ErrorList.init();
 
-    IR ir = new SigCompiler().compile(files);
-    Program program = new BodyCompiler(ir).compile();
-    new CodeGenerator("./bin").codegen(program);
-
-    if(ErrorList.hasError()) {
-      ErrorList.printAllErrors();
+    try {
+      IR ir = new SigCompiler().compile(files);
+      Program program = new BodyCompiler(ir).compile();
+      new CodeGenerator("./bin").codegen(program);
+    } finally {
+      if(ErrorList.hasError()) {
+        ErrorList.printAllErrors();
+      }
     }
   }
 
