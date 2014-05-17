@@ -8,10 +8,22 @@ import javassist.*;
 
 public class PostfixOperator extends PrimitiveOperator {
 
-  public static final PostfixOperator inc  = new PostfixOperator(CtClass.intType, "++", 1500);
-  public static final PostfixOperator dec  = new PostfixOperator(CtClass.intType, "--", 1500);
-  public static final PostfixOperator incv = new PostfixOperator(CtClass.voidType, CtClass.intType, "++", 1500);
-  public static final PostfixOperator decv = new PostfixOperator(CtClass.voidType, CtClass.intType, "--", 1500);
+  public static final PostfixOperator binc_post = new PostfixOperator(CtClass.byteType, "++", 1500);
+  public static final PostfixOperator sinc_post = new PostfixOperator(CtClass.shortType, "++", 1500);
+  public static final PostfixOperator iinc_post = new PostfixOperator(CtClass.intType, "++", 1500);
+  public static final PostfixOperator linc_post = new PostfixOperator(CtClass.longType, "++", 1500);
+  public static final PostfixOperator finc_post = new PostfixOperator(CtClass.floatType, "++", 1500);
+  public static final PostfixOperator dinc_post = new PostfixOperator(CtClass.doubleType, "++", 1500);
+
+  public static final PostfixOperator bdec_post = new PostfixOperator(CtClass.byteType, "--", 1500);
+  public static final PostfixOperator sdec_post = new PostfixOperator(CtClass.shortType, "--", 1500);
+  public static final PostfixOperator idec_post = new PostfixOperator(CtClass.intType, "--", 1500);
+  public static final PostfixOperator ldec_post = new PostfixOperator(CtClass.longType, "--", 1500);
+  public static final PostfixOperator fdec_post = new PostfixOperator(CtClass.floatType, "--", 1500);
+  public static final PostfixOperator ddec_post = new PostfixOperator(CtClass.doubleType, "--", 1500);
+
+  public static final PostfixOperator incv_post = new PostfixOperator(CtClass.voidType, CtClass.intType, "++", 1500);
+  public static final PostfixOperator decv_post = new PostfixOperator(CtClass.voidType, CtClass.intType, "--", 1500);
 
   private static IRPattern getPostfixOperatorPattern(CtClass type, String operator) {
     OperatorPattern pattern = new OperatorPattern(-1);

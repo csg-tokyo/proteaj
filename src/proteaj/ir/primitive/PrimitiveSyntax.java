@@ -2,6 +2,10 @@ package proteaj.ir.primitive;
 
 import proteaj.ir.*;
 
+import static proteaj.ir.primitive.BinaryOperator.*;
+import static proteaj.ir.primitive.PrefixOperator.*;
+import static proteaj.ir.primitive.PostfixOperator.*;
+
 public class PrimitiveSyntax extends IRSyntax {
 
   public static PrimitiveSyntax getSyntax() {
@@ -13,97 +17,32 @@ public class PrimitiveSyntax extends IRSyntax {
 
   private PrimitiveSyntax() {
     super("proteaj.lang.PrimitiveOperators");
-    addOperator(BinaryOperator.badd);
-    addOperator(BinaryOperator.cadd);
-    addOperator(BinaryOperator.sadd);
-    addOperator(BinaryOperator.iadd);
-    addOperator(BinaryOperator.ladd);
-    addOperator(BinaryOperator.fadd);
-    addOperator(BinaryOperator.dadd);
-    addOperator(BinaryOperator.bsub);
-    addOperator(BinaryOperator.csub);
-    addOperator(BinaryOperator.ssub);
-    addOperator(BinaryOperator.isub);
-    addOperator(BinaryOperator.lsub);
-    addOperator(BinaryOperator.fsub);
-    addOperator(BinaryOperator.dsub);
-    addOperator(BinaryOperator.bmul);
-    addOperator(BinaryOperator.cmul);
-    addOperator(BinaryOperator.smul);
-    addOperator(BinaryOperator.imul);
-    addOperator(BinaryOperator.lmul);
-    addOperator(BinaryOperator.fmul);
-    addOperator(BinaryOperator.dmul);
-    addOperator(BinaryOperator.bdiv);
-    addOperator(BinaryOperator.cdiv);
-    addOperator(BinaryOperator.sdiv);
-    addOperator(BinaryOperator.idiv);
-    addOperator(BinaryOperator.ldiv);
-    addOperator(BinaryOperator.fdiv);
-    addOperator(BinaryOperator.ddiv);
-    addOperator(BinaryOperator.brem);
-    addOperator(BinaryOperator.crem);
-    addOperator(BinaryOperator.srem);
-    addOperator(BinaryOperator.irem);
-    addOperator(BinaryOperator.lrem);
-    addOperator(BinaryOperator.frem);
-    addOperator(BinaryOperator.drem);
-    addOperator(BinaryOperator.blt);
-    addOperator(BinaryOperator.clt);
-    addOperator(BinaryOperator.slt);
-    addOperator(BinaryOperator.ilt);
-    addOperator(BinaryOperator.llt);
-    addOperator(BinaryOperator.flt);
-    addOperator(BinaryOperator.dlt);
-    addOperator(BinaryOperator.bgt);
-    addOperator(BinaryOperator.cgt);
-    addOperator(BinaryOperator.sgt);
-    addOperator(BinaryOperator.igt);
-    addOperator(BinaryOperator.lgt);
-    addOperator(BinaryOperator.fgt);
-    addOperator(BinaryOperator.dgt);
-    addOperator(BinaryOperator.bleq);
-    addOperator(BinaryOperator.cleq);
-    addOperator(BinaryOperator.sleq);
-    addOperator(BinaryOperator.ileq);
-    addOperator(BinaryOperator.lleq);
-    addOperator(BinaryOperator.fleq);
-    addOperator(BinaryOperator.dleq);
-    addOperator(BinaryOperator.bgeq);
-    addOperator(BinaryOperator.cgeq);
-    addOperator(BinaryOperator.sgeq);
-    addOperator(BinaryOperator.igeq);
-    addOperator(BinaryOperator.lgeq);
-    addOperator(BinaryOperator.fgeq);
-    addOperator(BinaryOperator.dgeq);
-    addOperator(BinaryOperator.bequal);
-    addOperator(BinaryOperator.cequal);
-    addOperator(BinaryOperator.sequal);
-    addOperator(BinaryOperator.iequal);
-    addOperator(BinaryOperator.lequal);
-    addOperator(BinaryOperator.bneq);
-    addOperator(BinaryOperator.cneq);
-    addOperator(BinaryOperator.sneq);
-    addOperator(BinaryOperator.ineq);
-    addOperator(BinaryOperator.lneq);
-    addOperator(BinaryOperator.bitand);
-    addOperator(BinaryOperator.bitxor);
-    addOperator(BinaryOperator.bitor);
+
+    addOperators(
+        badd, cadd, sadd, iadd, ladd, fadd, dadd,
+        bsub, csub, ssub, isub, lsub, fsub, dsub,
+        bmul, cmul, smul, imul, lmul, fmul, dmul,
+        bdiv, cdiv, sdiv, idiv, ldiv, fdiv, ddiv,
+        brem, crem, srem, irem, lrem, frem, drem,
+        blt, clt, slt, ilt, llt, flt, dlt,
+        bgt, cgt, sgt, igt, lgt, fgt, dgt,
+        bleq, cleq, sleq, ileq, lleq, fleq, dleq,
+        bgeq, cgeq, sgeq, igeq, lgeq, fgeq, dgeq,
+        bequal, cequal, sequal, iequal, lequal,
+        bneq, cneq, sneq, ineq, lneq,
+        bitand, bitxor, bitor, and, or,
+        bplus, splus, iplus, lplus, fplus, dplus,
+        bneg, sneg, ineg, lneg, fneg, dneg,
+        binc_pre, sinc_pre, iinc_pre, linc_pre, finc_pre, dinc_pre,
+        bdec_pre, sdec_pre, idec_pre, ldec_pre, fdec_pre, ddec_pre,
+        incv_pre, decv_pre,
+        not, compl,
+        binc_post, sinc_post, iinc_post, linc_post, finc_post, dinc_post,
+        bdec_post, sdec_post, idec_post, ldec_post, fdec_post, ddec_post,
+        incv_post, decv_post
+    );
+
     addOperator(BinaryOperator.getObjEqOperator());
     addOperator(BinaryOperator.getObjNeqOperator());
-    addOperator(BinaryOperator.and);
-    addOperator(BinaryOperator.or);
-    addOperator(PrefixOperator.plus);
-    addOperator(PrefixOperator.minus);
-    addOperator(PrefixOperator.inc);
-    addOperator(PrefixOperator.dec);
-    addOperator(PrefixOperator.incv);
-    addOperator(PrefixOperator.decv);
-    addOperator(PrefixOperator.not);
-    addOperator(PrefixOperator.compl);
-    addOperator(PostfixOperator.inc);
-    addOperator(PostfixOperator.dec);
-    addOperator(PostfixOperator.incv);
-    addOperator(PostfixOperator.decv);
   }
 }

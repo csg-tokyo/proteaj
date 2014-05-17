@@ -30,6 +30,8 @@ public class IRSyntax {
     ops.add(odata);
   }
 
+  public void addOperators (IROperator... operators) { ops.addAll(Arrays.asList(operators)); }
+
   public boolean hasBaseSyntax() {
     return baseSyntax != null;
   }
