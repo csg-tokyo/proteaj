@@ -6,10 +6,7 @@ import proteaj.error.*;
 import proteaj.io.SourceFileReader;
 import proteaj.token.*;
 
-import static java.lang.Character.isDigit;
-import static java.lang.Character.isJavaIdentifierStart;
-import static java.lang.Character.isJavaIdentifierPart;
-import static java.lang.Character.isWhitespace;
+import static java.lang.Character.*;
 
 public class SigLexer {
   public SigLexer(SourceFileReader reader) throws FileIOError {
@@ -261,10 +258,21 @@ public class SigLexer {
   }
 
   private char readEscapedChar(SourceFileReader reader) throws FileIOError, LexicalError {
+    assert reader.hasNext();
     char ch = reader.next();
 
     if(escapedChars.containsKey(ch)) return escapedChars.get(ch);
+    else if (ch == 'u') return readCharCode(reader);
     else throw new LexicalError("invalid escape sequence \"\\" + ch + "\"", filePath, reader.getLine());
+  }
+
+  private char readCharCode(SourceFileReader reader) throws FileIOError {
+    int code = 0;
+    for (int i = 0; i < 4; i++) {
+      assert reader.hasNext();
+      code = code * 16 + digit(reader.next(), 16);
+    }
+    return (char)code;
   }
 
   private int current;
