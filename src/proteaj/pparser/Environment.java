@@ -47,6 +47,14 @@ public class Environment {
     }
 
     else {
+      for(CtField field : thisClass.getFields()) try {
+        if(Modifiers.isStatic(field)) {
+          add(field.getName(), new StaticFieldAccess(field));
+        }
+      } catch (NotFoundException e) {
+        ErrorList.addError(new NotFoundError(e, filePath, 0));
+      }
+
       for(CtField field : thisClass.getDeclaredFields()) try {
         if(Modifiers.isStatic(field)) {
           add(field.getName(), new StaticFieldAccess(field));
