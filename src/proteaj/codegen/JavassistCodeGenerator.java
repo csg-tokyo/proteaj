@@ -1,5 +1,6 @@
 package proteaj.codegen;
 
+import proteaj.error.ForDebug;
 import proteaj.ir.*;
 import proteaj.ir.primitive.*;
 import proteaj.tast.*;
@@ -12,11 +13,35 @@ import javassist.*;
 import static proteaj.util.Escape.escape;
 
 public class JavassistCodeGenerator implements ExpressionVisitor<StringBuilder>, StatementVisitor<StringBuilder> {
-  public static String codeGen (MethodBody body)       { return instance.visit(body, new StringBuilder()).toString(); }
-  public static String codeGen (ConstructorBody body)  { return instance.visit(body, new StringBuilder()).toString(); }
-  public static String codeGen (FieldBody body)        { return instance.visit(body, new StringBuilder()).toString(); }
-  public static String codeGen (DefaultValue body)     { return instance.visit(body, new StringBuilder()).toString(); }
-  public static String codeGen (ClassInitializer body) { return instance.visit(body, new StringBuilder()).toString(); }
+  public static String codeGen (MethodBody body) {
+    String code = instance.visit(body, new StringBuilder()).toString();
+    ForDebug.print(code);
+    return code;
+  }
+
+  public static String codeGen (ConstructorBody body) {
+    String code = instance.visit(body, new StringBuilder()).toString();
+    ForDebug.print(code);
+    return code;
+  }
+
+  public static String codeGen (FieldBody body) {
+    String code = instance.visit(body, new StringBuilder()).toString();
+    ForDebug.print(code);
+    return code;
+  }
+
+  public static String codeGen (DefaultValue body) {
+    String code = instance.visit(body, new StringBuilder()).toString();
+    ForDebug.print(code);
+    return code;
+  }
+
+  public static String codeGen (ClassInitializer body) {
+    String code = instance.visit(body, new StringBuilder()).toString();
+    ForDebug.print(code);
+    return code;
+  }
 
   public static final JavassistCodeGenerator instance = new JavassistCodeGenerator();
 
@@ -51,7 +76,7 @@ public class JavassistCodeGenerator implements ExpressionVisitor<StringBuilder>,
   public StringBuilder visit(Block block, StringBuilder buf) {
     buf = buf.append('{');
     for (Statement s : block.getStatements()) buf = visit(s, buf.append('\n'));
-    buf = buf.append('}');
+    buf = buf.append('\n').append('}');
     return buf;
   }
 

@@ -21,7 +21,7 @@ public class Compiler {
   }
 
   public void compile(Collection<File> files) {
-    Verbose.setVerboseFlag();
+    ForDebug.setVerboseFlag();
     ErrorList.init();
 
     try {

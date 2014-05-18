@@ -11,7 +11,7 @@ import javassist.*;
 
 public class BodyParser {
   public MethodBody parseMethodBody(CtMethod method, SourceStringReader reader, Environment env) throws CompileErrors {
-    Verbose.print("[[ parse body of " + method.getName() + " ]]");
+    ForDebug.print("[[ parse body of " + method.getName() + " ]]");
     try {
       CtClass returnType = method.getReturnType();
       CtClass[] exceptionTypes = method.getExceptionTypes();
@@ -34,7 +34,7 @@ public class BodyParser {
   }
 
   public ConstructorBody parseConstructorBody(CtConstructor constructor, SourceStringReader reader, Environment env) throws CompileErrors {
-    Verbose.print("[[ parse body of constructor " + constructor.getSignature() + " ]]");
+    ForDebug.print("[[ parse body of constructor " + constructor.getSignature() + " ]]");
     try {
       CtClass[] exceptionTypes = constructor.getExceptionTypes();
 
@@ -56,7 +56,7 @@ public class BodyParser {
   }
 
   public FieldBody parseFieldBody(CtField field, SourceStringReader reader, Environment env) throws CompileErrors {
-    Verbose.print("[[ parse field initializer of " + field.getName() + " ]]");
+    ForDebug.print("[[ parse field initializer of " + field.getName() + " ]]");
     try {
       ParseResult<FieldBody> fbody = ExpressionParsers.fieldBody(field.getType()).applyRule(reader, env);
       if(! fbody.isFail()) {

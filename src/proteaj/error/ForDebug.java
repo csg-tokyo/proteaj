@@ -3,7 +3,7 @@ package proteaj.error;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Verbose {
+public class ForDebug {
   public static void print(String msg) {
     if (verbose) {
       if (! msgs.contains(msg)) {
