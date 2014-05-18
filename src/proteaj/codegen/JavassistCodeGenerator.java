@@ -409,6 +409,11 @@ public class JavassistCodeGenerator implements ExpressionVisitor<StringBuilder>,
   }
 
   @Override
+  public StringBuilder visit(TypeLiteral typeLiteral, StringBuilder buf) {
+    return buf.append("new proteaj.lang.Type(").append(typeLiteral.cls.getName()).append(".class)");
+  }
+
+  @Override
   public StringBuilder visit(NullLiteral nul, StringBuilder buf) {
     return buf.append("null");
   }
@@ -429,10 +434,18 @@ public class JavassistCodeGenerator implements ExpressionVisitor<StringBuilder>,
     }
     else if (operator instanceof BinaryOperator) {
       assert operands.size() == 2;
-      String name = ((BinaryOperator)operator).operator;
-      buf = visit(operands.get(0), buf);
-      buf = buf.append(' ').append(name).append(' ');
-      buf = visit(operands.get(1), buf);
+      if (operator == BinaryOperator.getInstanceOfOperator()) {
+        assert operands.get(1) instanceof TypeLiteral;
+        buf = visit(operands.get(0), buf);
+        buf = buf.append(" instanceof ");
+        buf = buf.append(((TypeLiteral)operands.get(1)).cls.getName());
+      }
+      else {
+        String name = ((BinaryOperator) operator).operator;
+        buf = visit(operands.get(0), buf);
+        buf = buf.append(' ').append(name).append(' ');
+        buf = visit(operands.get(1), buf);
+      }
     }
     else {
       assert false;

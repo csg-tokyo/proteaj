@@ -42,7 +42,8 @@ public class PrimitiveSyntax extends IRSyntax {
         incv_post, decv_post
     );
 
-    addOperator(BinaryOperator.getObjEqOperator());
-    addOperator(BinaryOperator.getObjNeqOperator());
+    addOperator(getInstanceOfOperator());
+    addOperator(getObjEqOperator());
+    addOperator(getObjNeqOperator());
   }
 }

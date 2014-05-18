@@ -28,5 +28,6 @@ public interface ExpressionVisitor<T> {
   public abstract T visit (IntLiteral intLiteral, T t);
   public abstract T visit (BooleanLiteral booleanLiteral, T t);
   public abstract T visit (ClassLiteral classLiteral, T t);
+  public abstract T visit (TypeLiteral typeLiteral, T t);
   public abstract T visit (NullLiteral nullLiteral, T t);
 }

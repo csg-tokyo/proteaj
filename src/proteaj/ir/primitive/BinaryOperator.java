@@ -98,6 +98,13 @@ public class BinaryOperator extends PrimitiveOperator {
   public static final BinaryOperator and    = new BinaryOperator(CtClass.booleanType, CtClass.booleanType, "&&", CtClass.booleanType, 200);
   public static final BinaryOperator or     = new BinaryOperator(CtClass.booleanType, CtClass.booleanType, "||", CtClass.booleanType, 100);
 
+  private static BinaryOperator instanceOf = null;
+
+  public static BinaryOperator getInstanceOfOperator() {
+    if (instanceOf == null) instanceOf = new BinaryOperator(CtClass.booleanType, IRCommonTypes.getObjectType(), "instanceof", IRCommonTypes.getTypeType(), 700);
+    return instanceOf;
+  }
+
   public static BinaryOperator getObjEqOperator() {
     return new BinaryOperator(CtClass.booleanType, IRCommonTypes.getObjectType(), "==", IRCommonTypes.getObjectType(), 600);
   }

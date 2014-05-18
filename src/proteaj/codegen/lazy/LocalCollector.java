@@ -154,6 +154,9 @@ public class LocalCollector implements ExpressionVisitor<Set<Expression>> {
   }
 
   @Override
+  public Set<Expression> visit(TypeLiteral typeLiteral, Set<Expression> localVariables) { return localVariables; }
+
+  @Override
   public Set<Expression> visit(NullLiteral nullLiteral, Set<Expression> localVariables) {
     return localVariables;
   }

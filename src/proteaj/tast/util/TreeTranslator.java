@@ -245,6 +245,10 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
     return classLiteral;
   }
 
+  public Expression translate(TypeLiteral typeLiteral) {
+    return typeLiteral;
+  }
+
   public Expression translate(NullLiteral nullLiteral) {
     return nullLiteral;
   }
@@ -381,6 +385,11 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   @Override
   public final Expression visit(ClassLiteral classLiteral, Expression expression) {
     return translate(classLiteral);
+  }
+
+  @Override
+  public Expression visit(TypeLiteral typeLiteral, Expression expression) {
+    return translate(typeLiteral);
   }
 
   @Override

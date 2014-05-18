@@ -421,15 +421,7 @@ public class ExpressionParsers {
         return unit(new NewExpression(constructor, Arrays.<Expression>asList(new CharLiteral(ch))));
       });
     }
-    else if (type.equals(IRCommonTypes.getTypeType())) {
-      return bind(typeName, clazz -> {
-        CtConstructor constructor;
-        try { constructor = getConstructor(type, IRCommonTypes.getClassType()); } catch (NotFoundException e) {
-          return error(e);
-        }
-        return unit(new NewExpression(constructor, Arrays.<Expression>asList(new ClassLiteral(clazz))));
-      });
-    }
+    else if (type.equals(IRCommonTypes.getTypeType())) return map(typeName, TypeLiteral::new);
     else {
       assert false;
       throw new RuntimeException("unknown primitive readas operator");
