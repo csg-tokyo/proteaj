@@ -1,6 +1,6 @@
 package proteaj;
 
-import proteaj.error.ErrorList;
+import proteaj.error.*;
 import proteaj.ir.IR;
 import proteaj.tast.Program;
 
@@ -21,6 +21,7 @@ public class Compiler {
   }
 
   public void compile(Collection<File> files) {
+    Verbose.setVerboseFlag();
     ErrorList.init();
 
     try {

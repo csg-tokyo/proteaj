@@ -1,6 +1,7 @@
 package proteaj.pparser;
 
 import proteaj.error.FailLog;
+import proteaj.error.Verbose;
 
 public abstract class ParseResult<T> {
   public abstract boolean isFail();
@@ -16,6 +17,7 @@ public abstract class ParseResult<T> {
 class Success<T> extends ParseResult<T> {
   public Success(T value) {
     this.value = value;
+    Verbose.print("[ parse success ] " + value.toString() + " : " + value.getClass());
   }
 
   @Override
@@ -41,6 +43,7 @@ class Failure<T> extends ParseResult<T> {
     this.msg = msg;
     this.pos = pos;
     this.line = line;
+    Verbose.print("[ parse fail ] " + "(" + line + "," + pos + ") " + msg);
   }
 
   @Override
