@@ -113,6 +113,14 @@ public class JavaExpressionParsers {
         return unit(new NewArrayExpression(arrayType, triad._2));
       }));
 
+
+  private static final PackratParser<ArrayInitializer> arrayInit =
+      bind(prefix("new", typeName), type -> {
+        CtClass component;
+        try { component = type.getComponentType(); } catch (NotFoundException e) { return error(e); }
+        return map(enclosed("{", rep(expression(component), ","), "}"), list -> new ArrayInitializer(type, list));
+      });
+
   private static final PackratParser<CastExpression> cast =
       bind(seq(enclosed("(", typeName, ")"), ref_JavaExpression), pair -> {
         try {
@@ -144,7 +152,7 @@ public class JavaExpressionParsers {
       choice(intLiteral, hexLiteral, booleanLiteral, stringLiteral, charLiteral, classLiteral);
 
   private static final PackratParser<Expression> primary =
-      choice(abbMethodCall, variable, staticMethodCall, staticFieldAccess, newObject, newArray, cast, parenthesized, literal);
+      choice(abbMethodCall, variable, staticMethodCall, staticFieldAccess, newObject, newArray, arrayInit, cast, parenthesized, literal);
 
   public static final PackratParser<Expression> javaExpression =
       choice(assignment, arrayLength, methodCall, fieldAccess, arrayAccess, primary);
