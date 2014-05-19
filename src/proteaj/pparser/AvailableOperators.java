@@ -42,7 +42,7 @@ public class AvailableOperators {
       for (Map.Entry<Integer, List<IROperator>> entry1 : entry.getValue().entrySet()) {
         System.out.println(" # " + entry1.getKey());
         for (IROperator operator : entry1.getValue()) {
-          System.out.println("  $ " + operator.getPattern());
+          System.out.println("  $ " + operator.pattern);
         }
       }
     }
@@ -61,10 +61,10 @@ public class AvailableOperators {
     }
 
     for (IROperator operator : syntax.getOperators()) {
-      int priority = operator.getPriority() + basePriority;
+      int priority = operator.priority + basePriority;
       if (maxPriority < priority) maxPriority = priority;
 
-      if (! operator.getPattern().isReadas()) loadOperator(operator, priority, normalMap);
+      if (! operator.pattern.isReadas()) loadOperator(operator, priority, normalMap);
       else loadOperator(operator, priority, readAsMap);
     }
 
@@ -72,7 +72,7 @@ public class AvailableOperators {
   }
 
   private void loadOperator (IROperator operator, int priority, Map<CtClass, TreeMap<Integer, List<IROperator>>> map) {
-    final CtClass clazz = operator.getReturnType();
+    final CtClass clazz = operator.returnType;
 
     if (clazz.isPrimitive()) loadPrimitive(clazz, priority, operator, map);
     else loadRef(clazz, priority, operator, map);
@@ -85,6 +85,7 @@ public class AvailableOperators {
   }
 
   private void loadRef_SuperClass (CtClass clazz, int priority, IROperator operator, Map<CtClass, TreeMap<Integer, List<IROperator>>> map) {
+    if (operator.returnTypeBounds.contains(clazz)) return;
     final CtClass sup;
     try { sup = clazz.getSuperclass(); } catch (NotFoundException e) {
       ErrorList.addError(new NotFoundError(e, header.filePath, 0));
@@ -94,6 +95,7 @@ public class AvailableOperators {
   }
 
   private void loadRef_Interfaces (CtClass clazz, int priority, IROperator operator, Map<CtClass, TreeMap<Integer, List<IROperator>>> map) {
+    if (operator.returnTypeBounds.contains(clazz)) return;
     final CtClass[] interfaces;
     try { interfaces = clazz.getInterfaces(); } catch (NotFoundException e) {
       ErrorList.addError(new NotFoundError(e, header.filePath, 0));

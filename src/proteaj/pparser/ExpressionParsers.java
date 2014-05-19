@@ -201,7 +201,7 @@ public class ExpressionParsers {
   }
 
   private PackratParser<Operation> makeOperationParser (final IROperator operator, final int priority) {
-    final IRPattern pattern = operator.getPattern();
+    final IRPattern pattern = operator.pattern;
     final int length = pattern.getPatternLength();
     final List<Expression> newOperandList = Collections.emptyList();
 
@@ -378,8 +378,8 @@ public class ExpressionParsers {
   }
 
   private PackratParser<? extends Expression> makeLiteralParser (final IROperator operator, Integer priority) {
-    final IRPattern pattern = operator.getPattern();
-    if (pattern.isDummy()) return makePrimitiveLiteralParser(operator.getReturnType());
+    final IRPattern pattern = operator.pattern;
+    if (pattern.isDummy()) return makePrimitiveLiteralParser(operator.returnType);
 
     final int length = pattern.getPatternLength();
     final List<Expression> newOperandList = Collections.emptyList();

@@ -50,12 +50,23 @@ public class OperatorsFile {
         IROperator op = irops.get(i);
         Element operator = doc.createElement("operator");
         operator.setAttribute("id", String.valueOf(i));
-        operator.setAttribute("return", op.getReturnType().getName());
+        operator.setAttribute("return", op.returnType.getName());
         operator.setAttribute("method", op.getMethodName());
-        operator.setAttribute("priority", String.valueOf(op.getPriority()));
+        operator.setAttribute("priority", String.valueOf(op.priority));
         root.appendChild(operator);
 
-        operator.appendChild(toXML(op.getPattern()));
+        Element bounds = doc.createElement("bounds");
+        bounds.setAttribute("length", String.valueOf(op.returnTypeBounds.size()));
+
+        for (CtClass bound : op.returnTypeBounds) {
+          Element e = doc.createElement("bound");
+          e.setTextContent(bound.getName());
+          bounds.appendChild(e);
+        }
+
+        operator.appendChild(bounds);
+
+        operator.appendChild(toXML(op.pattern));
       }
 
     } catch (ParserConfigurationException e) {
@@ -160,14 +171,35 @@ public class OperatorsFile {
       int priority = Integer.parseInt(getAttr(node, "priority"));
       CtClass returnType = cpool.get(getAttr(node, "return"));
 
-      Node ptnode = node.getFirstChild();
-      checkElementNode(ptnode, "pattern");
+      NodeList nodeList = node.getChildNodes();
+      Node node0 = nodeList.item(0);
+      Node node1 = nodeList.item(1);
 
-      IRPattern irpat = fromXML(ptnode, clz, cpool, fileName);
+      final Node bounds;
+      final Node ptNode;
+      if (node0.getNodeName().equals("bounds") && node1.getNodeName().equals("pattern")) {
+        bounds = node0;
+        ptNode = node1;
+      }
+      else if (node1.getNodeName().equals("bounds") && node0.getNodeName().equals("pattern")) {
+        bounds = node1;
+        ptNode = node0;
+      }
+      else throw new FileIOError(fileName + " is broken", fileName, 0);
+
+      int boundsLen = Integer.valueOf(getAttr(bounds, "length"));
+      NodeList boundsList = bounds.getChildNodes();
+      List<CtClass> returnTypeBounds = new ArrayList<>();
+      for (int j = 0; j < boundsLen; j++) {
+        CtClass bound = cpool.get(boundsList.item(j).getTextContent());
+        returnTypeBounds.add(bound);
+      }
+
+      IRPattern irpat = fromXML(ptNode, clz, cpool, fileName);
 
       CtMethod method = clz.getDeclaredMethod(methodName);
 
-      IROperator irop = new IROperator(returnType, irpat, priority, clz, method);
+      IROperator irop = new IROperator(returnType, returnTypeBounds, irpat, priority, clz, method);
       irops[id] = irop;
 
     } catch (NotFoundException e) {

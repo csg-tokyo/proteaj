@@ -3,12 +3,13 @@ package proteaj.ast;
 import java.util.List;
 
 public class OperatorDecl extends AST {
-  public OperatorDecl(List<TypeParameter> typeParams, String type, OperatorPattern pattern, List<Parameter> params, int priority, List<String> exceptions, int line) {
+  public OperatorDecl(List<TypeParameter> typeParams, String type, List<String> bounds, OperatorPattern pattern, List<Parameter> params, int priority, List<String> exceptions, int line) {
     super(line);
     this.name = null;
     this.modifiers = 0;
     this.typeParams = typeParams;
     this.type = type;
+    this.bounds = bounds;
     this.pattern = pattern;
     this.params = params;
     this.priority = priority;
@@ -50,26 +51,24 @@ public class OperatorDecl extends AST {
     return modifiers;
   }
 
-  public List<TypeParameter> getTypeParams() { return typeParams; }
-
+  @Deprecated
   public String getType() {
     return type;
   }
 
+  @Deprecated
   public OperatorPattern getPattern() {
     return pattern;
   }
 
+  @Deprecated
   public List<Parameter> getParams() {
     return params;
   }
 
+  @Deprecated
   public int getPriority() {
     return priority;
-  }
-
-  public List<String> getThrowsExceptions() {
-    return exceptions;
   }
 
   public String getBody() {
@@ -83,12 +82,14 @@ public class OperatorDecl extends AST {
   private String name;
   private int modifiers;
 
-  private final List<TypeParameter> typeParams;
-  private final String type;
-  private final OperatorPattern pattern;
-  private final List<Parameter> params;
-  private final int priority;
-  private final List<String> exceptions;
+  public final List<TypeParameter> typeParams;
+  public final String type;
+  public final List<String> bounds;
+  public final OperatorPattern pattern;
+  public final List<Parameter> params;
+  public final int priority;
+  public final List<String> exceptions;
+
   private String body;
   private int bodyLine;
 }

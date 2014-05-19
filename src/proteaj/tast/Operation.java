@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Operation extends Expression {
   public Operation(IROperator operator, List<Expression> operands) {
-    super(operator.getReturnType());
+    super(operator.returnType);
     this.operator = operator;
     this.operands = operands;
   }

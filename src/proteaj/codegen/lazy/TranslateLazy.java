@@ -34,13 +34,13 @@ public class TranslateLazy {
   }
 
   private void translate (IROperator operator, List<ClassDeclaration> generated, Map<IROperator, Pair<CtMethod, Map<Integer, CtMethod>>> methods) {
-    IRPattern pattern = operator.getPattern();
+    IRPattern pattern = operator.pattern;
     int length = pattern.getPatternLength();
 
     CtMethod actualMethod = operator.actualMethod;
     CtClass actualClass = actualMethod.getDeclaringClass();
 
-    Map<Integer, CtMethod> lazyMap = new HashMap<Integer, CtMethod>();
+    Map<Integer, CtMethod> lazyMap = new HashMap<>();
 
     CtClass[] paramTypes;
     try { paramTypes = actualMethod.getParameterTypes(); }

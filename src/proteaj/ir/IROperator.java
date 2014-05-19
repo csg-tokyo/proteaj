@@ -7,16 +7,18 @@ import java.util.*;
 import javassist.*;
 
 public class IROperator {
-  public IROperator(int modifier, CtClass returnType, OperatorPattern oppat, CtClass[] paramTypes, IROperandAttribute[] paramMods, CtClass[] andPreds, CtClass[] notPreds, int priority, CtMethod actualMethod) {
+  public IROperator(int modifier, CtClass returnType, List<CtClass> returnTypeBounds, OperatorPattern oppat, CtClass[] paramTypes, IROperandAttribute[] paramMods, CtClass[] andPreds, CtClass[] notPreds, int priority, CtMethod actualMethod) {
     this.returnType = returnType;
+    this.returnTypeBounds = returnTypeBounds;
     this.priority = priority;
     this.pattern = new IRPattern(modifier, oppat, paramTypes, paramMods, andPreds, notPreds);
     this.declCls = actualMethod.getDeclaringClass();
     this.actualMethod = actualMethod;
   }
 
-  public IROperator(CtClass returnType, IRPattern pattern, int priority, CtClass clz, CtMethod method) {
+  public IROperator(CtClass returnType, List<CtClass> returnTypeBounds, IRPattern pattern, int priority, CtClass clz, CtMethod method) {
     this.returnType = returnType;
+    this.returnTypeBounds = returnTypeBounds;
     this.pattern = pattern;
     this.priority = priority;
     this.declCls = clz;
@@ -25,20 +27,24 @@ public class IROperator {
 
   protected IROperator(CtClass returnType, IRPattern pattern, int priority) {
     this.returnType = returnType;
+    this.returnTypeBounds = Collections.emptyList();
     this.pattern = pattern;
     this.priority = priority;
     this.declCls = null;
     this.actualMethod = null;
   }
 
+  @Deprecated
   public int getPriority() {
     return priority;
   }
 
+  @Deprecated
   public CtClass getReturnType() {
     return returnType;
   }
 
+  @Deprecated
   public IRPattern getPattern() {
     return pattern;
   }
@@ -71,10 +77,12 @@ public class IROperator {
     return buf.toString();
   }
 
-  private int priority;
-  private CtClass returnType;
-  private IRPattern pattern;
-  private CtClass declCls;
+  public final int priority;
+  public final CtClass returnType;
+  public final List<CtClass> returnTypeBounds;
+  public final IRPattern pattern;
+
+  private final CtClass declCls;
 
   public final CtMethod actualMethod;
 }

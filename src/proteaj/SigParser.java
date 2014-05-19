@@ -581,7 +581,7 @@ public class SigParser {
   }
 
   /* OperatorDecl
-   *  : TypeParameters Type OperatorPattern Parameters ThrowsClause [ ':' "priority" '=' IntValue ] ( MethodBody | ';' )
+   *  : TypeParameters ( '[' Type [ "to" Type { "," Type } ] ']' | Type ) OperatorPattern Parameters ThrowsClause [ ':' "priority" '=' IntValue ] ( MethodBody | ';' )
    */
   public OperatorDecl parseOperatorDecl() throws ParseError {
     int line = lexer.lookahead().getLine();
@@ -589,11 +589,34 @@ public class SigParser {
     // TypeParameters
     List<TypeParameter> typeParams = parseTypeParameters();
 
-    // Type
-    if(! lexer.lookahead().isIdentifier()) {
-      throw new ParseError("invalid operator declaration : expected type name, but found \"" + lexer.lookahead().toString() + "\"", filePath, lexer.lookahead().getLine());
+    final String type;
+    List<String> bounds = new ArrayList<>();
+
+    // '[' Type [ "to" Type { "," Type } ] ']'
+    if (lexer.lookahead().is('[')) {
+      lexer.next();
+      if (lexer.lookahead().isIdentifier()) type = parseType();
+      else throw new ParseError("invalid operator declaration : expected type name, but found \"" + lexer.lookahead().toString() + "\"", filePath, lexer.lookahead().getLine());
+
+      if (lexer.lookahead().is("to")) {
+        lexer.next();
+        if (lexer.lookahead().isIdentifier()) bounds.add(parseType());
+        else throw new ParseError("invalid operator declaration : expected type name, but found \"" + lexer.lookahead().toString() + "\"", filePath, lexer.lookahead().getLine());
+
+        while (lexer.lookahead().is(',')) {
+          lexer.next();
+          if (lexer.lookahead().isIdentifier()) bounds.add(parseType());
+          else throw new ParseError("invalid operator declaration : expected type name, but found \"" + lexer.lookahead().toString() + "\"", filePath, lexer.lookahead().getLine());
+        }
+      }
+      else bounds.add(type);
+
+      if (lexer.lookahead().is(']')) lexer.next();
+      else throw new ParseError("invalid operator declaration : expected ']', but found '" + lexer.lookahead().toString() + "'", filePath, lexer.lookahead().getLine());
     }
-    String type = parseType();
+    // Type
+    else if (lexer.lookahead().isIdentifier()) type = parseType();
+    else throw new ParseError("invalid operator declaration : expected type name, but found \"" + lexer.lookahead().toString() + "\"", filePath, lexer.lookahead().getLine());
 
     // OperatorPattern
     OperatorPattern pattern = parseOperatorPattern();
@@ -616,7 +639,7 @@ public class SigParser {
       priority = Integer.parseInt(lexer.next(3).toString());
     }
 
-    OperatorDecl operator = new OperatorDecl(typeParams, type, pattern, params, priority, exceptions, line);
+    OperatorDecl operator = new OperatorDecl(typeParams, type, bounds, pattern, params, priority, exceptions, line);
 
     // ( MethodBody | ';' )
     if(lexer.lookahead().is('{')) {
