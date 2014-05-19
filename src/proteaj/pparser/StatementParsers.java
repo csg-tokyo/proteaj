@@ -61,13 +61,15 @@ public abstract class StatementParsers {
     public PackratParser<Statement> evaluate() { return singleStatement; }
   });
 
+  private final PackratParser<Statement> ref_BlockStatement = ref(new ParserThunk<Statement>() {
+    @Override
+    public PackratParser<Statement> evaluate() {
+      return blockStatement;
+    }
+  });
+
   private final PackratParser<Block> block =
-      map(scope(enclosed("{", rep(ref(new ParserThunk<Statement>() {
-        @Override
-        public PackratParser<Statement> evaluate() {
-          return blockStatement;
-        }
-      })), "}")), Block::new);
+      map(scope(enclosed("{", rep(ref_BlockStatement), "}")), Block::new);
 
   private final PackratParser<LocalVarDecl> simpleLocalDecl =
       bind(seq(qualifiedIdentifier, arrayBrackets, identifier, arrayBrackets), quad -> depends(env -> {
@@ -92,6 +94,30 @@ public abstract class StatementParsers {
 
   private final PackratParser<IfStatement> ifStatement =
       choice(ifElseStatement, simpleIfStatement);
+
+  private final PackratParser<CaseBlock> defaultBlock =
+      map(prefix("default", prefix(":", rep(ref_BlockStatement))), stmts -> new CaseBlock(stmts));
+
+  private final PackratParser<CaseBlock> charCaseBlock =
+      map(seq(enclosed("case", expression(CtClass.charType), ":"), rep(ref_BlockStatement)), pair -> new CaseBlock(pair._1, pair._2));
+
+  private final PackratParser<List<CaseBlock>> charCaseBlocks =
+      enclosed("{", rep1(choice(charCaseBlock, defaultBlock)), "}");
+
+  private final PackratParser<SwitchStatement> switchCharStatement =
+      map(seq(prefix("switch", enclosed("(", expression(CtClass.charType), ")")), charCaseBlocks), pair -> new SwitchStatement(pair._1, pair._2));
+
+  private final PackratParser<CaseBlock> intCaseBlock =
+      map(seq(enclosed("case", expression(CtClass.intType), ":"), rep(ref_BlockStatement)), pair -> new CaseBlock(pair._1, pair._2));
+
+  private final PackratParser<List<CaseBlock>> intCaseBlocks =
+      enclosed("{", rep1(choice(intCaseBlock, defaultBlock)), "}");
+
+  private final PackratParser<SwitchStatement> switchIntStatement =
+      map(seq(prefix("switch", enclosed("(", expression(CtClass.intType), ")")), intCaseBlocks), pair -> new SwitchStatement(pair._1, pair._2));
+
+  private final PackratParser<SwitchStatement> switchStatement =
+      choice(switchCharStatement, switchIntStatement);
 
   private final PackratParser<Expression> whileCondition =
       prefix("while", enclosed("(", expression(CtClass.booleanType), ")"));
@@ -158,7 +184,7 @@ public abstract class StatementParsers {
       });
 
   private final PackratParser<Statement> controlFlow =
-      choice(ifStatement, whileStatement, doWhileStatement,
+      choice(ifStatement, switchStatement, whileStatement, doWhileStatement,
           forStatement, throwStatement, tryStatement,
           breakStatement, continueStatement, returnStatement);
 

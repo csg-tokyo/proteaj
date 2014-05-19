@@ -4,6 +4,8 @@ import proteaj.tast.*;
 import proteaj.util.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
 import javassist.*;
 
 public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVisitor<Expression>  {
@@ -82,6 +84,15 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   public Statement translate(IfStatement ifStmt) {
     if (ifStmt.elseStmt == null) return new IfStatement(translate(ifStmt.condition), translate(ifStmt.thenStmt));
     else return new IfStatement(translate(ifStmt.condition), translate(ifStmt.thenStmt), translate(ifStmt.elseStmt));
+  }
+
+  public Statement translate(SwitchStatement switchStmt) {
+    return new SwitchStatement(translate(switchStmt.expr), switchStmt.cases.stream().map(this::translate).collect(Collectors.toList()));
+  }
+
+  public CaseBlock translate(CaseBlock caseBlock) {
+    if (caseBlock.isDefault()) return new CaseBlock(caseBlock.stmts.stream().map(this::translate).collect(Collectors.toList()));
+    else return new CaseBlock(translate(caseBlock.getLabel()), caseBlock.stmts.stream().map(this::translate).collect(Collectors.toList()));
   }
 
   public Statement translate(WhileStatement whileStmt) {
@@ -378,9 +389,7 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   }
 
   @Override
-  public final Expression visit(BooleanLiteral booleanLiteral, Expression expression) {
-    return translate(booleanLiteral);
-  }
+  public final Expression visit(BooleanLiteral booleanLiteral, Expression expression) { return translate(booleanLiteral); }
 
   @Override
   public final Expression visit(ClassLiteral classLiteral, Expression expression) {
@@ -388,7 +397,7 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   }
 
   @Override
-  public Expression visit(TypeLiteral typeLiteral, Expression expression) {
+  public final Expression visit(TypeLiteral typeLiteral, Expression expression) {
     return translate(typeLiteral);
   }
 
@@ -421,6 +430,9 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   public final Statement visit(IfStatement ifStmt, Statement statement) {
     return translate(ifStmt);
   }
+
+  @Override
+  public final Statement visit(SwitchStatement switchStmt, Statement statement) { return translate(switchStmt); }
 
   @Override
   public final Statement visit(WhileStatement whileStmt, Statement statement) {

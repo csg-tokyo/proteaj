@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Block extends Statement {
   public Block() {
-    this.statements = new ArrayList<Statement>();
+    this.statements = new ArrayList<>();
   }
 
   public Block(List<Statement> statements) {

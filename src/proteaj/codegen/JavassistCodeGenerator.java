@@ -124,6 +124,25 @@ public class JavassistCodeGenerator implements ExpressionVisitor<StringBuilder>,
   }
 
   @Override
+  public StringBuilder visit(SwitchStatement switchStmt, StringBuilder buf) {
+    buf = buf.append("switch ").append('(');
+    buf = visit(switchStmt.expr, buf);
+    buf = buf.append(')').append('{');
+
+    for (CaseBlock caseBlock : switchStmt.cases) {
+      if (caseBlock.isDefault()) buf = buf.append('\n').append("default :");
+      else {
+        buf = buf.append('\n').append("case ");
+        buf = visit(caseBlock.getLabel(), buf).append(" :");
+      }
+
+      for (Statement stmt : caseBlock.stmts) buf = visit(stmt, buf.append('\n'));
+    }
+
+    return buf.append('\n').append('}');
+  }
+
+  @Override
   public StringBuilder visit(WhileStatement whileStmt, StringBuilder buf) {
     buf = buf.append("while ").append('(');
     buf = visit(whileStmt.condition, buf);
