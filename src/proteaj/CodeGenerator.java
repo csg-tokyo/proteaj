@@ -6,6 +6,9 @@ import proteaj.io.*;
 import proteaj.tast.*;
 
 import java.io.*;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import javassist.*;
 
 import static proteaj.codegen.JavassistCodeGenerator.codeGen;
@@ -23,25 +26,28 @@ public class CodeGenerator {
     TranslateLazy translator = new TranslateLazy(program);
     program = translator.translate();
 
+    codegenFields(program);
+
     for (ClassDeclaration clazz : program.getClasses()) codegen(clazz);
     for (OperatorModuleDeclaration syntax : program.getOperatorsModules()) codegen(syntax);
   }
 
+  private void codegenFields (Program program) {
+    program.getClasses().stream().forEach(clazz -> clazz.getFields().stream().forEach(this::codegen));
+  }
+
   private void codegen (ClassDeclaration clazz) {
-    for (MethodDeclaration method : clazz.getMethods())
-      codegen(method);
+    for (ClassInitializerDefinition clIni : clazz.getInitializers())
+      codegen(clIni);
 
     for (ConstructorDeclaration constructor : clazz.getConstructors())
       codegen(constructor);
 
-    for (FieldDeclaration field : clazz.getFields())
-      codegen(field);
+    for (MethodDeclaration method : clazz.getMethods())
+      codegen(method);
 
     for (DefaultValueDefinition d : clazz.getDefaultValues())
       codegen(d);
-
-    for (ClassInitializerDefinition clIni : clazz.getInitializers())
-      codegen(clIni);
 
     try {
       if (target != null) clazz.clazz.writeFile(target);
@@ -86,10 +92,7 @@ public class CodeGenerator {
       CtClass thisClass = field.field.getDeclaringClass();
       thisClass.removeField(field.field);
       thisClass.addField(field.field, codeGen(field.body));
-    } catch (NotFoundException e) {
-      assert false;
-      throw new RuntimeException(e);
-    } catch (CannotCompileException e) {
+    } catch (NotFoundException | CannotCompileException e) {
       assert false;
       throw new RuntimeException(e);
     }
