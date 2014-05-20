@@ -221,6 +221,15 @@ public class JavassistCodeGenerator implements ExpressionVisitor<StringBuilder>,
     return buf.append(';');
   }
 
+  @Override
+  public StringBuilder visit(SynchronizedStatement syncStmt, StringBuilder buf) {
+    buf = buf.append("synchronized ").append('(');
+    buf = visit(syncStmt.expr, buf);
+    buf = buf.append(')');
+    buf = visit(syncStmt.block, buf);
+    return buf;
+  }
+
   public StringBuilder visit(Expression expr, StringBuilder buf) {
     return expr.accept(this, buf);
   }

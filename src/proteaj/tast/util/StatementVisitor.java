@@ -18,4 +18,5 @@ public interface StatementVisitor<T> {
   public abstract T visit (ContinueStatement continueStmt, T t);
   public abstract T visit (ReturnStatement returnStmt, T t);
   public abstract T visit (ExpressionStatement exprStmt, T t);
+  public abstract T visit (SynchronizedStatement syncStmt, T t);
 }

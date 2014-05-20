@@ -137,6 +137,10 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
     return new ExpressionStatement(translate(exprStmt.expr));
   }
 
+  public Statement translate (SynchronizedStatement syncStmt) {
+    return new SynchronizedStatement(translate(syncStmt.expr), translate(syncStmt.block));
+  }
+
   public Expression translate(Expression expression) {
     return expression.accept(this, null);
   }
@@ -478,4 +482,7 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   public final Statement visit(ExpressionStatement exprStmt, Statement statement) {
     return translate(exprStmt);
   }
+
+  @Override
+  public Statement visit(SynchronizedStatement syncStmt, Statement statement) { return translate(syncStmt); }
 }

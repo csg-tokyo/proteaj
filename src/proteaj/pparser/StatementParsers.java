@@ -183,10 +183,12 @@ public abstract class StatementParsers {
         public PackratParser<ReturnStatement> evaluate() { return getReturnStatementParser(); }
       });
 
+  private final PackratParser<SynchronizedStatement> syncStatement =
+      map(seq(enclosed("(", expression(IRCommonTypes.getObjectType()), ")"), block), pair -> new SynchronizedStatement(pair._1, pair._2));
+
   private final PackratParser<Statement> controlFlow =
-      choice(ifStatement, switchStatement, whileStatement, doWhileStatement,
-          forStatement, throwStatement, tryStatement,
-          breakStatement, continueStatement, returnStatement);
+      choice(ifStatement, switchStatement, whileStatement, doWhileStatement, forStatement, throwStatement, tryStatement,
+          breakStatement, continueStatement, returnStatement, syncStatement);
 
   private final PackratParser<Statement> localVarDeclStatement =
       map(postfix(localVarDecl, ";"), LocalVarDeclStatement::new);
