@@ -262,15 +262,37 @@ public class SigLexer {
     char ch = reader.next();
 
     if(escapedChars.containsKey(ch)) return escapedChars.get(ch);
-    else if (ch == 'u') return readCharCode(reader);
+    else if ('0' <= ch && ch <= '7') return readCharCode8(ch, reader);
+    else if (ch == 'u') return readCharCode16(reader);
     else throw new LexicalError("invalid escape sequence \"\\" + ch + "\"", filePath, reader.getLine());
   }
 
-  private char readCharCode(SourceFileReader reader) throws FileIOError {
+  private char readCharCode8 (char ch, SourceFileReader reader) throws FileIOError, LexicalError {
+    int code = digit(ch, 8);
+
+    int n = reader.lookahead();
+    if (!('0' <= n && n <= '7')) return (char)code;
+    code = code * 8 + digit(reader.next(), 8);
+
+    n = reader.lookahead();
+    if (!('0' <= n && n <= '7')) return (char)code;
+    code = code * 8 + digit(reader.next(), 8);
+
+    if (0 <= code && code <= 0x00ff) return (char)code;
+    else throw new LexicalError("invalid octal char code", filePath, reader.getLine());
+  }
+
+  private char readCharCode16(SourceFileReader reader) throws FileIOError, LexicalError {
     int code = 0;
     for (int i = 0; i < 4; i++) {
-      assert reader.hasNext();
-      code = code * 16 + digit(reader.next(), 16);
+      if (reader.hasNext()) {
+        int d = digit(reader.next(), 16);
+        if (d >= 0) {
+          code = code * 16 + d;
+          continue;
+        }
+      }
+      throw new LexicalError("invalid char code", filePath, reader.getLine());
     }
     return (char)code;
   }
