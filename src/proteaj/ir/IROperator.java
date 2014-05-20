@@ -25,9 +25,9 @@ public class IROperator {
     this.actualMethod = method;
   }
 
-  protected IROperator(CtClass returnType, IRPattern pattern, int priority) {
+  protected IROperator(CtClass returnType, List<CtClass> returnTypeBounds, IRPattern pattern, int priority) {
     this.returnType = returnType;
-    this.returnTypeBounds = Collections.emptyList();
+    this.returnTypeBounds = returnTypeBounds;
     this.pattern = pattern;
     this.priority = priority;
     this.declCls = null;

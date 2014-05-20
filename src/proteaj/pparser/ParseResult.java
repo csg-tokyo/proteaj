@@ -43,7 +43,7 @@ class Failure<T> extends ParseResult<T> {
     this.msg = msg;
     this.pos = pos;
     this.line = line;
-    ForDebug.print("[ parse fail ] " + "(" + line + "," + pos + ") " + msg);
+    //ForDebug.print("[ parse fail ] " + "(" + line + "," + pos + ") " + msg);
   }
 
   @Override
