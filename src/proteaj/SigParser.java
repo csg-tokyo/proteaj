@@ -847,7 +847,7 @@ public class SigParser {
   }
 
   /* Parameter
-   *  : Modifiers Type [ "..." ] Identifier [ '=' Expression ]
+   *  : Modifiers Type [ "..." ] Identifier { '[' ']' } [ '=' Expression ]
    */
   private Parameter parseParameter() throws ParseError {
     int line = lexer.lookahead().getLine();
@@ -868,6 +868,8 @@ public class SigParser {
       throw new ParseError("invalid parameter : expected parameter name, but found \"" + lexer.lookahead().toString() + "\"", filePath, lexer.lookahead().getLine());
     }
     String name = lexer.next().toString();
+
+    type = type + parseBrackets();
 
     Parameter param = new Parameter(type, name, line);
     param.setModifiers(mods);
