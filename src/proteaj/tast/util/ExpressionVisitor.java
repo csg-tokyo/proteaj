@@ -7,6 +7,7 @@ public interface ExpressionVisitor<T> {
   public abstract T visit (LocalVarDecl local, T t);
   public abstract T visit (ExpressionList list, T t);
   public abstract T visit (AssignExpression assign, T t);
+  public abstract T visit (TernaryIfExpression tif, T t);
   public abstract T visit (MethodCall methodCall, T t);
   public abstract T visit (StaticMethodCall methodCall, T t);
   public abstract T visit (FieldAccess fieldAccess, T t);

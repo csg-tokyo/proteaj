@@ -162,6 +162,10 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
     return new AssignExpression(translate(assign.ref), translate(assign.val));
   }
 
+  public Expression translate(TernaryIfExpression tif) {
+    return new TernaryIfExpression(tif.type, translate(tif.condition), translate(tif.thenExpr), translate(tif.elseExpr));
+  }
+
   public Expression translate(MethodCall methodCall) {
     try { return new MethodCall(translate(methodCall.expr), methodCall.method, translateExprs(methodCall.args)); }
     catch (NotFoundException e) {
@@ -303,6 +307,9 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   public final Expression visit(AssignExpression assign, Expression expression) {
     return translate(assign);
   }
+
+  @Override
+  public final Expression visit(TernaryIfExpression tif, Expression expression) { return translate(tif); }
 
   @Override
   public final Expression visit(MethodCall methodCall, Expression expression) {

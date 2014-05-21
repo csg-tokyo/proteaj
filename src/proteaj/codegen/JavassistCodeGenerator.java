@@ -282,6 +282,16 @@ public class JavassistCodeGenerator implements ExpressionVisitor<StringBuilder>,
   }
 
   @Override
+  public StringBuilder visit(TernaryIfExpression tif, StringBuilder buf) {
+    buf = visit(tif.condition, buf);
+    buf = buf.append('?');
+    buf = visit(tif.thenExpr, buf);
+    buf = buf.append(':');
+    buf = visit(tif.elseExpr, buf);
+    return buf;
+  }
+
+  @Override
   public StringBuilder visit(MethodCall methodCall, StringBuilder buf) {
     buf = visit(methodCall.expr, buf);
     buf = buf.append('.').append(methodCall.method.getName()).append('(');

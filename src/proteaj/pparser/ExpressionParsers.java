@@ -263,7 +263,11 @@ public class ExpressionParsers {
 
     PackratParser<CastExpression> lCast = bind(enclosed("(", infix(optional(typeName, clazz), "<-", typeName), ")"), pair -> castBody(clazz, pair._2, pair._1));
 
-    PackratParser<Expression> javaExpr = bind(ref_JavaExpression, expr -> {
+    // first arg : recursive
+    //PackratParser<TernaryIfExpression> ternaryIf =
+    //    map(seq(postfix(getParser_Ref(CtClass.booleanType), "?"), postfix(getParser_Ref(clazz), ":"), getParser_Ref(clazz)), triad -> new TernaryIfExpression(clazz, triad._1, triad._2, triad._3));
+
+    PackratParser <Expression> javaExpr = bind(ref_JavaExpression, expr -> {
       try {
         if (isAssignableTo(expr, clazz)) return unit(expr);
         else return failure("type mismatch: expected " + clazz.getName() + " but found " + expr.type.getName());

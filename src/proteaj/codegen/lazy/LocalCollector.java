@@ -41,6 +41,14 @@ public class LocalCollector implements ExpressionVisitor<Set<Expression>> {
   }
 
   @Override
+  public Set<Expression> visit(TernaryIfExpression tif, Set<Expression> localVariables) {
+    localVariables = visit(tif.condition, localVariables);
+    localVariables = visit(tif.thenExpr, localVariables);
+    localVariables = visit(tif.elseExpr, localVariables);
+    return localVariables;
+  }
+
+  @Override
   public Set<Expression> visit(MethodCall methodCall, Set<Expression> localVariables) {
     localVariables = visit(methodCall.expr, localVariables);
     for (Expression e : methodCall.args) localVariables = visit(e, localVariables);
