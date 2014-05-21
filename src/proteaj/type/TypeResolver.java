@@ -1,103 +1,54 @@
 package proteaj.type;
 
 import proteaj.error.NotFoundError;
-import proteaj.ir.IRHeader;
 
 import java.util.*;
 import javassist.*;
 
-public class TypeResolver {
-  public TypeResolver (IRHeader header, ClassPool pool) {
-    this.pool = pool;
-    this.header = header;
-    this.cache = new HashMap<>();
+public abstract class TypeResolver {
+  public static RootTypeResolver root () { return RootTypeResolver.getInstance(); }
+
+  public static TypeResolver file (String fileName, String packageName, List<String> importPackages, List<String> importClasses) {
+    return new TypeResolver_File(fileName, packageName, importPackages, importClasses);
   }
 
-  public Type getTypeOrNull (String name) {
+  public CtClass getType (String name) throws NotFoundError {
+    CtClass clazz = getTypeOrNull(name);
+    if (clazz == null) throw makeError(name);
+    else return clazz;
+  }
+
+  public boolean isTypeName (String name) {
+    return getTypeOrNull(name) != null;
+  }
+
+  public CtClass getTypeOrNull (String name) {
     if (name.endsWith("[]")) {
-      Type componentType = getTypeOrNull(name.substring(0, name.length() - 2));
-      if (componentType == null) return null;
-      else return getArrayType(componentType);
+      int pos = name.indexOf('[');
+      String cName = name.substring(0, pos);
+      int dim = name.substring(pos).length() / 2;
+
+      CtClass component = getTypeNameOrNull(cName);
+      if (component == null) return null;
+      else return getRootResolver().getArrayType(component, dim);
     }
-    else return getSimpleTypeOrNull(name);
+    else return getTypeNameOrNull(name);
   }
 
-  public Type getType (String name) throws NotFoundError {
-    if (name.endsWith("[]")) return getArrayType(getType(name.substring(0, name.length() - 2)));
-    else return getSimpleType(name);
+  public RootTypeResolver getRootResolver () {
+    return RootTypeResolver.getInstance();
   }
 
-  public Type getSimpleTypeOrNull (String name) {
-    switch (name) {
-      case "boolean" : return PrimitiveType.booleanType;
-      case "byte"    : return PrimitiveType.byteType;
-      case "char"    : return PrimitiveType.charType;
-      case "double"  : return PrimitiveType.doubleType;
-      case "float"   : return PrimitiveType.floatType;
-      case "int"     : return PrimitiveType.intType;
-      case "long"    : return PrimitiveType.longType;
-      case "short"   : return PrimitiveType.shortType;
-      case "void"    : return PrimitiveType.voidType;
-    }
-
+  protected CtClass getTypeNameOrNull (String name) {
     if (cache.containsKey(name)) return cache.get(name);
-
-    if (header.containsAbbName(name)) {
-      CtClass clazz = pool.getOrNull(header.getLongName(name));
-      if (clazz != null) {
-        Type type = RawType.get(clazz);
-        cache.put(name, type);
-        return type;
-      }
-      else return null;
-    }
-
-    if (! header.packageName.isEmpty()) {
-      CtClass clazz = pool.getOrNull(header.packageName + '.' + name);
-      if (clazz != null) {
-        header.addAbbName(name, clazz.getName());
-        Type type = RawType.get(clazz);
-        cache.put(name, type);
-        return type;
-      }
-    }
-
-    CtClass clazz = pool.getOrNull(name);
-    if (clazz != null) {
-      Type type = RawType.get(clazz);
-      cache.put(name, type);
-      return type;
-    }
-
-    for (String pack : header.importPackages) {
-      clazz = pool.getOrNull(pack + '.' + name);
-      if (clazz != null) {
-        header.addAbbName(name, clazz.getName());
-        Type type = RawType.get(clazz);
-        cache.put(name, type);
-        return type;
-      }
-    }
-
-    return null;
+    CtClass clazz = getTypeNameOrNull_NonCached(name);
+    cache.put(name, clazz);
+    return clazz;
   }
 
-  public Type getSimpleType (String name) throws NotFoundError {
-    Type type = getSimpleTypeOrNull(name);
-    if (type == null) throw new NotFoundError("class " + name + " is not found", header.filePath, 0);
-    else return type;
-  }
+  protected abstract CtClass getTypeNameOrNull_NonCached (String name);
 
-  public ArrayType getArrayType (Type type) {
-    return ArrayType.get(type);
-  }
+  protected abstract NotFoundError makeError (String name);
 
-  public ArrayType getArrayType (Type type, int dim) {
-    if (dim > 1) return getArrayType(ArrayType.get(type), dim - 1);
-    else return ArrayType.get(type);
-  }
-
-  private final ClassPool pool;
-  private final IRHeader header;
-  private Map<String, Type> cache;
+  private Map<String, CtClass> cache = new HashMap<>();
 }
