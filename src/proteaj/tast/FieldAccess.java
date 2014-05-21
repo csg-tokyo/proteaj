@@ -15,6 +15,11 @@ public class FieldAccess extends Expression {
     return visitor.visit(this, t);
   }
 
+  @Override
+  public String toString() {
+    return expr.toString() + '.' + field.getName();
+  }
+
   public final Expression expr;
   public final CtField field;
 }

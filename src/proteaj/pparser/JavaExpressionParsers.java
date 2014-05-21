@@ -12,22 +12,30 @@ import static proteaj.util.CtClassUtil.*;
 import static proteaj.util.Modifiers.*;
 
 public class JavaExpressionParsers {
-  private static final PackratParser<Expression> ref_JavaExpression = ref(new ParserThunk<Expression>() {
+  public static final PackratParser<Expression> ref_JavaExpression = ref(new ParserThunk<Expression>() {
     @Override
-    public PackratParser<Expression> evaluate() { return javaExpression; }
+    public PackratParser<Expression> evaluate() {
+      return javaExpression;
+    }
+  });
+
+  private static final PackratParser<Expression> ref_DotAccess = ref(new ParserThunk<Expression>() {
+    @Override
+    public PackratParser<Expression> evaluate() { return dotAccess; }
   });
 
   private static final PackratParser<AssignExpression> assignment =
-      bind(postfix(ref_JavaExpression, "="), left -> map(expression(left.type), right -> new AssignExpression(left, right)));
+      bind(postfix(ref_DotAccess, "="), left -> map(expression(left.type), right -> new AssignExpression(left, right)));
 
   private static final PackratParser<ArrayLength> arrayLength =
-      bind(postfix(postfix(ref_JavaExpression, "."), "length"), expr -> {
+      bind(postfix(postfix(ref_DotAccess, "."), "length"), expr -> {
         if (expr.type.isArray()) return unit(new ArrayLength(expr));
         else return failure("not array type");
       });
 
   private static final PackratParser<MethodCall> methodCall =
-      bind(infix(ref_JavaExpression, ".", identifier), pair -> depends(env -> foreach(env.getInstanceMethods(pair._1.type, pair._2), method -> methodCallArgs(pair._1, method), "method " + pair._2 + " is not found in " + pair._1.type.getName())));
+      bind(infix(ref_DotAccess, ".", identifier), pair -> depends(env ->
+          foreach(env.getInstanceMethods(pair._1.type, pair._2), method -> methodCallArgs(pair._1, method), "method " + pair._2 + " is not found in " + pair._1.type.getName())));
 
   private static PackratParser<MethodCall> methodCallArgs (Expression receiver, CtMethod method) {
     return effect(bind(arguments(method), args -> {
@@ -37,7 +45,7 @@ public class JavaExpressionParsers {
   }
 
   private static final PackratParser<FieldAccess> fieldAccess =
-      bind(infix(ref_JavaExpression, ".", identifier), pair -> depends(env -> {
+      bind(infix(ref_DotAccess, ".", identifier), pair -> depends(env -> {
         CtField field;
         try { field = pair._1.type.getField(pair._2); }
         catch (NotFoundException e) {
@@ -56,7 +64,7 @@ public class JavaExpressionParsers {
   private static final PackratParser<Expression> arrayIndex = enclosed("[", expression(CtClass.intType), "]");
 
   private static final PackratParser<ArrayAccess> arrayAccess =
-      bind(seq(ref_JavaExpression, arrayIndex), pair -> {
+      bind(seq(ref_DotAccess, arrayIndex), pair -> {
         if (pair._1.type.isArray()) try {
           return unit(new ArrayAccess(pair._1, pair._2));
         } catch (NotFoundException e) { return error(e); }
@@ -122,7 +130,7 @@ public class JavaExpressionParsers {
       });
 
   private static final PackratParser<CastExpression> cast =
-      bind(seq(enclosed("(", typeName, ")"), ref_JavaExpression), pair -> {
+      bind(seq(enclosed("(", typeName, ")"), ref_DotAccess), pair -> {
         try {
           if (isCastable(pair._2.type, pair._1)) return unit(new CastExpression(pair._1, pair._2));
           else return failure(pair._2.type.getName() + " cannot cast to " + pair._1.getName());
@@ -154,6 +162,9 @@ public class JavaExpressionParsers {
   private static final PackratParser<Expression> primary =
       choice(abbMethodCall, variable, staticMethodCall, staticFieldAccess, newObject, newArray, arrayInit, cast, parenthesized, literal);
 
-  public static final PackratParser<Expression> javaExpression =
-      choice(assignment, arrayLength, methodCall, fieldAccess, arrayAccess, primary);
+  private static final PackratParser<Expression> dotAccess =
+      choice(methodCall, arrayLength, fieldAccess, arrayAccess, primary);
+
+  private static final PackratParser<Expression> javaExpression =
+      choice(assignment, ref_DotAccess);
 }

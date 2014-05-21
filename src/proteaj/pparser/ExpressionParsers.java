@@ -1,5 +1,6 @@
 package proteaj.pparser;
 
+import proteaj.error.ForDebug;
 import proteaj.ir.*;
 import proteaj.tast.*;
 import proteaj.util.*;
@@ -262,7 +263,7 @@ public class ExpressionParsers {
 
     PackratParser<CastExpression> lCast = bind(enclosed("(", infix(optional(typeName, clazz), "<-", typeName), ")"), pair -> castBody(clazz, pair._2, pair._1));
 
-    PackratParser<Expression> javaExpr = bind(javaExpression, expr -> {
+    PackratParser<Expression> javaExpr = bind(ref_JavaExpression, expr -> {
       try {
         if (isAssignableTo(expr, clazz)) return unit(expr);
         else return failure("type mismatch: expected " + clazz.getName() + " but found " + expr.type.getName());
