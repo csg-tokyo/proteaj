@@ -1,10 +1,13 @@
 package proteaj.tast;
 
-import proteaj.ir.*;
 import proteaj.tast.util.*;
+import proteaj.type.CommonTypes;
 
 public class NullLiteral extends Expression {
-  public static final NullLiteral instance = new NullLiteral();
+  public static NullLiteral getInstance() {
+    if (instance == null) instance = new NullLiteral();
+    return instance;
+  }
 
   @Override
   public <T> T accept(ExpressionVisitor<T> visitor, T t) {
@@ -12,7 +15,9 @@ public class NullLiteral extends Expression {
   }
 
   private NullLiteral() {
-    super(IRCommonTypes.getNullType());
+    super(CommonTypes.getInstance().nullType);
   }
+
+  private static NullLiteral instance = null;
 }
 

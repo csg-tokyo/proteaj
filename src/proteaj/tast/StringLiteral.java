@@ -1,11 +1,11 @@
 package proteaj.tast;
 
-import proteaj.ir.*;
 import proteaj.tast.util.*;
+import proteaj.type.CommonTypes;
 
 public class StringLiteral extends Expression {
   public StringLiteral(String str) {
-    super(IRCommonTypes.getStringType());
+    super(CommonTypes.getInstance().stringType);
     this.str = str;
   }
 

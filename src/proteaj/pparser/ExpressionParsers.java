@@ -3,6 +3,7 @@ package proteaj.pparser;
 import proteaj.error.ForDebug;
 import proteaj.ir.*;
 import proteaj.tast.*;
+import proteaj.type.CommonTypes;
 import proteaj.util.*;
 
 import java.util.*;
@@ -271,10 +272,12 @@ public class ExpressionParsers {
       try {
         if (isAssignableTo(expr, clazz)) return unit(expr);
         else return failure("type mismatch: expected " + clazz.getName() + " but found " + expr.type.getName());
-      } catch (NotFoundException e) { return error(e); }
+      } catch (NotFoundException e) {
+        return error(e);
+      }
     });
 
-    PackratParser<NullLiteral> nullLiteral = map(keyword("null"), s -> NullLiteral.instance);
+    PackratParser<NullLiteral> nullLiteral = map(keyword("null"), s -> NullLiteral.getInstance());
 
     PackratParser<Expression> readAs = prefix(whitespaces, getLiteralParser(clazz));
 
@@ -408,16 +411,17 @@ public class ExpressionParsers {
   }
 
   private PackratParser<? extends Expression> makePrimitiveLiteralParser (final CtClass type) {
-    if (type.equals(IRCommonTypes.getIdentifierType())) {
+    CommonTypes cts = CommonTypes.getInstance();
+    if (type.equals(cts.identifierType)) {
       return bind(identifier, s -> {
         CtConstructor constructor;
-        try { constructor = getConstructor(type, IRCommonTypes.getStringType()); } catch (NotFoundException e) {
+        try { constructor = getConstructor(type, cts.stringType); } catch (NotFoundException e) {
           return error(e);
         }
         return unit(new NewExpression(constructor, Arrays.<Expression>asList(new StringLiteral(s))));
       });
     }
-    else if (type.equals(IRCommonTypes.getLetterType())) {
+    else if (type.equals(cts.letterType)) {
       return bind(letter, ch -> {
         CtConstructor constructor;
         try { constructor = getConstructor(type, CtClass.charType); } catch (NotFoundException e) {
@@ -426,7 +430,7 @@ public class ExpressionParsers {
         return unit(new NewExpression(constructor, Arrays.<Expression>asList(new CharLiteral(ch))));
       });
     }
-    else if (type.equals(IRCommonTypes.getTypeType())) return map(typeName, TypeLiteral::new);
+    else if (type.equals(cts.typeType)) return map(typeName, TypeLiteral::new);
     else {
       assert false;
       throw new RuntimeException("unknown primitive readas operator");

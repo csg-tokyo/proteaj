@@ -1,7 +1,9 @@
 package proteaj.ir.primitive;
 
 import proteaj.ir.*;
-import static proteaj.ir.IRCommonTypes.*;
+import proteaj.type.CommonTypes;
+
+import javassist.CtClass;
 
 public class PrimitiveReadasSyntax extends IRSyntax {
   public static PrimitiveReadasSyntax getSyntax() {
@@ -12,9 +14,15 @@ public class PrimitiveReadasSyntax extends IRSyntax {
   private PrimitiveReadasSyntax() {
     super("proteaj.lang.PrimitiveReadasOperators");
 
-    if(getIdentifierType() != null) addOperator(new PrimitiveReadasOperator(getIdentifierType()));
-    if(getLetterType() != null) addOperator(new PrimitiveReadasOperator(getLetterType()));
-    if(getTypeType() != null) addOperator(new PrimitiveReadasOperator(getTypeType()));
+    CommonTypes cts = CommonTypes.getInstance();
+
+    loadOperator(cts.identifierType);
+    loadOperator(cts.letterType);
+    loadOperator(cts.typeType);
+  }
+
+  private void loadOperator (CtClass clazz) {
+    if (clazz != null) addOperator(new PrimitiveReadasOperator(clazz));
   }
 
   private static PrimitiveReadasSyntax syntax = null;

@@ -3,6 +3,7 @@ package proteaj.pparser;
 import proteaj.error.*;
 import proteaj.ir.*;
 import proteaj.tast.*;
+import proteaj.type.CommonTypes;
 import proteaj.util.*;
 
 import java.util.*;
@@ -143,7 +144,7 @@ public abstract class StatementParsers {
       map(scope(seq(prefix("for", enclosed("(", forInit, ";")), postfix(forCond, ";"), postfix(forUpdate, ")"), ref_SingleStatement)), quad -> new ForStatement(quad._1, quad._2, quad._3, quad._4));
 
   private final PackratParser<ThrowStatement> throwStatement =
-      withEffect(map(enclosed("throw", expression(IRCommonTypes.getThrowableType()), ";"), ThrowStatement::new), s -> throwing(s.e.type));
+      withEffect(map(enclosed("throw", expression(CommonTypes.getInstance().throwableType), ";"), ThrowStatement::new), s -> throwing(s.e.type));
 
   private final PackratParser<Block> tryBlock = prefix("try", block);
   private final PackratParser<Block> finallyBlock = prefix("finally", block);
@@ -184,7 +185,7 @@ public abstract class StatementParsers {
       });
 
   private final PackratParser<SynchronizedStatement> syncStatement =
-      map(seq(enclosed("(", expression(IRCommonTypes.getObjectType()), ")"), block), pair -> new SynchronizedStatement(pair._1, pair._2));
+      map(seq(enclosed("(", expression(CommonTypes.getInstance().objectType), ")"), block), pair -> new SynchronizedStatement(pair._1, pair._2));
 
   private final PackratParser<Statement> controlFlow =
       choice(ifStatement, switchStatement, whileStatement, doWhileStatement, forStatement, throwStatement, tryStatement,

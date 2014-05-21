@@ -30,9 +30,13 @@ public abstract class TypeResolver {
 
       CtClass component = getTypeNameOrNull(cName);
       if (component == null) return null;
-      else return getRootResolver().getArrayType(component, dim);
+      else return getArrayType(component, dim);
     }
     else return getTypeNameOrNull(name);
+  }
+
+  public CtClass getArrayType (CtClass component, int dim) {
+    return getRootResolver().getArrayType(component, dim);
   }
 
   public RootTypeResolver getRootResolver () {

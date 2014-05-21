@@ -2,6 +2,7 @@ package proteaj.ir.primitive;
 
 import proteaj.ast.*;
 import proteaj.ir.*;
+import proteaj.type.*;
 import proteaj.util.*;
 
 import javassist.*;
@@ -99,18 +100,31 @@ public class BinaryOperator extends PrimitiveOperator {
   public static final BinaryOperator or     = new BinaryOperator(CtClass.booleanType, CtClass.booleanType, "||", CtClass.booleanType, 100);
 
   private static BinaryOperator instanceOf = null;
+  private static BinaryOperator objEquals  = null;
+  private static BinaryOperator objNotEqs  = null;
+
+  private static void initialize () {
+    if (instanceOf == null && objEquals == null && objNotEqs == null) {
+      CommonTypes cts = CommonTypes.getInstance();
+      instanceOf = new BinaryOperator(CtClass.booleanType, cts.objectType, "instanceof", cts.typeType, 700);
+      objEquals  = new BinaryOperator(CtClass.booleanType, cts.objectType, "==", cts.objectType, 600);
+      objNotEqs  = new BinaryOperator(CtClass.booleanType, cts.objectType, "!=", cts.objectType, 600);
+    }
+  }
 
   public static BinaryOperator getInstanceOfOperator() {
-    if (instanceOf == null) instanceOf = new BinaryOperator(CtClass.booleanType, IRCommonTypes.getObjectType(), "instanceof", IRCommonTypes.getTypeType(), 700);
+    initialize();
     return instanceOf;
   }
 
   public static BinaryOperator getObjEqOperator() {
-    return new BinaryOperator(CtClass.booleanType, IRCommonTypes.getObjectType(), "==", IRCommonTypes.getObjectType(), 600);
+    initialize();
+    return objEquals;
   }
 
   public static BinaryOperator getObjNeqOperator() {
-    return new BinaryOperator(CtClass.booleanType, IRCommonTypes.getObjectType(), "!=", IRCommonTypes.getObjectType(), 600);
+    initialize();
+    return objNotEqs;
   }
 
   private static IRPattern getBinaryOperatorPattern(CtClass left, String operator, CtClass right) {

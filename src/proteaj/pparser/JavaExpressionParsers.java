@@ -116,8 +116,7 @@ public class JavaExpressionParsers {
   private static final PackratParser<NewArrayExpression> newArray =
       bind(seq(prefix("new", className), rep1(arrayIndex), rep(keywords("[", "]"))), triad -> depends(env -> {
         int dim = triad._2.size() + triad._3.size();
-        CtClass arrayType;
-        try { arrayType = env.getArrayType(triad._1, dim); } catch (NotFoundError e) { return error(e); }
+        CtClass arrayType = env.getArrayType(triad._1, dim);
         return unit(new NewArrayExpression(arrayType, triad._2));
       }));
 

@@ -3,6 +3,7 @@ package proteaj.pparser;
 import proteaj.error.*;
 import proteaj.io.*;
 import proteaj.ir.*;
+import proteaj.type.CommonTypes;
 import proteaj.util.*;
 
 import java.util.*;
@@ -560,7 +561,7 @@ class PackratParserCombinators {
   public static Effect catching (CtClass exceptionType) {
     return (reader, env) -> {
       try {
-        if (! exceptionType.subtypeOf(IRCommonTypes.getThrowableType())) {
+        if (! exceptionType.subtypeOf(CommonTypes.getInstance().throwableType)) {
           String msg = "No exception of type " + exceptionType.getName() + " can be thrown; an exception type must be a subclass of Throwable";
           ErrorList.addError(new SemanticsError(msg, reader.filePath, reader.getLine()));
         }

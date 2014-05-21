@@ -1,12 +1,12 @@
 package proteaj.tast;
 
 import javassist.CtClass;
-import proteaj.ir.IRCommonTypes;
 import proteaj.tast.util.ExpressionVisitor;
+import proteaj.type.CommonTypes;
 
 public class TypeLiteral  extends Expression {
   public TypeLiteral(CtClass cls) {
-    super(IRCommonTypes.getTypeType());
+    super(CommonTypes.getInstance().typeType);
     this.cls = cls;
   }
 

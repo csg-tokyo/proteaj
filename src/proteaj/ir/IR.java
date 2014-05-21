@@ -17,6 +17,7 @@ public class IR {
     this.opool = new OperatorPool();
   }
 
+  @Deprecated
   public CtClass makeClass(String name, int mods) {
     CtClass ctcl = cpool.makeClass(name);
     ctcl.setModifiers(mods);
@@ -26,10 +27,6 @@ public class IR {
 
   public void addClass(CtClass scl, IRHeader hdata) {
     classenv.put(scl, hdata);
-  }
-
-  public void addInterface(CtClass iface, IRHeader hdata) {
-    classenv.put(iface, hdata);
   }
 
   public void addMethod(IRMethodBody method) {
@@ -60,6 +57,7 @@ public class IR {
     return classenv.get(ctcl);
   }
 
+  @Deprecated
   public ClassPool getClassPool() {
     return cpool;
   }
@@ -104,6 +102,7 @@ public class IR {
   private Collection<IRDefaultArgument> darguments;
   private Collection<IRStaticInitializer> sinits;
 
+  @Deprecated
   private ClassPool cpool;
   private OperatorPool opool;
 }

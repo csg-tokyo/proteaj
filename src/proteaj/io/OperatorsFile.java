@@ -16,6 +16,7 @@ import org.xml.sax.SAXException;
 
 import proteaj.error.*;
 import proteaj.ir.*;
+import proteaj.type.TypeResolver;
 
 import static org.w3c.dom.Node.*;
 import static proteaj.ir.IRPattern.*;
@@ -124,8 +125,8 @@ public class OperatorsFile {
     }
   }
 
-  public IRSyntax read(ClassPool cpool) throws FileIOError {
-    CtClass clz = cpool.getOrNull(name);
+  public IRSyntax read(TypeResolver resolver) throws FileIOError {
+    CtClass clz = resolver.getTypeOrNull(name);
     String fileName = getOpsFileName(name);
 
     if(clz == null) return null;
@@ -169,7 +170,7 @@ public class OperatorsFile {
 
       String methodName = getAttr(node, "method");
       int priority = Integer.parseInt(getAttr(node, "priority"));
-      CtClass returnType = cpool.get(getAttr(node, "return"));
+      CtClass returnType = resolver.getType(getAttr(node, "return"));
 
       NodeList nodeList = node.getChildNodes();
       Node node0 = nodeList.item(0);
@@ -191,11 +192,11 @@ public class OperatorsFile {
       NodeList boundsList = bounds.getChildNodes();
       List<CtClass> returnTypeBounds = new ArrayList<>();
       for (int j = 0; j < boundsLen; j++) {
-        CtClass bound = cpool.get(boundsList.item(j).getTextContent());
+        CtClass bound = resolver.getType(boundsList.item(j).getTextContent());
         returnTypeBounds.add(bound);
       }
 
-      IRPattern irpat = fromXML(ptNode, clz, cpool, fileName);
+      IRPattern irpat = fromXML(ptNode, clz, resolver, fileName);
 
       CtMethod method = clz.getDeclaredMethod(methodName);
 
@@ -218,7 +219,7 @@ public class OperatorsFile {
     return irsyn;
   }
 
-  public IRPattern fromXML(Node ptnode, CtClass clz, ClassPool cpool, String fileName) throws FileIOError, NotFoundError {
+  public IRPattern fromXML(Node ptnode, CtClass clz, TypeResolver resolver, String fileName) throws FileIOError, NotFoundError {
     int modifier = Integer.parseInt(getAttr(ptnode, "modifier"));
     int patlength = Integer.parseInt(getAttr(ptnode, "length"));
     int operatorsLength = Integer.parseInt(getAttr(ptnode, "operators"));
@@ -253,7 +254,7 @@ public class OperatorsFile {
       else if(elem.getNodeName().equals("operand")) {
         id &= ~PATTERN_OPERAND;
 
-        CtClass type = cpool.get(getAttr(elem, "type"));
+        CtClass type = resolver.getType(getAttr(elem, "type"));
         operandTypes[id] = type;
 
         int mod = Integer.parseInt(getAttr(elem, "modifier"));
@@ -271,12 +272,12 @@ public class OperatorsFile {
       }
       else if(elem.getNodeName().equals("and")) {
         id &= ~PATTERN_ANDPRED;
-        CtClass type = cpool.get(getAttr(elem, "type"));
+        CtClass type = resolver.getType(getAttr(elem, "type"));
         andpreds[id] = type;
       }
       else if(elem.getNodeName().equals("not")) {
         id &= ~PATTERN_NOTPRED;
-        CtClass type = cpool.get(getAttr(elem, "type"));
+        CtClass type = resolver.getType(getAttr(elem, "type"));
         notpreds[id] = type;
       }
     } catch (NotFoundException e) {

@@ -1,11 +1,11 @@
 package proteaj.pparser;
 
 import proteaj.error.*;
-import proteaj.ir.ClassResolver;
 import proteaj.ir.IR;
 import proteaj.ir.IRCommonTypes;
 import proteaj.ir.IRHeader;
 import proteaj.tast.*;
+import proteaj.type.*;
 import proteaj.util.*;
 
 import java.util.*;
@@ -17,7 +17,7 @@ public class Environment {
     this.thisMember = thisMember;
     IRHeader header = ir.getIRHeader(thisClass);
     this.filePath = header.filePath;
-    this.classResolver = new ClassResolver(header, ir.getClassPool());
+    this.resolver = header.resolver;
     this.availableOperators = new AvailableOperators(header, ir.getOperatorPool());
     this.env = new HashMap<>();
     this.exceptions = new HashMap<>();
@@ -69,7 +69,7 @@ public class Environment {
     this.thisClass = env.thisClass;
     this.thisMember = env.thisMember;
     this.filePath = env.filePath;
-    this.classResolver = env.classResolver;
+    this.resolver = env.resolver;
     this.availableOperators = env.availableOperators;
     this.env = new HashMap<>(env.env);
     this.exceptions = new HashMap<>();
@@ -84,19 +84,19 @@ public class Environment {
   }
 
   public CtClass getType(String name) throws NotFoundError {
-    return classResolver.getType(name);
+    return resolver.getType(name);
   }
 
   public CtClass getArrayType (String name, int dim) throws NotFoundError {
-    return classResolver.getArrayType(name, dim);
+    return resolver.getArrayType(resolver.getType(name), dim);
   }
 
-  public CtClass getArrayType (CtClass component, int dim) throws NotFoundError {
-    return classResolver.getArrayType(component, dim);
+  public CtClass getArrayType (CtClass component, int dim) {
+    return resolver.getArrayType(component, dim);
   }
 
   public boolean isTypeName(String name) {
-    return classResolver.isTypeName(name);
+    return resolver.isTypeName(name);
   }
 
   public List<CtMethod> getInstanceMethods (CtClass clazz, String name) {
@@ -153,12 +153,13 @@ public class Environment {
   }
 
   public void addException(CtClass exception, int line) throws NotFoundException {
-    assert exception.subtypeOf(IRCommonTypes.getThrowableType());
+    CommonTypes cts = CommonTypes.getInstance();
+    assert exception.subtypeOf(cts.throwableType);
 
-    if(exception.subtypeOf(IRCommonTypes.getErrorType())
-        || exception.subtypeOf(IRCommonTypes.getRuntimeExceptionType())) return;
+    if(exception.subtypeOf(cts.errorType)
+        || exception.subtypeOf(cts.runtimeExceptionType)) return;
 
-    if(! exceptions.containsKey(exception)) exceptions.put(exception, new ArrayList<Integer>());
+    if(! exceptions.containsKey(exception)) exceptions.put(exception, new ArrayList<>());
     exceptions.get(exception).add(line);
   }
 
@@ -209,7 +210,7 @@ public class Environment {
   public final String filePath;
   public final AvailableOperators availableOperators;
 
-  private final ClassResolver classResolver;
+  private final TypeResolver resolver;
   private Map<String, Expression> env;
   private Map<CtClass, List<Integer>> exceptions;
 
