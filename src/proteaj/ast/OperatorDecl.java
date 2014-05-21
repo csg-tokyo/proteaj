@@ -51,26 +51,6 @@ public class OperatorDecl extends AST {
     return modifiers;
   }
 
-  @Deprecated
-  public String getType() {
-    return type;
-  }
-
-  @Deprecated
-  public OperatorPattern getPattern() {
-    return pattern;
-  }
-
-  @Deprecated
-  public List<Parameter> getParams() {
-    return params;
-  }
-
-  @Deprecated
-  public int getPriority() {
-    return priority;
-  }
-
   public String getBody() {
     return body;
   }

@@ -252,7 +252,7 @@ public class SigSemanticsChecker {
       ErrorList.addError(new SemanticsError("can't define an abstract operator in the current version of ProteaJ", file, line));
     }
 
-    ret &= checkOperatorPattern(odecl.getPattern(), odecl.getParams());
+    ret &= checkOperatorPattern(odecl.pattern, odecl.params);
 
     return ret;
   }
@@ -339,7 +339,7 @@ public class SigSemanticsChecker {
       ret = false;
     }
 
-    if(! operand.getName().equals(param.getName())) {
+    if(! operand.getName().equals(param.getName()) && ! operand.getName().equals("_")) {
       ErrorList.addError(new SemanticsError("operand name \"" + operand.getName() + "\" do not match the parameter name \"" + param.getName() + "\"", file, line));
       ret = false;
     }

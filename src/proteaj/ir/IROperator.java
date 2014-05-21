@@ -34,21 +34,6 @@ public class IROperator {
     this.actualMethod = null;
   }
 
-  @Deprecated
-  public int getPriority() {
-    return priority;
-  }
-
-  @Deprecated
-  public CtClass getReturnType() {
-    return returnType;
-  }
-
-  @Deprecated
-  public IRPattern getPattern() {
-    return pattern;
-  }
-
   public String getClassName() {
     if(declCls != null) return declCls.getName();
     else return null;
