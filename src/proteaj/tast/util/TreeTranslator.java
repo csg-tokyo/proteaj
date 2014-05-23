@@ -108,10 +108,7 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   }
 
   public Statement translate(TryStatement tryStmt) {
-    List<Triad<CtClass, String, Block>> catches = new ArrayList<>();
-    for (Triad<CtClass, String, Block> triad : tryStmt.getCatchBlocks()) {
-      catches.add(Triad.make(triad._1, triad._2, translate(triad._3)));
-    }
+    List<CatchBlock> catches = tryStmt.catchBlocks.stream().map(c -> new CatchBlock(c.clazz, c.name, translate(c.block))).collect(Collectors.toList());
     if (! tryStmt.hasFinallyBlock()) return new TryStatement(translate(tryStmt.tryBlock), catches);
     else return new TryStatement(translate(tryStmt.tryBlock), catches, translate(tryStmt.getFinallyBlock()));
   }

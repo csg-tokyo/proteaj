@@ -175,11 +175,11 @@ public class JavassistCodeGenerator implements ExpressionVisitor<StringBuilder>,
   public StringBuilder visit(TryStatement tryStmt, StringBuilder buf) {
     buf = buf.append("try ");
     buf = visit(tryStmt.tryBlock, buf);
-    for(Triad<CtClass, String, Block> c : tryStmt.getCatchBlocks()) {
+    for(CatchBlock c : tryStmt.catchBlocks) {
       buf = buf.append("catch ").append('(');
-      buf = buf.append(c._1.getName()).append(' ').append(c._2);
+      buf = buf.append(c.clazz.getName()).append(' ').append(c.name);
       buf = buf.append(')');
-      buf = visit(c._3, buf);
+      buf = visit(c.block, buf);
     }
     if (tryStmt.hasFinallyBlock()) {
       buf = buf.append("finally ");

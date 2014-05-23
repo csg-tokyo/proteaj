@@ -152,12 +152,12 @@ public abstract class StatementParsers {
   private final PackratParser<Pair<CtClass, String>> catchTypeAndName =
       withEffect(prefix("catch", enclosed("(", seq(className, identifier), ")")), pair -> declareLocal(pair._2, pair._1));
 
-  private final PackratParser<Pair<Triad<CtClass,String,Block>, Environment>> catchClause =
-      withEffect(newEnvironment(bind(catchTypeAndName, pair -> map(block, block -> Triad.make(pair._1, pair._2, block)))), pair -> catching(pair._1._1));
+  private final PackratParser<Pair<CatchBlock, Environment>> catchClause =
+      withEffect(newEnvironment(bind(catchTypeAndName, pair -> map(block, block -> new CatchBlock(pair._1, pair._2, block)))), pair -> catching(pair._1.clazz));
 
-  private final PackratParser<Pair<List<Triad<CtClass,String,Block>>, List<Environment>>> catchClauseLists = unzip(rep1(catchClause));
+  private final PackratParser<Pair<List<CatchBlock>, List<Environment>>> catchClauseLists = unzip(rep1(catchClause));
 
-  private final PackratParser<List<Triad<CtClass,String,Block>>> catchClauses =
+  private final PackratParser<List<CatchBlock>> catchClauses =
       map(withEffect(catchClauseLists, pair -> throwing(pair._2)), pair -> pair._1);
 
   private final PackratParser<TryStatement> tryFinallyStatement =

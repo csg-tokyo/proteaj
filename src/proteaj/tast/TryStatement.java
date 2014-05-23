@@ -1,48 +1,36 @@
 package proteaj.tast;
 
 import proteaj.tast.util.*;
-import proteaj.util.*;
 
 import java.util.*;
-import javassist.*;
 
 public class TryStatement extends Statement {
   public TryStatement(Block tryBlock) {
     this.tryBlock = tryBlock;
-    this.catchBlocks = new ArrayList<Triad<CtClass,String,Block>>();
+    this.catchBlocks = new ArrayList<>();
     this.finallyBlock = null;
   }
 
   public TryStatement(Block tryBlock, Block finallyBlock) {
     this.tryBlock = tryBlock;
-    this.catchBlocks = new ArrayList<Triad<CtClass,String,Block>>();
+    this.catchBlocks = new ArrayList<>();
     this.finallyBlock = finallyBlock;
   }
 
-  public TryStatement(Block tryBlock, List<Triad<CtClass, String, Block>> catchBlocks) {
+  public TryStatement(Block tryBlock, List<CatchBlock> catchBlocks) {
     this.tryBlock = tryBlock;
     this.catchBlocks = catchBlocks;
     this.finallyBlock = null;
   }
 
-  public TryStatement(Block tryBlock, List<Triad<CtClass, String, Block>> catchBlocks, Block finallyBlock) {
+  public TryStatement(Block tryBlock, List<CatchBlock> catchBlocks, Block finallyBlock) {
     this.tryBlock = tryBlock;
     this.catchBlocks = catchBlocks;
     this.finallyBlock = finallyBlock;
   }
 
-  public void addCatchBlock(CtClass type, String name, Block block) {
-    catchBlocks.add(new Triad<CtClass, String, Block>(type, name, block));
-  }
-
-  public void setFinallyBlock(Block finallyBlock) {
-    this.finallyBlock = finallyBlock;
-  }
-
-  public List<Triad<CtClass, String, Block>> getCatchBlocks() { return catchBlocks; }
   public Block getFinallyBlock() { return finallyBlock; }
 
-  public boolean hasCatchBlock() { return ! catchBlocks.isEmpty(); }
   public boolean hasFinallyBlock() { return finallyBlock != null; }
 
   @Override
@@ -51,7 +39,7 @@ public class TryStatement extends Statement {
   }
 
   public final Block tryBlock;
-  private List<Triad<CtClass, String, Block>> catchBlocks;
-  private Block finallyBlock;
+  public final List<CatchBlock> catchBlocks;
+  private final Block finallyBlock;
 }
 
