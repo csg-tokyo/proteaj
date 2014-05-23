@@ -7,6 +7,8 @@ import proteaj.pparser.PackratReader;
 import proteaj.tast.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
 import javassist.*;
 
 public class BodyCompiler {
@@ -28,111 +30,81 @@ public class BodyCompiler {
   }
 
   private List<MethodDeclaration> compileMethods() {
-    List<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
+    return ir.getMethods().stream().map(method -> {
+      Environment env = new Environment(ir, method.ctMethod);
+      PackratReader reader = new PackratReader(method.source, env.filePath, method.line);
 
-    for(IRMethodBody irbody : ir.getMethods()) {
-      CtMethod method = irbody.getCtMethod();
-      Environment env = new Environment(ir, method);
-      PackratReader reader = new PackratReader(irbody.getSource(), env.filePath, irbody.getLine());
-
-      try {
-        env.addParams(irbody.getParamNames(), irbody.getParamTypes());
-      } catch (NotFoundException e) {
+      try { env.addParams(method.paramNames, method.getParamTypes()); } catch (NotFoundException e) {
         ErrorList.addError(new NotFoundError(e, env.filePath, reader.getLine()));
       }
 
       try {
-        MethodBody body = parser.parseMethodBody(method, reader, env);
-        methods.add(new MethodDeclaration(method, body));
-      } catch (CompileErrors es) {
-        for(CompileError e : es.getErrors()) ErrorList.addError(e);
+        return new MethodDeclaration(method.ctMethod, parser.parseMethodBody(method.ctMethod, reader, env));
+      } catch (CompileErrors e) {
+        ErrorList.addErrors(e);
+        return null;
       }
-    }
-
-    return methods;
+    }).filter(a -> a != null).collect(Collectors.toList());
   }
 
   private List<ConstructorDeclaration> compileConstructors() {
-    List<ConstructorDeclaration> constructors = new ArrayList<ConstructorDeclaration>();
+    return ir.getConstructors().stream().map(constructor -> {
+      Environment env = new Environment(ir, constructor.ctConstructor);
+      PackratReader reader = new PackratReader(constructor.source, env.filePath, constructor.line);
 
-    for(IRConstructorBody irbody : ir.getConstructors()) {
-      CtConstructor constructor = irbody.getCtConstructor();
-      Environment env = new Environment(ir, constructor);
-      PackratReader reader = new PackratReader(irbody.getSource(), env.filePath, irbody.getLine());
-
-      try {
-        env.addParams(irbody.getParamNames(), irbody.getParamTypes());
-      } catch (NotFoundException e) {
-        ErrorList.addError(new NotFoundError(e, reader.filePath, reader.getLine()));
+      try { env.addParams(constructor.paramNames, constructor.getParamTypes()); } catch (NotFoundException e) {
+        ErrorList.addError(new NotFoundError(e, env.filePath, reader.getLine()));
       }
 
       try {
-        ConstructorBody body = parser.parseConstructorBody(constructor, reader, env);
-        constructors.add(new ConstructorDeclaration(constructor, body));
-      } catch (CompileErrors es) {
-        for(CompileError e : es.getErrors()) ErrorList.addError(e);
+        return new ConstructorDeclaration(constructor.ctConstructor, parser.parseConstructorBody(constructor.ctConstructor, reader, env));
+      } catch (CompileErrors e) {
+        ErrorList.addErrors(e);
+        return null;
       }
-    }
-
-    return constructors;
+    }).filter(a -> a != null).collect(Collectors.toList());
   }
 
   private List<FieldDeclaration> compileFields() {
-    List<FieldDeclaration> fields = new ArrayList<FieldDeclaration>();
-
-    for(IRFieldBody irbody : ir.getFields()) {
-      CtField field = irbody.getCtField();
-      Environment env = new Environment(ir, field);
-      PackratReader reader = new PackratReader(irbody.getSource(), env.filePath, irbody.getLine());
+    return ir.getFields().stream().map(field -> {
+      Environment env = new Environment(ir, field.ctField);
+      PackratReader reader = new PackratReader(field.source, env.filePath, field.line);
 
       try {
-        FieldBody body = parser.parseFieldBody(field, reader, env);
-        //irbody.setAST(fbody);
-        fields.add(new FieldDeclaration(field, body));
-      } catch (CompileErrors es) {
-        for(CompileError e : es.getErrors()) ErrorList.addError(e);
+        return new FieldDeclaration(field.ctField, parser.parseFieldBody(field.ctField, reader, env));
+      } catch (CompileErrors e) {
+        ErrorList.addErrors(e);
+        return null;
       }
-    }
-
-    return fields;
+    }).filter(a -> a != null).collect(Collectors.toList());
   }
 
   private List<DefaultValueDefinition> compileDefaultArguments() {
-    List<DefaultValueDefinition> map = new ArrayList<DefaultValueDefinition>();
-
-    for(IRDefaultArgument irbody : ir.getDefaultArguments()) {
-      CtMethod method = irbody.getCtMethod();
-      Environment env = new Environment(ir, method);
-      PackratReader reader = new PackratReader(irbody.getSource(), env.filePath, irbody.getLine());
+    return ir.getDefaultArguments().stream().map(arg -> {
+      Environment env = new Environment(ir, arg.ctMethod);
+      PackratReader reader = new PackratReader(arg.source, env.filePath, arg.line);
 
       try {
-        DefaultValue defval = parser.parseDefaultArgument(method, reader, env);
-        map.add(new DefaultValueDefinition(method, defval));
-      } catch (CompileErrors es) {
-        for(CompileError e : es.getErrors()) ErrorList.addError(e);
+        return new DefaultValueDefinition(arg.ctMethod, parser.parseDefaultArgument(arg.ctMethod, reader, env));
+      } catch (CompileErrors e) {
+        ErrorList.addErrors(e);
+        return null;
       }
-    }
-
-    return map;
+    }).filter(a -> a != null).collect(Collectors.toList());
   }
 
   private List<ClassInitializerDefinition> compileStaticInitializers() {
-    List<ClassInitializerDefinition> list = new ArrayList<ClassInitializerDefinition>();
-
-    for(IRStaticInitializer sinit : ir.getStaticInitializers()) {
-      CtConstructor clinit = sinit.getCtConstructor();
-      Environment env = new Environment(ir, clinit);
-      PackratReader reader = new PackratReader(sinit.getSource(), env.filePath, sinit.getLine());
+    return ir.getStaticInitializers().stream().map(sInit -> {
+      Environment env = new Environment(ir, sInit.clInit);
+      PackratReader reader = new PackratReader(sInit.source, env.filePath, sInit.line);
 
       try {
-        ClassInitializer body = parser.parseStaticInitializer(reader, env);
-        list.add(new ClassInitializerDefinition(clinit, body));
-      } catch (CompileErrors es) {
-        for(CompileError e : es.getErrors()) ErrorList.addError(e);
+        return new ClassInitializerDefinition(sInit.clInit, parser.parseStaticInitializer(reader, env));
+      } catch (CompileErrors e) {
+        ErrorList.addErrors(e);
+        return null;
       }
-    }
-
-    return list;
+    }).filter(a -> a != null).collect(Collectors.toList());
   }
 
   private IR ir;

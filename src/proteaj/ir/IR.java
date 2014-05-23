@@ -6,9 +6,9 @@ import javassist.*;
 public class IR {
   public IR() {
     classenv = new HashMap<CtClass, IRHeader>();
-    methods = new ArrayList<IRMethodBody>();
-    constructors = new ArrayList<IRConstructorBody>();
-    fields = new ArrayList<IRFieldBody>();
+    methods = new ArrayList<IRMethod>();
+    constructors = new ArrayList<IRConstructor>();
+    fields = new ArrayList<IRField>();
     syntax = new ArrayList<IRSyntax>();
     darguments = new ArrayList<IRDefaultArgument>();
     sinits = new ArrayList<IRStaticInitializer>();
@@ -29,15 +29,15 @@ public class IR {
     classenv.put(scl, hdata);
   }
 
-  public void addMethod(IRMethodBody method) {
+  public void addMethod(IRMethod method) {
     methods.add(method);
   }
 
-  public void addConstructor(IRConstructorBody constructor) {
+  public void addConstructor(IRConstructor constructor) {
     constructors.add(constructor);
   }
 
-  public void addField(IRFieldBody field) {
+  public void addField(IRField field) {
     fields.add(field);
   }
 
@@ -70,15 +70,15 @@ public class IR {
     return classenv.keySet();
   }
 
-  public Collection<IRMethodBody> getMethods() {
+  public Collection<IRMethod> getMethods() {
     return methods;
   }
 
-  public Collection<IRConstructorBody> getConstructors() {
+  public Collection<IRConstructor> getConstructors() {
     return constructors;
   }
 
-  public Collection<IRFieldBody> getFields() {
+  public Collection<IRField> getFields() {
     return fields;
   }
 
@@ -95,9 +95,9 @@ public class IR {
   }
 
   private Map<CtClass, IRHeader> classenv;
-  private Collection<IRMethodBody> methods;
-  private Collection<IRConstructorBody> constructors;
-  private Collection<IRFieldBody> fields;
+  private Collection<IRMethod> methods;
+  private Collection<IRConstructor> constructors;
+  private Collection<IRField> fields;
   private Collection<IRSyntax> syntax;
   private Collection<IRDefaultArgument> darguments;
   private Collection<IRStaticInitializer> sinits;

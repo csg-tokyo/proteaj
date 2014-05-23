@@ -196,7 +196,7 @@ public class SigIRGenerator {
         }
 
         if(constructor.hasBody()) {
-          ir.addConstructor(new IRConstructorBody(ctconstructor, getParamNames(constructor.getParams()), constructor.getBody(), constructor.getBodyLine()));
+          ir.addConstructor(new IRConstructor(ctconstructor, getParamNames(constructor.getParams()), constructor.getBody(), constructor.getBodyLine()));
         }
 
         ctcl.addConstructor(ctconstructor);
@@ -232,7 +232,7 @@ public class SigIRGenerator {
         ctcl.addMethod(ctmethod);
 
         if(method.hasBody()) {
-          ir.addMethod(new IRMethodBody(ctmethod, getParamNames(method.getParams()), method.getBody(), method.getBodyLine()));
+          ir.addMethod(new IRMethod(ctmethod, getParamNames(method.getParams()), method.getBody(), method.getBodyLine()));
         }
       } catch (NotFoundError e) {
         ErrorList.addError(e);
@@ -255,7 +255,7 @@ public class SigIRGenerator {
         ctcl.addField(ctfield);
 
         if(field.hasBody()) {
-          ir.addField(new IRFieldBody(ctfield, field.getBody(), field.getBodyLine()));
+          ir.addField(new IRField(ctfield, field.getBody(), field.getBodyLine()));
         }
       } catch (NotFoundError e) {
         ErrorList.addError(e);
@@ -315,7 +315,7 @@ public class SigIRGenerator {
         iface.addField(ctfield);
 
         assert field.hasBody();
-        ir.addField(new IRFieldBody(ctfield, field.getBody(), field.getBodyLine()));
+        ir.addField(new IRField(ctfield, field.getBody(), field.getBodyLine()));
       } catch (NotFoundError e) {
         ErrorList.addError(e);
       } catch (CannotCompileException e) {
@@ -378,7 +378,7 @@ public class SigIRGenerator {
         irsyn.addOperator(odata);
 
         if(odecl.hasBody()) {
-          ir.addMethod(new IRMethodBody(smethod, getParamNames(odecl.params), odecl.getBody(), odecl.getBodyLine()));
+          ir.addMethod(new IRMethod(smethod, getParamNames(odecl.params), odecl.getBody(), odecl.getBodyLine()));
         }
       } catch (NotFoundError e) {
         ErrorList.addError(e);

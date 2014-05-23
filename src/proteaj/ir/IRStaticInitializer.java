@@ -3,25 +3,13 @@ package proteaj.ir;
 import javassist.*;
 
 public class IRStaticInitializer {
-  public IRStaticInitializer(CtConstructor clinit, String source, int line) {
-    this.clinit = clinit;
+  public IRStaticInitializer(CtConstructor clInit, String source, int line) {
+    this.clInit = clInit;
     this.source = source;
     this.line = line;
   }
 
-  public CtConstructor getCtConstructor() {
-    return clinit;
-  }
-
-  public int getLine() {
-    return line;
-  }
-
-  public String getSource() {
-    return source;
-  }
-
-  private int line;
-  private String source;
-  private CtConstructor clinit;
+  public final int line;
+  public final String source;
+  public final CtConstructor clInit;
 }

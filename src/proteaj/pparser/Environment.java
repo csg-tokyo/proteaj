@@ -2,7 +2,6 @@ package proteaj.pparser;
 
 import proteaj.error.*;
 import proteaj.ir.IR;
-import proteaj.ir.IRCommonTypes;
 import proteaj.ir.IRHeader;
 import proteaj.tast.*;
 import proteaj.type.*;

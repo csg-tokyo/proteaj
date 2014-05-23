@@ -3,25 +3,13 @@ package proteaj.ir;
 import javassist.*;
 
 public class IRDefaultArgument {
-  public IRDefaultArgument(CtMethod method, String source, int line) {
-    this.method = method;
+  public IRDefaultArgument(CtMethod ctMethod, String source, int line) {
+    this.ctMethod = ctMethod;
     this.source = source;
     this.line = line;
   }
 
-  public CtMethod getCtMethod() {
-    return method;
-  }
-
-  public int getLine() {
-    return line;
-  }
-
-  public String getSource() {
-    return source;
-  }
-
-  private int line;
-  private String source;
-  private CtMethod method;
+  public final int line;
+  public final String source;
+  public final CtMethod ctMethod;
 }

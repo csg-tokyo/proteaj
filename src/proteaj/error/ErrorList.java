@@ -7,6 +7,10 @@ public class ErrorList {
     errors = new HashMap<String, List<CompileError>>();
   }
 
+  public static void addErrors (CompileErrors es) {
+    for (CompileError e : es.getErrors()) addError(e);
+  }
+
   public static void addError(CompileError e) {
     String file = e.getFile();
 
