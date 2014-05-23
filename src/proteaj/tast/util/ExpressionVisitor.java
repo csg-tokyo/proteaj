@@ -4,7 +4,7 @@ import proteaj.tast.*;
 
 public interface ExpressionVisitor<T> {
   public abstract T visit (Operation operation, T t);
-  public abstract T visit (LocalVarDecl local, T t);
+  public abstract T visit (LocalsDecl localsDecl, T t);
   public abstract T visit (ExpressionList list, T t);
   public abstract T visit (AssignExpression assign, T t);
   public abstract T visit (TernaryIfExpression tif, T t);

@@ -6,7 +6,7 @@ public interface StatementVisitor<T> {
   public abstract T visit (Block block, T t);
   public abstract T visit (ThisConstructorCall thisStmt, T t);
   public abstract T visit (SuperConstructorCall superStmt, T t);
-  public abstract T visit (LocalVarDeclStatement localDecl, T t);
+  public abstract T visit (LocalsDeclStatement localDecl, T t);
   public abstract T visit (IfStatement ifStmt, T t);
   public abstract T visit (SwitchStatement switchStmt, T t);
   public abstract T visit (WhileStatement whileStmt, T t);

@@ -1,7 +1,6 @@
 package proteaj.pparser;
 
 import proteaj.error.*;
-import proteaj.ir.*;
 import proteaj.tast.*;
 import proteaj.type.CommonTypes;
 import proteaj.util.*;
@@ -72,17 +71,19 @@ public abstract class StatementParsers {
   private final PackratParser<Block> block =
       map(scope(enclosed("{", rep(ref_BlockStatement), "}")), Block::new);
 
-  private final PackratParser<LocalVarDecl> simpleLocalDecl =
-      bind(seq(qualifiedIdentifier, arrayBrackets, identifier, arrayBrackets), quad -> depends(env -> {
-        try { return unit(new LocalVarDecl(env.getArrayType(quad._1, quad._2 + quad._4), quad._3)); }
-        catch (NotFoundError e) { return failure(e.getMessage()); }
-      }));
+  private final PackratParser<LocalsDecl.LocalDecl> simpleLocalDecl =
+      map(seq(identifier, arrayBrackets), pair -> new LocalsDecl.LocalDecl(pair._1, pair._2));
 
-  private final PackratParser<LocalVarDecl> localDeclAndInit =
-      bind(postfix(simpleLocalDecl, "="), local -> map(expression(local.type), expr -> new LocalVarDecl(local.type, local.name, expr)));
+  private PackratParser<LocalsDecl.LocalDecl> localDeclAndInit (CtClass type) {
+    return map(infix(simpleLocalDecl, "=", expression(type)), pair -> new LocalsDecl.LocalDecl(pair._1.name, pair._1.dim, pair._2));
+  }
 
-  private final PackratParser<LocalVarDecl> localVarDecl =
-      withEffect(choice(localDeclAndInit, simpleLocalDecl), local -> declareLocal(local.name, local.type));
+  private PackratParser<LocalsDecl.LocalDecl> localVarDecl (CtClass type) {
+    return withEffect(choice(localDeclAndInit(type), simpleLocalDecl), local -> declareLocal(local.name, type));
+  }
+
+  private final PackratParser<LocalsDecl> localsDecl =
+      bind(typeName, type -> map(rep1(localVarDecl(type), ","), locals -> new LocalsDecl(type, locals)));
 
   private final PackratParser<Expression> ifCondition =
       prefix("if", enclosed("(", expression(CtClass.booleanType), ")"));
@@ -97,7 +98,7 @@ public abstract class StatementParsers {
       choice(ifElseStatement, simpleIfStatement);
 
   private final PackratParser<CaseBlock> defaultBlock =
-      map(prefix("default", prefix(":", rep(ref_BlockStatement))), stmts -> new CaseBlock(stmts));
+      map(prefix("default", prefix(":", rep(ref_BlockStatement))), CaseBlock::new);
 
   private final PackratParser<CaseBlock> charCaseBlock =
       map(seq(enclosed("case", expression(CtClass.charType), ":"), rep(ref_BlockStatement)), pair -> new CaseBlock(pair._1, pair._2));
@@ -133,7 +134,7 @@ public abstract class StatementParsers {
       map(rep(expression(CtClass.voidType), ","), ExpressionList::new);
 
   private final PackratParser<Expression> forInit =
-      choice(localVarDecl, expressionList);
+      choice(localsDecl, expressionList);
 
   private final PackratParser<Expression> forCond =
       optional(expression(CtClass.booleanType), new BooleanLiteral(true));
@@ -192,7 +193,7 @@ public abstract class StatementParsers {
           breakStatement, continueStatement, returnStatement, syncStatement);
 
   private final PackratParser<Statement> localVarDeclStatement =
-      map(postfix(localVarDecl, ";"), LocalVarDeclStatement::new);
+      map(postfix(localsDecl, ";"), LocalsDeclStatement::new);
 
   private final PackratParser<Statement> expressionStatement =
       map(postfix(expression(CtClass.voidType), ";"), ExpressionStatement::new);

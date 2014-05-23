@@ -1,7 +1,6 @@
 package proteaj.tast.util;
 
 import proteaj.tast.*;
-import proteaj.util.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -77,8 +76,8 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
     return new SuperConstructorCall(superStmt.constructor, translateExprs(superStmt.args));
   }
 
-  public Statement translate(LocalVarDeclStatement local) {
-    return new LocalVarDeclStatement(translate(local.lvdecl));
+  public Statement translate(LocalsDeclStatement local) {
+    return new LocalsDeclStatement(translate(local.localsDecl));
   }
 
   public Statement translate(IfStatement ifStmt) {
@@ -91,8 +90,8 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   }
 
   public CaseBlock translate(CaseBlock caseBlock) {
-    if (caseBlock.isDefault()) return new CaseBlock(caseBlock.stmts.stream().map(this::translate).collect(Collectors.toList()));
-    else return new CaseBlock(translate(caseBlock.getLabel()), caseBlock.stmts.stream().map(this::translate).collect(Collectors.toList()));
+    if (caseBlock.isDefault()) return new CaseBlock(translateStmts(caseBlock.stmts));
+    else return new CaseBlock(translate(caseBlock.getLabel()), translateStmts(caseBlock.stmts));
   }
 
   public Statement translate(WhileStatement whileStmt) {
@@ -146,9 +145,13 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
     return new Operation(operation.operator, translateExprs(operation.operands));
   }
 
-  public LocalVarDecl translate(LocalVarDecl local) {
-    if (local.val == null) return new LocalVarDecl(local.type, local.name);
-    else return new LocalVarDecl(local.type, local.name, translate(local.val));
+  public LocalsDecl translate(LocalsDecl locals) {
+    return new LocalsDecl(locals.type, locals.locals.stream().map(this::translate).collect(Collectors.toList()));
+  }
+
+  public LocalsDecl.LocalDecl translate(LocalsDecl.LocalDecl local) {
+    if (local.val == null) return new LocalsDecl.LocalDecl(local.name, local.dim);
+    else return new LocalsDecl.LocalDecl(local.name, local.dim, translate(local.val));
   }
 
   public Expression translate(ExpressionList list) {
@@ -208,9 +211,7 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   }
 
   public Expression translate(ArrayInitializer arrayInitializer) {
-    List<Expression> es = new ArrayList<>();
-    for (Expression e : arrayInitializer.expressions) es.add(translate(e));
-    return new ArrayInitializer(arrayInitializer.type, es);
+    return new ArrayInitializer(arrayInitializer.type, translateExprs(arrayInitializer.expressions));
   }
 
   public Expression translate(ArrayLength arrayLength) {
@@ -272,15 +273,11 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   /* utility */
 
   private List<Expression> translateExprs(List<Expression> list) {
-    List<Expression> es = new ArrayList<>();
-    for (Expression e : list) es.add(translate(e));
-    return es;
+    return list.stream().map(this::translate).collect(Collectors.toList());
   }
 
   private List<Statement> translateStmts(List<Statement> list) {
-    List<Statement> ss = new ArrayList<>();
-    for (Statement s : list) ss.add(translate(s));
-    return ss;
+    return list.stream().map(this::translate).collect(Collectors.toList());
   }
 
   /* visitor */
@@ -291,7 +288,7 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   }
 
   @Override
-  public final Expression visit(LocalVarDecl local, Expression expression) {
+  public final Expression visit(LocalsDecl local, Expression expression) {
     return translate(local);
   }
 
@@ -430,7 +427,7 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   }
 
   @Override
-  public final Statement visit(LocalVarDeclStatement localDecl, Statement statement) {
+  public final Statement visit(LocalsDeclStatement localDecl, Statement statement) {
     return translate(localDecl);
   }
 

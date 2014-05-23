@@ -23,8 +23,9 @@ public class LocalCollector implements ExpressionVisitor<Set<Expression>> {
   }
 
   @Override
-  public Set<Expression> visit(LocalVarDecl local, Set<Expression> localVariables) {
-    return visit(local.val, localVariables);
+  public Set<Expression> visit(LocalsDecl locals, Set<Expression> localVariables) {
+    for (LocalsDecl.LocalDecl local : locals.locals) localVariables = visit(local.val, localVariables);
+    return localVariables;
   }
 
   @Override

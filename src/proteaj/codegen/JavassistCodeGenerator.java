@@ -5,7 +5,6 @@ import proteaj.ir.*;
 import proteaj.ir.primitive.*;
 import proteaj.tast.*;
 import proteaj.tast.util.*;
-import proteaj.util.*;
 
 import java.util.*;
 import javassist.*;
@@ -105,8 +104,8 @@ public class JavassistCodeGenerator implements ExpressionVisitor<StringBuilder>,
   }
 
   @Override
-  public StringBuilder visit(LocalVarDeclStatement localDecl, StringBuilder buf) {
-    buf = visit(localDecl.lvdecl, buf);
+  public StringBuilder visit(LocalsDeclStatement localDecl, StringBuilder buf) {
+    buf = visit(localDecl.localsDecl, buf);
     return buf.append(';');
   }
 
@@ -253,11 +252,21 @@ public class JavassistCodeGenerator implements ExpressionVisitor<StringBuilder>,
   }
 
   @Override
-  public StringBuilder visit(LocalVarDecl local, StringBuilder buf) {
-    buf = buf.append(local.type.getName()).append(' ').append(local.name);
-    if (local.val != null) {
-      buf = buf.append(" = ");
-      buf = visit(local.val, buf);
+  public StringBuilder visit(LocalsDecl locals, StringBuilder buf) {
+    buf = buf.append(locals.type.getName()).append(' ');
+
+    for (int i = 0; i < locals.locals.size(); i++) {
+      LocalsDecl.LocalDecl local = locals.locals.get(i);
+
+      if (i != 0) buf = buf.append(',');
+      buf = buf.append(local.name);
+
+      for (int n = 0; n < local.dim; n++) buf = buf.append("[]");
+
+      if (local.val != null) {
+        buf = buf.append(" = ");
+        buf = visit(local.val, buf);
+      }
     }
     return buf;
   }
