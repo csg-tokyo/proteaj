@@ -2,6 +2,7 @@ package proteaj.pparser;
 
 import proteaj.error.ForDebug;
 import proteaj.error.FailLog;
+import proteaj.tast.Expression;
 
 public abstract class ParseResult<T> {
   public abstract boolean isFail();
@@ -17,7 +18,7 @@ public abstract class ParseResult<T> {
 class Success<T> extends ParseResult<T> {
   public Success(T value) {
     this.value = value;
-    ForDebug.print("[ parse success ] " + value.toString() + " : " + value.getClass());
+    ForDebug.print(value);
   }
 
   @Override

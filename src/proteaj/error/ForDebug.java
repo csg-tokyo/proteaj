@@ -1,5 +1,8 @@
 package proteaj.error;
 
+import proteaj.tast.Expression;
+import proteaj.codegen.JavassistCodeGenerator;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,6 +13,13 @@ public class ForDebug {
         msgs.add(msg);
         System.err.println(msg);
       }
+    }
+  }
+
+  public static void print (Object o) {
+    if (verbose) {
+      if (o instanceof Expression) print("[ parse success ] " + JavassistCodeGenerator.instance.visit((Expression)o, new StringBuilder()).toString());
+      else print("[ parse success ] " + o.toString());
     }
   }
 

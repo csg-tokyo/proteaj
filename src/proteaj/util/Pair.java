@@ -28,6 +28,11 @@ public class Pair<T1, T2> {
     return false;
   }
 
+  @Override
+  public String toString() {
+    return "Pair {" + _1 + ", " + _2 + '}';
+  }
+
   public final T1 _1;
   public final T2 _2;
 }

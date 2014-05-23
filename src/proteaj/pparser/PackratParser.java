@@ -154,7 +154,7 @@ public abstract class PackratParser<T> {
 class PackratParserState {
   public <T> void push (PackratParser<T> parser) { lrStack.push(new LR<T>(parser)); }
   public LR head () { return lrStack.peek(); }
-  public void pop () { lrStack.pop(); }
+  public LR pop () { return lrStack.pop(); }
   public LinkedList<LR> lrList () { return lrStack; }
 
   private LinkedList<LR> lrStack = new LinkedList<>();

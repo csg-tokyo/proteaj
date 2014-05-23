@@ -34,8 +34,8 @@ public operators StringOperators {
   public String left "+" right (String left, Object right) : priority = 300 {
     return left.concat(right.toString());
   }
-
+/*
   public String left "+" right (Object left, String right) : priority = 300 {
       return left.toString().concat(right);
-  }
+  }*/
 }

@@ -27,7 +27,8 @@ public class Compiler {
     try {
       IR ir = new SigCompiler().compile(files);
       Program program = new BodyCompiler(ir).compile();
-      new CodeGenerator("./bin").codegen(program);
+
+      if (! ErrorList.hasError()) new CodeGenerator("./bin").codegen(program);
     } finally {
       if(ErrorList.hasError()) {
         ErrorList.printAllErrors();

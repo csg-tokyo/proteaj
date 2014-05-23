@@ -19,10 +19,6 @@ public class ExpressionParsers {
     return depends(env -> expression(expected, env.availableOperators));
   }
 
-  public static PackratParser<Expression> expression (CtClass expected, AvailableOperators operators) {
-    return getInstance(operators).getParser(expected);
-  }
-
   public static PackratParser<DefaultValue> defaultArgument (CtClass expected) {
     return map(expression(expected), DefaultValue::new);
   }
@@ -35,7 +31,11 @@ public class ExpressionParsers {
     return depends(env -> arguments(behavior, env.availableOperators));
   }
 
-  public static PackratParser<List<Expression>> arguments (final CtBehavior behavior, AvailableOperators operators) {
+  private static PackratParser<Expression> expression (CtClass expected, AvailableOperators operators) {
+    return getInstance(operators).getParser_Ref(expected);
+  }
+
+  private static PackratParser<List<Expression>> arguments (final CtBehavior behavior, AvailableOperators operators) {
     return getInstance(operators).getArgumentsParserFromCache(behavior);
   }
 
@@ -61,18 +61,8 @@ public class ExpressionParsers {
   }
 
   /* */
-
-  private PackratParser<Expression> getParser (CtClass clazz) {
-    TreeMap<Integer, PackratParser<Expression>> tree = getExpressionParsersFromCache(clazz);
-    if (! tree.isEmpty()) return tree.firstEntry().getValue();
-    else return getDefaultParserFromCache(clazz);
-  }
-
   private PackratParser<Expression> getParser_Ref (final CtClass clazz) {
-    return ref(new ParserThunk<Expression>() {
-      @Override
-      public PackratParser<Expression> evaluate() { return getParser(clazz); }
-    });
+    return getParser_Ref(clazz, 0, true);
   }
 
   private PackratParser<Expression> getParser_Ref(final CtClass clazz, final int priority, final boolean inclusive) {
@@ -87,17 +77,8 @@ public class ExpressionParsers {
     });
   }
 
-  private PackratParser<Expression> getLiteralParser (final CtClass clazz) {
-    TreeMap<Integer, PackratParser<Expression>> tree = getReadAsExpressionParsersFromCache(clazz);
-    if (! tree.isEmpty()) return tree.firstEntry().getValue();
-    else return getDefaultLiteralParserFromCache(clazz);
-  }
-
   private PackratParser<Expression> getLiteralParser_Ref (final CtClass clazz) {
-    return ref(new ParserThunk<Expression>() {
-      @Override
-      public PackratParser<Expression> evaluate() { return getLiteralParser(clazz); }
-    });
+    return getLiteralParser_Ref(clazz, 0, true);
   }
 
   private PackratParser<Expression> getLiteralParser_Ref (final CtClass clazz, final int priority, final boolean inclusive) {
@@ -114,7 +95,7 @@ public class ExpressionParsers {
 
   private List<PackratParser<Expression>> getParsers (CtClass[] types) {
     List<PackratParser<Expression>> list = new ArrayList<>();
-    for (CtClass clazz : types) list.add(getParser(clazz));
+    for (CtClass clazz : types) list.add(expression(clazz));
     return list;
   }
 
@@ -258,7 +239,7 @@ public class ExpressionParsers {
   }
 
   private PackratParser<Expression> makeDefaultParser (final CtClass clazz) {
-    PackratParser<Expression> parenthesized = enclosed("(", getParser_Ref(clazz), ")");
+    PackratParser<Expression> parenthesized = enclosed("(", expression(clazz), ")");
 
     PackratParser<CastExpression> rCast = bind(enclosed("(", infix(typeName, "->", optional(typeName, clazz)), ")"), pair -> castBody(clazz, pair._1, pair._2));
 
@@ -279,7 +260,7 @@ public class ExpressionParsers {
 
     PackratParser<NullLiteral> nullLiteral = map(keyword("null"), s -> NullLiteral.getInstance());
 
-    PackratParser<Expression> readAs = prefix(whitespaces, getLiteralParser(clazz));
+    PackratParser<Expression> readAs = prefix(whitespaces, getLiteralParser_Ref(clazz));
 
     if (clazz.isArray()) {
       final CtClass componentType;
@@ -307,7 +288,7 @@ public class ExpressionParsers {
   }
 
   private PackratParser<CastExpression> castBody (final CtClass clazz, final CtClass from, final CtClass to) {
-    return bind(getParser_Ref(from), expr -> {
+    return bind(expression(from), expr -> {
       try {
         if (! to.subtypeOf(clazz))
           return failure("type mismatch: expected" + clazz.getName() + " but found " + to.getName());
@@ -335,7 +316,7 @@ public class ExpressionParsers {
       try { componentType = arrayType.getComponentType(); } catch (NotFoundException e) { return error(e); }
 
       if (length == 1) {
-        PackratParser<List<Expression>> varArgsParser = map(rep(getParser_Ref(componentType), ","), es -> {
+        PackratParser<List<Expression>> varArgsParser = map(rep(expression(componentType), ","), es -> {
           List<Expression> args = new ArrayList<>();
           args.add(new VariableArguments(es, arrayType));
           return args;
@@ -346,7 +327,7 @@ public class ExpressionParsers {
         PackratParser<List<Expression>> otherArgsParser = sequence(argParsers.subList(0, length - 1), ",");
 
         PackratParser<List<Expression>> varArgsNParser =
-            map(infix(otherArgsParser, ",", rep1(getParser_Ref(componentType), ",")), pair -> {
+            map(infix(otherArgsParser, ",", rep1(expression(componentType), ",")), pair -> {
               List<Expression> args = new ArrayList<>(pair._1);
               args.add(new VariableArguments(pair._2, arrayType));
               return args;

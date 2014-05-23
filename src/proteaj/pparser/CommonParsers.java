@@ -281,6 +281,8 @@ public class CommonParsers {
             buf.append(reader.next());
           }
 
+          ForDebug.print("[ until white spaces ] " + buf.toString());
+
           return success(buf.toString());
         }
       };
