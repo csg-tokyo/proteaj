@@ -5,24 +5,15 @@ import javassist.*;
 
 public class IR {
   public IR() {
-    classenv = new HashMap<CtClass, IRHeader>();
-    methods = new ArrayList<IRMethod>();
-    constructors = new ArrayList<IRConstructor>();
-    fields = new ArrayList<IRField>();
-    syntax = new ArrayList<IRSyntax>();
-    darguments = new ArrayList<IRDefaultArgument>();
-    sinits = new ArrayList<IRStaticInitializer>();
+    classenv = new HashMap<>();
+    methods = new ArrayList<>();
+    constructors = new ArrayList<>();
+    fields = new ArrayList<>();
+    syntax = new ArrayList<>();
+    darguments = new ArrayList<>();
+    sinits = new ArrayList<>();
 
-    this.cpool = ClassPool.getDefault();
     this.opool = new OperatorPool();
-  }
-
-  @Deprecated
-  public CtClass makeClass(String name, int mods) {
-    CtClass ctcl = cpool.makeClass(name);
-    ctcl.setModifiers(mods);
-
-    return ctcl;
   }
 
   public void addClass(CtClass scl, IRHeader hdata) {
@@ -55,11 +46,6 @@ public class IR {
 
   public IRHeader getIRHeader(CtClass ctcl) {
     return classenv.get(ctcl);
-  }
-
-  @Deprecated
-  public ClassPool getClassPool() {
-    return cpool;
   }
 
   public OperatorPool getOperatorPool() {
@@ -102,7 +88,5 @@ public class IR {
   private Collection<IRDefaultArgument> darguments;
   private Collection<IRStaticInitializer> sinits;
 
-  @Deprecated
-  private ClassPool cpool;
   private OperatorPool opool;
 }

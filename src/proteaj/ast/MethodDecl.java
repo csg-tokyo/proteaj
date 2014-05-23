@@ -35,22 +35,6 @@ public class MethodDecl extends AST {
     return modifiers;
   }
 
-  public String getReturnType() {
-    return returnType;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public List<Parameter> getParams() {
-    return params;
-  }
-
-  public List<String> getThrowsExceptions() {
-    return exceptions;
-  }
-
   public String getBody() {
     return body;
   }
@@ -59,11 +43,12 @@ public class MethodDecl extends AST {
     return bodyLine;
   }
 
+  public final String returnType;
+  public final String name;
+  public final List<Parameter> params;
+  public final List<String> exceptions;
+
   private int modifiers;
-  private String returnType;
-  private String name;
-  private List<Parameter> params;
-  private List<String> exceptions;
   private String body;
   private int bodyLine;
 }

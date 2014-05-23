@@ -27,14 +27,6 @@ public class FieldDecl extends AST {
     return modifiers;
   }
 
-  public String getType() {
-    return type;
-  }
-
-  public String getName() {
-    return name;
-  }
-
   public String getBody() {
     return body;
   }
@@ -43,9 +35,10 @@ public class FieldDecl extends AST {
     return bodyLine;
   }
 
+  public final String type;
+  public final String name;
+
   private int modifiers;
-  private String type;
-  private String name;
   private String body;
   private int bodyLine;
 }

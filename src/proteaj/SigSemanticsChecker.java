@@ -137,12 +137,12 @@ public class SigSemanticsChecker {
       ret = false;
     }
 
-    if(! cdecl.getName().equals(clz.getName())) {
-      ErrorList.addError(new SemanticsError("invalid constructor name : " + cdecl.getName(), file, line));
+    if(! cdecl.name.equals(clz.getName())) {
+      ErrorList.addError(new SemanticsError("invalid constructor name : " + cdecl.name, file, line));
       ret = false;
     }
 
-    for(Parameter param : cdecl.getParams()) ret &= checkMethodParameter(param);
+    for(Parameter param : cdecl.params) ret &= checkMethodParameter(param);
 
     return ret;
   }
@@ -176,7 +176,7 @@ public class SigSemanticsChecker {
       ret = false;
     }
 
-    for(Parameter param : mdecl.getParams()) ret &= checkMethodParameter(param);
+    for(Parameter param : mdecl.params) ret &= checkMethodParameter(param);
 
     return ret;
   }
@@ -192,7 +192,7 @@ public class SigSemanticsChecker {
       ret = false;
     }
 
-    for(Parameter param : mdecl.getParams()) ret &= checkMethodParameter(param);
+    for(Parameter param : mdecl.params) ret &= checkMethodParameter(param);
 
     return ret;
   }
@@ -209,7 +209,7 @@ public class SigSemanticsChecker {
     }
 
     if(! fdecl.hasBody()) {
-      ErrorList.addError(new SemanticsError("uninitialized constant : " + fdecl.getName(), file, line));
+      ErrorList.addError(new SemanticsError("uninitialized constant : " + fdecl.name, file, line));
       ret = false;
     }
 
@@ -232,7 +232,7 @@ public class SigSemanticsChecker {
       ret = false;
     }
 
-    for(Parameter param : mdecl.getParams()) ret &= checkMethodParameter(param);
+    for(Parameter param : mdecl.params) ret &= checkMethodParameter(param);
 
     return ret;
   }

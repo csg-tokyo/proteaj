@@ -182,21 +182,21 @@ public class SigIRGenerator {
       }
 
       for(ConstructorDecl constructor : cdecl.getConstructors()) try {
-        CtClass[] params = getParamTypes(constructor.getParams(), resolver);
+        CtClass[] params = getParamTypes(constructor.params, resolver);
         int mods = constructor.getModifiers();
-        if(lastParamIsVarArgs(constructor.getParams())) mods |= Modifiers.VARARGS;
+        if(lastParamIsVarArgs(constructor.params)) mods |= Modifiers.VARARGS;
 
         CtConstructor ctconstructor = new CtConstructor(params, ctcl);
         ctconstructor.setModifiers(mods);
 
         if(constructor.hasThrowsException()) try {
-          ctconstructor.setExceptionTypes(getExceptionTypes(constructor.getThrowsExceptions(), resolver));
+          ctconstructor.setExceptionTypes(getExceptionTypes(constructor.exceptions, resolver));
         } catch (NotFoundException e) {
           ErrorList.addError(new NotFoundError(e, ir.getIRHeader(ctcl).filePath, constructor.getLine()));
         }
 
         if(constructor.hasBody()) {
-          ir.addConstructor(new IRConstructor(ctconstructor, getParamNames(constructor.getParams()), constructor.getBody(), constructor.getBodyLine()));
+          ir.addConstructor(new IRConstructor(ctconstructor, getParamNames(constructor.params), constructor.getBody(), constructor.getBodyLine()));
         }
 
         ctcl.addConstructor(ctconstructor);
@@ -210,34 +210,34 @@ public class SigIRGenerator {
 
   private void registerMethod(Collection<Pair<CtClass, ClassDecl>> classes, IR ir) {
     for(Pair<CtClass, ClassDecl> pair : classes) {
-      CtClass ctcl = pair._1;
+      CtClass clazz = pair._1;
       ClassDecl cdecl = pair._2;
-      TypeResolver resolver = ir.getIRHeader(ctcl).resolver;
+      TypeResolver resolver = ir.getIRHeader(clazz).resolver;
 
       for(MethodDecl method : cdecl.getMethods()) try {
-        CtClass returnType = resolver.getType(method.getReturnType());
-        CtClass[] paramTypes = getParamTypes(method.getParams(), resolver);
+        CtClass returnType = resolver.getType(method.returnType);
+        CtClass[] paramTypes = getParamTypes(method.params, resolver);
         int mods = method.getModifiers();
-        if(lastParamIsVarArgs(method.getParams())) mods |= Modifiers.VARARGS;
+        if(lastParamIsVarArgs(method.params)) mods |= Modifiers.VARARGS;
 
-        CtMethod ctmethod = new CtMethod(returnType, method.getName(), paramTypes, ctcl);
+        CtMethod ctmethod = new CtMethod(returnType, method.name, paramTypes, clazz);
         ctmethod.setModifiers(mods);
 
         if(method.hasThrowsException()) try {
-          ctmethod.setExceptionTypes(getExceptionTypes(method.getThrowsExceptions(), resolver));
+          ctmethod.setExceptionTypes(getExceptionTypes(method.exceptions, resolver));
         } catch (NotFoundException e) {
-          ErrorList.addError(new NotFoundError(e, ir.getIRHeader(ctcl).filePath, method.getLine()));
+          ErrorList.addError(new NotFoundError(e, ir.getIRHeader(clazz).filePath, method.getLine()));
         }
 
-        ctcl.addMethod(ctmethod);
+        clazz.addMethod(ctmethod);
 
         if(method.hasBody()) {
-          ir.addMethod(new IRMethod(ctmethod, getParamNames(method.getParams()), method.getBody(), method.getBodyLine()));
+          ir.addMethod(new IRMethod(ctmethod, getParamNames(method.params), method.getBody(), method.getBodyLine()));
         }
       } catch (NotFoundError e) {
         ErrorList.addError(e);
       } catch (CannotCompileException e) {
-        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(ctcl).filePath, method.getLine()));
+        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(clazz).filePath, method.getLine()));
       }
     }
   }
@@ -249,7 +249,7 @@ public class SigIRGenerator {
       TypeResolver resolver = ir.getIRHeader(ctcl).resolver;
 
       for(FieldDecl field : cdecl.getFields()) try {
-        CtField ctfield = new CtField(resolver.getType(field.getType()), field.getName(), ctcl);
+        CtField ctfield = new CtField(resolver.getType(field.type), field.name, ctcl);
         ctfield.setModifiers(field.getModifiers());
 
         ctcl.addField(ctfield);
@@ -286,12 +286,12 @@ public class SigIRGenerator {
       TypeResolver resolver = ir.getIRHeader(iface).resolver;
 
       for(MethodDecl method : idecl.getMethods()) try {
-        CtClass returnType = resolver.getType(method.getReturnType());
-        CtClass[] paramTypes = getParamTypes(method.getParams(), resolver);
+        CtClass returnType = resolver.getType(method.returnType);
+        CtClass[] paramTypes = getParamTypes(method.params, resolver);
         int mods = method.getModifiers() | Modifiers.PUBLIC | Modifiers.ABSTRACT;
-        if(lastParamIsVarArgs(method.getParams())) mods |= Modifiers.VARARGS;
+        if(lastParamIsVarArgs(method.params)) mods |= Modifiers.VARARGS;
 
-        CtMethod ctmethod = new CtMethod(returnType, method.getName(), paramTypes, iface);
+        CtMethod ctmethod = new CtMethod(returnType, method.name, paramTypes, iface);
         ctmethod.setModifiers(mods);
         iface.addMethod(ctmethod);
       } catch (NotFoundError e) {
@@ -309,7 +309,7 @@ public class SigIRGenerator {
       TypeResolver resolver = ir.getIRHeader(iface).resolver;
 
       for(FieldDecl field : idecl.getFields()) try {
-        CtField ctfield = new CtField(resolver.getType(field.getType()), field.getName(), iface);
+        CtField ctfield = new CtField(resolver.getType(field.type), field.name, iface);
         ctfield.setModifiers(field.getModifiers() | Modifier.PUBLIC | Modifier.STATIC | Modifier.FINAL);
 
         iface.addField(ctfield);
@@ -479,8 +479,7 @@ public class SigIRGenerator {
   }
 
   private boolean lastParamIsVarArgs(List<Parameter> params) {
-    if(params.isEmpty()) return false;
-    return hasVarArgs(params.get(params.size() - 1).getModifiers());
+    return !params.isEmpty() && hasVarArgs(params.get(params.size() - 1).getModifiers());
   }
 
   private IROperandAttribute[] getParamModifiers(OperatorPattern pattern, List<Parameter> params) {
@@ -520,11 +519,6 @@ public class SigIRGenerator {
   private String appendPackageName(String packageName, String shortName) {
     if(packageName.equals("")) return shortName;
     else return packageName + '.' + shortName;
-  }
-
-  private String getShortName(String longName) {
-    if(longName.contains(".")) return longName.substring(longName.lastIndexOf('.') + 1);
-    else return longName;
   }
 
   private Collection<CompilationUnit> cunits;
