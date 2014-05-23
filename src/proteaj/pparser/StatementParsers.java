@@ -101,7 +101,7 @@ public abstract class StatementParsers {
       map(prefix("default", prefix(":", rep(ref_BlockStatement))), CaseBlock::new);
 
   private final PackratParser<CaseBlock> charCaseBlock =
-      map(seq(enclosed("case", expression(CtClass.charType), ":"), rep(ref_BlockStatement)), pair -> new CaseBlock(pair._1, pair._2));
+      map(prefix("case", expression(CtClass.charType), ":", rep(ref_BlockStatement)), pair -> new CaseBlock(pair._1, pair._2));
 
   private final PackratParser<List<CaseBlock>> charCaseBlocks =
       enclosed("{", rep1(choice(charCaseBlock, defaultBlock)), "}");
@@ -110,7 +110,7 @@ public abstract class StatementParsers {
       map(seq(prefix("switch", enclosed("(", expression(CtClass.charType), ")")), charCaseBlocks), pair -> new SwitchStatement(pair._1, pair._2));
 
   private final PackratParser<CaseBlock> intCaseBlock =
-      map(seq(enclosed("case", expression(CtClass.intType), ":"), rep(ref_BlockStatement)), pair -> new CaseBlock(pair._1, pair._2));
+      map(prefix("case", expression(CtClass.intType), ":", rep(ref_BlockStatement)), pair -> new CaseBlock(pair._1, pair._2));
 
   private final PackratParser<List<CaseBlock>> intCaseBlocks =
       enclosed("{", rep1(choice(intCaseBlock, defaultBlock)), "}");

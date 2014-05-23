@@ -52,6 +52,10 @@ public class CommonParsers {
     return PackratParserCombinators.prefix(keyword(prefix), parser);
   }
 
+  public static <T1, T2> PackratParser<Pair<T1, T2>> prefix (String prefix, PackratParser<T1> parser1, String infix, PackratParser<T2> parser2) {
+    return PackratParserCombinators.prefix(keyword(prefix), parser1, keyword(infix), parser2);
+  }
+
   public static <T> PackratParser<T> postfix (PackratParser<T> parser, String postfix) {
     return PackratParserCombinators.postfix(parser, keyword(postfix));
   }

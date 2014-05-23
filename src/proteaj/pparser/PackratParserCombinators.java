@@ -27,6 +27,29 @@ class PackratParserCombinators {
     };
   }
 
+  public static <T1, T2> PackratParser<Pair<T1, T2>> prefix (final PackratParser<?> prefix, final PackratParser<T1> parser1, final PackratParser<?> infix, final PackratParser<T2> parser2) {
+    return new PackratParser<Pair<T1, T2>>() {
+      @Override
+      protected ParseResult<Pair<T1, T2>> parse(PackratReader reader, Environment env) {
+        final int pos = reader.getPos();
+
+        ParseResult<?> prefixResult = prefix.applyRule(reader, env);
+        if (prefixResult.isFail()) return fail(prefixResult, pos, reader);
+
+        ParseResult<T1> result1 = parser1.applyRule(reader, env);
+        if (result1.isFail()) return fail(result1, pos, reader);
+
+        ParseResult<?> infixResult = infix.applyRule(reader, env);
+        if (infixResult.isFail()) return fail(infixResult, pos, reader);
+
+        ParseResult<T2> result2 = parser2.applyRule(reader, env);
+        if (result2.isFail()) return fail(result2, pos, reader);
+
+        return success(Pair.make(result1.get(), result2.get()));
+      }
+    };
+  }
+
   public static <T> PackratParser<T> postfix (final PackratParser<T> parser, final PackratParser<?> postfix) {
     return new PackratParser<T>() {
       @Override
