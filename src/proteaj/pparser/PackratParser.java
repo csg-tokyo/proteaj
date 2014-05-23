@@ -1,29 +1,28 @@
 package proteaj.pparser;
 
 import proteaj.error.*;
-import proteaj.io.*;
 import proteaj.util.*;
 
 import java.util.*;
 
 public abstract class PackratParser<T> {
-  protected abstract ParseResult<T> parse(SourceStringReader reader, Environment env);
+  protected abstract ParseResult<T> parse(PackratReader reader, Environment env);
 
-  public ParseResult<T> applyRule(SourceStringReader reader, Environment env) {
+  public ParseResult<T> applyRule(PackratReader reader, Environment env) {
     return applyRule(reader, env, reader.getPos());
   }
 
-  public ParseResult<T> applyRule(SourceStringReader reader, Environment env, int pos) {
+  public ParseResult<T> applyRule(PackratReader reader, Environment env, int pos) {
     Pair<ParseResult<T>, Integer> m = recall(reader, env, pos);
     if(m == null) {
-      getState(reader).push(this);
-      LR<T> lr = getState(reader).head();
+      reader.state.push(this);
+      LR<T> lr = reader.state.head();
       mtable.memoize(reader, pos, lr, pos);
 
       reader.setPos(pos);
       ParseResult<T> ans = parse(reader, env);
 
-      getState(reader).pop();
+      reader.state.pop();
 
       if(lr.isDetected()) {
         lr.setSeed(ans);
@@ -47,7 +46,7 @@ public abstract class PackratParser<T> {
     }
   }
 
-  private ParseResult<T> lrAnswer(SourceStringReader reader, Environment env, int bPos, LR<T> lr, int ePos) {
+  private ParseResult<T> lrAnswer(PackratReader reader, Environment env, int bPos, LR<T> lr, int ePos) {
     Head h = lr.getHead();
 
     if(h.parser != this) return lr.getSeed();
@@ -56,8 +55,8 @@ public abstract class PackratParser<T> {
     return growLR(h, reader, env, bPos);
   }
 
-  private ParseResult<T> growLR(Head h, SourceStringReader reader, Environment env, int pos) {
-    getState(reader).heads.put(pos, h);
+  private ParseResult<T> growLR(Head h, PackratReader reader, Environment env, int pos) {
+    reader.state.heads.put(pos, h);
     while(true) {
       reader.setPos(pos);
       h.copyInvolvedSetToEvalSet();
@@ -68,7 +67,7 @@ public abstract class PackratParser<T> {
       int position = reader.getPos();
 
       if(ans.isFail() || position <= m._2) {
-        getState(reader).heads.remove(pos);
+        reader.state.heads.remove(pos);
         reader.setPos(m._2);
         return m._1;
       }
@@ -76,10 +75,10 @@ public abstract class PackratParser<T> {
     }
   }
 
-  private void setupLR(SourceStringReader reader, LR lr) {
+  private void setupLR(PackratReader reader, LR lr) {
     if(! lr.isDetected()) lr.setHead(new Head<>(this));
 
-    for (LR s : getState(reader).lrList()) {
+    for (LR s : reader.state.lrList()) {
       if (s.getHead() == lr.getHead()) return;
       s.setHead(lr.getHead());
       lr.getHead().addInvolvedParser(s.parser);
@@ -88,9 +87,9 @@ public abstract class PackratParser<T> {
     assert false;
   }
 
-  private Pair<ParseResult<T>, Integer> recall(SourceStringReader reader, Environment env, int pos) {
-    if(! getState(reader).heads.containsKey(pos)) return mtable.lookup(reader, pos);
-    Head h = getState(reader).heads.get(pos);
+  private Pair<ParseResult<T>, Integer> recall(PackratReader reader, Environment env, int pos) {
+    if(! reader.state.heads.containsKey(pos)) return mtable.lookup(reader, pos);
+    Head h = reader.state.heads.get(pos);
 
     if(! (mtable.contains(reader, pos) || h.involves(this))) return Pair.make(FAIL, pos);
 
@@ -114,19 +113,19 @@ public abstract class PackratParser<T> {
     return new Success<>(t);
   }
 
-  protected Failure<T> fail(String msg, int pos, SourceStringReader reader) {
+  protected Failure<T> fail(String msg, int pos, PackratReader reader) {
     Failure<T> f = new Failure<>(msg, reader.getPos(), reader.getLine());
     reader.setPos(pos);
     return f;
   }
 
-  protected <U> Failure<T> fail(ParseResult<U> result, int pos, SourceStringReader reader) {
+  protected <U> Failure<T> fail(ParseResult<U> result, int pos, PackratReader reader) {
     assert result.isFail();
     reader.setPos(pos);
     return ((Failure<U>)result).fail();
   }
 
-  protected Failure<T> fail(List<ParseResult<?>> results, int pos, SourceStringReader reader) {
+  protected Failure<T> fail(List<ParseResult<?>> results, int pos, PackratReader reader) {
     assert ! results.isEmpty();
 
     Failure<T> best = null;
@@ -140,25 +139,9 @@ public abstract class PackratParser<T> {
     return best;
   }
 
-  private PackratParserState getState (SourceStringReader reader) {
-    if (! state.containsKey(reader)) state.put(reader, new PackratParserState());
-    return state.get(reader);
-  }
-
   private MemoTable<T> mtable;
 
-  private static final Map<SourceStringReader, PackratParserState> state = new WeakHashMap<>();
   private final ParseResult<T> FAIL = new Failure<>("not involved in this left recursion", 0, 0);
-}
-
-class PackratParserState {
-  public <T> void push (PackratParser<T> parser) { lrStack.push(new LR<T>(parser)); }
-  public LR head () { return lrStack.peek(); }
-  public LR pop () { return lrStack.pop(); }
-  public LinkedList<LR> lrList () { return lrStack; }
-
-  private LinkedList<LR> lrStack = new LinkedList<>();
-  Map<Integer, Head> heads = new HashMap<>();
 }
 
 class LR<T> extends ParseResult<T> {
@@ -255,8 +238,8 @@ class MemoTable<T> {
     memos = new WeakHashMap<>();
   }
 
-  public void memoize(SourceStringReader reader, int bPos, ParseResult<T> ast, Integer ePos) {
-    if (! memos.containsKey(reader)) memos.put(reader, new HashMap<Integer, Pair<ParseResult<T>, Integer>>());
+  public void memoize(PackratReader reader, int bPos, ParseResult<T> ast, Integer ePos) {
+    if (! memos.containsKey(reader)) memos.put(reader, new HashMap<>());
 
     Map<Integer, Pair<ParseResult<T>, Integer>> map = memos.get(reader);
 
@@ -269,14 +252,14 @@ class MemoTable<T> {
     map.put(bPos, Pair.make(ast, ePos));
   }
 
-  public boolean contains(SourceStringReader reader, int pos) {
+  public boolean contains(PackratReader reader, int pos) {
     return memos.containsKey(reader) && memos.get(reader).containsKey(pos);
   }
 
-  public Pair<ParseResult<T>, Integer> lookup(SourceStringReader reader, int pos) {
+  public Pair<ParseResult<T>, Integer> lookup(PackratReader reader, int pos) {
     if (! memos.containsKey(reader)) return null;
     else return memos.get(reader).get(pos);
   }
 
-  private Map<SourceStringReader, Map<Integer, Pair<ParseResult<T>, Integer>>> memos;
+  private Map<PackratReader, Map<Integer, Pair<ParseResult<T>, Integer>>> memos;
 }

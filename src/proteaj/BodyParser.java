@@ -1,7 +1,6 @@
 package proteaj;
 
 import proteaj.error.*;
-import proteaj.io.*;
 import proteaj.tast.*;
 import proteaj.pparser.*;
 
@@ -10,7 +9,7 @@ import java.util.Map.Entry;
 import javassist.*;
 
 public class BodyParser {
-  public MethodBody parseMethodBody(CtMethod method, SourceStringReader reader, Environment env) throws CompileErrors {
+  public MethodBody parseMethodBody(CtMethod method, PackratReader reader, Environment env) throws CompileErrors {
     ForDebug.print("[[ parse body of " + method.getName() + " ]]");
     try {
       CtClass returnType = method.getReturnType();
@@ -33,7 +32,7 @@ public class BodyParser {
     }
   }
 
-  public ConstructorBody parseConstructorBody(CtConstructor constructor, SourceStringReader reader, Environment env) throws CompileErrors {
+  public ConstructorBody parseConstructorBody(CtConstructor constructor, PackratReader reader, Environment env) throws CompileErrors {
     ForDebug.print("[[ parse body of constructor " + constructor.getSignature() + " ]]");
     try {
       CtClass[] exceptionTypes = constructor.getExceptionTypes();
@@ -55,7 +54,7 @@ public class BodyParser {
     }
   }
 
-  public FieldBody parseFieldBody(CtField field, SourceStringReader reader, Environment env) throws CompileErrors {
+  public FieldBody parseFieldBody(CtField field, PackratReader reader, Environment env) throws CompileErrors {
     ForDebug.print("[[ parse field initializer of " + field.getName() + " ]]");
     try {
       ParseResult<FieldBody> fbody = ExpressionParsers.fieldBody(field.getType()).applyRule(reader, env);
@@ -72,7 +71,7 @@ public class BodyParser {
     }
   }
 
-  public DefaultValue parseDefaultArgument(CtMethod method, SourceStringReader reader, Environment env) throws CompileErrors {
+  public DefaultValue parseDefaultArgument(CtMethod method, PackratReader reader, Environment env) throws CompileErrors {
     try {
       ParseResult<DefaultValue> defval = ExpressionParsers.defaultArgument(method.getReturnType()).applyRule(reader, env);
       if(! defval.isFail()) {
@@ -88,7 +87,7 @@ public class BodyParser {
     }
   }
 
-  public ClassInitializer parseStaticInitializer(SourceStringReader reader, Environment env) throws CompileErrors {
+  public ClassInitializer parseStaticInitializer(PackratReader reader, Environment env) throws CompileErrors {
     ParseResult<ClassInitializer> sibody = StatementParsers.classInitializer().applyRule(reader, env);
     if(! sibody.isFail()) {
       if(env.hasException()) {
@@ -101,7 +100,7 @@ public class BodyParser {
     throw new CompileErrors(new ParseError(sibody.getFailLog().getMessage(), reader.filePath, sibody.getFailLog().getLine()));
   }
 
-  private CompileErrors createUnhandledExceptions(SourceStringReader reader, Environment env) {
+  private CompileErrors createUnhandledExceptions(PackratReader reader, Environment env) {
     List<CompileError> errors = new ArrayList<CompileError>();
     for(Entry<CtClass, List<Integer>> entry : env.getExceptions().entrySet()) {
       CtClass exception = entry.getKey();

@@ -1,9 +1,9 @@
 package proteaj;
 
 import proteaj.error.*;
-import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.pparser.Environment;
+import proteaj.pparser.PackratReader;
 import proteaj.tast.*;
 
 import java.util.*;
@@ -33,7 +33,7 @@ public class BodyCompiler {
     for(IRMethodBody irbody : ir.getMethods()) {
       CtMethod method = irbody.getCtMethod();
       Environment env = new Environment(ir, method);
-      SourceStringReader reader = new SourceStringReader(irbody.getSource(), env.filePath, irbody.getLine());
+      PackratReader reader = new PackratReader(irbody.getSource(), env.filePath, irbody.getLine());
 
       try {
         env.addParams(irbody.getParamNames(), irbody.getParamTypes());
@@ -58,7 +58,7 @@ public class BodyCompiler {
     for(IRConstructorBody irbody : ir.getConstructors()) {
       CtConstructor constructor = irbody.getCtConstructor();
       Environment env = new Environment(ir, constructor);
-      SourceStringReader reader = new SourceStringReader(irbody.getSource(), env.filePath, irbody.getLine());
+      PackratReader reader = new PackratReader(irbody.getSource(), env.filePath, irbody.getLine());
 
       try {
         env.addParams(irbody.getParamNames(), irbody.getParamTypes());
@@ -83,7 +83,7 @@ public class BodyCompiler {
     for(IRFieldBody irbody : ir.getFields()) {
       CtField field = irbody.getCtField();
       Environment env = new Environment(ir, field);
-      SourceStringReader reader = new SourceStringReader(irbody.getSource(), env.filePath, irbody.getLine());
+      PackratReader reader = new PackratReader(irbody.getSource(), env.filePath, irbody.getLine());
 
       try {
         FieldBody body = parser.parseFieldBody(field, reader, env);
@@ -103,7 +103,7 @@ public class BodyCompiler {
     for(IRDefaultArgument irbody : ir.getDefaultArguments()) {
       CtMethod method = irbody.getCtMethod();
       Environment env = new Environment(ir, method);
-      SourceStringReader reader = new SourceStringReader(irbody.getSource(), env.filePath, irbody.getLine());
+      PackratReader reader = new PackratReader(irbody.getSource(), env.filePath, irbody.getLine());
 
       try {
         DefaultValue defval = parser.parseDefaultArgument(method, reader, env);
@@ -122,7 +122,7 @@ public class BodyCompiler {
     for(IRStaticInitializer sinit : ir.getStaticInitializers()) {
       CtConstructor clinit = sinit.getCtConstructor();
       Environment env = new Environment(ir, clinit);
-      SourceStringReader reader = new SourceStringReader(sinit.getSource(), env.filePath, sinit.getLine());
+      PackratReader reader = new PackratReader(sinit.getSource(), env.filePath, sinit.getLine());
 
       try {
         ClassInitializer body = parser.parseStaticInitializer(reader, env);

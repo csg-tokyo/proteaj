@@ -1,12 +1,13 @@
-package proteaj.io;
+package proteaj.pparser;
 
 import java.util.*;
 
-public class SourceStringReader {
-  public SourceStringReader(String source, String filePath, int line) {
+public class PackratReader {
+  public PackratReader(String source, String filePath, int line) {
     this.source = source;
     this.filePath = filePath;
     this.current = 0;
+    this.state = new PackratParserState();
 
     this.lines = createLinesMap(line);
   }
@@ -70,5 +71,16 @@ public class SourceStringReader {
   private final TreeMap<Integer, Integer> lines;
 
   public final String filePath;
+
+  public final PackratParserState state;
 }
 
+class PackratParserState {
+  public <T> void push (PackratParser<T> parser) { lrStack.push(new LR<T>(parser)); }
+  public LR head () { return lrStack.peek(); }
+  public LR pop () { return lrStack.pop(); }
+  public LinkedList<LR> lrList () { return lrStack; }
+
+  private LinkedList<LR> lrStack = new LinkedList<>();
+  Map<Integer, Head> heads = new HashMap<>();
+}

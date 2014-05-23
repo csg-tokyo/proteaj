@@ -4,7 +4,6 @@ import java.util.*;
 import javassist.*;
 
 import proteaj.error.*;
-import proteaj.io.*;
 import proteaj.util.*;
 
 import static java.lang.Character.*;
@@ -17,7 +16,7 @@ public class CommonParsers {
   public static final PackratParser<?> whitespaces =
       new PackratParser<String>() {
         @Override
-        protected ParseResult<String> parse(SourceStringReader reader, Environment env) {
+        protected ParseResult<String> parse(PackratReader reader, Environment env) {
           while(isWhitespace(reader.lookahead())) reader.next();
           return dummyResult;
         }
@@ -36,7 +35,7 @@ public class CommonParsers {
   public static PackratParser<String[]> keywords (final String... words) {
     return new PackratParser<String[]>() {
       @Override
-      protected ParseResult<String[]> parse(SourceStringReader reader, Environment env) {
+      protected ParseResult<String[]> parse(PackratReader reader, Environment env) {
         final int pos = reader.getPos();
 
         for (String word : words) {
@@ -80,7 +79,7 @@ public class CommonParsers {
   public static final PackratParser<Character> letter =
       new PackratParser<Character>() {
         @Override
-        protected ParseResult<Character> parse(SourceStringReader reader, Environment env) {
+        protected ParseResult<Character> parse(PackratReader reader, Environment env) {
           if (isLetter(reader.lookahead())) return success(reader.next());
           else return fail("expected letter, but found " + (char)reader.lookahead(), reader.getPos(), reader);
         }
@@ -89,7 +88,7 @@ public class CommonParsers {
   public static final PackratParser<String> identifier =
       new PackratParser<String>() {
         @Override
-        protected ParseResult<String> parse(SourceStringReader reader, Environment env) {
+        protected ParseResult<String> parse(PackratReader reader, Environment env) {
           int pos = reader.getPos();
 
           while(isWhitespace(reader.lookahead())) reader.next();
@@ -112,7 +111,7 @@ public class CommonParsers {
   public static final PackratParser<Integer> integer =
       new PackratParser<Integer>() {
         @Override
-        protected ParseResult<Integer> parse(SourceStringReader reader, Environment env) {
+        protected ParseResult<Integer> parse(PackratReader reader, Environment env) {
           final int pos = reader.getPos();
 
           while(isWhitespace(reader.lookahead())) reader.next();
@@ -139,7 +138,7 @@ public class CommonParsers {
   public static final PackratParser<Integer> hexadecimal =
       new PackratParser<Integer>() {
         @Override
-        protected ParseResult<Integer> parse(SourceStringReader reader, Environment env) {
+        protected ParseResult<Integer> parse(PackratReader reader, Environment env) {
           final int pos = reader.getPos();
 
           // 0x
@@ -166,7 +165,7 @@ public class CommonParsers {
   public static final PackratParser<String> string =
       new PackratParser<String>() {
         @Override
-        protected ParseResult<String> parse(SourceStringReader reader, Environment env) {
+        protected ParseResult<String> parse(PackratReader reader, Environment env) {
           final int pos = reader.getPos();
 
           // '"'
@@ -193,7 +192,7 @@ public class CommonParsers {
   public static final PackratParser<Character> character =
       new PackratParser<Character>() {
         @Override
-        protected ParseResult<Character> parse(SourceStringReader reader, Environment env) {
+        protected ParseResult<Character> parse(PackratReader reader, Environment env) {
           final int pos = reader.getPos();
 
           // '\''
@@ -234,7 +233,7 @@ public class CommonParsers {
   public static final PackratParser<CtClass> className =
       new PackratParser<CtClass>() {
         @Override
-        protected ParseResult<CtClass> parse(SourceStringReader reader, Environment env) {
+        protected ParseResult<CtClass> parse(PackratReader reader, Environment env) {
           final int pos = reader.getPos();
 
           ParseResult<String> id0 = identifier.applyRule(reader, env);
@@ -273,7 +272,7 @@ public class CommonParsers {
   public static final PackratParser<String> untilWhitespace =
       new PackratParser<String>() {
         @Override
-        protected ParseResult<String> parse(SourceStringReader reader, Environment env) {
+        protected ParseResult<String> parse(PackratReader reader, Environment env) {
           StringBuilder buf = new StringBuilder();
 
           while(reader.hasNext()) {
@@ -287,7 +286,7 @@ public class CommonParsers {
         }
       };
 
-  private static int readEscapedChar(SourceStringReader reader) {
+  private static int readEscapedChar(PackratReader reader) {
     char ch = reader.next();
 
     if(escapedChars.containsKey(ch)) return escapedChars.get(ch);
@@ -312,7 +311,7 @@ public class CommonParsers {
     if (word.isEmpty()) return unit(word);
     else return new PackratParser<String>() {
       @Override
-      protected ParseResult<String> parse(SourceStringReader reader, Environment env) {
+      protected ParseResult<String> parse(PackratReader reader, Environment env) {
         final int pos = reader.getPos();
         final int len = word.length();
 
