@@ -11,7 +11,7 @@ public operators StringOperators {
     return left.concat(Character.toString(right));
   }
 
-  public String left "+" right (char left, String right) : priority = 300 {
+  public nonassoc String left "+" right (char left, String right) : priority = 320 {
     return Character.toString(left).concat(right);
   }
 
@@ -19,7 +19,7 @@ public operators StringOperators {
     return left.concat(Integer.toString(right));
   }
 
-  public String left "+" right (int left, String right) : priority = 300 {
+  public nonassoc String left "+" right (int left, String right) : priority = 320 {
     return Integer.toString(left).concat(right);
   }
 
@@ -27,15 +27,15 @@ public operators StringOperators {
     return left.concat(Long.toString(right));
   }
 
-  public String left "+" right (long left, String right) : priority = 300 {
+  public nonassoc String left "+" right (long left, String right) : priority = 320 {
     return Long.toString(left).concat(right);
   }
 
   public String left "+" right (String left, Object right) : priority = 300 {
     return left.concat(right.toString());
   }
-/*
-  public String left "+" right (Object left, String right) : priority = 300 {
+
+  public nonassoc String left "+" right (Object left, String right) : priority = 320 {
       return left.toString().concat(right);
-  }*/
+  }
 }
