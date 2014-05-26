@@ -7,9 +7,9 @@ import java.util.*;
 import javassist.*;
 
 public class IROperator {
-  public IROperator(int modifier, CtClass returnType, List<CtClass> returnTypeBounds, OperatorPattern oppat, CtClass[] paramTypes, IROperandAttribute[] paramMods, CtClass[] andPreds, CtClass[] notPreds, int priority, CtMethod actualMethod) {
+  public IROperator(int modifier, CtClass returnType, CtClass[] returnTypeBounds, OperatorPattern oppat, CtClass[] paramTypes, IROperandAttribute[] paramMods, CtClass[] andPreds, CtClass[] notPreds, int priority, CtMethod actualMethod) {
     this.returnType = returnType;
-    this.returnTypeBounds = returnTypeBounds;
+    this.returnTypeBounds = Arrays.asList(returnTypeBounds);
     this.priority = priority;
     this.pattern = new IRPattern(modifier, oppat, paramTypes, paramMods, andPreds, notPreds);
     this.declCls = actualMethod.getDeclaringClass();

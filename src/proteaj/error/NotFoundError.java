@@ -11,6 +11,10 @@ public class NotFoundError extends CompileError {
     super(e.getMessage(), file, line);
   }
 
+  public NotFoundError(NotFoundException e, String file) {
+    this(e, file, 0);
+  }
+
   @Override
   public String getKind() {
     return "Not Found Error";

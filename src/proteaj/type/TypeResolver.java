@@ -8,8 +8,12 @@ import javassist.*;
 public abstract class TypeResolver {
   public static RootTypeResolver root () { return RootTypeResolver.getInstance(); }
 
-  public static TypeResolver file (String fileName, String packageName, List<String> importPackages, List<String> importClasses) {
+  public static TypeResolver onFile (String fileName, String packageName, List<String> importPackages, List<String> importClasses) {
     return new TypeResolver_File(fileName, packageName, importPackages, importClasses);
+  }
+
+  public static TypeResolver onModule(TypeResolver resolver) {
+    return new TypeResolver_Module(resolver);
   }
 
   public CtClass getType (String name) throws NotFoundError {

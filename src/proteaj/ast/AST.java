@@ -9,10 +9,6 @@ public abstract class AST {
     this.line = ast.line;
   }
 
-  public int getLine() {
-    return line;
-  }
-
-  private int line;
+  public final int line;
 }
 

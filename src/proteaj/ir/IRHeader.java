@@ -13,7 +13,7 @@ public class IRHeader {
     this.usingSyntax = usingSyntax;
     this.unusingSyntax = unusingSyntax;
 
-    this.resolver = TypeResolver.file(filePath, packageName, importPackages, importClasses);
+    this.resolver = TypeResolver.onFile(filePath, packageName, importPackages, importClasses);
 
     this.usingSyntax.add(0, "proteaj.lang.PrimitiveOperators");
     this.usingSyntax.add(1, "proteaj.lang.PrimitiveReadasOperators");

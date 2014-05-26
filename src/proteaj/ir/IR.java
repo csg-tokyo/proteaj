@@ -5,7 +5,8 @@ import javassist.*;
 
 public class IR {
   public IR() {
-    classenv = new HashMap<>();
+    classes = new ArrayList<>();
+
     methods = new ArrayList<>();
     constructors = new ArrayList<>();
     fields = new ArrayList<>();
@@ -16,9 +17,12 @@ public class IR {
     this.opool = new OperatorPool();
   }
 
-  public void addClass(CtClass scl, IRHeader hdata) {
-    classenv.put(scl, hdata);
+  public void addClass (IRClass clazz) {
+    classIRHeaderMap.put(clazz.clazz, clazz.header);
+    classes.add(clazz);
   }
+
+  public List<IRClass> getClasses () { return classes; }
 
   public void addMethod(IRMethod method) {
     methods.add(method);
@@ -33,6 +37,7 @@ public class IR {
   }
 
   public void addSyntax(IRSyntax syntax) {
+    opool.addSyntax(syntax);
     this.syntax.add(syntax);
   }
 
@@ -44,16 +49,8 @@ public class IR {
     this.sinits.add(sinit);
   }
 
-  public IRHeader getIRHeader(CtClass ctcl) {
-    return classenv.get(ctcl);
-  }
-
   public OperatorPool getOperatorPool() {
     return opool;
-  }
-
-  public Collection<CtClass> getClasses() {
-    return classenv.keySet();
   }
 
   public Collection<IRMethod> getMethods() {
@@ -80,7 +77,8 @@ public class IR {
     return sinits;
   }
 
-  private Map<CtClass, IRHeader> classenv;
+  private List<IRClass> classes;
+
   private Collection<IRMethod> methods;
   private Collection<IRConstructor> constructors;
   private Collection<IRField> fields;
@@ -89,4 +87,12 @@ public class IR {
   private Collection<IRStaticInitializer> sinits;
 
   private OperatorPool opool;
+
+  @Deprecated
+  public IRHeader getIRHeader(CtClass ctClass) {
+    return classIRHeaderMap.get(ctClass);
+  }
+
+  @Deprecated
+  private Map<CtClass, IRHeader> classIRHeaderMap = new HashMap<>();
 }

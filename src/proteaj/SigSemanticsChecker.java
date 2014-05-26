@@ -36,7 +36,7 @@ public class SigSemanticsChecker {
   private boolean checkClassDecl(ClassDecl cdecl) {
     boolean ret = true;
     int mod = cdecl.getModifiers();
-    int line = cdecl.getLine();
+    int line = cdecl.line;
     String file = cunit.filePath;
 
     if((mod & ~CLASS_MODIFIER) > 0) {
@@ -72,7 +72,7 @@ public class SigSemanticsChecker {
   private boolean checkInterfaceDecl(InterfaceDecl idecl) {
     boolean ret = true;
     int mod = idecl.getModifiers();
-    int line = idecl.getLine();
+    int line = idecl.line;
     String file = cunit.filePath;
 
     if((mod & ~INTERFACE_MODIFIER) > 0) {
@@ -101,7 +101,7 @@ public class SigSemanticsChecker {
   private boolean checkSyntaxDecl(SyntaxDecl sdecl) {
     boolean ret = true;
     int mod = sdecl.getModifiers();
-    int line = sdecl.getLine();
+    int line = sdecl.line;
     String file = cunit.filePath;
 
     if((mod & ~SYNTAX_MODIFIER) > 0) {
@@ -129,7 +129,7 @@ public class SigSemanticsChecker {
   private boolean checkConstructorDecl(ConstructorDecl cdecl, ClassDecl clz) {
     boolean ret = true;
     int mod = cdecl.getModifiers();
-    int line = cdecl.getLine();
+    int line = cdecl.line;
     String file = cunit.filePath;
 
     if((mod & ~CONSTRUCTOR_MODIFIER) > 0 || ! isValidAccessModifier(mod)) {
@@ -149,7 +149,7 @@ public class SigSemanticsChecker {
 
   private boolean checkFieldDecl(FieldDecl fdecl) {
     int mod = fdecl.getModifiers();
-    int line = fdecl.getLine();
+    int line = fdecl.line;
     String file = cunit.filePath;
 
     if((mod & ~FIELD_MODIFIER) > 0 || ! isValidAccessModifier(mod)) {
@@ -163,7 +163,7 @@ public class SigSemanticsChecker {
   private boolean checkMethodDecl(MethodDecl mdecl) {
     boolean ret = true;
     int mod = mdecl.getModifiers();
-    int line = mdecl.getLine();
+    int line = mdecl.line;
     String file = cunit.filePath;
 
     if((mod & ~METHOD_MODIFIER) > 0 || ! isValidAccessModifier(mod) || (((mod & ABSTRACT) > 0) && ((mod & PRIVATE) > 0))) {
@@ -184,7 +184,7 @@ public class SigSemanticsChecker {
   private boolean checkConcreteMethodDecl(MethodDecl mdecl) {
     boolean ret = true;
     int mod = mdecl.getModifiers();
-    int line = mdecl.getLine();
+    int line = mdecl.line;
     String file = cunit.filePath;
 
     if((mod & ~CONCRETE_METHOD_MODIFIER) > 0 || ! isValidAccessModifier(mod)) {
@@ -200,7 +200,7 @@ public class SigSemanticsChecker {
   private boolean checkConstantDecl(FieldDecl fdecl) {
     boolean ret = true;
     int mod = fdecl.getModifiers();
-    int line = fdecl.getLine();
+    int line = fdecl.line;
     String file = cunit.filePath;
 
     if((mod & ~CONSTANT_MODIFIER) > 0) {
@@ -219,7 +219,7 @@ public class SigSemanticsChecker {
   private boolean checkAbstractMethodDecl(MethodDecl mdecl) {
     boolean ret = true;
     int mod = mdecl.getModifiers();
-    int line = mdecl.getLine();
+    int line = mdecl.line;
     String file = cunit.filePath;
 
     if((mod & ~ABSTRACT_METHOD_MODIFIER) > 0) {
@@ -240,7 +240,7 @@ public class SigSemanticsChecker {
   private boolean checkOperatorDecl(OperatorDecl odecl) {
     boolean ret = true;
     int mod = odecl.getModifiers();
-    int line = odecl.getLine();
+    int line = odecl.line;
     String file = cunit.filePath;
 
     if((mod & ~OPERATOR_MODIFIER) > 0) {
@@ -259,7 +259,7 @@ public class SigSemanticsChecker {
 
   private boolean checkMethodParameter(Parameter param) {
     int mod = param.getModifiers();
-    int line = param.getLine();
+    int line = param.line;
     String file = cunit.filePath;
 
     if((mod & ~PARAMETER_MODIFIER) > 0) {
@@ -276,7 +276,7 @@ public class SigSemanticsChecker {
   private boolean checkOperatorPattern(OperatorPattern pattern, List<Parameter> params) {
     boolean ret = true;
     int length = pattern.getLength();
-    int line = pattern.getLine();
+    int line = pattern.line;
     String file = cunit.filePath;
 
     Deque<Integer> stack = new ArrayDeque<>();
@@ -331,7 +331,7 @@ public class SigSemanticsChecker {
   private boolean checkOperand(Operand operand, Parameter param) {
     boolean ret = true;
     int mod = param.getModifiers();
-    int line = operand.getLine();
+    int line = operand.line;
     String file = cunit.filePath;
 
     if((mod & ~OPERAND_MODIFIER) > 0) {

@@ -7,7 +7,7 @@ public abstract class CompileError extends Exception {
     this.line = line;
   }
 
-  public CompileError setLine(int line) {
+  public CompileError at (int line) {
     this.line = line;
     return this;
   }

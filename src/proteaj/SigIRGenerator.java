@@ -4,11 +4,12 @@ import proteaj.error.*;
 import proteaj.ast.*;
 import proteaj.io.*;
 import proteaj.ir.*;
-import proteaj.type.RootTypeResolver;
-import proteaj.type.TypeResolver;
+import proteaj.type.*;
 import proteaj.util.*;
 
 import java.util.*;
+import java.util.stream.IntStream;
+
 import javassist.*;
 
 import static proteaj.util.Modifiers.*;
@@ -23,21 +24,27 @@ public class SigIRGenerator {
     IR ir = new IR();
 
     Collection<Pair<IRHeader, FileBody>> files = analyzeHeaders(cunits);
-    Collection<Pair<CtClass, ClassDecl>> classes = registerClasses(files, ir);
-    Collection<Pair<CtClass, InterfaceDecl>> interfaces = registerInterfaces(files, ir);
-    Collection<Pair<CtClass, SyntaxDecl>> syntax = registerSyntax(files, ir);
+    Map<IRClass, ClassDecl> classes = registerClasses(files, ir);
+    Map<IRClass, InterfaceDecl> interfaces = registerInterfaces(files, ir);
+    Map<IRClass, SyntaxDecl> syntax = registerSyntax(files, ir);
 
     loadPrimitiveOperators(ir);
 
-    registerSuperClass(classes, ir);
-    registerStaticInitializer(classes, ir);
-    registerConstructor(classes, ir);
-    registerMethod(classes, ir);
-    registerField(classes, ir);
-    registerSuperInterface(interfaces, ir);
-    registerInterfaceMethod(interfaces, ir);
-    registerInterfaceField(interfaces, ir);
-    registerOperator(syntax, ir);
+    classes.forEach((clazz, cdecl) -> {
+      registerSuperClasses       (clazz, cdecl);
+      registerStaticInitializers (clazz, cdecl, ir);
+      registerConstructors       (clazz, cdecl, ir);
+      registerMethods            (clazz, cdecl, ir);
+      registerFields             (clazz, cdecl, ir);
+    });
+
+    interfaces.forEach((clazz, idecl) -> {
+      registerSuperInterfaces    (clazz, idecl);
+      registerInterfaceMethods   (clazz, idecl);
+      registerInterfaceFields(clazz, idecl, ir);
+    });
+
+    syntax.forEach((clazz, sdecl) -> registerOperatorModule(clazz, sdecl, ir));
 
     return ir;
   }
@@ -58,57 +65,57 @@ public class SigIRGenerator {
     return files;
   }
 
-  private Collection<Pair<CtClass, ClassDecl>> registerClasses(Collection<Pair<IRHeader, FileBody>> files, IR ir) {
-    Collection<Pair<CtClass, ClassDecl>> classes = new ArrayList<>();
+  private IRClass makeClass (int mod, String name, IRHeader header) {
+    CtClass ctClass = root.makeClass(mod, appendPackageName(header.packageName, name));
+    return new IRClass(ctClass, header);
+  }
+
+  private IRClass makeInterface (int mod, String name, IRHeader header) {
+    CtClass ctClass = root.makeInterface(mod, appendPackageName(header.packageName, name));
+    return new IRClass(ctClass, header);
+  }
+
+  private Map<IRClass, ClassDecl> registerClasses(Collection<Pair<IRHeader, FileBody>> files, IR ir) {
+    Map<IRClass, ClassDecl> classes = new HashMap<>();
 
     for(Pair<IRHeader, FileBody> pair : files) {
-      IRHeader hdata = pair._1;
+      IRHeader header = pair._1;
       FileBody body = pair._2;
-      String packageName = hdata.packageName;
 
       for(ClassDecl cdecl : body.getClasses()) {
-        String shortName = cdecl.getName();
-        String longName = appendPackageName(packageName, shortName);
-
-        CtClass ctcl = root.makeClass(cdecl.getModifiers(), longName);
-        ir.addClass(ctcl, hdata);
-
-        classes.add(Pair.make(ctcl, cdecl));
+        IRClass clazz = makeClass(cdecl.getModifiers(), cdecl.getName(), header);
+        ir.addClass(clazz);
+        classes.put(clazz, cdecl);
       }
     }
 
     return classes;
   }
 
-  private Collection<Pair<CtClass, InterfaceDecl>> registerInterfaces(Collection<Pair<IRHeader, FileBody>> files, IR ir) {
-    Collection<Pair<CtClass, InterfaceDecl>> ifaces = new ArrayList<>();
+  private Map<IRClass, InterfaceDecl> registerInterfaces(Collection<Pair<IRHeader, FileBody>> files, IR ir) {
+    Map<IRClass, InterfaceDecl> ifaces = new HashMap<>();
 
     for(Pair<IRHeader, FileBody> pair : files) {
       IRHeader hdata = pair._1;
       FileBody body = pair._2;
-      String packageName = hdata.packageName;
 
       for(InterfaceDecl idecl : body.getInterfaces()) {
-        String shortName = idecl.getName();
-        String longName = appendPackageName(packageName, shortName);
-
-        CtClass iface = root.makeInterface(idecl.getModifiers(), longName);
-        ir.addClass(iface, hdata);
-
-        ifaces.add(Pair.make(iface, idecl));
+        IRClass clazz = makeInterface(idecl.getModifiers(), idecl.getName(), hdata);
+        ir.addClass(clazz);
+        ifaces.put(clazz, idecl);
       }
     }
 
     return ifaces;
   }
 
-  private Collection<Pair<CtClass, SyntaxDecl>> registerSyntax(Collection<Pair<IRHeader, FileBody>> files, IR ir) {
-    Collection<Pair<CtClass, SyntaxDecl>> syntax = new ArrayList<>();
+  private Map<IRClass, SyntaxDecl> registerSyntax(Collection<Pair<IRHeader, FileBody>> files, IR ir) {
+    Map<IRClass, SyntaxDecl> syntax = new HashMap<>();
 
     for(Pair<IRHeader, FileBody> pair : files) {
       IRHeader header = pair._1;
 
-      for(String ops : header.usingSyntax) try {
+      for(String ops : header.usingSyntax) try {  // TODO :  if (! compilations.contains(ops))
         loadOperatorsFile(ops, ir);
       } catch (FileIOError e) {
         ErrorList.addError(e);
@@ -118,301 +125,205 @@ public class SigIRGenerator {
     for(Pair<IRHeader, FileBody> pair : files) {
       IRHeader hdata = pair._1;
       FileBody body = pair._2;
-      String packageName = hdata.packageName;
 
       for(SyntaxDecl syn : body.getSyntax()) {
-        String longName = appendPackageName(packageName, syn.getName());
-        CtClass ctcl = root.makeClass(syn.getModifiers(), longName);
-        ir.addClass(ctcl, hdata);
-        syntax.add(Pair.make(ctcl, syn));
+        IRClass clazz = makeClass(syn.getModifiers(), syn.getName(), hdata);
+        ir.addClass(clazz);
+        syntax.put(clazz, syn);
       }
     }
 
     return syntax;
   }
 
-  private void loadPrimitiveOperators(IR ir) {
+  private void loadPrimitiveOperators (IR ir) {
     ir.getOperatorPool().loadPrimitiveOperators();
   }
 
-  private void registerSuperClass(Collection<Pair<CtClass, ClassDecl>> classes, IR ir) {
-    for(Pair<CtClass, ClassDecl> pair : classes) try {
-      CtClass ctcl = pair._1;
-      ClassDecl cdecl = pair._2;
-      TypeResolver resolver = ir.getIRHeader(ctcl).resolver;
+  private void registerSuperClasses(IRClass clazz, ClassDecl cdecl) {
+    TypeResolver resolver = clazz.resolver;
+    try {
+      clazz.setSuperclass(resolver.getType(cdecl.getSuperClass()));
+      for(String iface : cdecl.getInterfaces()) clazz.addInterface(resolver.getType(iface));
+    } catch (NotFoundError | SemanticsError e) {
+      ErrorList.addError(e.at(cdecl.line));
+    }
+  }
 
-      ctcl.setSuperclass(resolver.getType(cdecl.getSuperClass()));
-      for(String iface : cdecl.getInterfaces()) {
-        ctcl.addInterface(resolver.getType(iface));
+  private void registerStaticInitializers (IRClass clazz, ClassDecl cdecl, IR ir) {
+    cdecl.getStaticInitializers().forEach(sInit -> registerStaticInitializer(clazz, sInit, ir));
+  }
+
+  private void registerStaticInitializer (IRClass clazz, StaticInitializer sInit, IR ir) {
+    try {
+      IRStaticInitializer irStaticInitializer = clazz.makeStaticInitializer(sInit.getBody(), sInit.getBodyLine());
+      ir.addStaticInitializer(irStaticInitializer);
+    } catch (SemanticsError e) {
+      ErrorList.addError(e.at(sInit.line));
+    }
+  }
+
+  private void registerConstructors (IRClass clazz, ClassDecl cdecl, IR ir) {
+    if (cdecl.getConstructors().isEmpty()) clazz.addDefaultConstructor();
+    else cdecl.getConstructors().forEach(constructor -> registerConstructor(clazz, constructor, ir));
+  }
+
+  private void registerConstructor (IRClass clazz, ConstructorDecl constructor, IR ir) {
+    TypeResolver resolver = clazz.resolver;
+
+    int mods = constructor.getModifiers();
+    if (lastParamIsVarArgs(constructor.params)) mods |= Modifiers.VARARGS;
+
+    try {
+      CtClass[] paramTypes = getParamTypes(constructor.params, resolver);
+      CtClass[] exceptions = getTypes(constructor.exceptions, resolver);
+
+      if (constructor.hasBody()) {
+        IRConstructor irConstructor = clazz.makeConstructor(mods, paramTypes, getParamNames(constructor.params), exceptions, constructor.getBody(), constructor.getBodyLine());
+        ir.addConstructor(irConstructor);
+      } else {
+        clazz.addAbstractConstructor(mods, paramTypes, exceptions);
       }
+    } catch (NotFoundError | SemanticsError e) { ErrorList.addError(e.at(constructor.line)); }
+  }
+
+  private void registerMethods (IRClass clazz, ClassDecl cdecl, IR ir) {
+    cdecl.getMethods().forEach(method -> registerMethod(clazz, method, ir));
+  }
+
+  private void registerMethod (IRClass clazz, MethodDecl method, IR ir) {
+    TypeResolver resolver = clazz.resolver;
+
+    int mods = method.getModifiers();
+    if(lastParamIsVarArgs(method.params)) mods |= Modifiers.VARARGS;
+
+    try {
+      CtClass returnType = resolver.getType(method.returnType);
+      CtClass[] paramTypes = getParamTypes(method.params, resolver);
+      CtClass[] exceptions = getTypes(method.exceptions, resolver);
+
+      if (method.hasBody()) {
+        IRMethod irMethod = clazz.makeMethod(mods, returnType, method.name, paramTypes, getParamNames(method.params), exceptions, method.getBody(), method.getBodyLine());
+        ir.addMethod(irMethod);
+      } else {
+        clazz.addAbstractMethod(mods, returnType, method.name, paramTypes, exceptions);
+      }
+    } catch (NotFoundError | SemanticsError e) { ErrorList.addError(e.at(method.line)); }
+  }
+
+  private void registerFields (IRClass clazz, ClassDecl cdecl, IR ir) {
+    cdecl.getFields().forEach(field -> registerField(clazz, field, ir));
+  }
+
+  private void registerField (IRClass clazz, FieldDecl field, IR ir) {
+    try {
+      CtClass type = clazz.resolver.getType(field.type);
+
+      if (field.hasBody()) {
+        IRField irField = clazz.makeField(field.getModifiers(), type, field.name, field.getBody(), field.getBodyLine());
+        ir.addField(irField);
+      } else {
+        clazz.addAbstractField(field.getModifiers(), type, field.name);
+      }
+    } catch (NotFoundError | SemanticsError e) { ErrorList.addError(e.at(field.line)); }
+  }
+
+  private void registerSuperInterfaces (IRClass clazz, InterfaceDecl idecl) {
+    TypeResolver resolver = clazz.resolver;
+    for (String iface : idecl.getInterfaces()) try {
+      clazz.addInterface(resolver.getType(iface));
     } catch (NotFoundError e) {
-      ErrorList.addError(e);
-    } catch (CannotCompileException e) {
-      ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(pair._1).filePath, pair._2.getLine()));
+      ErrorList.addError(e.at(idecl.line));
     }
   }
 
-  private void registerStaticInitializer(Collection<Pair<CtClass, ClassDecl>> classes, IR ir) {
-    for(Pair<CtClass, ClassDecl> pair : classes) {
-      CtClass ctcl = pair._1;
-      ClassDecl cdecl = pair._2;
-
-      for(StaticInitializer sinit : cdecl.getStaticInitializers()) try {
-        IRStaticInitializer irsinit = new IRStaticInitializer(ctcl.makeClassInitializer(), sinit.getBody(), sinit.getBodyLine());
-        ir.addStaticInitializer(irsinit);
-      } catch (CannotCompileException e) {
-        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(ctcl).filePath, sinit.getLine()));
-      }
-    }
+  private void registerInterfaceMethods (IRClass clazz, InterfaceDecl idecl) {
+    idecl.getMethods().forEach(method -> registerInterfaceMethod(clazz, method));
   }
 
-  private void registerConstructor(Collection<Pair<CtClass, ClassDecl>> classes, IR ir) {
-    for(Pair<CtClass, ClassDecl> pair : classes) {
-      CtClass ctcl = pair._1;
-      ClassDecl cdecl = pair._2;
-      TypeResolver resolver = ir.getIRHeader(ctcl).resolver;
+  private void registerInterfaceMethod (IRClass clazz, MethodDecl method) {
+    TypeResolver resolver = clazz.resolver;
 
-      // default constructor
-      if(cdecl.getConstructors().isEmpty()) try {
-        ctcl.addConstructor(CtNewConstructor.defaultConstructor(ctcl));
-        continue;
-      } catch (CannotCompileException e) {
-        assert false;
-        throw new RuntimeException(e);
-      }
+    int mods = method.getModifiers() | Modifiers.PUBLIC | Modifiers.ABSTRACT;
+    if(lastParamIsVarArgs(method.params)) mods |= Modifiers.VARARGS;
 
-      for(ConstructorDecl constructor : cdecl.getConstructors()) try {
-        CtClass[] params = getParamTypes(constructor.params, resolver);
-        int mods = constructor.getModifiers();
-        if(lastParamIsVarArgs(constructor.params)) mods |= Modifiers.VARARGS;
+    try {
+      CtClass returnType = resolver.getType(method.returnType);
+      CtClass[] paramTypes = getParamTypes(method.params, resolver);
+      CtClass[] exceptions = getTypes(method.exceptions, resolver);
 
-        CtConstructor ctconstructor = new CtConstructor(params, ctcl);
-        ctconstructor.setModifiers(mods);
-
-        if(constructor.hasThrowsException()) try {
-          ctconstructor.setExceptionTypes(getExceptionTypes(constructor.exceptions, resolver));
-        } catch (NotFoundException e) {
-          ErrorList.addError(new NotFoundError(e, ir.getIRHeader(ctcl).filePath, constructor.getLine()));
-        }
-
-        if(constructor.hasBody()) {
-          ir.addConstructor(new IRConstructor(ctconstructor, getParamNames(constructor.params), constructor.getBody(), constructor.getBodyLine()));
-        }
-
-        ctcl.addConstructor(ctconstructor);
-      } catch (NotFoundError e) {
-        ErrorList.addError(e);
-      } catch (CannotCompileException e) {
-        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(ctcl).filePath, constructor.getLine()));
-      }
-    }
+      clazz.addAbstractMethod(mods, returnType, method.name, paramTypes, exceptions);
+    } catch (NotFoundError | SemanticsError e) { ErrorList.addError(e.at(method.line)); }
   }
 
-  private void registerMethod(Collection<Pair<CtClass, ClassDecl>> classes, IR ir) {
-    for(Pair<CtClass, ClassDecl> pair : classes) {
-      CtClass clazz = pair._1;
-      ClassDecl cdecl = pair._2;
-      TypeResolver resolver = ir.getIRHeader(clazz).resolver;
-
-      for(MethodDecl method : cdecl.getMethods()) try {
-        CtClass returnType = resolver.getType(method.returnType);
-        CtClass[] paramTypes = getParamTypes(method.params, resolver);
-        int mods = method.getModifiers();
-        if(lastParamIsVarArgs(method.params)) mods |= Modifiers.VARARGS;
-
-        CtMethod ctmethod = new CtMethod(returnType, method.name, paramTypes, clazz);
-        ctmethod.setModifiers(mods);
-
-        if(method.hasThrowsException()) try {
-          ctmethod.setExceptionTypes(getExceptionTypes(method.exceptions, resolver));
-        } catch (NotFoundException e) {
-          ErrorList.addError(new NotFoundError(e, ir.getIRHeader(clazz).filePath, method.getLine()));
-        }
-
-        clazz.addMethod(ctmethod);
-
-        if(method.hasBody()) {
-          ir.addMethod(new IRMethod(ctmethod, getParamNames(method.params), method.getBody(), method.getBodyLine()));
-        }
-      } catch (NotFoundError e) {
-        ErrorList.addError(e);
-      } catch (CannotCompileException e) {
-        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(clazz).filePath, method.getLine()));
-      }
-    }
+  private void registerInterfaceFields (IRClass clazz, InterfaceDecl idecl, IR ir) {
+    idecl.getFields().forEach(field -> registerInterfaceField(clazz, field, ir));
   }
 
-  private void registerField(Collection<Pair<CtClass, ClassDecl>> classes, IR ir) {
-    for(Pair<CtClass, ClassDecl> pair : classes) {
-      CtClass ctcl = pair._1;
-      ClassDecl cdecl = pair._2;
-      TypeResolver resolver = ir.getIRHeader(ctcl).resolver;
+  private void registerInterfaceField (IRClass clazz, FieldDecl field, IR ir) {
+    int mods = field.getModifiers() | Modifier.PUBLIC | Modifier.STATIC | Modifier.FINAL;
+    try {
+      CtClass type = clazz.resolver.getType(field.type);
 
-      for(FieldDecl field : cdecl.getFields()) try {
-        CtField ctfield = new CtField(resolver.getType(field.type), field.name, ctcl);
-        ctfield.setModifiers(field.getModifiers());
-
-        ctcl.addField(ctfield);
-
-        if(field.hasBody()) {
-          ir.addField(new IRField(ctfield, field.getBody(), field.getBodyLine()));
-        }
-      } catch (NotFoundError e) {
-        ErrorList.addError(e);
-      } catch (CannotCompileException e) {
-        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(ctcl).filePath, field.getLine()));
-      }
-    }
+      assert field.hasBody();
+      IRField irField = clazz.makeField(mods, type, field.name, field.getBody(), field.getBodyLine());
+      ir.addField(irField);
+    } catch (NotFoundError | SemanticsError e) { ErrorList.addError(e.at(field.line)); }
   }
 
-  private void registerSuperInterface(Collection<Pair<CtClass, InterfaceDecl>> interfaces, IR ir) {
-    for(Pair<CtClass, InterfaceDecl> pair : interfaces) {
-      CtClass iface = pair._1;
-      InterfaceDecl idecl = pair._2;
-      TypeResolver resolver = ir.getIRHeader(iface).resolver;
+  private void registerOperatorModule (IRClass clazz, SyntaxDecl sdecl, IR ir) {
+    IRSyntax irSyntax = new IRSyntax(clazz.clazz);
 
-      for(String ifaceName : idecl.getInterfaces()) try {
-        iface.addInterface(resolver.getType(ifaceName));
-      } catch (NotFoundError e) {
-        ErrorList.addError(e);
-      }
-    }
+    if (sdecl.hasBaseOperators()) try {
+      String base = sdecl.getBaseOperators();
+      loadOperatorsFile(base, ir);
+      irSyntax.setBaseSyntax(base);
+    } catch (FileIOError e) { ErrorList.addError(e.at(sdecl.line)); }
+
+    registerOperators(clazz, irSyntax, sdecl, ir);
+
+    ir.addSyntax(irSyntax);
   }
 
-  private void registerInterfaceMethod(Collection<Pair<CtClass, InterfaceDecl>> interfaces, IR ir) {
-    for(Pair<CtClass, InterfaceDecl> pair : interfaces) {
-      CtClass iface = pair._1;
-      InterfaceDecl idecl = pair._2;
-      TypeResolver resolver = ir.getIRHeader(iface).resolver;
-
-      for(MethodDecl method : idecl.getMethods()) try {
-        CtClass returnType = resolver.getType(method.returnType);
-        CtClass[] paramTypes = getParamTypes(method.params, resolver);
-        int mods = method.getModifiers() | Modifiers.PUBLIC | Modifiers.ABSTRACT;
-        if(lastParamIsVarArgs(method.params)) mods |= Modifiers.VARARGS;
-
-        CtMethod ctmethod = new CtMethod(returnType, method.name, paramTypes, iface);
-        ctmethod.setModifiers(mods);
-        iface.addMethod(ctmethod);
-      } catch (NotFoundError e) {
-        ErrorList.addError(e);
-      } catch (CannotCompileException e) {
-        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(iface).filePath, method.getLine()));
-      }
-    }
+  private void registerOperators (IRClass clazz, IRSyntax irSyntax, SyntaxDecl sdecl, IR ir) {
+    sdecl.getOperators().forEach(operator -> registerOperator(clazz, irSyntax, operator, ir));
   }
 
-  private void registerInterfaceField(Collection<Pair<CtClass, InterfaceDecl>> interfaces, IR ir) {
-    for(Pair<CtClass, InterfaceDecl> pair : interfaces) {
-      CtClass iface = pair._1;
-      InterfaceDecl idecl = pair._2;
-      TypeResolver resolver = ir.getIRHeader(iface).resolver;
+  private void registerOperator (IRClass clazz, IRSyntax irSyntax, OperatorDecl odecl, IR ir) {
+    TypeResolver resolver = clazz.resolver;
 
-      for(FieldDecl field : idecl.getFields()) try {
-        CtField ctfield = new CtField(resolver.getType(field.type), field.name, iface);
-        ctfield.setModifiers(field.getModifiers() | Modifier.PUBLIC | Modifier.STATIC | Modifier.FINAL);
+    int mods = odecl.getModifiers() | Modifiers.STATIC;
+    String name = odecl.hasName() ? odecl.getName() : clazz.makeUniqueName("$ProteaJAutoGeneratedMethod");
+    IROperandAttribute[] paramMods = getParamModifiers(odecl.pattern, odecl.params);
 
-        iface.addField(ctfield);
+    try {
+      CtClass returnType = resolver.getType(odecl.type);
+      CtClass[] paramTypes = getParamTypes(odecl.params, resolver);
+      CtClass[] andPreds = getAndPredicateTypes(odecl.pattern, resolver);
+      CtClass[] notPreds = getNotPredicateTypes(odecl.pattern, resolver);
+      CtClass[] bounds = getTypes(odecl.bounds, resolver);
+      CtClass[] exceptions = getTypes(odecl.exceptions, resolver);
 
-        assert field.hasBody();
-        ir.addField(new IRField(ctfield, field.getBody(), field.getBodyLine()));
-      } catch (NotFoundError e) {
-        ErrorList.addError(e);
-      } catch (CannotCompileException e) {
-        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(iface).filePath, field.getLine()));
-      }
-    }
+      registerDefaultArguments(clazz, paramMods, paramTypes, odecl.params, ir);
+
+      IRMethod method = clazz.makeMethod(mods, returnType, name, paramTypes, getParamNames(odecl.params), exceptions, odecl.getBody(), odecl.getBodyLine());
+      ir.addMethod(method);
+
+      IROperator operator = new IROperator(mods, returnType, bounds, odecl.pattern, paramTypes, paramMods, andPreds, notPreds, odecl.priority, method.ctMethod);
+      irSyntax.addOperator(operator);
+    } catch (NotFoundError | SemanticsError e) { ErrorList.addError(e.at(odecl.line)); }
   }
 
-  private void registerOperator(Collection<Pair<CtClass, SyntaxDecl>> operators, IR ir) {
-    OperatorPool opool = ir.getOperatorPool();
-
-    for(Pair<CtClass, SyntaxDecl> pair : operators) {
-      CtClass ctcl = pair._1;
-      SyntaxDecl syndecl = pair._2;
-
-      TypeResolver resolver = ir.getIRHeader(ctcl).resolver;
-      IRSyntax irsyn = new IRSyntax(ctcl);
-
-      if(syndecl.hasBaseOperators()) try {
-        String base = syndecl.getBaseOperators();
-        loadOperatorsFile(base, ir);
-        irsyn.setBaseSyntax(base);
-      } catch (FileIOError e) {
-        ErrorList.addError(e);
-      }
-
-      for(String mixin : syndecl.getMixinOperators()) try {
-        loadOperatorsFile(mixin, ir);
-        irsyn.addMixinSyntax(mixin);
-      } catch (FileIOError e) {
-        ErrorList.addError(e);
-      }
-
-      for(OperatorDecl odecl : syndecl.getOperators()) try {
-        String mname = odecl.hasName() ? odecl.getName() : ctcl.makeUniqueName("$ProteaJAutoGeneratedMethod");
-        OperatorPattern pattern = odecl.pattern;
-        CtClass[] paramTypes = getParamTypes(odecl.params, resolver);
-        IROperandAttribute[] paramMods = getParamModifiers(pattern, odecl.params);
-        CtClass[] andPreds = getAndPredicateTypes(pattern, resolver);
-        CtClass[] notPreds = getNotPredicateTypes(pattern, resolver);
-        CtClass returnType = resolver.getType(odecl.type);
-        List<CtClass> bounds = new ArrayList<>();
-        for (String b : odecl.bounds) bounds.add(resolver.getType(b));
-        int modifiers = odecl.getModifiers() | Modifiers.STATIC;
-
-        registerDefaultArgument(paramMods, paramTypes, odecl.params, ctcl, ir);
-
-        CtMethod smethod = new CtMethod(returnType, mname, paramTypes, ctcl);
-        smethod.setModifiers(modifiers);
-
-        if(odecl.hasThrowsException()) try {
-          smethod.setExceptionTypes(getExceptionTypes(odecl.exceptions, resolver));
-        } catch (NotFoundException e) {
-          ErrorList.addError(new NotFoundError(e, ir.getIRHeader(ctcl).filePath, odecl.getLine()));
-        }
-
-        ctcl.addMethod(smethod);
-
-        IROperator odata = new IROperator(modifiers, returnType, bounds, pattern, paramTypes, paramMods, andPreds, notPreds, odecl.priority, smethod);
-        irsyn.addOperator(odata);
-
-        if(odecl.hasBody()) {
-          ir.addMethod(new IRMethod(smethod, getParamNames(odecl.params), odecl.getBody(), odecl.getBodyLine()));
-        }
-      } catch (NotFoundError e) {
-        ErrorList.addError(e);
-      } catch (CannotCompileException e) {
-        ErrorList.addError(new SemanticsError(e.getMessage(), ir.getIRHeader(ctcl).filePath, odecl.getLine()));
-      }
-
-      opool.addSyntax(irsyn);
-      ir.addSyntax(irsyn);
-    }
-  }
-
-  private void registerDefaultArgument(IROperandAttribute[] attrs, CtClass[] types, List<Parameter> params, CtClass ctcl, IR ir) {
-    assert attrs.length == types.length;
-    assert attrs.length == params.size();
-
-    for(int i = 0; i < attrs.length; i++) {
-      if(attrs[i].isOption()) try {
-        Parameter param = params.get(i);
-        assert param.hasDefaultValue();
-
-        String mname = ctcl.makeUniqueName("$ProteaJAutoGeneratedMethod");
-        CtMethod method = new CtMethod(types[i], mname, new CtClass[0], ctcl);
-        method.setModifiers(Modifiers.PUBLIC | Modifiers.STATIC);
-
-        ctcl.addMethod(method);
+  private void registerDefaultArguments (IRClass clazz, IROperandAttribute[] attrs, CtClass[] types, List<Parameter> params, IR ir) {
+    IntStream.range(0, attrs.length).filter(i -> attrs[i].isOption()).forEach(i -> {
+      String name = clazz.makeUniqueName("$ProteaJAutoGeneratedMethod");
+      Parameter param = params.get(i);
+      try {
+        CtMethod method = clazz.makeCtMethod(Modifiers.PUBLIC | Modifiers.STATIC, types[i], name, new CtClass[0], new CtClass[0]);
         attrs[i].setDefaultMethod(method);
         ir.addDefaultArgument(new IRDefaultArgument(method, param.getDefaultValue(), param.getDefaultValueLine()));
-
-      } catch (CannotCompileException e) {
-        assert false;
-        throw new RuntimeException(e);
-      }
-    }
+      } catch (NotFoundError | SemanticsError e) { ErrorList.addError(e.at(param.getDefaultValueLine())); }
+    });
   }
 
   private boolean loadOperatorsFile(String name, IR ir) throws FileIOError {
@@ -438,12 +349,12 @@ public class SigIRGenerator {
     return ret;
   }
 
-  private CtClass[] getExceptionTypes(List<String> exceptions, TypeResolver resolver) throws NotFoundError {
-    CtClass[] eTypes = new CtClass[exceptions.size()];
-    for(int i = 0; i < eTypes.length; i++) {
-      eTypes[i] = resolver.getType(exceptions.get(i));
+  private CtClass[] getTypes(List<String> typeNames, TypeResolver resolver) throws NotFoundError {
+    CtClass[] types = new CtClass[typeNames.size()];
+    for(int i = 0; i < types.length; i++) {
+      types[i] = resolver.getType(typeNames.get(i));
     }
-    return eTypes;
+    return types;
   }
 
   private String[] getParamNames(List<Parameter> params) {
