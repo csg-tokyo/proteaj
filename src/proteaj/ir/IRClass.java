@@ -10,7 +10,7 @@ public class IRClass {
   public IRClass(CtClass clazz, IRHeader header) {
     this.clazz = clazz;
     this.header = header;
-    this.resolver = TypeResolver.onModule(header.resolver);
+    this.resolver = header.resolver;
   }
 
   public void setSuperclass (CtClass sup) throws SemanticsError {

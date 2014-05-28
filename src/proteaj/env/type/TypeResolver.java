@@ -12,10 +12,6 @@ public abstract class TypeResolver {
     return new TypeResolver_File(fileName, packageName, importPackages, importClasses);
   }
 
-  public static TypeResolver onModule(TypeResolver resolver) {
-    return new TypeResolver_Module(resolver);
-  }
-
   public CtClass getType (String name) throws NotFoundError {
     CtClass clazz = getTypeOrNull(name);
     if (clazz == null) throw makeError(name);
@@ -40,11 +36,7 @@ public abstract class TypeResolver {
   }
 
   public CtClass getArrayType (CtClass component, int dim) {
-    return getRootResolver().getArrayType(component, dim);
-  }
-
-  public RootTypeResolver getRootResolver () {
-    return RootTypeResolver.getInstance();
+    return root().getArrayType(component, dim);
   }
 
   protected CtClass getTypeNameOrNull (String name) {

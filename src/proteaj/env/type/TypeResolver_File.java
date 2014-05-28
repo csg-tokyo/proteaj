@@ -11,7 +11,7 @@ class TypeResolver_File extends TypeResolver {
     this.packageName = packageName;
     this.importPackages = importPackages;
     this.importClasses = importClasses;
-    this.root = getRootResolver();
+    this.root = root();
   }
 
   @Override
