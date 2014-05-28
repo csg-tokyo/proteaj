@@ -6,25 +6,17 @@ import javassist.*;
 public class IRSyntax {
   public IRSyntax(CtClass actualClass) {
     this.name = actualClass.getName();
-    this.baseSyntax = null;
-    this.mixinSyntax = new ArrayList<>();
+    this.baseIRSyntax = null;
     this.ops = new ArrayList<>();
   }
 
   public IRSyntax(String name) {
     this.name = name;
-    this.baseSyntax = null;
-    this.mixinSyntax = new ArrayList<>();
+    this.baseIRSyntax = null;
     this.ops = new ArrayList<>();
   }
 
-  public void setBaseSyntax(String baseSyntax) {
-    this.baseSyntax = baseSyntax;
-  }
-
-  public void addMixinSyntax(String mixinSyntax) {
-    this.mixinSyntax.add(mixinSyntax);
-  }
+  public void setBaseIRSyntax (IRSyntax syntax) { this.baseIRSyntax = syntax; }
 
   public void addOperator(IROperator odata) {
     ops.add(odata);
@@ -32,21 +24,9 @@ public class IRSyntax {
 
   public void addOperators (IROperator... operators) { ops.addAll(Arrays.asList(operators)); }
 
-  public boolean hasBaseSyntax() {
-    return baseSyntax != null;
-  }
+  public boolean hasBaseIRSyntax() { return baseIRSyntax != null; }
 
-  public String getName() {
-    return name;
-  }
-
-  public String getBaseSyntax() {
-    return baseSyntax;
-  }
-
-  public List<String> getMixinSyntax() {
-    return mixinSyntax;
-  }
+  public IRSyntax getBaseIRSyntax() { return baseIRSyntax; }
 
   public List<IROperator> getOperators() {
     return ops;
@@ -54,7 +34,7 @@ public class IRSyntax {
 
   public final String name;
 
-  private String baseSyntax;
-  private List<String> mixinSyntax;
+  private IRSyntax baseIRSyntax;
+
   private List<IROperator> ops;
 }

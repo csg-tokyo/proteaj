@@ -50,14 +50,11 @@ public class AvailableOperators {
 
   /* private methods for initializing */
   private int loadSyntax (IRSyntax syntax, int basePriority) {
-    if (header.unusingSyntax.contains(syntax.getName())) return basePriority;
+    if (header.unusingSyntax.contains(syntax.name)) return basePriority;
 
     int maxPriority = basePriority;
-    if (syntax.hasBaseSyntax()) try {
-      maxPriority = loadSyntax(getSyntaxFromPool(syntax.getBaseSyntax()), basePriority);
-    } catch (NotFoundError e) {
-      ErrorList.addError(e);
-      return basePriority;
+    if (syntax.hasBaseIRSyntax()) {
+      maxPriority = loadSyntax(syntax.getBaseIRSyntax(), basePriority);
     }
 
     for (IROperator operator : syntax.getOperators()) {
@@ -124,10 +121,10 @@ public class AvailableOperators {
     List<String> using = new ArrayList<>(header.usingSyntax);
     for (String name : header.usingSyntax) try {
       IRSyntax syntax = getSyntaxFromPool(name);
-      while (syntax.hasBaseSyntax()) {
-        String base = syntax.getBaseSyntax();
-        if (using.contains(base)) using.remove(base);
-        syntax = getSyntaxFromPool(base);
+      while (syntax.hasBaseIRSyntax()) {
+        IRSyntax base = syntax.getBaseIRSyntax();
+        if (using.contains(base.name)) using.remove(base.name);
+        syntax = base;
       }
     } catch (NotFoundError e) {}
 
@@ -143,7 +140,13 @@ public class AvailableOperators {
 
   private IRSyntax getSyntaxFromPool (String name) throws NotFoundError {
     if (pool.containsSyntax(name)) return pool.getSyntax(name);
-    else throw new NotFoundError("operators module " + name + " is not found", header.filePath, 0);
+
+    try {
+      IRSyntax syntax = pool.loadOperatorsFile(name);
+      if (syntax != null) return syntax;
+    } catch (FileIOError e) { ErrorList.addError(e); }
+
+    throw new NotFoundError("operators module " + name + " is not found", header.filePath, 0);
   }
 
   /* utility methods for manipulating operators map */
@@ -153,9 +156,9 @@ public class AvailableOperators {
   }
 
   private static List<IROperator> getEntryFromMap (CtClass clazz, int priority, Map<CtClass, TreeMap<Integer, List<IROperator>>> map) {
-    if (! map.containsKey(clazz)) map.put(clazz, new TreeMap<Integer, List<IROperator>>());
+    if (! map.containsKey(clazz)) map.put(clazz, new TreeMap<>());
     TreeMap<Integer, List<IROperator>> treeMap = map.get(clazz);
-    if (! treeMap.containsKey(priority)) treeMap.put(priority, new ArrayList<IROperator>());
+    if (! treeMap.containsKey(priority)) treeMap.put(priority, new ArrayList<>());
     return treeMap.get(priority);
   }
 

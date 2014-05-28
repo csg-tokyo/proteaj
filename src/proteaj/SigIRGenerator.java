@@ -2,7 +2,6 @@ package proteaj;
 
 import proteaj.error.*;
 import proteaj.ast.*;
-import proteaj.io.*;
 import proteaj.ir.*;
 import proteaj.env.type.*;
 import proteaj.util.*;
@@ -26,9 +25,10 @@ public class SigIRGenerator {
     Collection<Pair<IRHeader, FileBody>> files = analyzeHeaders(cunits);
     Map<IRClass, ClassDecl> classes = registerClasses(files, ir);
     Map<IRClass, InterfaceDecl> interfaces = registerInterfaces(files, ir);
-    Map<IRClass, SyntaxDecl> syntax = registerSyntax(files, ir);
+    Map<Pair<IRSyntax, IRClass>, SyntaxDecl> syntax = registerSyntax(files, ir);
 
     loadPrimitiveOperators(ir);
+
 
     classes.forEach((clazz, cdecl) -> {
       registerSuperClasses       (clazz, cdecl);
@@ -44,7 +44,10 @@ public class SigIRGenerator {
       registerInterfaceFields(clazz, idecl, ir);
     });
 
-    syntax.forEach((clazz, sdecl) -> registerOperatorModule(clazz, sdecl, ir));
+    syntax.forEach((pair, sdecl) -> {
+      registerBaseOperatorModule(pair._1, sdecl, ir);
+      registerOperators(pair._2, pair._1, sdecl, ir);
+    });
 
     return ir;
   }
@@ -109,18 +112,8 @@ public class SigIRGenerator {
     return ifaces;
   }
 
-  private Map<IRClass, SyntaxDecl> registerSyntax(Collection<Pair<IRHeader, FileBody>> files, IR ir) {
-    Map<IRClass, SyntaxDecl> syntax = new HashMap<>();
-
-    for(Pair<IRHeader, FileBody> pair : files) {
-      IRHeader header = pair._1;
-
-      for(String ops : header.usingSyntax) try {  // TODO :  if (! compilations.contains(ops))
-        loadOperatorsFile(ops, ir);
-      } catch (FileIOError e) {
-        ErrorList.addError(e);
-      }
-    }
+  private Map<Pair<IRSyntax, IRClass>, SyntaxDecl> registerSyntax(Collection<Pair<IRHeader, FileBody>> files, IR ir) {
+    Map<Pair<IRSyntax, IRClass>, SyntaxDecl> syntaxMap = new HashMap<>();
 
     for(Pair<IRHeader, FileBody> pair : files) {
       IRHeader hdata = pair._1;
@@ -129,11 +122,13 @@ public class SigIRGenerator {
       for(SyntaxDecl syn : body.getSyntax()) {
         IRClass clazz = makeClass(syn.getModifiers(), syn.getName(), hdata);
         ir.addClass(clazz);
-        syntax.put(clazz, syn);
+        IRSyntax syntax = new IRSyntax(clazz.clazz);
+        ir.addSyntax(syntax);
+        syntaxMap.put(Pair.make(syntax, clazz), syn);
       }
     }
 
-    return syntax;
+    return syntaxMap;
   }
 
   private void loadPrimitiveOperators (IR ir) {
@@ -271,18 +266,10 @@ public class SigIRGenerator {
     } catch (NotFoundError | SemanticsError e) { ErrorList.addError(e.at(field.line)); }
   }
 
-  private void registerOperatorModule (IRClass clazz, SyntaxDecl sdecl, IR ir) {
-    IRSyntax irSyntax = new IRSyntax(clazz.clazz);
-
+  private void registerBaseOperatorModule (IRSyntax syntax, SyntaxDecl sdecl, IR ir) {
     if (sdecl.hasBaseOperators()) try {
-      String base = sdecl.getBaseOperators();
-      loadOperatorsFile(base, ir);
-      irSyntax.setBaseSyntax(base);
+      syntax.setBaseIRSyntax(ir.getOperatorPool().loadOperatorsFile(sdecl.getBaseOperators()));
     } catch (FileIOError e) { ErrorList.addError(e.at(sdecl.line)); }
-
-    registerOperators(clazz, irSyntax, sdecl, ir);
-
-    ir.addSyntax(irSyntax);
   }
 
   private void registerOperators (IRClass clazz, IRSyntax irSyntax, SyntaxDecl sdecl, IR ir) {
@@ -324,29 +311,6 @@ public class SigIRGenerator {
         ir.addDefaultArgument(new IRDefaultArgument(method, param.getDefaultValue(), param.getDefaultValueLine()));
       } catch (NotFoundError | SemanticsError e) { ErrorList.addError(e.at(param.getDefaultValueLine())); }
     });
-  }
-
-  private boolean loadOperatorsFile(String name, IR ir) throws FileIOError {
-    OperatorPool opool = ir.getOperatorPool();
-
-    boolean ret = true;
-
-    if(! opool.containsSyntax(name)) {
-      OperatorsFile ofile = OperatorsFile.loadOperatorsFile(name);
-      if(ofile != null) {
-        IRSyntax irsyn = ofile.read(root);
-        if(irsyn != null) {
-          opool.addSyntax(irsyn);
-          if(irsyn.hasBaseSyntax()) ret &= loadOperatorsFile(irsyn.getBaseSyntax(), ir);
-
-          for(String mixin : irsyn.getMixinSyntax()) ret &= loadOperatorsFile(mixin, ir);
-        }
-        else ret = false;
-      }
-      else ret = false;
-    }
-
-    return ret;
   }
 
   private CtClass[] getTypes(List<String> typeNames, TypeResolver resolver) throws NotFoundError {

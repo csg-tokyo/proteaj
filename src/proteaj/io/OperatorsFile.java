@@ -25,7 +25,7 @@ import static proteaj.util.XMLUtil.hasAttr;
 
 public class OperatorsFile {
   public OperatorsFile(IRSyntax irsyn) {
-    name = irsyn.getName();
+    name = irsyn.name;
 
     try {
       DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
@@ -34,15 +34,7 @@ public class OperatorsFile {
 
       Element root = doc.createElement("operators");
       root.setAttribute("name", name);
-      if(irsyn.hasBaseSyntax()) root.setAttribute("super", irsyn.getBaseSyntax());
-
-      List<String> mixins = irsyn.getMixinSyntax();
-      for(int i = 0; i < mixins.size(); i++) {
-        Element mixin = doc.createElement("mixin");
-        mixin.setAttribute("id", String.valueOf(i));
-        mixin.setAttribute("operators", mixins.get(i));
-        root.appendChild(mixin);
-      }
+      if(irsyn.hasBaseIRSyntax()) root.setAttribute("super", irsyn.getBaseIRSyntax().name);
 
       doc.appendChild(root);
 
@@ -125,7 +117,11 @@ public class OperatorsFile {
     }
   }
 
-  public IRSyntax read(TypeResolver resolver) throws FileIOError {
+  public IRSyntax read (OperatorPool pool) throws FileIOError {
+    return read(TypeResolver.root(), pool);
+  }
+
+  public IRSyntax read(TypeResolver resolver, OperatorPool pool) throws FileIOError {
     CtClass clz = resolver.getTypeOrNull(name);
     String fileName = getOpsFileName(name);
 
@@ -138,24 +134,7 @@ public class OperatorsFile {
     IRSyntax irsyn = new IRSyntax(clz);
 
     if(hasAttr(root, "super")) {
-      irsyn.setBaseSyntax(getAttr(root, "super"));
-    }
-
-    NodeList mixinlist = root.getElementsByTagName("mixin");
-    String[] mixinops  = new String[mixinlist.getLength()];
-    for(int i = 0; i < mixinlist.getLength(); i++) {
-      Node node = mixinlist.item(i);
-      checkElementNode(node, "mixin");
-
-      int id = Integer.parseInt(getAttr(node, "id"));
-      if(id < 0 || id >= mixinlist.getLength()) throw new FileIOError(fileName + " is broken", fileName, 0);
-
-      mixinops[id] = getAttr(node, "operators");
-    }
-
-    for(String mixin : mixinops) {
-      if(mixin == null) throw new FileIOError(fileName + " is broken", fileName, 0);
-      irsyn.addMixinSyntax(mixin);
+      irsyn.setBaseIRSyntax(pool.loadOperatorsFile(getAttr(root, "super")));
     }
 
     NodeList nlist = root.getElementsByTagName("operator");
