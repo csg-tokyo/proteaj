@@ -1,7 +1,7 @@
 package proteaj.tast;
 
 import proteaj.tast.util.*;
-import proteaj.type.CommonTypes;
+import proteaj.env.type.CommonTypes;
 
 public class NullLiteral extends Expression {
   public static NullLiteral getInstance() {

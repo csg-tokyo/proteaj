@@ -2,7 +2,7 @@ package proteaj.ir;
 
 import proteaj.error.NotFoundError;
 import proteaj.error.SemanticsError;
-import proteaj.type.TypeResolver;
+import proteaj.env.type.TypeResolver;
 
 import javassist.*;
 

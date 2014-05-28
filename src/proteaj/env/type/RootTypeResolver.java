@@ -1,11 +1,8 @@
-package proteaj.type;
+package proteaj.env.type;
 
 import proteaj.error.*;
-import proteaj.util.Modifiers;
 
-import java.util.*;
 import javassist.*;
-import javassist.bytecode.*;
 
 public class RootTypeResolver extends TypeResolver {
 

@@ -1,8 +1,7 @@
 package proteaj.pparser;
 
-import proteaj.error.*;
 import proteaj.tast.*;
-import proteaj.type.CommonTypes;
+import proteaj.env.type.CommonTypes;
 import proteaj.util.*;
 
 import java.util.*;

@@ -1,6 +1,6 @@
 package proteaj.ir;
 
-import proteaj.type.TypeResolver;
+import proteaj.env.type.TypeResolver;
 
 import java.util.*;
 

@@ -16,7 +16,7 @@ import org.xml.sax.SAXException;
 
 import proteaj.error.*;
 import proteaj.ir.*;
-import proteaj.type.TypeResolver;
+import proteaj.env.type.TypeResolver;
 
 import static org.w3c.dom.Node.*;
 import static proteaj.ir.IRPattern.*;

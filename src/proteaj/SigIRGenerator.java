@@ -4,7 +4,7 @@ import proteaj.error.*;
 import proteaj.ast.*;
 import proteaj.io.*;
 import proteaj.ir.*;
-import proteaj.type.*;
+import proteaj.env.type.*;
 import proteaj.util.*;
 
 import java.util.*;

@@ -2,7 +2,7 @@ package proteaj.tast;
 
 import javassist.CtClass;
 import proteaj.tast.util.ExpressionVisitor;
-import proteaj.type.CommonTypes;
+import proteaj.env.type.CommonTypes;
 
 public class TypeLiteral  extends Expression {
   public TypeLiteral(CtClass cls) {

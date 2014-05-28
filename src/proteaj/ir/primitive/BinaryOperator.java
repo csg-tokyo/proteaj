@@ -2,7 +2,7 @@ package proteaj.ir.primitive;
 
 import proteaj.ast.*;
 import proteaj.ir.*;
-import proteaj.type.*;
+import proteaj.env.type.*;
 import proteaj.util.*;
 
 import javassist.*;

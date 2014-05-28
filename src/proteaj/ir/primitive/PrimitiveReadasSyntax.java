@@ -1,7 +1,7 @@
 package proteaj.ir.primitive;
 
 import proteaj.ir.*;
-import proteaj.type.CommonTypes;
+import proteaj.env.type.CommonTypes;
 
 import javassist.CtClass;
 

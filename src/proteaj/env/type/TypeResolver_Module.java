@@ -1,4 +1,4 @@
-package proteaj.type;
+package proteaj.env.type;
 
 import javassist.CtClass;
 import proteaj.error.NotFoundError;
