@@ -185,7 +185,7 @@ public abstract class StatementParsers {
       });
 
   private final PackratParser<SynchronizedStatement> syncStatement =
-      map(seq(enclosed("(", expression(CommonTypes.getInstance().objectType), ")"), block), pair -> new SynchronizedStatement(pair._1, pair._2));
+      map(prefix("synchronized", seq(enclosed("(", expression(CommonTypes.getInstance().objectType), ")"), block)), pair -> new SynchronizedStatement(pair._1, pair._2));
 
   private final PackratParser<Statement> controlFlow =
       choice(ifStatement, switchStatement, whileStatement, doWhileStatement, forStatement, throwStatement, tryStatement,
