@@ -20,7 +20,9 @@ public class CtClassUtil {
 
   // not perfect
   public static boolean isCastable (CtClass from, CtClass to) throws NotFoundException {
-    return from.isPrimitive() || to.isPrimitive() || from.subtypeOf(to) || to.subtypeOf(from) || to == CtClass.voidType;
+    return from.isPrimitive() || to.isPrimitive()
+        || from.isInterface() || to.isInterface()
+        || from.subtypeOf(to) || to.subtypeOf(from) || to == CtClass.voidType;
   }
 
   public static boolean isAssignable (CtClass from, CtClass to) throws NotFoundException {
