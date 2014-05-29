@@ -265,10 +265,10 @@ public class ExpressionParsers {
       final CtClass componentType;
       try { componentType = clazz.getComponentType(); } catch (NotFoundException e) { return error(e); }
       PackratParser<ArrayInitializer> arrayInit = map(enclosed("{", rep(expression(componentType), ","), "}"), list -> new ArrayInitializer(clazz, list));
-      return choice(parenthesized, rCast, lCast, arrayInit, javaExpr, nullLiteral, readAs);
+      return choice(rCast, lCast, arrayInit, javaExpr, parenthesized, nullLiteral, readAs);
     }
 
-    else return choice(parenthesized, rCast, lCast, javaExpr, nullLiteral, readAs);
+    else return choice(rCast, lCast, javaExpr, parenthesized, nullLiteral, readAs);
   }
 
   private boolean isAssignableTo (Expression e, CtClass clazz) throws NotFoundException {
