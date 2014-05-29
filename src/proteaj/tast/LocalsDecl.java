@@ -6,8 +6,9 @@ import java.util.*;
 import javassist.*;
 
 public class LocalsDecl extends Expression {
-  public LocalsDecl(CtClass type, List<LocalDecl> locals) {
+  public LocalsDecl(boolean isFinal, CtClass type, List<LocalDecl> locals) {
     super(CtClass.voidType);
+    this.isFinal = isFinal;
     this.type = type;
     this.locals = locals;
   }
@@ -17,6 +18,7 @@ public class LocalsDecl extends Expression {
     return visitor.visit(this, t);
   }
 
+  public final boolean isFinal;
   public final CtClass type;
   public final List<LocalDecl> locals;
 

@@ -41,6 +41,7 @@ public class ErrorList {
         else System.err.println("<< " + e.getKind() + " >> " + e.getMessage());
       }
     }
+    System.err.println(errors.size() + " errors");
   }
 
   private static Map<String, List<CompileError>> errors;

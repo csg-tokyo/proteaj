@@ -81,8 +81,14 @@ public abstract class StatementParsers {
     return withEffect(choice(localDeclAndInit(type), simpleLocalDecl), local -> declareLocal(local.name, type));
   }
 
+  private final PackratParser<LocalsDecl> finalLocalsDecl =
+      bind(prefix("final", typeName), type -> map(rep1(localVarDecl(type), ","), locals -> new LocalsDecl(true, type, locals)));
+
+  private final PackratParser<LocalsDecl> nonFinalLocalsDecl =
+      bind(typeName, type -> map(rep1(localVarDecl(type), ","), locals -> new LocalsDecl(false, type, locals)));
+
   private final PackratParser<LocalsDecl> localsDecl =
-      bind(typeName, type -> map(rep1(localVarDecl(type), ","), locals -> new LocalsDecl(type, locals)));
+      choice(finalLocalsDecl, nonFinalLocalsDecl);
 
   private final PackratParser<Expression> ifCondition =
       prefix("if", enclosed("(", expression(CtClass.booleanType), ")"));

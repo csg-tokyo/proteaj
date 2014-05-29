@@ -146,7 +146,7 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   }
 
   public LocalsDecl translate(LocalsDecl locals) {
-    return new LocalsDecl(locals.type, locals.locals.stream().map(this::translate).collect(Collectors.toList()));
+    return new LocalsDecl(locals.isFinal, locals.type, locals.locals.stream().map(this::translate).collect(Collectors.toList()));
   }
 
   public LocalsDecl.LocalDecl translate(LocalsDecl.LocalDecl local) {

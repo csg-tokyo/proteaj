@@ -253,6 +253,7 @@ public class JavassistCodeGenerator implements ExpressionVisitor<StringBuilder>,
 
   @Override
   public StringBuilder visit(LocalsDecl locals, StringBuilder buf) {
+    if (locals.isFinal) buf = buf.append("final ");
     buf = buf.append(locals.type.getName()).append(' ');
 
     for (int i = 0; i < locals.locals.size(); i++) {
