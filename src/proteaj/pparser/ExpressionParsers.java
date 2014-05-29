@@ -1,5 +1,6 @@
 package proteaj.pparser;
 
+import proteaj.error.ForDebug;
 import proteaj.ir.*;
 import proteaj.tast.*;
 import proteaj.env.type.CommonTypes;

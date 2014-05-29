@@ -9,10 +9,10 @@ import java.util.Set;
 public class ForDebug {
   public static void print(String msg) {
     if (verbose) {
-      if (! msgs.contains(msg)) {
-        msgs.add(msg);
-        System.err.println(msg);
-      }
+//      if (! msgs.contains(msg)) {
+//        msgs.add(msg);
+        System.out.println(msg);
+//      }
     }
   }
 

@@ -18,7 +18,6 @@ public abstract class ParseResult<T> {
 class Success<T> extends ParseResult<T> {
   public Success(T value) {
     this.value = value;
-    ForDebug.print(value);
   }
 
   @Override
@@ -44,7 +43,6 @@ class Failure<T> extends ParseResult<T> {
     this.msg = msg;
     this.pos = pos;
     this.line = line;
-    //ForDebug.print("[ parse fail ] " + "(" + line + "," + pos + ") " + msg);
   }
 
   @Override
