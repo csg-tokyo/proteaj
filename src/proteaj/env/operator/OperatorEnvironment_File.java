@@ -35,7 +35,7 @@ class OperatorEnvironment_File extends OperatorEnvironment {
         if (syntax != null) unusingSet.add(syntax);
       }
     }
-    return null;
+    return unusingSet;
   }
 
   @Override
