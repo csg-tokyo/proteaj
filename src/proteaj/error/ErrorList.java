@@ -29,7 +29,11 @@ public class ErrorList {
   }
 
   public static void printAllErrors() {
-    for(Map.Entry<String, List<CompileError>> entry : errors.entrySet()) {
+    int num = 0;
+    List<Map.Entry<String, List<CompileError>>> es = new ArrayList<>(errors.entrySet());
+    Collections.sort(es, (e1, e2) -> e1.getKey().compareTo(e2.getKey()));
+
+    for(Map.Entry<String, List<CompileError>> entry : es) {
       assert ! entry.getValue().isEmpty();
 
       Collections.sort(entry.getValue(), CompileErrorComparator.instance);
@@ -37,11 +41,12 @@ public class ErrorList {
       System.err.println('[' + entry.getKey() + ']');
 
       for(CompileError e : entry.getValue()) {
+        num++;
         if(e.getLine() != 0) System.err.println("line " + e.getLine() + " : << " + e.getKind() + " >> " + e.getMessage());
         else System.err.println("<< " + e.getKind() + " >> " + e.getMessage());
       }
     }
-    System.err.println(errors.size() + " errors");
+    System.err.println(num + " errors");
   }
 
   private static Map<String, List<CompileError>> errors;
