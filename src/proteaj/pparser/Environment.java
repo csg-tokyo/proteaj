@@ -101,8 +101,8 @@ public class Environment {
   public List<CtMethod> getInstanceMethods (CtClass clazz, String name) {
     List<CtMethod> methods = new ArrayList<>();
 
-    for (CtMethod method : getVisibleMethods(clazz)) {
-      if (method.getName().equals(name) && (! Modifiers.isStatic(method))) methods.add(method);
+    for (CtMethod method : getVisibleMethods(clazz, name)) {
+      if (! Modifiers.isStatic(method)) methods.add(method);
     }
 
     return methods;
@@ -111,28 +111,58 @@ public class Environment {
   public List<CtMethod> getStaticMethods (CtClass clazz, String name) {
     List<CtMethod> methods = new ArrayList<>();
 
-    for (CtMethod method : getVisibleMethods(clazz)) {
-      if (method.getName().equals(name) && Modifiers.isStatic(method)) methods.add(method);
+    for (CtMethod method : getVisibleMethods(clazz, name)) {
+      if (Modifiers.isStatic(method)) methods.add(method);
     }
 
     return methods;
   }
 
-  private List<CtMethod> getVisibleMethods (CtClass clazz) {
+  private List<CtMethod> getVisibleMethods (CtClass clazz, String name) {
     if (! visibleMethodsCache.containsKey(clazz)) {
-      List<CtMethod> methods = new ArrayList<>();
+      Map<String, List<CtMethod>> methods = new HashMap<>();
 
       if (clazz == thisClass) {
-        Collections.addAll(methods, clazz.getDeclaredMethods());
+        for (CtMethod method : clazz.getDeclaredMethods()) addVisibleMethod(method, methods);
       }
 
       for (CtMethod method : clazz.getMethods()) {
-        if (isVisible(method) && (! methods.contains(method))) methods.add(method);
+        if (isVisible(method)) addVisibleMethod(method, methods);
       }
 
       visibleMethodsCache.put(clazz, methods);
     }
-    return visibleMethodsCache.get(clazz);
+    return visibleMethodsCache.get(clazz).getOrDefault(name, Collections.emptyList());
+  }
+
+  private void addVisibleMethod (CtMethod method, Map<String, List<CtMethod>> methods) {
+    if (methods.containsKey(method.getName())) {
+      List<CtMethod> list = methods.get(method.getName());
+      if (list.contains(method)) return;
+      for (int i = 0; i < list.size(); i++) try {
+        CtClass[] t1 = method.getParameterTypes();
+        CtClass[] t2 = list.get(i).getParameterTypes();
+        if (t1.length > t2.length) {
+          list.add(i, method);
+          return;
+        }
+        else if (t1.length == t2.length) {
+          for (int j = 0; j < t1.length; j++) {
+            if (t1[j].equals(t2[j])) continue;
+            if (t1[j].subtypeOf(t2[j])) {
+              list.add(i, method);
+              return;
+            }
+          }
+        }
+      } catch (NotFoundException e) { ErrorList.addError(new NotFoundError(e, filePath)); }
+      list.add(method);
+    }
+    else {
+      List<CtMethod> list = new ArrayList<>();
+      list.add(method);
+      methods.put(method.getName(), list);
+    }
   }
 
   public void inheritExceptions(Environment env) {
@@ -213,6 +243,6 @@ public class Environment {
   private Map<String, Expression> env;
   private Map<CtClass, List<Integer>> exceptions;
 
-  private Map<CtClass, List<CtMethod>> visibleMethodsCache = new HashMap<>();
+  private Map<CtClass, Map<String, List<CtMethod>>> visibleMethodsCache = new HashMap<>();
 }
 
