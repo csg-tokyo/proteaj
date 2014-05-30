@@ -159,7 +159,7 @@ public class JavaExpressionParsers {
   private static final PackratParser<ClassLiteral> classLiteral = map(postfix(postfix(className, "."), "class"), ClassLiteral::new);
 
   private static final PackratParser<Expression> literal =
-      choice(intLiteral, hexLiteral, booleanLiteral, stringLiteral, charLiteral, classLiteral);
+      choice(hexLiteral, intLiteral, booleanLiteral, stringLiteral, charLiteral, classLiteral);
 
   private static final PackratParser<Expression> primary =
       choice(abbMethodCall, variable, staticMethodCall, staticFieldAccess, newObject, newArray, arrayInit, parenthesized, literal);

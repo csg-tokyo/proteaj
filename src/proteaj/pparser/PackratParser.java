@@ -230,34 +230,3 @@ class Head<T> {
   private List<PackratParser> involvedSet;
   private List<PackratParser> evalSet;
 }
-/*
-class MemoTable<T> {
-  public MemoTable() {
-    memos = new WeakHashMap<>();
-  }
-
-  public void memoize(PackratReader reader, int bPos, ParseResult<T> ast, Integer ePos) {
-    if (! memos.containsKey(reader)) memos.put(reader, new HashMap<>());
-
-    Map<Integer, Pair<ParseResult<T>, Integer>> map = memos.get(reader);
-
-    if (map.containsKey(bPos)) {
-      ParseResult<T> memo = map.get(bPos)._1;
-
-      if (! memo.isFail() && ! (memo instanceof LR) && ast.isFail()) return;
-    }
-
-    map.put(bPos, Pair.make(ast, ePos));
-  }
-
-  public boolean contains(PackratReader reader, int pos) {
-    return memos.containsKey(reader) && memos.get(reader).containsKey(pos);
-  }
-
-  public Pair<ParseResult<T>, Integer> lookup(PackratReader reader, int pos) {
-    if (! memos.containsKey(reader)) return null;
-    else return memos.get(reader).get(pos);
-  }
-
-  private Map<PackratReader, Map<Integer, Pair<ParseResult<T>, Integer>>> memos;
-}*/
