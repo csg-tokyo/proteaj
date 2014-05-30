@@ -29,7 +29,7 @@ public abstract class StatementParsers {
     new StatementParsers() {
       @Override
       protected PackratParser<ReturnStatement> getReturnStatementParser() {
-        return failure("return statement cannot be used here");
+        return returnVoidStatement;
       }
     };
 
