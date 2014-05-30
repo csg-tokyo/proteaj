@@ -1,5 +1,7 @@
 package proteaj.pparser;
 
+import proteaj.util.Pair;
+
 import java.util.*;
 
 public class PackratReader {
@@ -51,6 +53,10 @@ public class PackratReader {
     current = pos;
   }
 
+  public <T> MemoTable<T> memos (PackratParser<T> parser) {
+    return state.getMemoTable(parser);
+  }
+
   private TreeMap<Integer, Integer> createLinesMap(int line) {
     TreeMap<Integer, Integer> map = new TreeMap<Integer, Integer>();
 
@@ -81,6 +87,39 @@ class PackratParserState {
   public LR pop () { return lrStack.pop(); }
   public LinkedList<LR> lrList () { return lrStack; }
 
-  private LinkedList<LR> lrStack = new LinkedList<>();
+  public <T> MemoTable<T> getMemoTable (PackratParser<T> parser) {
+    if (! memoTables.containsKey(parser)) memoTables.put(parser, new MemoTable<>());
+    return (MemoTable<T>) memoTables.get(parser);
+  }
+
   Map<Integer, Head> heads = new HashMap<>();
+
+  private LinkedList<LR> lrStack = new LinkedList<>();
+  private Map<PackratParser<?>, MemoTable<?>> memoTables = new HashMap<>();
+}
+
+class MemoTable<T> {
+  public MemoTable() {
+    memos = new HashMap<>();
+  }
+
+  public void memoize(int bPos, ParseResult<T> ast, Integer ePos) {
+    if (memos.containsKey(bPos)) {
+      ParseResult<T> memo = memos.get(bPos)._1;
+
+      if (! memo.isFail() && ! (memo instanceof LR) && ast.isFail()) return;
+    }
+
+    memos.put(bPos, Pair.make(ast, ePos));
+  }
+
+  public boolean contains(int pos) {
+    return memos.containsKey(pos);
+  }
+
+  public Pair<ParseResult<T>, Integer> lookup(int pos) {
+    return memos.get(pos);
+  }
+
+  private Map<Integer, Pair<ParseResult<T>, Integer>> memos;
 }

@@ -17,7 +17,7 @@ public abstract class PackratParser<T> {
     if(m == null) {
       reader.state.push(this);
       LR<T> lr = reader.state.head();
-      mtable.memoize(reader, pos, lr, pos);
+      mtable(reader).memoize(pos, lr, pos);
 
       reader.setPos(pos);
       ParseResult<T> ans = parse(reader, env);
@@ -26,11 +26,11 @@ public abstract class PackratParser<T> {
 
       if(lr.isDetected()) {
         lr.setSeed(ans);
-        mtable.memoize(reader, pos, lr, reader.getPos());
+        mtable(reader).memoize(pos, lr, reader.getPos());
         return lrAnswer(reader, env, pos, lr, reader.getPos());
       }
       else {
-        mtable.memoize(reader, pos, ans, reader.getPos());
+        mtable(reader).memoize(pos, ans, reader.getPos());
         return ans;
       }
     }
@@ -50,7 +50,7 @@ public abstract class PackratParser<T> {
     Head h = lr.getHead();
 
     if(h.parser != this) return lr.getSeed();
-    mtable.memoize(reader, bPos, lr.getSeed(), ePos);
+    mtable(reader).memoize(bPos, lr.getSeed(), ePos);
 
     return growLR(h, reader, env, bPos);
   }
@@ -63,7 +63,7 @@ public abstract class PackratParser<T> {
 
       ParseResult<T> ans = parse(reader, env);
 
-      Pair<ParseResult<T>, Integer> m = mtable.lookup(reader, pos);
+      Pair<ParseResult<T>, Integer> m = mtable(reader).lookup(pos);
       int position = reader.getPos();
 
       if(ans.isFail() || position <= m._2) {
@@ -71,7 +71,7 @@ public abstract class PackratParser<T> {
         reader.setPos(m._2);
         return m._1;
       }
-      else mtable.memoize(reader, pos, ans, position);
+      else mtable(reader).memoize(pos, ans, position);
     }
   }
 
@@ -88,25 +88,23 @@ public abstract class PackratParser<T> {
   }
 
   private Pair<ParseResult<T>, Integer> recall(PackratReader reader, Environment env, int pos) {
-    if(! reader.state.heads.containsKey(pos)) return mtable.lookup(reader, pos);
+    if(! reader.state.heads.containsKey(pos)) return mtable(reader).lookup(pos);
     Head h = reader.state.heads.get(pos);
 
-    if(! (mtable.contains(reader, pos) || h.involves(this))) return Pair.make(FAIL, pos);
+    if(! (mtable(reader).contains(pos) || h.involves(this))) return Pair.make(FAIL, pos);
 
     if(h.containsInEvalSet(this)) {
       h.removeFromEvalSet(this);
 
       ParseResult<T> ans = parse(reader, env);
-      mtable.memoize(reader, pos, ans, reader.getPos());
+      mtable(reader).memoize(pos, ans, reader.getPos());
 
       return Pair.make(ans, reader.getPos());
     }
-    else return mtable.lookup(reader, pos);
+    else return mtable(reader).lookup(pos);
   }
 
-  protected PackratParser() {
-    mtable = new MemoTable<>();
-  }
+  protected PackratParser() {}
 
   // utilities
   protected Success<T> success(T t) {
@@ -139,7 +137,7 @@ public abstract class PackratParser<T> {
     return best;
   }
 
-  private MemoTable<T> mtable;
+  private MemoTable<T> mtable(PackratReader reader) { return reader.memos(this); }
 
   private final ParseResult<T> FAIL = new Failure<>("not involved in this left recursion", 0, 0);
 }
@@ -232,7 +230,7 @@ class Head<T> {
   private List<PackratParser> involvedSet;
   private List<PackratParser> evalSet;
 }
-
+/*
 class MemoTable<T> {
   public MemoTable() {
     memos = new WeakHashMap<>();
@@ -262,4 +260,4 @@ class MemoTable<T> {
   }
 
   private Map<PackratReader, Map<Integer, Pair<ParseResult<T>, Integer>>> memos;
-}
+}*/
