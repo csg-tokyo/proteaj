@@ -3,6 +3,7 @@ package proteaj.pparser;
 import proteaj.util.Pair;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class PackratReader {
   public PackratReader(String source, String filePath, int line) {
@@ -53,6 +54,8 @@ public class PackratReader {
     current = pos;
   }
 
+  public Stream<Failure<?>> getAllFailures() { return state.getAllFailures(); }
+
   public <T> MemoTable<T> memos (PackratParser<T> parser) {
     return state.getMemoTable(parser);
   }
@@ -92,6 +95,10 @@ class PackratParserState {
     return (MemoTable<T>) memoTables.get(parser);
   }
 
+  public Stream<Failure<?>> getAllFailures() {
+    return memoTables.values().stream().flatMap(MemoTable::getAllFailures);
+  }
+
   Map<Integer, Head> heads = new HashMap<>();
 
   private LinkedList<LR> lrStack = new LinkedList<>();
@@ -111,6 +118,10 @@ class MemoTable<T> {
     }
 
     memos.put(bPos, Pair.make(ast, ePos));
+  }
+
+  public Stream<Failure<?>> getAllFailures() {
+    return memos.values().stream().map(pair -> pair._1).filter(ParseResult::isFail).map(result -> (Failure<?>)result);
   }
 
   public boolean contains(int pos) {

@@ -6,6 +6,8 @@ import proteaj.pparser.*;
 
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
+
 import javassist.*;
 
 public class BodyParser {
@@ -16,17 +18,8 @@ public class BodyParser {
       CtClass[] exceptionTypes = method.getExceptionTypes();
 
       ParseResult<MethodBody> mbody = StatementParsers.methodBody(returnType).applyRule(reader, env);
-      if(! mbody.isFail()) {
-        env.removeExceptions(exceptionTypes);
-
-        if(env.hasException()) {
-          throw createUnhandledExceptions(reader, env);
-        }
-
-        return mbody.get();
-      }
-
-      throw new CompileErrors(new ParseError(mbody.getFailLog().getMessage(), reader.filePath, mbody.getFailLog().getLine()));
+      env.removeExceptions(exceptionTypes);
+      return getResultOrThrowErrors(mbody, reader, env);
     } catch (NotFoundException e) {
       throw new CompileErrors(new NotFoundError(e, reader.filePath, 0));
     }
@@ -38,17 +31,8 @@ public class BodyParser {
       CtClass[] exceptionTypes = constructor.getExceptionTypes();
 
       ParseResult<ConstructorBody> cbody = StatementParsers.constructorBody().applyRule(reader, env);
-      if(! cbody.isFail()) {
-        env.removeExceptions(exceptionTypes);
-
-        if(env.hasException()) {
-          throw createUnhandledExceptions(reader, env);
-        }
-
-        return cbody.get();
-      }
-
-      throw new CompileErrors(new ParseError(cbody.getFailLog().getMessage(), reader.filePath, cbody.getFailLog().getLine()));
+      env.removeExceptions(exceptionTypes);
+      return getResultOrThrowErrors(cbody, reader, env);
     } catch (NotFoundException e) {
       throw new CompileErrors(new NotFoundError(e, reader.filePath, 0));
     }
@@ -58,14 +42,7 @@ public class BodyParser {
     ForDebug.print("[[ parse field initializer of " + field.getName() + " ]]");
     try {
       ParseResult<FieldBody> fbody = ExpressionParsers.fieldBody(field.getType()).applyRule(reader, env);
-      if(! fbody.isFail()) {
-        if(env.hasException()) {
-          throw createUnhandledExceptions(reader, env);
-        }
-        return fbody.get();
-      }
-
-      throw new CompileErrors(new ParseError(fbody.getFailLog().getMessage(), reader.filePath, fbody.getFailLog().getLine()));
+      return getResultOrThrowErrors(fbody, reader, env);
     } catch (NotFoundException e) {
       throw new CompileErrors(new NotFoundError(e, reader.filePath, 0));
     }
@@ -74,14 +51,7 @@ public class BodyParser {
   public DefaultValue parseDefaultArgument(CtMethod method, PackratReader reader, Environment env) throws CompileErrors {
     try {
       ParseResult<DefaultValue> defval = ExpressionParsers.defaultArgument(method.getReturnType()).applyRule(reader, env);
-      if(! defval.isFail()) {
-        if(env.hasException()) {
-          throw createUnhandledExceptions(reader, env);
-        }
-        return defval.get();
-      }
-
-      throw new CompileErrors(new ParseError(defval.getFailLog().getMessage(), reader.filePath, defval.getFailLog().getLine()));
+      return getResultOrThrowErrors(defval, reader, env);
     } catch (NotFoundException e) {
       throw new CompileErrors(new NotFoundError(e, reader.filePath, 0));
     }
@@ -89,23 +59,30 @@ public class BodyParser {
 
   public ClassInitializer parseStaticInitializer(PackratReader reader, Environment env) throws CompileErrors {
     ParseResult<ClassInitializer> sibody = StatementParsers.classInitializer().applyRule(reader, env);
-    if(! sibody.isFail()) {
-      if(env.hasException()) {
-        throw createUnhandledExceptions(reader, env);
-      }
-
-      return sibody.get();
-    }
-
-    throw new CompileErrors(new ParseError(sibody.getFailLog().getMessage(), reader.filePath, sibody.getFailLog().getLine()));
+    return getResultOrThrowErrors(sibody, reader, env);
   }
 
-  private CompileErrors createUnhandledExceptions(PackratReader reader, Environment env) {
+  private <T> T getResultOrThrowErrors (ParseResult<T> result, PackratReader reader, Environment env) throws CompileErrors {
+    if (result.isFail()) {
+      Optional<Failure<?>> failure = reader.getAllFailures().max((f1, f2) -> f1.pos - f2.pos);
+
+      if (failure.isPresent())
+        throw new CompileErrors(new ParseError(failure.get().msg, env.filePath, failure.get().line));
+      else
+        throw new CompileErrors(new ParseError(result.getFailLog().getMessage(), env.filePath, result.getFailLog().getLine()));
+    }
+    if (env.hasException()) {
+      throw createUnhandledExceptions(env);
+    }
+    return result.get();
+  }
+
+  private CompileErrors createUnhandledExceptions(Environment env) {
     List<CompileError> errors = new ArrayList<CompileError>();
     for(Entry<CtClass, List<Integer>> entry : env.getExceptions().entrySet()) {
       CtClass exception = entry.getKey();
       for(int line : entry.getValue()) {
-        errors.add(new ParseError("unhandled exception type " + exception.getName(), reader.filePath, line));
+        errors.add(new ParseError("unhandled exception type " + exception.getName(), env.filePath, line));
       }
     }
     return new CompileErrors(errors);
