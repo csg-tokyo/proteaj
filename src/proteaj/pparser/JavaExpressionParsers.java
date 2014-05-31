@@ -165,7 +165,7 @@ public class JavaExpressionParsers {
       choice(abbMethodCall, variable, staticMethodCall, staticFieldAccess, newObject, newArray, arrayInit, parenthesized, literal);
 
   private static final PackratParser<Expression> dotAccess =
-      choice(methodCall, arrayLength, fieldAccess, arrayAccess, primary);
+      choice(arrayAccess, methodCall, arrayLength, fieldAccess, primary);
 
   private static final PackratParser<Expression> javaExpression =
       choice(assignment, cast, ref_DotAccess);
