@@ -13,6 +13,8 @@ public class Modifiers {
     return modifiers.get(mod);
   }
 
+  public static boolean isPublic(int mod) { return (mod & PUBLIC) == PUBLIC; }
+
   public static boolean isStatic(int mod) {
     return (mod & STATIC) == STATIC;
   }

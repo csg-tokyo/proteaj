@@ -130,6 +130,13 @@ public class Environment {
         if (isVisible(method)) addVisibleMethod(method, methods);
       }
 
+      // workaround
+      if (clazz.getName().equals("java.lang.StringBuffer")) {
+        for (CtMethod method : clazz.getDeclaredMethods()) {
+          if (isVisible(method)) addVisibleMethod(method, methods);
+        }
+      }
+
       visibleMethodsCache.put(clazz, methods);
     }
     return visibleMethodsCache.get(clazz).getOrDefault(name, Collections.emptyList());
@@ -138,7 +145,17 @@ public class Environment {
   private void addVisibleMethod (CtMethod method, Map<String, List<CtMethod>> methods) {
     if (methods.containsKey(method.getName())) {
       List<CtMethod> list = methods.get(method.getName());
-      if (list.contains(method)) return;
+
+      if (list.contains(method)) {
+        int i = list.indexOf(method);
+        if (method != list.get(i)) try {
+          if (method.getReturnType().subtypeOf(list.get(i).getReturnType())) {
+            list.set(i, method);
+          }
+        } catch (NotFoundException e) { ErrorList.addError(new NotFoundError(e, filePath)); }
+        return;
+      }
+
       for (int i = 0; i < list.size(); i++) try {
         CtClass[] t1 = method.getParameterTypes();
         CtClass[] t2 = list.get(i).getParameterTypes();
