@@ -33,13 +33,15 @@ public class Environment {
       }
 
       for(CtField field : thisClass.getFields()) try {
-        add(field.getName(), new FieldAccess(thisExpr, field));
+        if (Modifiers.isStatic(field)) add(field.getName(), new StaticFieldAccess(field));
+        else add(field.getName(), new FieldAccess(thisExpr, field));
       } catch (NotFoundException e) {
         ErrorList.addError(new NotFoundError(e, filePath, 0));
       }
 
       for(CtField field : thisClass.getDeclaredFields()) try {
-        add(field.getName(), new FieldAccess(thisExpr, field));
+        if (Modifiers.isStatic(field)) add(field.getName(), new StaticFieldAccess(field));
+        else add(field.getName(), new FieldAccess(thisExpr, field));
       } catch (NotFoundException e) {
         ErrorList.addError(new NotFoundError(e, filePath, 0));
       }
