@@ -6,7 +6,6 @@ import proteaj.pparser.*;
 
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.stream.Stream;
 
 import javassist.*;
 
@@ -72,19 +71,17 @@ public class BodyParser {
         throw new CompileErrors(new ParseError(result.getFailLog().getMessage(), env.filePath, result.getFailLog().getLine()));
     }
     if (env.hasException()) {
-      throw createUnhandledExceptions(env);
+      warnUnhandledExceptions(env);
     }
     return result.get();
   }
 
-  private CompileErrors createUnhandledExceptions(Environment env) {
-    List<CompileError> errors = new ArrayList<CompileError>();
+  private void warnUnhandledExceptions(Environment env) {
     for(Entry<CtClass, List<Integer>> entry : env.getExceptions().entrySet()) {
       CtClass exception = entry.getKey();
       for(int line : entry.getValue()) {
-        errors.add(new ParseError("unhandled exception type " + exception.getName(), env.filePath, line));
+        Warning.print("unhandled exception type " + exception.getName(), env.filePath, line);
       }
     }
-    return new CompileErrors(errors);
   }
 }
