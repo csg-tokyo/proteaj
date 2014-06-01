@@ -74,7 +74,8 @@ public abstract class StatementParsers {
       map(seq(identifier, arrayBrackets), pair -> new LocalsDecl.LocalDecl(pair._1, pair._2));
 
   private PackratParser<LocalsDecl.LocalDecl> localDeclAndInit (CtClass type) {
-    return map(infix(simpleLocalDecl, "=", expression(type)), pair -> new LocalsDecl.LocalDecl(pair._1.name, pair._1.dim, pair._2));
+    return bind(postfix(simpleLocalDecl, "="), local -> depends(env ->
+        map(expression(env.getArrayType(type, local.dim)), e -> new LocalsDecl.LocalDecl(local.name, local.dim, e))));
   }
 
   private PackratParser<LocalsDecl.LocalDecl> localVarDecl (CtClass type) {
