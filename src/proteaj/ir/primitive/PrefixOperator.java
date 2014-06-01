@@ -51,7 +51,7 @@ public class PrefixOperator extends PrimitiveOperator {
     CtClass[] paramTypes = { type };
     IROperandAttribute[] paramMods = { new IROperandAttribute(0) };
 
-    return new IRPattern(MOD_RASSOC, pattern, paramTypes, paramMods, getEmptyCtClassArray(), getEmptyCtClassArray());
+    return new IRPattern(MOD_NONASSOC, pattern, paramTypes, paramMods, getEmptyCtClassArray(), getEmptyCtClassArray());
   }
 
   private PrefixOperator(CtClass returnType, String operator, CtClass type, int priority) {
@@ -65,6 +65,6 @@ public class PrefixOperator extends PrimitiveOperator {
   }
 
   public final String operator;
-  private static final int MOD_RASSOC = Modifiers.PUBLIC | Modifiers.STATIC | Modifiers.RIGHT_ASSOC;
+  private static final int MOD_NONASSOC = Modifiers.PUBLIC | Modifiers.STATIC | Modifiers.NON_ASSOC;
 }
 
