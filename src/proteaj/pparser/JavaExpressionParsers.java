@@ -2,7 +2,6 @@ package proteaj.pparser;
 
 import javassist.*;
 
-import proteaj.error.*;
 import proteaj.tast.*;
 import proteaj.util.Pair;
 
@@ -146,6 +145,10 @@ public class JavaExpressionParsers {
 
   private static final PackratParser<IntLiteral> hexLiteral = map(hexadecimal, IntLiteral::new);
 
+  private static final PackratParser<FloatLiteral> floatLiteral = map(floatConst, FloatLiteral::new);
+
+  private static final PackratParser<DoubleLiteral> doubleLiteral = map(decimal, DoubleLiteral::new);
+
   private static final PackratParser<BooleanLiteral> trueLiteral = map(keyword("true"), s -> new BooleanLiteral(true));
 
   private static final PackratParser<BooleanLiteral> falseLiteral = map(keyword("false"), s -> new BooleanLiteral(false));
@@ -159,7 +162,7 @@ public class JavaExpressionParsers {
   private static final PackratParser<ClassLiteral> classLiteral = map(postfix(postfix(className, "."), "class"), ClassLiteral::new);
 
   private static final PackratParser<Expression> literal =
-      choice(hexLiteral, intLiteral, booleanLiteral, stringLiteral, charLiteral, classLiteral);
+      choice(hexLiteral, floatLiteral, doubleLiteral, intLiteral, booleanLiteral, stringLiteral, charLiteral, classLiteral);
 
   private static final PackratParser<Expression> primary =
       choice(abbMethodCall, variable, staticMethodCall, staticFieldAccess, newObject, newArray, arrayInit, parenthesized, literal);

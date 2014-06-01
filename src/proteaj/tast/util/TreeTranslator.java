@@ -250,9 +250,11 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
     return charLiteral;
   }
 
-  public Expression translate(IntLiteral intLiteral) {
-    return intLiteral;
-  }
+  public Expression translate(IntLiteral intLiteral) { return intLiteral; }
+
+  public Expression translate(FloatLiteral floatLiteral) { return floatLiteral; }
+
+  public Expression translate(DoubleLiteral doubleLiteral) { return doubleLiteral; }
 
   public Expression translate(BooleanLiteral booleanLiteral) {
     return booleanLiteral;
@@ -394,12 +396,16 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   }
 
   @Override
+  public final Expression visit(FloatLiteral floatLiteral, Expression expression) { return translate(floatLiteral); }
+
+  @Override
+  public final Expression visit(DoubleLiteral doubleLiteral, Expression expression) { return translate(doubleLiteral); }
+
+  @Override
   public final Expression visit(BooleanLiteral booleanLiteral, Expression expression) { return translate(booleanLiteral); }
 
   @Override
-  public final Expression visit(ClassLiteral classLiteral, Expression expression) {
-    return translate(classLiteral);
-  }
+  public final Expression visit(ClassLiteral classLiteral, Expression expression) { return translate(classLiteral); }
 
   @Override
   public final Expression visit(TypeLiteral typeLiteral, Expression expression) {

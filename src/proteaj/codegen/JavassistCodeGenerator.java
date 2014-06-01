@@ -472,6 +472,16 @@ public class JavassistCodeGenerator implements ExpressionVisitor<StringBuilder>,
   }
 
   @Override
+  public StringBuilder visit(FloatLiteral floatLiteral, StringBuilder buf) {
+    return buf.append(floatLiteral.val).append('f');
+  }
+
+  @Override
+  public StringBuilder visit(DoubleLiteral doubleLiteral, StringBuilder buf) {
+    return buf.append(doubleLiteral.val);
+  }
+
+  @Override
   public StringBuilder visit(BooleanLiteral bool, StringBuilder buf) {
     return buf.append(bool.val);
   }

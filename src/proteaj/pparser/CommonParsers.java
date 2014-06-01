@@ -139,6 +139,34 @@ public class CommonParsers {
         }
       };
 
+  public static final PackratParser<Double> decimal =
+      new PackratParser<Double>() {
+        @Override
+        protected ParseResult<Double> parse(PackratReader reader, Environment env) {
+          final int pos = reader.getPos();
+
+          ParseResult<Integer> i = integer.applyRule(reader, env);
+          if (i.isFail()) return fail(i, pos, reader);
+
+          StringBuilder buf = new StringBuilder();
+          buf.append(i.get());
+
+          ParseResult<String> dot = element(".").applyRule(reader, env);
+          if (dot.isFail()) return fail(dot, pos, reader);
+
+          buf.append('.');
+
+          while(isDigit(reader.lookahead())) {
+            buf.append(reader.next());
+          }
+
+          return success(Double.valueOf(buf.toString()));
+        }
+      };
+
+  public static final PackratParser<Float> floatConst =
+      map(PackratParserCombinators.postfix(decimal, element("f")), v -> v.floatValue());
+
   public static final PackratParser<Integer> hexadecimal =
       new PackratParser<Integer>() {
         @Override
