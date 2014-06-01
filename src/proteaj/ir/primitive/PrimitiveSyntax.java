@@ -24,6 +24,7 @@ public class PrimitiveSyntax extends IRSyntax {
         bmul, cmul, smul, imul, lmul, fmul, dmul,
         bdiv, cdiv, sdiv, idiv, ldiv, fdiv, ddiv,
         brem, crem, srem, irem, lrem, frem, drem,
+        lsh, rsh, lrsh,
         blt, clt, slt, ilt, llt, flt, dlt,
         bgt, cgt, sgt, igt, lgt, fgt, dgt,
         bleq, cleq, sleq, ileq, lleq, fleq, dleq,

@@ -49,6 +49,10 @@ public class BinaryOperator extends PrimitiveOperator {
   public static final BinaryOperator frem = new BinaryOperator(CtClass.floatType, "%", 1000);
   public static final BinaryOperator drem = new BinaryOperator(CtClass.doubleType, "%", 1000);
 
+  public static final BinaryOperator lsh  = new BinaryOperator(CtClass.intType, "<<", 800);
+  public static final BinaryOperator rsh  = new BinaryOperator(CtClass.intType, ">>", 800);
+  public static final BinaryOperator lrsh = new BinaryOperator(CtClass.intType, ">>>", 800);
+
   public static final BinaryOperator blt  = new BinaryOperator(CtClass.booleanType, CtClass.byteType, "<", CtClass.byteType, 700);
   public static final BinaryOperator clt  = new BinaryOperator(CtClass.booleanType, CtClass.charType, "<", CtClass.charType, 700);
   public static final BinaryOperator slt  = new BinaryOperator(CtClass.booleanType, CtClass.shortType, "<", CtClass.shortType, 700);
