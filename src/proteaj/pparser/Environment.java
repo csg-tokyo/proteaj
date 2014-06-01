@@ -166,7 +166,7 @@ public class Environment {
         else if (t1.length == t2.length) {
           for (int j = 0; j < t1.length; j++) {
             if (t1[j].equals(t2[j])) continue;
-            if (t1[j].subtypeOf(t2[j])) {
+            if (CtClassUtil.isSubtype(t1[j], t2[j])) {
               list.add(i, method);
               return;
             }

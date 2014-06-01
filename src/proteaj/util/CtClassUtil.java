@@ -31,6 +31,11 @@ public class CtClassUtil {
     else return from.subtypeOf(to);
   }
 
+  public static boolean isSubtype (CtClass from, CtClass to) throws NotFoundException {
+    if (from.isPrimitive()) return isAssignable_Primitive(from, to);
+    else return from.subtypeOf(to);
+  }
+
   private static boolean isAssignable_Primitive (CtClass from, CtClass to) {
     if (from == to) return true;
     if (from == CtClass.byteType) return to == CtClass.shortType || to == CtClass.intType || to == CtClass.longType || to == CtClass.floatType || to == CtClass.doubleType;
