@@ -150,8 +150,8 @@ public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVi
   }
 
   public LocalsDecl.LocalDecl translate(LocalsDecl.LocalDecl local) {
-    if (local.val == null) return new LocalsDecl.LocalDecl(local.name, local.dim);
-    else return new LocalsDecl.LocalDecl(local.name, local.dim, translate(local.val));
+    if (local.val == null) return new LocalsDecl.LocalDecl(local.type, local.name, local.dim);
+    else return new LocalsDecl.LocalDecl(local.type, local.name, local.dim, translate(local.val));
   }
 
   public Expression translate(ExpressionList list) {

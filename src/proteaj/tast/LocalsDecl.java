@@ -23,18 +23,21 @@ public class LocalsDecl extends Expression {
   public final List<LocalDecl> locals;
 
   public static class LocalDecl {
-    public LocalDecl (String name, int dim) {
+    public LocalDecl (CtClass type, String name, int dim) {
+      this.type = type;
       this.name = name;
       this.dim = dim;
       this.val = null;
     }
 
-    public LocalDecl (String name, int dim, Expression val) {
+    public LocalDecl (CtClass type, String name, int dim, Expression val) {
+      this.type = type;
       this.name = name;
       this.dim = 0;
       this.val = val;
     }
 
+    public final CtClass type;
     public final String name;
     public final int dim;
     public final Expression val;

@@ -70,16 +70,18 @@ public abstract class StatementParsers {
   private final PackratParser<Block> block =
       map(scope(enclosed("{", rep(ref_BlockStatement), "}")), Block::new);
 
-  private final PackratParser<LocalsDecl.LocalDecl> simpleLocalDecl =
-      map(seq(identifier, arrayBrackets), pair -> new LocalsDecl.LocalDecl(pair._1, pair._2));
+  private final PackratParser<LocalsDecl.LocalDecl> simpleLocalDecl (CtClass type) {
+    return bind(seq(identifier, arrayBrackets), pair ->
+        depends(env -> unit(new LocalsDecl.LocalDecl(env.getArrayType(type, pair._2), pair._1, pair._2))));
+  }
 
   private PackratParser<LocalsDecl.LocalDecl> localDeclAndInit (CtClass type) {
-    return bind(postfix(simpleLocalDecl, "="), local -> depends(env ->
-        map(expression(env.getArrayType(type, local.dim)), e -> new LocalsDecl.LocalDecl(local.name, local.dim, e))));
+    return bind(postfix(simpleLocalDecl(type), "="), local ->
+        map(expression(local.type), e -> new LocalsDecl.LocalDecl(local.type, local.name, local.dim, e)));
   }
 
   private PackratParser<LocalsDecl.LocalDecl> localVarDecl (CtClass type) {
-    return withEffect(choice(localDeclAndInit(type), simpleLocalDecl), local -> declareLocal(local.name, type));
+    return withEffect(choice(localDeclAndInit(type), simpleLocalDecl(type)), local -> declareLocal(local.name, local.type));
   }
 
   private final PackratParser<LocalsDecl> finalLocalsDecl =
