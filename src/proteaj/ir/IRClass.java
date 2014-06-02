@@ -6,11 +6,14 @@ import proteaj.env.type.TypeResolver;
 
 import javassist.*;
 
+import java.util.*;
+
 public class IRClass {
   public IRClass(CtClass clazz, IRHeader header) {
     this.clazz = clazz;
     this.header = header;
     this.resolver = header.resolver;
+    this.fields = new ArrayList<>();
   }
 
   public void setSuperclass (CtClass sup) throws SemanticsError {
@@ -110,9 +113,16 @@ public class IRClass {
       field = new CtField(type, name, clazz);
       field.setModifiers(mod);
       clazz.addField(field);
+      fields.add(field);
     } catch (CannotCompileException e) {
       throw new SemanticsError(e, header.filePath);
     }
     return field;
   }
+
+  public List<CtField> getDeclaredFields_Ordered () {
+    return fields;
+  }
+
+  private List<CtField> fields;
 }

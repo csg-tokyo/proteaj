@@ -12,7 +12,7 @@ public class ClassDecl extends AST {
     this.sinits = new HashSet<StaticInitializer>();
     this.constructors = new HashSet<ConstructorDecl>();
     this.methods = new HashSet<MethodDecl>();
-    this.fields = new HashSet<FieldDecl>();
+    this.fields = new ArrayList<FieldDecl>();
   }
 
   public void setModifiers(int modifiers) {
@@ -72,7 +72,7 @@ public class ClassDecl extends AST {
     return methods;
   }
 
-  public Set<FieldDecl> getFields() {
+  public List<FieldDecl> getFields() {
     return fields;
   }
 
@@ -83,6 +83,6 @@ public class ClassDecl extends AST {
   private Set<StaticInitializer> sinits;
   private Set<ConstructorDecl> constructors;
   private Set<MethodDecl> methods;
-  private Set<FieldDecl> fields;
+  private List<FieldDecl> fields;
 }
 

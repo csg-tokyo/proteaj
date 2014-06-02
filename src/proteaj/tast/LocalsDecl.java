@@ -33,7 +33,7 @@ public class LocalsDecl extends Expression {
     public LocalDecl (CtClass type, String name, int dim, Expression val) {
       this.type = type;
       this.name = name;
-      this.dim = 0;
+      this.dim = dim;
       this.val = val;
     }
 

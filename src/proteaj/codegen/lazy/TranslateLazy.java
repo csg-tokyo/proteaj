@@ -58,7 +58,7 @@ public class TranslateLazy {
           try { thunkType.addMethod(method); }
           catch (CannotCompileException e) { assert false; throw new RuntimeException(e); }
 
-          generated.add(new ClassDeclaration(thunkType, "auto generated"));
+          generated.add(new ClassDeclaration(thunkType, "auto generated", Collections.emptyList()));
 
           paramTypes[n] = thunkType;
 

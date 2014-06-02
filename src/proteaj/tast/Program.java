@@ -10,7 +10,7 @@ public class Program {
     this.classes = new HashMap<>();
     this.operatorModules = new ArrayList<>();
 
-    for (IRClass clazz: ir.getClasses()) classes.put(clazz.clazz, new ClassDeclaration(clazz.clazz, clazz.header.filePath));
+    for (IRClass clazz: ir.getClasses()) classes.put(clazz.clazz, new ClassDeclaration(clazz, clazz.header.filePath));
     for (IRSyntax syntax: ir.getSyntax()) operatorModules.add(new OperatorModuleDeclaration(syntax));
   }
 

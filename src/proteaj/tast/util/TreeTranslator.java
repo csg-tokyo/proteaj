@@ -9,7 +9,7 @@ import javassist.*;
 
 public class TreeTranslator implements StatementVisitor<Statement>, ExpressionVisitor<Expression>  {
   public ClassDeclaration translate(ClassDeclaration declaration) {
-    ClassDeclaration ret = new ClassDeclaration(declaration.clazz, declaration.filePath);
+    ClassDeclaration ret = new ClassDeclaration(declaration.clazz, declaration.filePath, declaration.getDeclaredFields_Ordered());
 
     for (MethodDeclaration method       : declaration.getMethods())       ret.addMethod(translate(method));
     for (ConstructorDeclaration cons    : declaration.getConstructors())  ret.addConstructor(translate(cons));

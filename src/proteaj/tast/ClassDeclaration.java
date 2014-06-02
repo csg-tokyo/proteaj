@@ -2,17 +2,24 @@ package proteaj.tast;
 
 import java.util.*;
 import javassist.*;
+import proteaj.ir.IRClass;
 
 public class ClassDeclaration {
-  public ClassDeclaration (CtClass clazz, String filePath) {
+  public ClassDeclaration (IRClass clazz, String filePath) {
+    this(clazz.clazz, filePath, clazz.getDeclaredFields_Ordered());
+  }
+
+  public ClassDeclaration (CtClass clazz, String filePath, List<CtField> fields_ordered) {
     this.clazz = clazz;
     this.filePath = filePath;
 
-    this.methods = new HashMap<CtMethod, MethodDeclaration>();
-    this.constructors = new ArrayList<ConstructorDeclaration>();
-    this.fields = new ArrayList<FieldDeclaration>();
-    this.defaultValues = new ArrayList<DefaultValueDefinition>();
-    this.initializers = new ArrayList<ClassInitializerDefinition>();
+    this.methods = new HashMap<>();
+    this.fields = new HashMap<>();
+    this.constructors = new ArrayList<>();
+    this.defaultValues = new ArrayList<>();
+    this.initializers = new ArrayList<>();
+
+    this.fields_ordered = fields_ordered;
   }
 
   public void addMethod (MethodDeclaration method) {
@@ -24,7 +31,7 @@ public class ClassDeclaration {
   }
 
   public void addField (FieldDeclaration field) {
-    fields.add(field);
+    fields.put(field.field, field);
   }
 
   public void addDefaultValue (DefaultValueDefinition defaultValue) {
@@ -39,18 +46,24 @@ public class ClassDeclaration {
     return methods.get(method);
   }
 
+  public FieldDeclaration getField(CtField field) { return fields.get(field); }
+
   public Collection<MethodDeclaration> getMethods() { return methods.values(); }
+  public Collection<FieldDeclaration> getFields() { return fields.values(); }
   public List<ConstructorDeclaration> getConstructors() { return constructors; }
-  public List<FieldDeclaration> getFields() { return fields; }
   public List<DefaultValueDefinition> getDefaultValues() { return defaultValues; }
   public List<ClassInitializerDefinition> getInitializers() { return initializers; }
+
+  public List<CtField> getDeclaredFields_Ordered () { return fields_ordered; }
 
   public final CtClass clazz;
   public final String filePath;
 
   private Map<CtMethod, MethodDeclaration> methods;
+  private Map<CtField, FieldDeclaration> fields;
   private List<ConstructorDeclaration> constructors;
-  private List<FieldDeclaration> fields;
   private List<DefaultValueDefinition> defaultValues;
   private List<ClassInitializerDefinition> initializers;
+
+  private List<CtField> fields_ordered;
 }

@@ -275,7 +275,7 @@ public class ExpressionParsers {
   private boolean isAssignableTo (Expression e, CtClass clazz) throws NotFoundException {
     if (isAssignable(e.type, clazz)) return true;
     if (e instanceof IntLiteral) {
-      int value = ((IntLiteral)e).val;
+      long value = ((IntLiteral)e).val;
       if (clazz == CtClass.byteType) return Byte.MIN_VALUE <= value && value <= Byte.MAX_VALUE;
       else if (clazz == CtClass.charType) return Character.MIN_VALUE <= value && value <= Character.MAX_VALUE;
       else if (clazz == CtClass.shortType) return Short.MIN_VALUE <= value && value <= Short.MAX_VALUE;

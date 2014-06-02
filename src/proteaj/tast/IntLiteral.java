@@ -5,8 +5,8 @@ import proteaj.tast.util.*;
 import javassist.CtClass;
 
 public class IntLiteral extends Expression {
-  public IntLiteral(int val) {
-    super(CtClass.intType);
+  public IntLiteral(long val) {
+    super(CtClass.longType);
     this.val = val;
   }
 
@@ -20,6 +20,6 @@ public class IntLiteral extends Expression {
     return String.valueOf(val);
   }
 
-  public final int val;
+  public final long val;
 }
 

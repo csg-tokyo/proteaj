@@ -15,6 +15,10 @@ public class Modifiers {
 
   public static boolean isPublic(int mod) { return (mod & PUBLIC) == PUBLIC; }
 
+  public static boolean isAbstract(int mod) { return (mod & ABSTRACT) == ABSTRACT; }
+
+  public static boolean isAbstract(CtMember member) { return isAbstract(member.getModifiers()); }
+
   public static boolean isStatic(int mod) {
     return (mod & STATIC) == STATIC;
   }

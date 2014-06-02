@@ -6,9 +6,12 @@ import proteaj.io.*;
 import proteaj.tast.*;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.*;
 
 import javassist.*;
 
+import static proteaj.codegen.JavaCodeGenerator.generateJavaCode;
 import static proteaj.codegen.JavassistCodeGenerator.codeGen;
 
 public class CodeGenerator {
@@ -35,6 +38,23 @@ public class CodeGenerator {
   }
 
   private void codegen (ClassDeclaration clazz) {
+    try {
+      Path dirPath = Paths.get("generated/" + clazz.filePath).getParent();
+      if (! Files.exists(dirPath)) dirPath = Files.createDirectories(dirPath);
+
+      Path path = Paths.get(dirPath.toString() + "/" + clazz.clazz.getSimpleName() + ".java");
+      if (! Files.exists(path)) path = Files.createFile(path);
+
+      System.out.println("write " + path.toString());
+
+      Writer writer = Files.newBufferedWriter(path, Charset.defaultCharset());
+      writer.write(generateJavaCode(clazz));
+      writer.close();
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+/*
     for (ClassInitializerDefinition clIni : clazz.getInitializers())
       codegen(clIni);
 
@@ -57,7 +77,7 @@ public class CodeGenerator {
       ErrorList.addError(new NotFoundError(e, clazz.filePath, 0));
     } catch (IOException e) {
       ErrorList.addError(new FileIOError("can't write class file", clazz.filePath, 0));
-    }
+    }*/
   }
 
   private void codegen (OperatorModuleDeclaration syntax) {

@@ -112,10 +112,10 @@ public class CommonParsers {
         }
       };
 
-  public static final PackratParser<Integer> integer =
-      new PackratParser<Integer>() {
+  public static final PackratParser<Long> integer =
+      new PackratParser<Long>() {
         @Override
-        protected ParseResult<Integer> parse(PackratReader reader, Environment env) {
+        protected ParseResult<Long> parse(PackratReader reader, Environment env) {
           final int pos = reader.getPos();
 
           while(isWhitespace(reader.lookahead())) reader.next();
@@ -123,10 +123,10 @@ public class CommonParsers {
           if (isDigit(reader.lookahead())) {
             if(reader.lookahead() == 0) {
               reader.next();
-              return success(0);
+              return success(0L);
             }
 
-            int val = digit(reader.next(), 10);
+            long val = digit(reader.next(), 10);
 
             while(isDigit(reader.lookahead())) {
               val = val * 10 + digit(reader.next(), 10);
@@ -145,7 +145,7 @@ public class CommonParsers {
         protected ParseResult<Double> parse(PackratReader reader, Environment env) {
           final int pos = reader.getPos();
 
-          ParseResult<Integer> i = integer.applyRule(reader, env);
+          ParseResult<Long> i = integer.applyRule(reader, env);
           if (i.isFail()) return fail(i, pos, reader);
 
           StringBuilder buf = new StringBuilder();
@@ -167,10 +167,10 @@ public class CommonParsers {
   public static final PackratParser<Float> floatConst =
       map(PackratParserCombinators.postfix(decimal, element("f")), v -> v.floatValue());
 
-  public static final PackratParser<Integer> hexadecimal =
-      new PackratParser<Integer>() {
+  public static final PackratParser<Long> hexadecimal =
+      new PackratParser<Long>() {
         @Override
-        protected ParseResult<Integer> parse(PackratReader reader, Environment env) {
+        protected ParseResult<Long> parse(PackratReader reader, Environment env) {
           final int pos = reader.getPos();
 
           // 0x
@@ -179,7 +179,7 @@ public class CommonParsers {
 
           if (! reader.hasNext()) return fail("digit is not found", pos, reader);
 
-          int val = digit(reader.next(), 16);
+          long val = digit(reader.next(), 16);
           if (val == -1) return fail("invalid hexadecimal", pos, reader);
 
           while (reader.hasNext()) {
