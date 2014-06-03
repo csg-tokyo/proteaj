@@ -277,7 +277,6 @@ public class ExpressionParsers {
     if (e instanceof IntLiteral) {
       long value = ((IntLiteral)e).val;
       if (clazz == CtClass.byteType) return Byte.MIN_VALUE <= value && value <= Byte.MAX_VALUE;
-      else if (clazz == CtClass.charType) return Character.MIN_VALUE <= value && value <= Character.MAX_VALUE;
       else if (clazz == CtClass.shortType) return Short.MIN_VALUE <= value && value <= Short.MAX_VALUE;
       else if (clazz == CtClass.intType) return Integer.MIN_VALUE <= value && value <= Integer.MAX_VALUE;
       else if (clazz == CtClass.longType) return Long.MIN_VALUE <= value && value <= Long.MAX_VALUE;
