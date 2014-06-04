@@ -59,7 +59,7 @@ java -classpath bin print.Main
 
 ```proteaj
 public operators PrintOperators {
-  public void "p" str (String str) {
+  public void "p" _ (String str) {
     System.out.println(str);
   }
 }
@@ -73,7 +73,7 @@ public operators PrintOperators {
 
 の形式で記述します。
 例えば先程の例の場合、
-public はアクセス修飾子であり、void が返り値の型、"p" str がパターンで、(String str) が引数リストです。
+public はアクセス修飾子であり、void が返り値の型、"p" _ がパターンで、(String str) が引数リストです。
 
 #### 修飾子
 
@@ -86,7 +86,7 @@ readas はユーザ定義リテラルを表現するための機能で、これ�
 
 演算子のパターンは基本的には名前とオペランドで表現します。
 例えば、先程の例では "p" が名前で、str がオペランドです。
-オペランド名は仮引数名と一致する必要があります。
+オペランド名は仮引数名と一致するか、アンダースコアでなければなりません必要があります。
 
 名前およびオペランドの個数や並び順は自由です。
 名前のない演算子やオペランドのない演算子も定義可能です。
@@ -95,7 +95,7 @@ readas はユーザ定義リテラルを表現するための機能で、これ�
 オプションは省略可能なオペランドを表し、デフォルト引数とともに利用します。
 
 ```proteaj
-public void "p" str? (String str = "\n") {
+public void "p" _? (String str = "\n") {
   System.out.println(str);
 }
 ```
@@ -103,7 +103,7 @@ public void "p" str? (String str = "\n") {
 繰り返し記法は0回以上の繰り返し(*) と1回以上の繰り返し (+) の二種類があり、可変長引数とともに用います。
 
 ```proteaj
-public void "p" strs+ (String... strs) {
+public void "p" _+ (String... strs) {
   for (int i = 0; i < strs.length; i++)
     System.out.println(strs[i]);
 }
@@ -112,7 +112,7 @@ public void "p" strs+ (String... strs) {
 また、この記法では繰り返しの区切り文字を指定することもできます。
 
 ```proteaj
-public void "p" strs+(",") (String... strs) {
+public void "p" _+(",") (String... strs) {
   for (int i = 0; i < strs.length; i++)
     System.out.println(strs[i]);
 }
@@ -127,7 +127,7 @@ not述語は次に現れる式が指定した型の式として読むことが�
 例えば、
 
 ```proteaj
-public void "p" !Identifier str (String str) {
+public void "p" !Identifier _ (String str) {
   System.out.println(str);
 }
 ```
@@ -150,8 +150,8 @@ ProteaJ では結合順序と解析順序の 2種類の演算子の優先順序�
 例えば、足し算と掛け算の定義は以下のようになります。
 
 ```proteaj
-public int left "+" right (int left, int right) : priority = 900 { ... }
-public int left "*" right (int left, int right) : priority = 1000 { ... }
+public int _ "+" _ (int left, int right) : priority = 900 { ... }
+public int _ "*" _ (int left, int right) : priority = 1000 { ... }
 ```
 
 解析順序は結合順序が同じ演算子のどちらを優先して使用するかを示す順序です。
@@ -159,8 +159,8 @@ public int left "*" right (int left, int right) : priority = 1000 { ... }
 例えば、
 
 ```proteaj
-void "if" c "then" e1 "else" e2 (boolean c, lazy void e1, lazy void e2) { ... }
-void "if" c "then" e (boolean c, lazy void e) { ... }
+void "if" _ "then" _ "else" _ (boolean c, lazy void e1, lazy void e2) { ... }
+void "if" _ "then" _ (boolean c, lazy void e) { ... }
 ```
 
 の場合、先に定義した if_then_else_ 演算子が if_then_ 演算子より優先して利用されます。
@@ -171,13 +171,69 @@ void "if" c "then" e (boolean c, lazy void e) { ... }
 引数リストの型名の前に lazy キーワードをつけることで、対応するオペランドの実引数が遅延評価されるようになります。
 
 ```proteaj
-public void "if" c "then" e (boolean c, lazy void e) {
+public void "if" _ "then" _ (boolean c, lazy void e) {
   if (c) e;
 }
 ```
 
 ただし、現在の実装は完全ではなく、引数部での代入計算を行った場合の振る舞いは保証できません。
 また、オペランドの実引数として書くことができるのは式であり、文ではない点にも注意して下さい。
+
+#### 演算子の返り値の型と継承の制限
+
+演算子はその返り値の型が期待されるような式部分でのみ利用できます。
+例えば、
+
+```proteaj
+public readas Alphabets _+ (Alphabet... as) { ... }
+public readas Alphabet "a" () : priority = 100 { ... }
+public readas Alphabet "z" () : priority = 100 { ... }
+```
+
+と定義した場合、
+
+```proteaj
+Alphabets as = alphabets;  // OK
+String str = alphabets;    // Error!
+```
+
+のように使えます。
+
+また、演算子はその返り値の型のスーパータイプが期待されている部分でも使うことができます。
+しかし、これは時々不都合な場合があります。
+例えば、先ほどの演算子は次のように使うこともできてしまいます。
+
+```proteaj
+Object obj = alphabets;  // OK (!?)
+```
+
+このような挙動が望ましくない場合は多く考えられるので、
+制限する機能を用意しています。
+
+```proteaj
+public readas [Alphabets] _+ (Alphabet... as) { ... }
+public readas [Alphabet] "a" () : priority = 100 { ... }
+public readas [Alphabet] "z" () : priority = 100 { ... }
+```
+
+のように定義することで、これらの演算子は期待される型がちょうど返り値の型と同じ場合にのみ利用可能となります。
+
+```proteaj
+Alphabets as = alphabets;  // OK
+String str = alphabets;    // Error!
+Object obj = alphabets;    // Error!
+```
+
+また、
+
+```proteaj
+public readas [Alphabets to AbstractAlphabets] _+ (Alphabet... as) { ... }
+public readas [Alphabet] "a" () : priority = 100 { ... }
+public readas [Alphabet] "z" () : priority = 100 { ... }
+```
+
+のように定義すると、Alphabets <: T <: AbstractAlphabets を満たす T 型を期待するような式部分で利用可能となります。
+
 
 ### 演算子の使い方
 
@@ -215,12 +271,10 @@ ProteaJ の演算子が利用できないのは、
 代入文の左辺、メソッドやフィールドアクセスのレシーバ部分 (a.b の a)、Javaのキャスト構文の引数部です。
 それ以外の式部分では演算子を利用することができます。
 
-
 ### Java の機能
 
 ProteaJ は概ね Java 1.4 相当の機能をサポートしています。
-ただし、内部クラスや匿名クラス、switch文はサポートしていません。(他にもサポートを忘れている機能があるかもしれません)
-switch文についてはサボっているだけなので、欲しいと言われたら作ります。
+ただし、内部クラスや匿名クラスはサポートしていません。(他にもサポートを忘れている機能があるかもしれません)
 
 ProteaJ の演算子は期待される型が分かる部分でしか使えないため、通常のJavaのキャスト構文では引数部で演算子を利用できません。
 そのため、ProteaJ では通常のJavaのキャストの他に、独自のキャスト構文を用意しています。
@@ -249,16 +303,24 @@ void foo () {
 
 ログ
 ---
-### 2014/5/15
+### 2014/6/4
+ - 演算子の利用可能な型にスコープを付ける機能を追加
+ - オペランドをアンダースコアで記述可能に
+ - synchronized ブロックをサポート
+ - switch, break, continue をサポート
  - 複数フィールドの同時宣言をサポート
+ - float, double, クラスリテラルをサポート
  - 16進数リテラルをサポート
+ - 8進・16進文字コードを文字列リテラル中で利用可能に
  - ビット演算子をサポート
+ - instanceof をサポート
  - 配列初期化構文をサポート
  - C言語風の配列変数宣言をサポート
  - int 以外のプリミティブ型の演算子を追加
  - プリミティブ型のワイドニング変換を一部サポート
-### 2014/5/16
- - break, continue をサポート
+ - エラーメッセージをもう少しまともに
+ - 多数のバグを修正
+ - コンパイラのパフォーマンスを10倍以上改善
 
 その他
 ---
