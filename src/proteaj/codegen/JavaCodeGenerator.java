@@ -1,22 +1,39 @@
 package proteaj.codegen;
 
-import javassist.CtClass;
-import javassist.CtField;
-import javassist.CtMethod;
-import javassist.NotFoundException;
 import proteaj.ir.IROperator;
 import proteaj.ir.primitive.*;
 import proteaj.tast.*;
 import proteaj.tast.util.*;
 import proteaj.util.Modifiers;
 
-import java.util.List;
+import java.util.*;
+import javassist.*;
 
 import static proteaj.util.Escape.escape;
 
 public class JavaCodeGenerator implements ExpressionVisitor<CodeBuffer>, StatementVisitor<CodeBuffer> {
   public static String generateJavaCode (ClassDeclaration clazz) {
     return new JavaCodeGenerator(clazz.clazz).visit(clazz, new CodeBuffer()).toString();
+  }
+
+  public String codeGen (MethodBody body) {
+    return visit(body, new CodeBuffer()).toString();
+  }
+
+  public String codeGen (ConstructorBody body) {
+    return visit(body, new CodeBuffer()).toString();
+  }
+
+  public String codeGen (FieldBody body) {
+    return visit(body, new CodeBuffer()).toString();
+  }
+
+  public String codeGen (DefaultValue body) {
+    return visit(body, new CodeBuffer()).toString();
+  }
+
+  public String codeGen (ClassInitializer body) {
+    return visit(body, new CodeBuffer()).toString();
   }
 
   public CodeBuffer visit (ClassDeclaration clazz, CodeBuffer buf) {
@@ -82,8 +99,8 @@ public class JavaCodeGenerator implements ExpressionVisitor<CodeBuffer>, Stateme
         buf = buf.append(Modifiers.toString(method.getModifiers())).append(' ');
         buf = buf.append(method.getReturnType()).append(' ');
         buf = buf.append(method.getName()).append(' ');
-        buf = codegenParams(method.getParameterTypes(), buf);
-        buf = codegenThrows(method.getExceptionTypes(), buf).append(';');
+        buf = codeGenParams(method.getParameterTypes(), buf);
+        buf = codeGenThrows(method.getExceptionTypes(), buf).append(';');
       } catch (NotFoundException e) {
         e.printStackTrace();
       }
@@ -107,8 +124,8 @@ public class JavaCodeGenerator implements ExpressionVisitor<CodeBuffer>, Stateme
     try {
       buf = buf.append(Modifiers.toString(constructor.constructor.getModifiers())).append(' ');
       buf = buf.append(constructor.constructor.getName()).append(' ');
-      buf = codegenParams(constructor.constructor.getParameterTypes(), buf);
-      buf = codegenThrows(constructor.constructor.getExceptionTypes(), buf);
+      buf = codeGenParams(constructor.constructor.getParameterTypes(), buf);
+      buf = codeGenThrows(constructor.constructor.getExceptionTypes(), buf);
       buf = visit(constructor.body, buf.append(' '));
     } catch (NotFoundException e) {
       e.printStackTrace();
@@ -121,8 +138,8 @@ public class JavaCodeGenerator implements ExpressionVisitor<CodeBuffer>, Stateme
       buf = buf.append(Modifiers.toString(method.method.getModifiers())).append(' ');
       buf = buf.append(method.method.getReturnType()).append(' ');
       buf = buf.append(method.method.getName()).append(' ');
-      buf = codegenParams(method.method.getParameterTypes(), buf);
-      buf = codegenThrows(method.method.getExceptionTypes(), buf);
+      buf = codeGenParams(method.method.getParameterTypes(), buf);
+      buf = codeGenThrows(method.method.getExceptionTypes(), buf);
       buf = visit(method.body, buf.append(' '));
     } catch (NotFoundException e) {
       e.printStackTrace();
@@ -149,8 +166,8 @@ public class JavaCodeGenerator implements ExpressionVisitor<CodeBuffer>, Stateme
       buf = buf.append(Modifiers.toString(dvDef.method.getModifiers())).append(' ');
       buf = buf.append(dvDef.method.getReturnType()).append(' ');
       buf = buf.append(dvDef.method.getName()).append(' ');
-      buf = codegenParams(dvDef.method.getParameterTypes(), buf);
-      buf = codegenThrows(dvDef.method.getExceptionTypes(), buf);
+      buf = codeGenParams(dvDef.method.getParameterTypes(), buf);
+      buf = codeGenThrows(dvDef.method.getExceptionTypes(), buf);
       buf = visit(dvDef.body, buf.append(' '));
     } catch (NotFoundException e) {
       e.printStackTrace();
@@ -158,7 +175,7 @@ public class JavaCodeGenerator implements ExpressionVisitor<CodeBuffer>, Stateme
     return buf;
   }
 
-  private CodeBuffer codegenParams (CtClass[] types, CodeBuffer buf) {
+  private CodeBuffer codeGenParams(CtClass[] types, CodeBuffer buf) {
     buf = buf.append('(');
 
     if (types != null && types.length > 0) {
@@ -169,7 +186,7 @@ public class JavaCodeGenerator implements ExpressionVisitor<CodeBuffer>, Stateme
     return buf.append(')');
   }
 
-  private CodeBuffer codegenThrows (CtClass[] types, CodeBuffer buf) {
+  private CodeBuffer codeGenThrows(CtClass[] types, CodeBuffer buf) {
     if (types != null && types.length > 0) {
       buf.append(" throws ").append(types[0]);
       for (int i = 1; i < types.length; i++) buf = buf.append(", ").append(types[i]);
@@ -439,14 +456,9 @@ public class JavaCodeGenerator implements ExpressionVisitor<CodeBuffer>, Stateme
   @Override
   public CodeBuffer visit(MethodCall methodCall, CodeBuffer buf) {
     buf = visit(methodCall.expr, buf).append('.');
-    buf = buf.append(methodCall.method.getName()).append('(');
-
-    List<Expression> args = methodCall.args;
-
-    if (! args.isEmpty()) buf = visit(args.get(0), buf);
-    for (int i = 1; i < args.size(); i++) buf = visit(args.get(i), buf.append(','));
-
-    return buf.append(')');
+    buf = buf.append(methodCall.method.getName());
+    buf = codeGenArgs(methodCall.args, methodCall.method, buf);
+    return buf;
   }
 
   @Override
@@ -455,14 +467,10 @@ public class JavaCodeGenerator implements ExpressionVisitor<CodeBuffer>, Stateme
       buf = buf.append(methodCall.method.getDeclaringClass()).append('.');
     }
 
-    buf = buf.append(methodCall.method.getName()).append('(');
+    buf = buf.append(methodCall.method.getName());
+    buf = codeGenArgs(methodCall.args, methodCall.method, buf);
 
-    List<Expression> args = methodCall.args;
-
-    if (! args.isEmpty()) buf = visit(args.get(0), buf);
-    for (int i = 1; i < args.size(); i++) buf = visit(args.get(i), buf.append(','));
-
-    return buf.append(')');
+    return buf;
   }
 
   @Override
@@ -484,14 +492,9 @@ public class JavaCodeGenerator implements ExpressionVisitor<CodeBuffer>, Stateme
 
   @Override
   public CodeBuffer visit(NewExpression newExpression, CodeBuffer buf) {
-    buf = buf.append("new ").append(newExpression.constructor.getDeclaringClass()).append('(');
-
-    List<Expression> args = newExpression.args;
-
-    if (! args.isEmpty()) buf = visit(args.get(0), buf);
-    for (int i = 1; i < args.size(); i++) buf = visit(args.get(i), buf.append(','));
-
-    return buf.append(')');
+    buf = buf.append("new ").append(newExpression.constructor.getDeclaringClass());
+    buf = codeGenArgs(newExpression.args, newExpression.constructor, buf);
+    return buf;
   }
 
   @Override
@@ -643,6 +646,40 @@ public class JavaCodeGenerator implements ExpressionVisitor<CodeBuffer>, Stateme
     return buf.append("null");
   }
 
+  private CodeBuffer codeGenArgs (List<Expression> args, CtBehavior behavior, CodeBuffer buf) {
+    final CtClass[] types;
+    try {
+      types = behavior.getParameterTypes();
+    } catch (NotFoundException e) {
+      assert false;
+      throw new RuntimeException(e);
+    }
+
+    assert args.size() == types.length;
+
+    buf = buf.append('(');
+
+    if (types.length != 0) {
+      buf = codeGenArg(args.get(0), types[0], buf);
+
+      for (int i = 1; i < types.length; i++) {
+        buf = buf.append(", ");
+        buf = codeGenArg(args.get(i), types[i], buf);
+      }
+    }
+
+    buf = buf.append(')');
+    return buf;
+  }
+
+  private CodeBuffer codeGenArg (Expression arg, CtClass type, CodeBuffer buf) {
+    buf = buf.append('(').append(type).append(')');
+    buf = buf.append('(');
+    buf = visit(arg, buf);
+    buf = buf.append(')');
+    return buf;
+  }
+
   private CodeBuffer codeGenPrimitiveOperator (PrimitiveOperator operator, List<Expression> operands, CodeBuffer buf) {
     if (operator instanceof PrefixOperator) {
       assert operands.size() == 1;
@@ -684,7 +721,7 @@ public class JavaCodeGenerator implements ExpressionVisitor<CodeBuffer>, Stateme
     return buf;
   }
 
-  private JavaCodeGenerator (CtClass clazz) {
+  public JavaCodeGenerator (CtClass clazz) {
     this.thisClass = clazz;
   }
 
