@@ -10,6 +10,7 @@ import java.util.*;
 import javassist.*;
 
 import static proteaj.util.Escape.escape;
+import static proteaj.util.Escape.unicodeEscape;
 
 public class JavaCodeGenerator implements ExpressionVisitor<CodeBuffer>, StatementVisitor<CodeBuffer> {
   public static String generateJavaCode (ClassDeclaration clazz) {
@@ -607,7 +608,7 @@ public class JavaCodeGenerator implements ExpressionVisitor<CodeBuffer>, Stateme
 
   @Override
   public CodeBuffer visit(CharLiteral ch, CodeBuffer buf) {
-    return buf.append('\'').append(escape(ch.val)).append('\'');
+    return buf.append('\'').append(unicodeEscape(ch.val)).append('\'');
   }
 
   @Override

@@ -25,4 +25,20 @@ public class Escape {
       default   : return Character.toString(c);
     }
   }
+
+  public static String unicodeEscape (char c) {
+    switch (c) {
+      case '\\' : return "\\\\";
+      case '\'' : return "\\'";
+      case '\"' : return "\\\"";
+      case '\b' : return "\\b";
+      case '\t' : return "\\t";
+      case '\n' : return "\\n";
+      case '\f' : return "\\f";
+      case '\r' : return "\\r";
+    }
+    String s = Integer.toHexString(c);
+    while (s.length() < 4) s = "0" + s;
+    return "\\u" + s;
+  }
 }
