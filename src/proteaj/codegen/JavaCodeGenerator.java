@@ -608,7 +608,8 @@ public class JavaCodeGenerator implements ExpressionVisitor<CodeBuffer>, Stateme
 
   @Override
   public CodeBuffer visit(CharLiteral ch, CodeBuffer buf) {
-    return buf.append('\'').append(unicodeEscape(ch.val)).append('\'');
+    return buf.append('\'').append(escape(ch.val)).append('\'');
+    //return buf.append('\'').append(unicodeEscape(ch.val)).append('\'');
   }
 
   @Override

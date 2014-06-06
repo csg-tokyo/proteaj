@@ -42,7 +42,7 @@ public class CodeGenerator {
   }
 
   private void codegen (ClassDeclaration clazz) {
-     // generateJavaCode(clazz);
+    // generateJavaCode(clazz);
     codegenByJavassist(clazz);
   }
 
