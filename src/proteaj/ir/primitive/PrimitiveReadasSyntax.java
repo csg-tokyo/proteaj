@@ -12,7 +12,7 @@ public class PrimitiveReadasSyntax extends IRSyntax {
   }
 
   private PrimitiveReadasSyntax() {
-    super("proteaj.lang.PrimitiveReadasOperators");
+    super("proteaj.lang.PrimitiveReadasOperators", "(no source)");
 
     CommonTypes cts = CommonTypes.getInstance();
 

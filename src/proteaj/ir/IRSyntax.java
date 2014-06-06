@@ -4,14 +4,16 @@ import java.util.*;
 import javassist.*;
 
 public class IRSyntax {
-  public IRSyntax(CtClass actualClass) {
+  public IRSyntax(CtClass actualClass, String filePath) {
     this.name = actualClass.getName();
+    this.filePath = filePath;
     this.baseIRSyntax = null;
     this.ops = new ArrayList<>();
   }
 
-  public IRSyntax(String name) {
+  public IRSyntax(String name, String filePath) {
     this.name = name;
+    this.filePath = filePath;
     this.baseIRSyntax = null;
     this.ops = new ArrayList<>();
   }
@@ -33,6 +35,7 @@ public class IRSyntax {
   }
 
   public final String name;
+  public final String filePath;
 
   private IRSyntax baseIRSyntax;
 

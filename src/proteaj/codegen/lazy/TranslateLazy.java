@@ -29,11 +29,11 @@ public class TranslateLazy {
 
   private void translate (OperatorModuleDeclaration op, List<ClassDeclaration> generated, Map<IROperator, Pair<CtMethod, Map<Integer, CtMethod>>> methods) {
     for (IROperator operator : op.syntax.getOperators()) {
-      translate(operator, generated, methods);
+      translate(operator, generated, methods, op.syntax.filePath);
     }
   }
 
-  private void translate (IROperator operator, List<ClassDeclaration> generated, Map<IROperator, Pair<CtMethod, Map<Integer, CtMethod>>> methods) {
+  private void translate (IROperator operator, List<ClassDeclaration> generated, Map<IROperator, Pair<CtMethod, Map<Integer, CtMethod>>> methods, String filePath) {
     IRPattern pattern = operator.pattern;
     int length = pattern.getPatternLength();
 
@@ -58,7 +58,7 @@ public class TranslateLazy {
           try { thunkType.addMethod(method); }
           catch (CannotCompileException e) { assert false; throw new RuntimeException(e); }
 
-          generated.add(new ClassDeclaration(thunkType, "auto generated", Collections.emptyList()));
+          generated.add(new ClassDeclaration(thunkType, filePath, Collections.emptyList()));
 
           paramTypes[n] = thunkType;
 
@@ -80,17 +80,14 @@ public class TranslateLazy {
       program.addMethod(new MethodDeclaration(method, body));
 
       methods.put(operator, Pair.make(method, lazyMap));
-    } catch (NotFoundException e) {
-      assert false;
-      throw new RuntimeException(e);
-    } catch (CannotCompileException e) {
+    } catch (NotFoundException | CannotCompileException e) {
       assert false;
       throw new RuntimeException(e);
     }
   }
 
   private ClassDeclaration translate (ClassDeclaration clazz, List<ClassDeclaration> generated, Map<IROperator, Pair<CtMethod, Map<Integer, CtMethod>>> methods) {
-    return new ProgramTranslator(clazz.clazz, generated, methods).translate(clazz);
+    return new ProgramTranslator(clazz, generated, methods).translate(clazz);
   }
 
   private Program program;

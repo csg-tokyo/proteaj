@@ -9,8 +9,9 @@ import javassist.*;
 import java.util.*;
 
 public class ProgramTranslator extends TreeTranslator {
-  public ProgramTranslator(CtClass clazz, List<ClassDeclaration> generated, Map<IROperator, Pair<CtMethod, Map<Integer, CtMethod>>> methods) {
-    this.clazz = clazz;
+  public ProgramTranslator(ClassDeclaration clazz, List<ClassDeclaration> generated, Map<IROperator, Pair<CtMethod, Map<Integer, CtMethod>>> methods) {
+    this.clazz = clazz.clazz;
+    this.filePath = clazz.filePath;
     this.generated = generated;
     this.methods = methods;
   }
@@ -78,17 +79,14 @@ public class ProgramTranslator extends TreeTranslator {
           MethodBody mBody = new MethodBody(mBlock);
           MethodDeclaration methodDeclaration = new MethodDeclaration(eval, mBody);
 
-          ClassDeclaration classDeclaration = new ClassDeclaration(thunk, "auto generated", fields);
+          ClassDeclaration classDeclaration = new ClassDeclaration(thunk, filePath, fields);
           classDeclaration.addConstructor(constructorDeclaration);
           classDeclaration.addMethod(methodDeclaration);
 
           generated.add(classDeclaration);
 
           operands.add(new NewExpression(constructor, args));
-        } catch (NotFoundException e) {
-          assert false;
-          throw new RuntimeException(e);
-        } catch (CannotCompileException e) {
+        } catch (NotFoundException | CannotCompileException e) {
           assert false;
           throw new RuntimeException(e);
         }
@@ -107,6 +105,7 @@ public class ProgramTranslator extends TreeTranslator {
 
 
   private final CtClass clazz;
+  private final String filePath;
   private final List<ClassDeclaration> generated;
   private final Map<IROperator, Pair<CtMethod, Map<Integer, CtMethod>>> methods;
 }

@@ -16,7 +16,7 @@ public class PrimitiveSyntax extends IRSyntax {
   private static PrimitiveSyntax syntax = null;
 
   private PrimitiveSyntax() {
-    super("proteaj.lang.PrimitiveOperators");
+    super("proteaj.lang.PrimitiveOperators", "(no source)");
 
     addOperators(
         badd, cadd, sadd, iadd, ladd, fadd, dadd,

@@ -131,7 +131,7 @@ public class OperatorsFile {
     checkElementNode(root, "operators");
     if(! getAttr(root, "name").equals(name)) throw new FileIOError(fileName + " is broken", fileName, 0);
 
-    IRSyntax irsyn = new IRSyntax(clz);
+    IRSyntax irsyn = new IRSyntax(clz, fileName);
 
     if(hasAttr(root, "super")) {
       irsyn.setBaseIRSyntax(pool.loadOperatorsFile(getAttr(root, "super")));
