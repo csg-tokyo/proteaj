@@ -76,7 +76,7 @@ public class JavaExpressionParsers {
       choice(abbStaticMethodCall, abbInstanceMethodCall);
 
   private static final PackratParser<Expression> variable =
-      bind(identifier, s -> depends(env -> env.contains(s) ? unit(env.get(s)) : failure("unknown variable: " + s)));
+      bind(identifier, s -> depends(env -> env.contains(s) ? unit(env.get(s)) : failure("unknown variable: " + s, 5)));
 
   private static final PackratParser<Pair<CtClass, String>> classDotIdentifier = infix(className, ".", identifier);
 
@@ -89,10 +89,10 @@ public class JavaExpressionParsers {
   private static PackratParser<FieldAccess> getInstanceField (Expression expr, String name, Environment env) {
     CtField field;
     try { field = expr.type.getField(name); } catch (NotFoundException e) {
-      return failure("field " + name + " is not found in " + expr.type.getName());
+      return failure("field " + name + " is not found in " + expr.type.getName(), 10);
     }
-    if (! env.isVisible(field)) return failure("field " + expr.type.getName() + '.' + name + " is not visible from " + env.thisClass.getName());
-    if (isStatic(field)) return failure("field " + expr.type.getName() + '.' + name + " is a static field");
+    if (! env.isVisible(field)) return failure("field " + expr.type.getName() + '.' + name + " is not visible from " + env.thisClass.getName(), 10);
+    if (isStatic(field)) return failure("field " + expr.type.getName() + '.' + name + " is a static field", 10);
 
     try { return unit(new FieldAccess(expr, field)); } catch (NotFoundException e) {
       return error(e);
@@ -102,10 +102,10 @@ public class JavaExpressionParsers {
   private static PackratParser<StaticFieldAccess> getStaticField (CtClass clazz, String name, Environment env) {
     CtField field;
     try { field = clazz.getField(name); } catch (NotFoundException e) {
-      return failure("field " + name + " is not found in " + clazz.getName());
+      return failure("field " + name + " is not found in " + clazz.getName(), 10);
     }
-    if (! env.isVisible(field)) return failure("field " + clazz.getName() + '.' + name + " is not visible from " + env.thisClass.getName());
-    if (! isStatic(field)) return failure("field " + clazz.getName() + '.' + name + " is not a static field");
+    if (! env.isVisible(field)) return failure("field " + clazz.getName() + '.' + name + " is not visible from " + env.thisClass.getName(), 10);
+    if (! isStatic(field)) return failure("field " + clazz.getName() + '.' + name + " is not a static field", 10);
 
     try { return unit(new StaticFieldAccess(field)); } catch (NotFoundException e) {
       return error(e);
@@ -134,7 +134,7 @@ public class JavaExpressionParsers {
       bind(seq(enclosed("(", typeName, ")"), ref_DotAccess), pair -> {
         try {
           if (isCastable(pair._2.type, pair._1)) return unit(new CastExpression(pair._1, pair._2));
-          else return failure(pair._2.type.getName() + " cannot cast to " + pair._1.getName());
+          else return failure(pair._2.type.getName() + " cannot cast to " + pair._1.getName(), 10);
         } catch (NotFoundException e) { return error(e); }
       });
 

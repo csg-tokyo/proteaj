@@ -1,6 +1,5 @@
 package proteaj.pparser;
 
-import proteaj.error.*;
 import proteaj.util.*;
 
 import java.util.*;
@@ -172,11 +171,6 @@ class LR<T> extends ParseResult<T> {
   @Override
   public boolean isFail() {
     return false;
-  }
-
-  @Override
-  public FailLog getFailLog() {
-    return null;
   }
 
   @Override

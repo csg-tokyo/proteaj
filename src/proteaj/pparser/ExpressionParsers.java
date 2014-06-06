@@ -252,7 +252,7 @@ public class ExpressionParsers {
     PackratParser <Expression> javaExpr = bind(ref_JavaExpression, expr -> {
       try {
         if (isAssignableTo(expr, clazz)) return unit(expr);
-        else return failure("type mismatch: expected " + clazz.getName() + " but found " + expr.type.getName());
+        else return failure("type mismatch: expected " + clazz.getName() + " but found " + expr.type.getName(), 5);
       } catch (NotFoundException e) {
         return error(e);
       }
@@ -290,9 +290,9 @@ public class ExpressionParsers {
     return bind(expression(from), expr -> {
       try {
         if (! to.subtypeOf(clazz))
-          return failure("type mismatch: expected" + clazz.getName() + " but found " + to.getName());
+          return failure("type mismatch: expected" + clazz.getName() + " but found " + to.getName(), 10);
         if (! isCastable(from, to))
-          return failure(from + " cannot cast to " + to.getName());
+          return failure(from + " cannot cast to " + to.getName(), 10);
       } catch (NotFoundException e) { return error(e); }
       return unit(new CastExpression(to, expr));
     });
@@ -450,8 +450,7 @@ public class ExpressionParsers {
   }
 
   private PackratParser<Expression> makeDefaultLiteralParser (final CtClass clazz) {
-    PackratParser<Expression> parenthesized = enclosed("(", getLiteralParser_Ref(clazz), ")");
-    return choice(parenthesized, bind(untilWhitespace, s -> failure("fail to parse as a " + clazz.getName() + " literal : " + s)));
+    return choice(enclosed("(", getLiteralParser_Ref(clazz), ")"), failure("fail to parse"));
   }
 
   private final AvailableOperators operators;

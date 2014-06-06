@@ -41,6 +41,24 @@ public class PackratReader {
     else return -1;
   }
 
+  public String untilNextWhitespace () {
+    StringBuilder buf = new StringBuilder();
+
+    int index = 0;
+
+    while (Character.isWhitespace(lookahead(index))) index++;
+
+    while (hasNext(index) && ! Character.isWhitespace(lookahead(index))) {
+      buf.appendCodePoint(lookahead(index++));
+    }
+
+    return buf.toString();
+  }
+
+  public String getSourceFrom (int pos) {
+    return source.substring(pos, current);
+  }
+
   public char next() {
     assert hasNext();
     return source.charAt(current++);

@@ -214,7 +214,7 @@ public abstract class StatementParsers {
 
   private final PackratParser<ThisConstructorCall> thisConstructorCall_Args =
       depends(env -> foreach(env.thisClass.getDeclaredConstructors(), c -> bind(arguments(c), args -> {
-        if (c == env.thisMember) return failure("recursive constructor invocation");
+        if (c == env.thisMember) return failure("recursive constructor invocation", 10);
         else return unit(new ThisConstructorCall(c, args));
       }), "suitable constructor is not found"));
 
@@ -236,9 +236,9 @@ public abstract class StatementParsers {
         try {
           CtClass superCls = env.thisClass.getSuperclass();
           if(! hasDefaultConstructor(superCls))
-            return failure("implicit super constructor is undefined. Must explicitly invoke another constructor");
+            return failure("implicit super constructor is undefined. Must explicitly invoke another constructor", 1);
           else if(! getDefaultConstructor(superCls).visibleFrom(env.thisClass))
-            return failure("implicit super constructor is not visible. Must explicitly invoke another constructor");
+            return failure("implicit super constructor is not visible. Must explicitly invoke another constructor", 1);
           else
             return unit(new SuperConstructorCall(getDefaultConstructor(superCls)));
         } catch (NotFoundException e) { return error(e); }

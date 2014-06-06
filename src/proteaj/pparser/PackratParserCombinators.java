@@ -502,6 +502,15 @@ class PackratParserCombinators {
     };
   }
 
+  public static <T> PackratParser<T> failure (final String msg, int priority) {
+    return new PackratParser<T>() {
+      @Override
+      protected ParseResult<T> parse(PackratReader reader, Environment env) {
+        return new Failure<>(msg, reader.getPos(), reader.getLine(), priority);
+      }
+    };
+  }
+
   public static <T> PackratParser<T> error (final NotFoundException e) {
     return new PackratParser<T>() {
       @Override
@@ -541,6 +550,45 @@ class PackratParserCombinators {
         return success(Pair.make(ss, ts));
       }
     };
+  }
+
+  public static <T> PackratParser<T> debugPrint (PackratParser<T> parser, String msg) {
+    return new PackratParser<T>() {
+      @Override
+      protected ParseResult<T> parse(PackratReader reader, Environment env) {
+        int pos = reader.getPos();
+
+        System.out.println(spaces() + "try parse " + msg + " @@ " + reader.untilNextWhitespace() + " $ " + this);
+
+        count++;
+
+        ParseResult<T> result = parser.applyRule(reader, env);
+
+        count--;
+
+        if (result.isFail()) {
+          System.out.println(spaces() + "fail " + msg);
+          return result;
+        }
+
+        System.out.println(spaces() + "success " + msg + " ### " + result.get() + " @@ " + reader.getSourceFrom(pos));
+
+        return result;
+      }
+
+      @Override
+      public String toString() {
+        return msg;
+      }
+    };
+  }
+
+  private static int count = 0;
+
+  private static String spaces () {
+    String s = "";
+    while (s.length() < count) s = s + " ";
+    return s;
   }
 
   public static Effect throwing (CtClass exceptionType) {

@@ -1,7 +1,5 @@
 package proteaj.pparser;
 
-import proteaj.error.FailLog;
-
 public class Success<T> extends ParseResult<T> {
   public Success(T value) {
     this.value = value;
@@ -10,11 +8,6 @@ public class Success<T> extends ParseResult<T> {
   @Override
   public boolean isFail() {
     return false;
-  }
-
-  @Override
-  public FailLog getFailLog() {
-    return null;
   }
 
   @Override

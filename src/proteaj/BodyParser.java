@@ -63,12 +63,13 @@ public class BodyParser {
 
   private <T> T getResultOrThrowErrors (ParseResult<T> result, PackratReader reader, Environment env) throws CompileErrors {
     if (result.isFail()) {
-      Optional<Failure<?>> failure = reader.getAllFailures().max((f1, f2) -> f1.pos - f2.pos);
+      Optional<Failure<?>> failure = reader.getAllFailures().max((f1, f2) -> {
+        if (f1.pos == f2.pos) return f1.priority - f2.priority;
+        else return f1.pos - f2.pos;
+      });
 
-      if (failure.isPresent())
-        throw new CompileErrors(new ParseError(failure.get().msg, env.filePath, failure.get().line));
-      else
-        throw new CompileErrors(new ParseError(result.getFailLog().getMessage(), env.filePath, result.getFailLog().getLine()));
+      Failure<?> fail = failure.orElse((Failure<?>)result);
+      throw new CompileErrors(new ParseError(fail.msg, env.filePath, fail.line));
     }
     if (env.hasException()) {
       warnUnhandledExceptions(env);
