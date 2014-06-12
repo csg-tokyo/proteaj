@@ -36,14 +36,14 @@
     <exclude name="**/*.rbc/**"/>
   </patternset>
   <patternset id="library.patterns">
-    <include name="*.zip"/>
-    <include name="*.apk"/>
-    <include name="*.war"/>
-    <include name="*.egg"/>
-    <include name="*.ear"/>
-    <include name="*.ane"/>
-    <include name="*.swc"/>
     <include name="*.jar"/>
+    <include name="*.war"/>
+    <include name="*.ear"/>
+    <include name="*.apk"/>
+    <include name="*.zip"/>
+    <include name="*.swc"/>
+    <include name="*.ane"/>
+    <include name="*.egg"/>
   </patternset>
   <patternset id="compiler.resources">
     <exclude name="**/?*.java"/>
@@ -97,6 +97,10 @@
   
   
   <!-- Project Libraries -->
+  
+  <path id="library.args4j:args4j:2.0.28.classpath">
+    <pathelement location="${basedir}/lib/args4j-2.0.28.jar"/>
+  </path>
   
   <path id="library.bin.classpath">
     <pathelement location="${basedir}/bin"/>

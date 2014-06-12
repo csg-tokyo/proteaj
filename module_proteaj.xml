@@ -19,12 +19,14 @@
     <path refid="${module.jdk.classpath.proteaj}"/>
     <path refid="library.javassist.classpath"/>
     <path refid="library.bin.classpath"/>
+    <path refid="library.args4j:args4j:2.0.28.classpath"/>
   </path>
   
   <path id="proteaj.runtime.production.module.classpath">
     <pathelement location="${proteaj.output.dir}"/>
     <path refid="library.javassist.classpath"/>
     <path refid="library.bin.classpath"/>
+    <path refid="library.args4j:args4j:2.0.28.classpath"/>
   </path>
   
   <path id="proteaj.module.classpath">
@@ -32,6 +34,7 @@
     <pathelement location="${proteaj.output.dir}"/>
     <path refid="library.javassist.classpath"/>
     <path refid="library.bin.classpath"/>
+    <path refid="library.args4j:args4j:2.0.28.classpath"/>
   </path>
   
   <path id="proteaj.runtime.module.classpath">
@@ -39,6 +42,7 @@
     <pathelement location="${proteaj.output.dir}"/>
     <path refid="library.javassist.classpath"/>
     <path refid="library.bin.classpath"/>
+    <path refid="library.args4j:args4j:2.0.28.classpath"/>
   </path>
   
   

@@ -13,12 +13,9 @@ import java.nio.file.*;
 import javassist.*;
 
 public class CodeGenerator {
-  public CodeGenerator() {
-    this.target = null;
-  }
-
-  public CodeGenerator(String target) {
+  public CodeGenerator(String target, boolean translateToJava) {
     this.target = target;
+    this.translateToJava = translateToJava;
   }
 
   public void codegen (Program program) {
@@ -42,8 +39,8 @@ public class CodeGenerator {
   }
 
   private void codegen (ClassDeclaration clazz) {
-    // generateJavaCode(clazz);
-    codegenByJavassist(clazz);
+    if (translateToJava) generateJavaCode(clazz);
+    else codegenByJavassist(clazz);
   }
 
   private void codegenByJavassist (ClassDeclaration clazz) {
@@ -76,7 +73,7 @@ public class CodeGenerator {
 
   private void generateJavaCode (ClassDeclaration clazz) {
     try {
-      Path dirPath = Paths.get("generated/" + clazz.filePath).getParent();
+      Path dirPath = Paths.get(target + "/" + clazz.filePath).getParent();
       if (! Files.exists(dirPath)) dirPath = Files.createDirectories(dirPath);
 
       Path path = Paths.get(dirPath.toString() + "/" + clazz.clazz.getSimpleName() + ".java");
@@ -145,5 +142,6 @@ public class CodeGenerator {
   }
 
   private final String target;
+  private final boolean translateToJava;
 }
 

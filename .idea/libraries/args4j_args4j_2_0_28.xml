@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="args4j:args4j:2.0.28" type="repository">
+    <properties maven-id="args4j:args4j:2.0.28" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/args4j-2.0.28.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -71,6 +71,12 @@ public class RootTypeResolver extends TypeResolver {
     return array;
   }
 
+  public void appendClassPath (String path) throws NotFoundError {
+    try { pool.appendPathList(path); } catch (NotFoundException e) {
+      throw new NotFoundError(e, "(command line args)");
+    }
+  }
+
   private CtClass searchType_FullQualified(String name) {
     CtClass clazz = pool.getOrNull(name);
     if (clazz != null) return clazz;
