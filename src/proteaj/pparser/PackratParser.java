@@ -29,8 +29,7 @@ public abstract class PackratParser<T> {
         return lrAnswer(reader, env, pos, lr, reader.getPos());
       }
       else {
-        mtable(reader).memoize(pos, ans, reader.getPos());
-        return ans;
+        return mtable(reader).memoize(pos, ans, reader.getPos());
       }
     }
     else {
@@ -169,9 +168,7 @@ class LR<T> extends ParseResult<T> {
   }
 
   @Override
-  public boolean isFail() {
-    return false;
-  }
+  public boolean isFail() { return true; }
 
   @Override
   public T getOrElse(T t) {

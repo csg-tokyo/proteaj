@@ -128,18 +128,19 @@ class MemoTable<T> {
     memos = new HashMap<>();
   }
 
-  public void memoize(int bPos, ParseResult<T> ast, Integer ePos) {
+  public ParseResult<T> memoize(int bPos, ParseResult<T> ast, Integer ePos) {
     if (memos.containsKey(bPos)) {
       ParseResult<T> memo = memos.get(bPos)._1;
 
-      if (! memo.isFail() && ! (memo instanceof LR) && ast.isFail()) return;
+      if (! (memo instanceof LR) && ! memo.isFail() && ast.isFail()) return memo;
     }
 
     memos.put(bPos, Pair.make(ast, ePos));
+    return ast;
   }
 
   public Stream<Failure<?>> getAllFailures() {
-    return memos.values().stream().map(pair -> pair._1).filter(ParseResult::isFail).map(result -> (Failure<?>)result);
+    return memos.values().stream().map(pair -> pair._1).filter(result -> result instanceof Failure).map(result -> (Failure<?>)result);
   }
 
   public boolean contains(int pos) {

@@ -110,7 +110,7 @@ public class BinaryOperator extends PrimitiveOperator {
   private static void initialize () {
     if (instanceOf == null && objEquals == null && objNotEqs == null) {
       CommonTypes cts = CommonTypes.getInstance();
-      instanceOf = new BinaryOperator(CtClass.booleanType, cts.objectType, "instanceof", cts.typeType, 700);
+      instanceOf = new BinaryOperator(MOD_NASSOC, CtClass.booleanType, cts.objectType, "instanceof", cts.typeType, 700);
       objEquals  = new BinaryOperator(CtClass.booleanType, cts.objectType, "==", cts.objectType, 600);
       objNotEqs  = new BinaryOperator(CtClass.booleanType, cts.objectType, "!=", cts.objectType, 600);
     }
@@ -131,7 +131,7 @@ public class BinaryOperator extends PrimitiveOperator {
     return objNotEqs;
   }
 
-  private static IRPattern getBinaryOperatorPattern(CtClass left, String operator, CtClass right) {
+  private static IRPattern getBinaryOperatorPattern(int mod, CtClass left, String operator, CtClass right) {
     OperatorPattern pattern = new OperatorPattern(-1);
 
     pattern.append(new Operand("left", -1));
@@ -141,20 +141,24 @@ public class BinaryOperator extends PrimitiveOperator {
     CtClass[] paramTypes = { left, right };
     IROperandAttribute[] paramMods = { new IROperandAttribute(0), new IROperandAttribute(0) };
 
-    return new IRPattern(MOD_LASSOC, pattern, paramTypes, paramMods, getEmptyCtClassArray(), getEmptyCtClassArray());
+    return new IRPattern(mod, pattern, paramTypes, paramMods, getEmptyCtClassArray(), getEmptyCtClassArray());
+  }
+
+  private BinaryOperator(int mod, CtClass returnType, CtClass left, String operator, CtClass right, int priority) {
+    super(returnType, getBinaryOperatorPattern(mod, left, operator, right), priority);
+    this.operator = operator;
   }
 
   private BinaryOperator(CtClass returnType, CtClass left, String operator, CtClass right, int priority) {
-    super(returnType, getBinaryOperatorPattern(left, operator, right), priority);
-    this.operator = operator;
+    this(MOD_LASSOC, returnType, left, operator, right, priority);
   }
 
   private BinaryOperator(CtClass type, String operator, int priority) {
-    super(type, getBinaryOperatorPattern(type, operator, type), priority);
-    this.operator = operator;
+    this(type, type, operator, type, priority);
   }
 
   public final String operator;
   private static final int MOD_LASSOC = Modifiers.PUBLIC | Modifiers.STATIC;
+  private static final int MOD_NASSOC = Modifiers.PUBLIC | Modifiers.STATIC | Modifiers.NON_ASSOC;
 }
 

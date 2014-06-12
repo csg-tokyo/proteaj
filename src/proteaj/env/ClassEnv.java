@@ -12,6 +12,14 @@ public class ClassEnv {
     this.thisClass = thisClass;
   }
 
+  public Env staticEnv () {
+    return null;
+  }
+
+  public Env instanceEnv () {
+    return null;
+  }
+
   public final OperatorEnvironment operatorEnv;
   public final TypeResolver resolver;
   public final CtClass thisClass;

@@ -3,47 +3,49 @@ package proteaj.lang;
 unusing proteaj.lang.StringOperators;
 
 public operators StringOperators {
-  public String left "+" right (String left, String right) : priority = 300 {
+  public [String] left "+" right (String left, String right) : priority = 300 {
     return left.concat(right);
   }
 
-  public String left "+" right (String left, char right) : priority = 300 {
+  public [String] left "+" right (String left, char right) : priority = 300 {
     return left.concat(Character.toString(right));
   }
 
-  public nonassoc String left "+" right (char left, String right) : priority = 320 {
+  public nonassoc [String] left "+" right (char left, String right) : priority = 320 {
     return Character.toString(left).concat(right);
   }
 
-  public String left "+" right (String left, int right) : priority = 300 {
+  public [String] left "+" right (String left, int right) : priority = 300 {
     return left.concat(Integer.toString(right));
   }
 
-  public nonassoc String left "+" right (int left, String right) : priority = 320 {
+  public nonassoc [String] left "+" right (int left, String right) : priority = 320 {
     return Integer.toString(left).concat(right);
   }
 
-  public String left "+" right (String left, long right) : priority = 300 {
+  public [String] left "+" right (String left, long right) : priority = 300 {
     return left.concat(Long.toString(right));
   }
 
-  public nonassoc String left "+" right (long left, String right) : priority = 320 {
+  public nonassoc [String] left "+" right (long left, String right) : priority = 320 {
     return Long.toString(left).concat(right);
   }
 
-  public String left "+" right (String left, boolean right) : priority = 300 {
+  public [String] left "+" right (String left, boolean right) : priority = 300 {
     return left.concat(Boolean.toString(right));
   }
 
-  public nonassoc String left "+" right (boolean left, String right) : priority = 320 {
+  public nonassoc [String] left "+" right (boolean left, String right) : priority = 320 {
     return Boolean.toString(left).concat(right);
   }
 
-  public String left "+" right (String left, Object right) : priority = 300 {
+  public [String] left "+" right (String left, Object right) : priority = 300 {
     return left.concat(right.toString());
   }
 
-  public nonassoc String left "+" right (Object left, String right) : priority = 320 {
+  public nonassoc [String] !String left "+" right (Object left, String right) : priority = 320 {
       return left.toString().concat(right);
   }
+
+  public nonassoc Object _ (String str) { return str; }
 }
