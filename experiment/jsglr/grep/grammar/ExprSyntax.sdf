@@ -1,0 +1,85 @@
+module ExprSyntax
+
+imports 
+	Common
+  Grep
+
+exports
+
+  context-free start-symbols
+  
+    Start
+
+  context-free syntax
+  
+    SingleStmt -> Start
+    
+    SingleStmt -> Stmt
+    Type ID "=" Expr ";" -> Stmt {prefer, "LocalVarDef"}
+    Type ID ";" -> Stmt {"LocalVarDecl"}
+    
+    ID -> Type
+    
+    "if" "(" Expr ")" SingleStmt "else" SingleStmt -> SingleStmt {prefer, "IfElseStmt"}
+    "if" "(" Expr ")" SingleStmt -> SingleStmt {"IfStmt"}
+    
+    "{" Stmts "}" -> SingleStmt {"Block"}
+    Expr ";" -> SingleStmt {"ExprStmt"}
+    
+    Stmts Stmt -> Stmts {"Statements"}
+    Stmt -> Stmts
+    
+    OrExpr -> Expr
+    
+    OrExpr "||" AndExpr -> OrExpr {"OrExpression"}
+    AndExpr             -> OrExpr
+    
+    AndExpr "&&" EqExpr -> AndExpr {"AndExpression"}
+    EqExpr              -> AndExpr
+    
+    EqExpr "==" CmpExpr -> EqExpr {"EqExpression"}
+    EqExpr "!=" CmpExpr -> EqExpr {"NEqExpression"}
+    CmpExpr             -> EqExpr
+    
+    CmpExpr "<" AddExpr  -> CmpExpr {"LThExpression"}
+    CmpExpr ">" AddExpr  -> CmpExpr {"GThExpression"}
+    CmpExpr "<=" AddExpr -> CmpExpr {"LEqExpression"}
+    CmpExpr ">=" AddExpr -> CmpExpr {"GEqExpression"}
+    AddExpr              -> CmpExpr
+    
+    AddExpr "+" MulExpr -> AddExpr {"AddExpression"}
+    AddExpr "-" MulExpr -> AddExpr {"SubExpression"}
+    MulExpr             -> AddExpr
+    
+    MulExpr "*" PrefixExpr -> MulExpr {"MulExpression"}
+    MulExpr "/" PrefixExpr -> MulExpr {"DivExpression"}
+    MulExpr "%" PrefixExpr -> MulExpr {"ModExpression"}
+    PrefixExpr             -> MulExpr
+    
+    "+" PostfixExpr  -> PrefixExpr {"PrefixPlus"}
+    "-" PostfixExpr  -> PrefixExpr {"PrefixMinus"}
+    "!" PostfixExpr  -> PrefixExpr {"PrefixNot"}
+    "++" PostfixExpr -> PrefixExpr {"PrefixIncrement"}
+    "--" PostfixExpr -> PrefixExpr {"PrefixDecrement"}
+    PostfixExpr      -> PrefixExpr
+    
+    DotExpr "++" -> PostfixExpr {"PostfixIncrement"}
+    DotExpr "--" -> PostfixExpr {"PostfixDecrement"}
+    DotExpr      -> PostfixExpr
+    
+    DotExpr "." ID "(" Args ")" -> DotExpr {prefer, "MethodCall"}
+    DotExpr "." ID              -> DotExpr {"FieldAccess"}
+    Primary                     -> DotExpr
+    
+    Args "," Expr -> Args {"Args"}
+    Expr          -> Args
+    
+    "(" Expr ")"   -> Primary {"Bracket"}
+    TokenLevelExpr -> Primary
+    
+    ID           -> TokenLevelExpr {"Variable"}
+    Literal      -> TokenLevelExpr
+    
+    INT -> Literal {"IntLiteral"}
+    STRING -> Literal {"StringLiteral"}
+    

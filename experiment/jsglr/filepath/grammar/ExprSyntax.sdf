@@ -1,0 +1,63 @@
+module ExprSyntax
+
+imports 
+	Common
+  FilePath
+
+exports
+
+  context-free start-symbols
+  
+    Start
+
+  context-free syntax
+  
+    Expr -> Start
+    
+    OrExpr -> Expr
+    
+    OrExpr "||" AndExpr -> OrExpr {"OrExpression"}
+    AndExpr             -> OrExpr
+    
+    AndExpr "&&" EqExpr -> AndExpr {"AndExpression"}
+    EqExpr              -> AndExpr
+    
+    EqExpr "==" CmpExpr -> EqExpr {"EqExpression"}
+    EqExpr "!=" CmpExpr -> EqExpr {"NEqExpression"}
+    CmpExpr             -> EqExpr
+    
+    CmpExpr "<" AddExpr  -> CmpExpr {"LThExpression"}
+    CmpExpr ">" AddExpr  -> CmpExpr {"GThExpression"}
+    CmpExpr "<=" AddExpr -> CmpExpr {"LEqExpression"}
+    CmpExpr ">=" AddExpr -> CmpExpr {"GEqExpression"}
+    AddExpr              -> CmpExpr
+    
+    AddExpr "+" MulExpr -> AddExpr {"AddExpression"}
+    AddExpr "-" MulExpr -> AddExpr {"SubExpression"}
+    MulExpr             -> AddExpr
+    
+    MulExpr "*" PrefixExpr -> MulExpr {"MulExpression"}
+    MulExpr "/" PrefixExpr -> MulExpr {"DivExpression"}
+    MulExpr "%" PrefixExpr -> MulExpr {"ModExpression"}
+    PrefixExpr             -> MulExpr
+    
+    "+" PostfixExpr  -> PrefixExpr {"PrefixPlus"}
+    "-" PostfixExpr  -> PrefixExpr {"PrefixMinus"}
+    "!" PostfixExpr  -> PrefixExpr {"PrefixNot"}
+    "++" PostfixExpr -> PrefixExpr {"PrefixIncrement"}
+    "--" PostfixExpr -> PrefixExpr {"PrefixDecrement"}
+    PostfixExpr      -> PrefixExpr
+    
+    DotExpr "++" -> PostfixExpr {"PostfixIncrement"}
+    DotExpr "--" -> PostfixExpr {"PostfixDecrement"}
+    DotExpr      -> PostfixExpr
+    
+    DotExpr "." Primary -> DotExpr {"FieldAccess"}
+    Primary             -> DotExpr
+    
+    "(" Expr ")" -> Primary {"Bracket"}
+    ID           -> Primary {"Variable"}
+    Literal      -> Primary
+    
+    INT -> Literal {"IntLiteral"}
+    STRING -> Literal {"StringLiteral"}

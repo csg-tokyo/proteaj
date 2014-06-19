@@ -1,0 +1,34 @@
+module FilePath
+imports
+    ExprSyntax
+    
+exports
+  
+  context-free syntax
+    FilePath -> TokenLevelExpr {"FilePathExpression"}
+    
+  lexical syntax
+    FileName              -> FilePath {"SimpleFilePath"}
+    DirPath FileName      -> FilePath {"FilePath"}
+    
+    DirPath FileName "/"  -> DirPath {left, "DirChild"}
+    DirPath "./"          -> DirPath {left, "DirThis"}
+    DirPath "../"         -> DirPath {left, "DirParent"}
+    
+    FileName "/"          -> DirPath {"DirName"}
+    "/"                   -> DirPath {"DirRoot"}
+    "./"                  -> DirPath {"DirCurrent"}
+    "../"                 -> DirPath {"DirCurrentParent"}
+    "~/"                  -> DirPath {"DirHome"}
+    
+    "." { FileName2 "." }+ -> FileName {"HiddenFileName"}
+    { FileName2 "." }+     -> FileName {"QualifiedFileName"}
+    
+    FileName3+  -> FileName2 {"FileNameWithStar"}
+    ID          -> FileName3
+    PathStar    -> FileName3
+    
+    "*" -> PathStar {"PathStar"}
+   
+  lexical restrictions
+    PathStar -/- [\*]

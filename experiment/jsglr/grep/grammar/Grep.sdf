@@ -1,0 +1,13 @@
+module Grep
+imports
+  ExprSyntax
+  Regex
+  FilePath
+  
+exports
+  context-free syntax
+    
+    "grep" Expr Exprs -> Expr {"GrepExpr"}
+    
+    Exprs Expr -> Exprs {"ExprList"}
+    Expr       -> Exprs

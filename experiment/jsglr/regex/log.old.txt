@@ -1,0 +1,3841 @@
+---------------
+string length = 1
+program length = 1
+parse time = 8 msec.
+ambiguities = 1
+---------------
+string length = 2
+program length = 1
+parse time = 9 msec.
+ambiguities = 1
+---------------
+string length = 3
+program length = 1
+parse time = 9 msec.
+ambiguities = 1
+---------------
+string length = 4
+program length = 1
+parse time = 11 msec.
+ambiguities = 1
+---------------
+string length = 5
+program length = 1
+parse time = 11 msec.
+ambiguities = 1
+---------------
+string length = 6
+program length = 1
+parse time = 18 msec.
+ambiguities = 1
+---------------
+string length = 7
+program length = 1
+parse time = 12 msec.
+ambiguities = 1
+---------------
+string length = 8
+program length = 1
+parse time = 14 msec.
+ambiguities = 1
+---------------
+string length = 9
+program length = 1
+parse time = 15 msec.
+ambiguities = 1
+---------------
+string length = 10
+program length = 1
+parse time = 15 msec.
+ambiguities = 1
+---------------
+string length = 11
+program length = 1
+parse time = 15 msec.
+ambiguities = 1
+---------------
+string length = 12
+program length = 1
+parse time = 15 msec.
+ambiguities = 1
+---------------
+string length = 13
+program length = 1
+parse time = 16 msec.
+ambiguities = 1
+---------------
+string length = 14
+program length = 1
+parse time = 17 msec.
+ambiguities = 1
+---------------
+string length = 15
+program length = 1
+parse time = 17 msec.
+ambiguities = 1
+---------------
+string length = 16
+program length = 1
+parse time = 18 msec.
+ambiguities = 1
+---------------
+string length = 17
+program length = 1
+parse time = 18 msec.
+ambiguities = 1
+---------------
+string length = 18
+program length = 1
+parse time = 18 msec.
+ambiguities = 1
+---------------
+string length = 19
+program length = 1
+parse time = 20 msec.
+ambiguities = 1
+---------------
+string length = 20
+program length = 1
+parse time = 20 msec.
+ambiguities = 1
+---------------
+string length = 1
+program length = 2
+parse time = 10 msec.
+ambiguities = 3
+---------------
+string length = 2
+program length = 2
+parse time = 12 msec.
+ambiguities = 3
+---------------
+string length = 3
+program length = 2
+parse time = 17 msec.
+ambiguities = 3
+---------------
+string length = 4
+program length = 2
+parse time = 16 msec.
+ambiguities = 3
+---------------
+string length = 5
+program length = 2
+parse time = 17 msec.
+ambiguities = 3
+---------------
+string length = 6
+program length = 2
+parse time = 19 msec.
+ambiguities = 3
+---------------
+string length = 7
+program length = 2
+parse time = 20 msec.
+ambiguities = 3
+---------------
+string length = 8
+program length = 2
+parse time = 21 msec.
+ambiguities = 3
+---------------
+string length = 9
+program length = 2
+parse time = 23 msec.
+ambiguities = 3
+---------------
+string length = 10
+program length = 2
+parse time = 24 msec.
+ambiguities = 3
+---------------
+string length = 11
+program length = 2
+parse time = 25 msec.
+ambiguities = 3
+---------------
+string length = 12
+program length = 2
+parse time = 26 msec.
+ambiguities = 3
+---------------
+string length = 13
+program length = 2
+parse time = 28 msec.
+ambiguities = 3
+---------------
+string length = 14
+program length = 2
+parse time = 28 msec.
+ambiguities = 3
+---------------
+string length = 15
+program length = 2
+parse time = 29 msec.
+ambiguities = 3
+---------------
+string length = 16
+program length = 2
+parse time = 30 msec.
+ambiguities = 3
+---------------
+string length = 17
+program length = 2
+parse time = 31 msec.
+ambiguities = 3
+---------------
+string length = 18
+program length = 2
+parse time = 32 msec.
+ambiguities = 3
+---------------
+string length = 19
+program length = 2
+parse time = 33 msec.
+ambiguities = 3
+---------------
+string length = 20
+program length = 2
+parse time = 33 msec.
+ambiguities = 3
+---------------
+string length = 1
+program length = 3
+parse time = 14 msec.
+ambiguities = 7
+---------------
+string length = 2
+program length = 3
+parse time = 18 msec.
+ambiguities = 7
+---------------
+string length = 3
+program length = 3
+parse time = 20 msec.
+ambiguities = 7
+---------------
+string length = 4
+program length = 3
+parse time = 22 msec.
+ambiguities = 7
+---------------
+string length = 5
+program length = 3
+parse time = 25 msec.
+ambiguities = 7
+---------------
+string length = 6
+program length = 3
+parse time = 28 msec.
+ambiguities = 7
+---------------
+string length = 7
+program length = 3
+parse time = 30 msec.
+ambiguities = 7
+---------------
+string length = 8
+program length = 3
+parse time = 31 msec.
+ambiguities = 7
+---------------
+string length = 9
+program length = 3
+parse time = 33 msec.
+ambiguities = 7
+---------------
+string length = 10
+program length = 3
+parse time = 35 msec.
+ambiguities = 7
+---------------
+string length = 11
+program length = 3
+parse time = 36 msec.
+ambiguities = 7
+---------------
+string length = 12
+program length = 3
+parse time = 36 msec.
+ambiguities = 7
+---------------
+string length = 13
+program length = 3
+parse time = 37 msec.
+ambiguities = 7
+---------------
+string length = 14
+program length = 3
+parse time = 38 msec.
+ambiguities = 7
+---------------
+string length = 15
+program length = 3
+parse time = 40 msec.
+ambiguities = 7
+---------------
+string length = 16
+program length = 3
+parse time = 41 msec.
+ambiguities = 7
+---------------
+string length = 17
+program length = 3
+parse time = 41 msec.
+ambiguities = 7
+---------------
+string length = 18
+program length = 3
+parse time = 43 msec.
+ambiguities = 7
+---------------
+string length = 19
+program length = 3
+parse time = 44 msec.
+ambiguities = 7
+---------------
+string length = 20
+program length = 3
+parse time = 54 msec.
+ambiguities = 7
+---------------
+string length = 1
+program length = 4
+parse time = 19 msec.
+ambiguities = 15
+---------------
+string length = 2
+program length = 4
+parse time = 23 msec.
+ambiguities = 15
+---------------
+string length = 3
+program length = 4
+parse time = 27 msec.
+ambiguities = 15
+---------------
+string length = 4
+program length = 4
+parse time = 31 msec.
+ambiguities = 15
+---------------
+string length = 5
+program length = 4
+parse time = 35 msec.
+ambiguities = 15
+---------------
+string length = 6
+program length = 4
+parse time = 36 msec.
+ambiguities = 15
+---------------
+string length = 7
+program length = 4
+parse time = 39 msec.
+ambiguities = 15
+---------------
+string length = 8
+program length = 4
+parse time = 46 msec.
+ambiguities = 15
+---------------
+string length = 9
+program length = 4
+parse time = 43 msec.
+ambiguities = 15
+---------------
+string length = 10
+program length = 4
+parse time = 46 msec.
+ambiguities = 15
+---------------
+string length = 11
+program length = 4
+parse time = 47 msec.
+ambiguities = 15
+---------------
+string length = 12
+program length = 4
+parse time = 47 msec.
+ambiguities = 15
+---------------
+string length = 13
+program length = 4
+parse time = 50 msec.
+ambiguities = 15
+---------------
+string length = 14
+program length = 4
+parse time = 49 msec.
+ambiguities = 15
+---------------
+string length = 15
+program length = 4
+parse time = 52 msec.
+ambiguities = 15
+---------------
+string length = 16
+program length = 4
+parse time = 55 msec.
+ambiguities = 15
+---------------
+string length = 17
+program length = 4
+parse time = 60 msec.
+ambiguities = 15
+---------------
+string length = 18
+program length = 4
+parse time = 56 msec.
+ambiguities = 15
+---------------
+string length = 19
+program length = 4
+parse time = 57 msec.
+ambiguities = 15
+---------------
+string length = 20
+program length = 4
+parse time = 61 msec.
+ambiguities = 15
+---------------
+string length = 1
+program length = 5
+parse time = 26 msec.
+ambiguities = 31
+---------------
+string length = 2
+program length = 5
+parse time = 31 msec.
+ambiguities = 31
+---------------
+string length = 3
+program length = 5
+parse time = 38 msec.
+ambiguities = 31
+---------------
+string length = 4
+program length = 5
+parse time = 39 msec.
+ambiguities = 31
+---------------
+string length = 5
+program length = 5
+parse time = 45 msec.
+ambiguities = 31
+---------------
+string length = 6
+program length = 5
+parse time = 48 msec.
+ambiguities = 31
+---------------
+string length = 7
+program length = 5
+parse time = 51 msec.
+ambiguities = 31
+---------------
+string length = 8
+program length = 5
+parse time = 61 msec.
+ambiguities = 31
+---------------
+string length = 9
+program length = 5
+parse time = 57 msec.
+ambiguities = 31
+---------------
+string length = 10
+program length = 5
+parse time = 57 msec.
+ambiguities = 31
+---------------
+string length = 11
+program length = 5
+parse time = 60 msec.
+ambiguities = 31
+---------------
+string length = 12
+program length = 5
+parse time = 61 msec.
+ambiguities = 31
+---------------
+string length = 13
+program length = 5
+parse time = 63 msec.
+ambiguities = 31
+---------------
+string length = 14
+program length = 5
+parse time = 65 msec.
+ambiguities = 31
+---------------
+string length = 15
+program length = 5
+parse time = 71 msec.
+ambiguities = 31
+---------------
+string length = 16
+program length = 5
+parse time = 68 msec.
+ambiguities = 31
+---------------
+string length = 17
+program length = 5
+parse time = 73 msec.
+ambiguities = 31
+---------------
+string length = 18
+program length = 5
+parse time = 73 msec.
+ambiguities = 31
+---------------
+string length = 19
+program length = 5
+parse time = 74 msec.
+ambiguities = 31
+---------------
+string length = 20
+program length = 5
+parse time = 76 msec.
+ambiguities = 31
+---------------
+string length = 1
+program length = 6
+parse time = 36 msec.
+ambiguities = 63
+---------------
+string length = 2
+program length = 6
+parse time = 45 msec.
+ambiguities = 63
+---------------
+string length = 3
+program length = 6
+parse time = 51 msec.
+ambiguities = 63
+---------------
+string length = 4
+program length = 6
+parse time = 55 msec.
+ambiguities = 63
+---------------
+string length = 5
+program length = 6
+parse time = 64 msec.
+ambiguities = 63
+---------------
+string length = 6
+program length = 6
+parse time = 60 msec.
+ambiguities = 63
+---------------
+string length = 7
+program length = 6
+parse time = 69 msec.
+ambiguities = 63
+---------------
+string length = 8
+program length = 6
+parse time = 69 msec.
+ambiguities = 63
+---------------
+string length = 9
+program length = 6
+parse time = 75 msec.
+ambiguities = 63
+---------------
+string length = 10
+program length = 6
+parse time = 79 msec.
+ambiguities = 63
+---------------
+string length = 11
+program length = 6
+parse time = 82 msec.
+ambiguities = 63
+---------------
+string length = 12
+program length = 6
+parse time = 80 msec.
+ambiguities = 63
+---------------
+string length = 13
+program length = 6
+parse time = 89 msec.
+ambiguities = 63
+---------------
+string length = 14
+program length = 6
+parse time = 86 msec.
+ambiguities = 63
+---------------
+string length = 15
+program length = 6
+parse time = 97 msec.
+ambiguities = 63
+---------------
+string length = 16
+program length = 6
+parse time = 97 msec.
+ambiguities = 63
+---------------
+string length = 17
+program length = 6
+parse time = 101 msec.
+ambiguities = 63
+---------------
+string length = 18
+program length = 6
+parse time = 106 msec.
+ambiguities = 63
+---------------
+string length = 19
+program length = 6
+parse time = 114 msec.
+ambiguities = 63
+---------------
+string length = 20
+program length = 6
+parse time = 100 msec.
+ambiguities = 63
+---------------
+string length = 1
+program length = 7
+parse time = 57 msec.
+ambiguities = 127
+---------------
+string length = 2
+program length = 7
+parse time = 58 msec.
+ambiguities = 127
+---------------
+string length = 3
+program length = 7
+parse time = 69 msec.
+ambiguities = 127
+---------------
+string length = 4
+program length = 7
+parse time = 69 msec.
+ambiguities = 127
+---------------
+string length = 5
+program length = 7
+parse time = 79 msec.
+ambiguities = 127
+---------------
+string length = 6
+program length = 7
+parse time = 78 msec.
+ambiguities = 127
+---------------
+string length = 7
+program length = 7
+parse time = 88 msec.
+ambiguities = 127
+---------------
+string length = 8
+program length = 7
+parse time = 88 msec.
+ambiguities = 127
+---------------
+string length = 9
+program length = 7
+parse time = 102 msec.
+ambiguities = 127
+---------------
+string length = 10
+program length = 7
+parse time = 95 msec.
+ambiguities = 127
+---------------
+string length = 11
+program length = 7
+parse time = 108 msec.
+ambiguities = 127
+---------------
+string length = 12
+program length = 7
+parse time = 103 msec.
+ambiguities = 127
+---------------
+string length = 13
+program length = 7
+parse time = 119 msec.
+ambiguities = 127
+---------------
+string length = 14
+program length = 7
+parse time = 114 msec.
+ambiguities = 127
+---------------
+string length = 15
+program length = 7
+parse time = 123 msec.
+ambiguities = 127
+---------------
+string length = 16
+program length = 7
+parse time = 125 msec.
+ambiguities = 127
+---------------
+string length = 17
+program length = 7
+parse time = 126 msec.
+ambiguities = 127
+---------------
+string length = 18
+program length = 7
+parse time = 127 msec.
+ambiguities = 127
+---------------
+string length = 19
+program length = 7
+parse time = 133 msec.
+ambiguities = 127
+---------------
+string length = 20
+program length = 7
+parse time = 130 msec.
+ambiguities = 127
+---------------
+string length = 1
+program length = 8
+parse time = 63 msec.
+ambiguities = 255
+---------------
+string length = 2
+program length = 8
+parse time = 72 msec.
+ambiguities = 255
+---------------
+string length = 3
+program length = 8
+parse time = 85 msec.
+ambiguities = 255
+---------------
+string length = 4
+program length = 8
+parse time = 81 msec.
+ambiguities = 255
+---------------
+string length = 5
+program length = 8
+parse time = 100 msec.
+ambiguities = 255
+---------------
+string length = 6
+program length = 8
+parse time = 98 msec.
+ambiguities = 255
+---------------
+string length = 7
+program length = 8
+parse time = 116 msec.
+ambiguities = 255
+---------------
+string length = 8
+program length = 8
+parse time = 118 msec.
+ambiguities = 255
+---------------
+string length = 9
+program length = 8
+parse time = 131 msec.
+ambiguities = 255
+---------------
+string length = 10
+program length = 8
+parse time = 124 msec.
+ambiguities = 255
+---------------
+string length = 11
+program length = 8
+parse time = 141 msec.
+ambiguities = 255
+---------------
+string length = 12
+program length = 8
+parse time = 137 msec.
+ambiguities = 255
+---------------
+string length = 13
+program length = 8
+parse time = 149 msec.
+ambiguities = 255
+---------------
+string length = 14
+program length = 8
+parse time = 153 msec.
+ambiguities = 255
+---------------
+string length = 15
+program length = 8
+parse time = 159 msec.
+ambiguities = 255
+---------------
+string length = 16
+program length = 8
+parse time = 157 msec.
+ambiguities = 255
+---------------
+string length = 17
+program length = 8
+parse time = 164 msec.
+ambiguities = 255
+---------------
+string length = 18
+program length = 8
+parse time = 160 msec.
+ambiguities = 255
+---------------
+string length = 19
+program length = 8
+parse time = 191 msec.
+ambiguities = 255
+---------------
+string length = 20
+program length = 8
+parse time = 176 msec.
+ambiguities = 255
+---------------
+string length = 1
+program length = 9
+parse time = 87 msec.
+ambiguities = 511
+---------------
+string length = 2
+program length = 9
+parse time = 92 msec.
+ambiguities = 511
+---------------
+string length = 3
+program length = 9
+parse time = 114 msec.
+ambiguities = 511
+---------------
+string length = 4
+program length = 9
+parse time = 114 msec.
+ambiguities = 511
+---------------
+string length = 5
+program length = 9
+parse time = 153 msec.
+ambiguities = 511
+---------------
+string length = 6
+program length = 9
+parse time = 136 msec.
+ambiguities = 511
+---------------
+string length = 7
+program length = 9
+parse time = 171 msec.
+ambiguities = 511
+---------------
+string length = 8
+program length = 9
+parse time = 155 msec.
+ambiguities = 511
+---------------
+string length = 9
+program length = 9
+parse time = 200 msec.
+ambiguities = 511
+---------------
+string length = 10
+program length = 9
+parse time = 158 msec.
+ambiguities = 511
+---------------
+string length = 11
+program length = 9
+parse time = 204 msec.
+ambiguities = 511
+---------------
+string length = 12
+program length = 9
+parse time = 195 msec.
+ambiguities = 511
+---------------
+string length = 13
+program length = 9
+parse time = 258 msec.
+ambiguities = 511
+---------------
+string length = 14
+program length = 9
+parse time = 213 msec.
+ambiguities = 511
+---------------
+string length = 15
+program length = 9
+parse time = 244 msec.
+ambiguities = 511
+---------------
+string length = 16
+program length = 9
+parse time = 265 msec.
+ambiguities = 511
+---------------
+string length = 17
+program length = 9
+parse time = 245 msec.
+ambiguities = 511
+---------------
+string length = 18
+program length = 9
+parse time = 242 msec.
+ambiguities = 511
+---------------
+string length = 19
+program length = 9
+parse time = 260 msec.
+ambiguities = 511
+---------------
+string length = 20
+program length = 9
+parse time = 246 msec.
+ambiguities = 511
+---------------
+string length = 1
+program length = 10
+parse time = 128 msec.
+ambiguities = 1023
+---------------
+string length = 2
+program length = 10
+parse time = 136 msec.
+ambiguities = 1023
+---------------
+string length = 3
+program length = 10
+parse time = 153 msec.
+ambiguities = 1023
+---------------
+string length = 4
+program length = 10
+parse time = 156 msec.
+ambiguities = 1023
+---------------
+string length = 5
+program length = 10
+parse time = 207 msec.
+ambiguities = 1023
+---------------
+string length = 6
+program length = 10
+parse time = 199 msec.
+ambiguities = 1023
+---------------
+string length = 7
+program length = 10
+parse time = 235 msec.
+ambiguities = 1023
+---------------
+string length = 8
+program length = 10
+parse time = 249 msec.
+ambiguities = 1023
+---------------
+string length = 9
+program length = 10
+parse time = 308 msec.
+ambiguities = 1023
+---------------
+string length = 10
+program length = 10
+parse time = 285 msec.
+ambiguities = 1023
+---------------
+string length = 11
+program length = 10
+parse time = 393 msec.
+ambiguities = 1023
+---------------
+string length = 12
+program length = 10
+parse time = 267 msec.
+ambiguities = 1023
+---------------
+string length = 13
+program length = 10
+parse time = 317 msec.
+ambiguities = 1023
+---------------
+string length = 14
+program length = 10
+parse time = 307 msec.
+ambiguities = 1023
+---------------
+string length = 15
+program length = 10
+parse time = 343 msec.
+ambiguities = 1023
+---------------
+string length = 16
+program length = 10
+parse time = 317 msec.
+ambiguities = 1023
+---------------
+string length = 17
+program length = 10
+parse time = 390 msec.
+ambiguities = 1023
+---------------
+string length = 18
+program length = 10
+parse time = 350 msec.
+ambiguities = 1023
+---------------
+string length = 19
+program length = 10
+parse time = 379 msec.
+ambiguities = 1023
+---------------
+string length = 20
+program length = 10
+parse time = 397 msec.
+ambiguities = 1023
+---------------
+string length = 1
+program length = 11
+parse time = 166 msec.
+ambiguities = 2047
+---------------
+string length = 2
+program length = 11
+parse time = 203 msec.
+ambiguities = 2047
+---------------
+string length = 3
+program length = 11
+parse time = 259 msec.
+ambiguities = 2047
+---------------
+string length = 4
+program length = 11
+parse time = 257 msec.
+ambiguities = 2047
+---------------
+string length = 5
+program length = 11
+parse time = 324 msec.
+ambiguities = 2047
+---------------
+string length = 6
+program length = 11
+parse time = 307 msec.
+ambiguities = 2047
+---------------
+string length = 7
+program length = 11
+parse time = 357 msec.
+ambiguities = 2047
+---------------
+string length = 8
+program length = 11
+parse time = 328 msec.
+ambiguities = 2047
+---------------
+string length = 9
+program length = 11
+parse time = 385 msec.
+ambiguities = 2047
+---------------
+string length = 10
+program length = 11
+parse time = 361 msec.
+ambiguities = 2047
+---------------
+string length = 11
+program length = 11
+parse time = 418 msec.
+ambiguities = 2047
+---------------
+string length = 12
+program length = 11
+parse time = 442 msec.
+ambiguities = 2047
+---------------
+string length = 13
+program length = 11
+parse time = 478 msec.
+ambiguities = 2047
+---------------
+string length = 14
+program length = 11
+parse time = 383 msec.
+ambiguities = 2047
+---------------
+string length = 15
+program length = 11
+parse time = 536 msec.
+ambiguities = 2047
+---------------
+string length = 16
+program length = 11
+parse time = 459 msec.
+ambiguities = 2047
+---------------
+string length = 17
+program length = 11
+parse time = 538 msec.
+ambiguities = 2047
+---------------
+string length = 18
+program length = 11
+parse time = 499 msec.
+ambiguities = 2047
+---------------
+string length = 19
+program length = 11
+parse time = 554 msec.
+ambiguities = 2047
+---------------
+string length = 20
+program length = 11
+parse time = 505 msec.
+ambiguities = 2047
+---------------
+string length = 1
+program length = 12
+parse time = 289 msec.
+ambiguities = 4095
+---------------
+string length = 2
+program length = 12
+parse time = 320 msec.
+ambiguities = 4095
+---------------
+string length = 3
+program length = 12
+parse time = 380 msec.
+ambiguities = 4095
+---------------
+string length = 4
+program length = 12
+parse time = 388 msec.
+ambiguities = 4095
+---------------
+string length = 5
+program length = 12
+parse time = 443 msec.
+ambiguities = 4095
+---------------
+string length = 6
+program length = 12
+parse time = 403 msec.
+ambiguities = 4095
+---------------
+string length = 7
+program length = 12
+parse time = 524 msec.
+ambiguities = 4095
+---------------
+string length = 8
+program length = 12
+parse time = 486 msec.
+ambiguities = 4095
+---------------
+string length = 9
+program length = 12
+parse time = 624 msec.
+ambiguities = 4095
+---------------
+string length = 10
+program length = 12
+parse time = 512 msec.
+ambiguities = 4095
+---------------
+string length = 11
+program length = 12
+parse time = 649 msec.
+ambiguities = 4095
+---------------
+string length = 12
+program length = 12
+parse time = 572 msec.
+ambiguities = 4095
+---------------
+string length = 13
+program length = 12
+parse time = 697 msec.
+ambiguities = 4095
+---------------
+string length = 14
+program length = 12
+parse time = 669 msec.
+ambiguities = 4095
+---------------
+string length = 15
+program length = 12
+parse time = 786 msec.
+ambiguities = 4095
+---------------
+string length = 16
+program length = 12
+parse time = 658 msec.
+ambiguities = 4095
+---------------
+string length = 17
+program length = 12
+parse time = 816 msec.
+ambiguities = 4095
+---------------
+string length = 18
+program length = 12
+parse time = 759 msec.
+ambiguities = 4095
+---------------
+string length = 19
+program length = 12
+parse time = 953 msec.
+ambiguities = 4095
+---------------
+string length = 20
+program length = 12
+parse time = 785 msec.
+ambiguities = 4095
+---------------
+string length = 1
+program length = 13
+parse time = 480 msec.
+ambiguities = 8191
+---------------
+string length = 2
+program length = 13
+parse time = 474 msec.
+ambiguities = 8191
+---------------
+string length = 3
+program length = 13
+parse time = 648 msec.
+ambiguities = 8191
+---------------
+string length = 4
+program length = 13
+parse time = 482 msec.
+ambiguities = 8191
+---------------
+string length = 5
+program length = 13
+parse time = 721 msec.
+ambiguities = 8191
+---------------
+string length = 6
+program length = 13
+parse time = 688 msec.
+ambiguities = 8191
+---------------
+string length = 7
+program length = 13
+parse time = 848 msec.
+ambiguities = 8191
+---------------
+string length = 8
+program length = 13
+parse time = 712 msec.
+ambiguities = 8191
+---------------
+string length = 9
+program length = 13
+parse time = 1005 msec.
+ambiguities = 8191
+---------------
+string length = 10
+program length = 13
+parse time = 814 msec.
+ambiguities = 8191
+---------------
+string length = 11
+program length = 13
+parse time = 1046 msec.
+ambiguities = 8191
+---------------
+string length = 12
+program length = 13
+parse time = 975 msec.
+ambiguities = 8191
+---------------
+string length = 13
+program length = 13
+parse time = 1166 msec.
+ambiguities = 8191
+---------------
+string length = 14
+program length = 13
+parse time = 1014 msec.
+ambiguities = 8191
+---------------
+string length = 15
+program length = 13
+parse time = 1754 msec.
+ambiguities = 8191
+---------------
+string length = 16
+program length = 13
+parse time = 1118 msec.
+ambiguities = 8191
+---------------
+string length = 17
+program length = 13
+parse time = 1477 msec.
+ambiguities = 8191
+---------------
+string length = 18
+program length = 13
+parse time = 1152 msec.
+ambiguities = 8191
+---------------
+string length = 19
+program length = 13
+parse time = 2081 msec.
+ambiguities = 8191
+---------------
+string length = 20
+program length = 13
+parse time = 1969 msec.
+ambiguities = 8191
+---------------
+string length = 1
+program length = 14
+parse time = 821 msec.
+ambiguities = 16383
+---------------
+string length = 2
+program length = 14
+parse time = 778 msec.
+ambiguities = 16383
+---------------
+string length = 3
+program length = 14
+parse time = 1093 msec.
+ambiguities = 16383
+---------------
+string length = 4
+program length = 14
+parse time = 722 msec.
+ambiguities = 16383
+---------------
+string length = 5
+program length = 14
+parse time = 1334 msec.
+ambiguities = 16383
+---------------
+string length = 6
+program length = 14
+parse time = 936 msec.
+ambiguities = 16383
+---------------
+string length = 7
+program length = 14
+parse time = 1512 msec.
+ambiguities = 16383
+---------------
+string length = 8
+program length = 14
+parse time = 1754 msec.
+ambiguities = 16383
+---------------
+string length = 9
+program length = 14
+parse time = 2311 msec.
+ambiguities = 16383
+---------------
+string length = 10
+program length = 14
+parse time = 1852 msec.
+ambiguities = 16383
+---------------
+string length = 11
+program length = 14
+parse time = 2527 msec.
+ambiguities = 16383
+---------------
+string length = 12
+program length = 14
+parse time = 2171 msec.
+ambiguities = 16383
+---------------
+string length = 13
+program length = 14
+parse time = 2843 msec.
+ambiguities = 16383
+---------------
+string length = 14
+program length = 14
+parse time = 3764 msec.
+ambiguities = 16383
+---------------
+string length = 15
+program length = 14
+parse time = 2426 msec.
+ambiguities = 16383
+---------------
+string length = 16
+program length = 14
+parse time = 2306 msec.
+ambiguities = 16383
+---------------
+string length = 17
+program length = 14
+parse time = 3397 msec.
+ambiguities = 16383
+---------------
+string length = 18
+program length = 14
+parse time = 3326 msec.
+ambiguities = 16383
+---------------
+string length = 19
+program length = 14
+parse time = 3919 msec.
+ambiguities = 16383
+---------------
+string length = 20
+program length = 14
+parse time = 3338 msec.
+ambiguities = 16383
+---------------
+string length = 1
+program length = 15
+parse time = 1335 msec.
+ambiguities = 32767
+---------------
+string length = 2
+program length = 15
+parse time = 1783 msec.
+ambiguities = 32767
+---------------
+string length = 3
+program length = 15
+parse time = 1822 msec.
+ambiguities = 32767
+---------------
+string length = 4
+program length = 15
+parse time = 1700 msec.
+ambiguities = 32767
+---------------
+string length = 5
+program length = 15
+parse time = 3103 msec.
+ambiguities = 32767
+---------------
+string length = 6
+program length = 15
+parse time = 4137 msec.
+ambiguities = 32767
+---------------
+string length = 7
+program length = 15
+parse time = 2867 msec.
+ambiguities = 32767
+---------------
+string length = 8
+program length = 15
+parse time = 2431 msec.
+ambiguities = 32767
+---------------
+string length = 9
+program length = 15
+parse time = 3362 msec.
+ambiguities = 32767
+---------------
+string length = 10
+program length = 15
+parse time = 4143 msec.
+ambiguities = 32767
+---------------
+string length = 11
+program length = 15
+parse time = 6637 msec.
+ambiguities = 32767
+---------------
+string length = 12
+program length = 15
+parse time = 5255 msec.
+ambiguities = 32767
+---------------
+string length = 13
+program length = 15
+parse time = 5666 msec.
+ambiguities = 32767
+---------------
+string length = 14
+program length = 15
+parse time = 6324 msec.
+ambiguities = 32767
+---------------
+string length = 15
+program length = 15
+parse time = 7735 msec.
+ambiguities = 32767
+---------------
+string length = 16
+program length = 15
+parse time = 7497 msec.
+ambiguities = 32767
+---------------
+string length = 17
+program length = 15
+parse time = 7900 msec.
+ambiguities = 32767
+---------------
+string length = 18
+program length = 15
+parse time = 7976 msec.
+ambiguities = 32767
+---------------
+string length = 19
+program length = 15
+parse time = 9921 msec.
+ambiguities = 32767
+---------------
+string length = 20
+program length = 15
+parse time = 9157 msec.
+ambiguities = 32767
+---------------
+string length = 1
+program length = 16
+parse time = 2558 msec.
+ambiguities = 65535
+---------------
+string length = 2
+program length = 16
+parse time = 2319 msec.
+ambiguities = 65535
+---------------
+string length = 3
+program length = 16
+parse time = 4382 msec.
+ambiguities = 65535
+---------------
+string length = 4
+program length = 16
+parse time = 4484 msec.
+ambiguities = 65535
+---------------
+string length = 5
+program length = 16
+parse time = 6773 msec.
+ambiguities = 65535
+---------------
+string length = 6
+program length = 16
+parse time = 5612 msec.
+ambiguities = 65535
+---------------
+string length = 7
+program length = 16
+parse time = 10286 msec.
+ambiguities = 65535
+---------------
+string length = 8
+program length = 16
+parse time = 8906 msec.
+ambiguities = 65535
+---------------
+string length = 9
+program length = 16
+parse time = 12138 msec.
+ambiguities = 65535
+---------------
+string length = 10
+program length = 16
+parse time = 9509 msec.
+ambiguities = 65535
+---------------
+string length = 11
+program length = 16
+parse time = 13674 msec.
+ambiguities = 65535
+---------------
+string length = 12
+program length = 16
+parse time = 11564 msec.
+ambiguities = 65535
+---------------
+string length = 13
+program length = 16
+parse time = 15001 msec.
+ambiguities = 65535
+---------------
+string length = 14
+program length = 16
+parse time = 12682 msec.
+ambiguities = 65535
+---------------
+string length = 15
+program length = 16
+parse time = 16161 msec.
+ambiguities = 65535
+---------------
+string length = 16
+program length = 16
+parse time = 14554 msec.
+ambiguities = 65535
+---------------
+string length = 17
+program length = 16
+parse time = 20084 msec.
+ambiguities = 65535
+---------------
+string length = 18
+program length = 16
+parse time = 15866 msec.
+ambiguities = 65535
+---------------
+string length = 19
+program length = 16
+parse time = 21323 msec.
+ambiguities = 65535
+---------------
+string length = 20
+program length = 16
+parse time = 25173 msec.
+ambiguities = 65535
+---------------
+string length = 1
+program length = 17
+parse time = 6326 msec.
+ambiguities = 131071
+---------------
+string length = 2
+program length = 17
+parse time = 5451 msec.
+ambiguities = 131071
+---------------
+string length = 3
+program length = 17
+parse time = 10997 msec.
+ambiguities = 131071
+---------------
+string length = 4
+program length = 17
+parse time = 9869 msec.
+ambiguities = 131071
+---------------
+string length = 5
+program length = 17
+parse time = 18138 msec.
+ambiguities = 131071
+---------------
+string length = 6
+program length = 17
+parse time = 12499 msec.
+ambiguities = 131071
+---------------
+string length = 7
+program length = 17
+parse time = 21228 msec.
+ambiguities = 131071
+---------------
+string length = 8
+program length = 17
+parse time = 17210 msec.
+ambiguities = 131071
+---------------
+string length = 9
+program length = 17
+parse time = 25074 msec.
+ambiguities = 131071
+---------------
+string length = 10
+program length = 17
+parse time = 19574 msec.
+ambiguities = 131071
+---------------
+string length = 11
+program length = 17
+parse time = 27551 msec.
+ambiguities = 131071
+---------------
+string length = 12
+program length = 17
+parse time = 31835 msec.
+ambiguities = 131071
+---------------
+string length = 13
+program length = 17
+parse time = 36437 msec.
+ambiguities = 131071
+---------------
+string length = 14
+program length = 17
+parse time = 43128 msec.
+ambiguities = 131071
+---------------
+string length = 15
+program length = 17
+parse time = 37188 msec.
+ambiguities = 131071
+---------------
+string length = 16
+program length = 17
+parse time = 48558 msec.
+ambiguities = 131071
+---------------
+string length = 17
+program length = 17
+parse time = 39964 msec.
+ambiguities = 131071
+---------------
+string length = 18
+program length = 17
+parse time = 50989 msec.
+ambiguities = 131071
+---------------
+string length = 19
+program length = 17
+parse time = 49857 msec.
+ambiguities = 131071
+---------------
+string length = 20
+program length = 17
+parse time = 51735 msec.
+ambiguities = 131071
+---------------
+string length = 1
+program length = 18
+parse time = 16121 msec.
+ambiguities = 262143
+---------------
+string length = 2
+program length = 18
+parse time = 16966 msec.
+ambiguities = 262143
+---------------
+string length = 3
+program length = 18
+parse time = 27199 msec.
+ambiguities = 262143
+---------------
+string length = 4
+program length = 18
+parse time = 29725 msec.
+ambiguities = 262143
+---------------
+string length = 5
+program length = 18
+parse time = 36182 msec.
+ambiguities = 262143
+---------------
+string length = 6
+program length = 18
+parse time = 38288 msec.
+ambiguities = 262143
+---------------
+string length = 7
+program length = 18
+parse time = 50372 msec.
+ambiguities = 262143
+---------------
+string length = 8
+program length = 18
+parse time = 50101 msec.
+ambiguities = 262143
+---------------
+string length = 9
+program length = 18
+parse time = 54665 msec.
+ambiguities = 262143
+---------------
+string length = 10
+program length = 18
+parse time = 60843 msec.
+ambiguities = 262143
+---------------
+string length = 11
+program length = 18
+parse time = 67005 msec.
+ambiguities = 262143
+---------------
+string length = 12
+program length = 18
+parse time = 64305 msec.
+ambiguities = 262143
+---------------
+string length = 13
+program length = 18
+parse time = 77332 msec.
+ambiguities = 262143
+---------------
+string length = 14
+program length = 18
+parse time = 71839 msec.
+ambiguities = 262143
+---------------
+string length = 15
+program length = 18
+parse time = 96111 msec.
+ambiguities = 262143
+---------------
+string length = 16
+program length = 18
+parse time = 83841 msec.
+ambiguities = 262143
+---------------
+string length = 17
+program length = 18
+parse time = 107990 msec.
+ambiguities = 262143
+---------------
+string length = 18
+program length = 18
+---------------
+string length = 19
+program length = 18
+---------------
+string length = 20
+program length = 18
+---------------
+string length = 1
+program length = 19
+parse time = 34056 msec.
+ambiguities = 524287
+---------------
+string length = 2
+program length = 19
+parse time = 38027 msec.
+ambiguities = 524287
+---------------
+string length = 3
+program length = 19
+parse time = 63158 msec.
+ambiguities = 524287
+---------------
+string length = 4
+program length = 19
+parse time = 57258 msec.
+ambiguities = 524287
+---------------
+string length = 5
+program length = 19
+parse time = 89745 msec.
+ambiguities = 524287
+---------------
+string length = 6
+program length = 19
+parse time = 74651 msec.
+ambiguities = 524287
+---------------
+string length = 7
+program length = 19
+parse time = 117816 msec.
+ambiguities = 524287
+---------------
+string length = 8
+program length = 19
+---------------
+string length = 9
+program length = 19
+---------------
+string length = 10
+program length = 19
+---------------
+string length = 11
+program length = 19
+---------------
+string length = 12
+program length = 19
+---------------
+string length = 13
+program length = 19
+---------------
+string length = 14
+program length = 19
+---------------
+string length = 15
+program length = 19
+---------------
+string length = 16
+program length = 19
+---------------
+string length = 17
+program length = 19
+---------------
+string length = 18
+program length = 19
+---------------
+string length = 19
+program length = 19
+---------------
+string length = 20
+program length = 19
+---------------
+string length = 1
+program length = 20
+parse time = 84082 msec.
+ambiguities = 1048575
+---------------
+string length = 2
+program length = 20
+parse time = 93638 msec.
+ambiguities = 1048575
+---------------
+string length = 3
+program length = 20
+---------------
+string length = 4
+program length = 20
+---------------
+string length = 5
+program length = 20
+---------------
+string length = 6
+program length = 20
+---------------
+string length = 7
+program length = 20
+---------------
+string length = 8
+program length = 20
+---------------
+string length = 9
+program length = 20
+---------------
+string length = 10
+program length = 20
+---------------
+string length = 11
+program length = 20
+---------------
+string length = 12
+program length = 20
+---------------
+string length = 13
+program length = 20
+---------------
+string length = 14
+program length = 20
+---------------
+string length = 15
+program length = 20
+---------------
+string length = 16
+program length = 20
+---------------
+string length = 17
+program length = 20
+---------------
+string length = 18
+program length = 20
+---------------
+string length = 19
+program length = 20
+---------------
+string length = 20
+program length = 20
+---------------
+string length = 1
+program length = 1
+parse time = 8 msec.
+ambiguities = 1
+---------------
+string length = 2
+program length = 1
+parse time = 8 msec.
+ambiguities = 1
+---------------
+string length = 3
+program length = 1
+parse time = 10 msec.
+ambiguities = 1
+---------------
+string length = 4
+program length = 1
+parse time = 10 msec.
+ambiguities = 1
+---------------
+string length = 5
+program length = 1
+parse time = 11 msec.
+ambiguities = 1
+---------------
+string length = 6
+program length = 1
+parse time = 12 msec.
+ambiguities = 1
+---------------
+string length = 7
+program length = 1
+parse time = 12 msec.
+ambiguities = 1
+---------------
+string length = 8
+program length = 1
+parse time = 13 msec.
+ambiguities = 1
+---------------
+string length = 9
+program length = 1
+parse time = 14 msec.
+ambiguities = 1
+---------------
+string length = 10
+program length = 1
+parse time = 14 msec.
+ambiguities = 1
+---------------
+string length = 11
+program length = 1
+parse time = 15 msec.
+ambiguities = 1
+---------------
+string length = 12
+program length = 1
+parse time = 15 msec.
+ambiguities = 1
+---------------
+string length = 13
+program length = 1
+parse time = 16 msec.
+ambiguities = 1
+---------------
+string length = 14
+program length = 1
+parse time = 16 msec.
+ambiguities = 1
+---------------
+string length = 15
+program length = 1
+parse time = 17 msec.
+ambiguities = 1
+---------------
+string length = 16
+program length = 1
+parse time = 17 msec.
+ambiguities = 1
+---------------
+string length = 17
+program length = 1
+parse time = 18 msec.
+ambiguities = 1
+---------------
+string length = 18
+program length = 1
+parse time = 18 msec.
+ambiguities = 1
+---------------
+string length = 19
+program length = 1
+parse time = 19 msec.
+ambiguities = 1
+---------------
+string length = 20
+program length = 1
+parse time = 21 msec.
+ambiguities = 1
+---------------
+string length = 1
+program length = 2
+parse time = 10 msec.
+ambiguities = 3
+---------------
+string length = 2
+program length = 2
+parse time = 12 msec.
+ambiguities = 3
+---------------
+string length = 3
+program length = 2
+parse time = 14 msec.
+ambiguities = 3
+---------------
+string length = 4
+program length = 2
+parse time = 16 msec.
+ambiguities = 3
+---------------
+string length = 5
+program length = 2
+parse time = 23 msec.
+ambiguities = 3
+---------------
+string length = 6
+program length = 2
+parse time = 19 msec.
+ambiguities = 3
+---------------
+string length = 7
+program length = 2
+parse time = 20 msec.
+ambiguities = 3
+---------------
+string length = 8
+program length = 2
+parse time = 22 msec.
+ambiguities = 3
+---------------
+string length = 9
+program length = 2
+parse time = 23 msec.
+ambiguities = 3
+---------------
+string length = 10
+program length = 2
+parse time = 24 msec.
+ambiguities = 3
+---------------
+string length = 11
+program length = 2
+parse time = 26 msec.
+ambiguities = 3
+---------------
+string length = 12
+program length = 2
+parse time = 26 msec.
+ambiguities = 3
+---------------
+string length = 13
+program length = 2
+parse time = 29 msec.
+ambiguities = 3
+---------------
+string length = 14
+program length = 2
+parse time = 28 msec.
+ambiguities = 3
+---------------
+string length = 15
+program length = 2
+parse time = 34 msec.
+ambiguities = 3
+---------------
+string length = 16
+program length = 2
+parse time = 30 msec.
+ambiguities = 3
+---------------
+string length = 17
+program length = 2
+parse time = 31 msec.
+ambiguities = 3
+---------------
+string length = 18
+program length = 2
+parse time = 31 msec.
+ambiguities = 3
+---------------
+string length = 19
+program length = 2
+parse time = 32 msec.
+ambiguities = 3
+---------------
+string length = 20
+program length = 2
+parse time = 33 msec.
+ambiguities = 3
+---------------
+string length = 1
+program length = 3
+parse time = 17 msec.
+ambiguities = 7
+---------------
+string length = 2
+program length = 3
+parse time = 17 msec.
+ambiguities = 7
+---------------
+string length = 3
+program length = 3
+parse time = 21 msec.
+ambiguities = 7
+---------------
+string length = 4
+program length = 3
+parse time = 23 msec.
+ambiguities = 7
+---------------
+string length = 5
+program length = 3
+parse time = 25 msec.
+ambiguities = 7
+---------------
+string length = 6
+program length = 3
+parse time = 27 msec.
+ambiguities = 7
+---------------
+string length = 7
+program length = 3
+parse time = 29 msec.
+ambiguities = 7
+---------------
+string length = 8
+program length = 3
+parse time = 31 msec.
+ambiguities = 7
+---------------
+string length = 9
+program length = 3
+parse time = 35 msec.
+ambiguities = 7
+---------------
+string length = 10
+program length = 3
+parse time = 34 msec.
+ambiguities = 7
+---------------
+string length = 11
+program length = 3
+parse time = 36 msec.
+ambiguities = 7
+---------------
+string length = 12
+program length = 3
+parse time = 37 msec.
+ambiguities = 7
+---------------
+string length = 13
+program length = 3
+parse time = 40 msec.
+ambiguities = 7
+---------------
+string length = 14
+program length = 3
+parse time = 39 msec.
+ambiguities = 7
+---------------
+string length = 15
+program length = 3
+parse time = 40 msec.
+ambiguities = 7
+---------------
+string length = 16
+program length = 3
+parse time = 42 msec.
+ambiguities = 7
+---------------
+string length = 17
+program length = 3
+parse time = 41 msec.
+ambiguities = 7
+---------------
+string length = 18
+program length = 3
+parse time = 43 msec.
+ambiguities = 7
+---------------
+string length = 19
+program length = 3
+parse time = 42 msec.
+ambiguities = 7
+---------------
+string length = 20
+program length = 3
+parse time = 45 msec.
+ambiguities = 7
+---------------
+string length = 1
+program length = 4
+parse time = 19 msec.
+ambiguities = 15
+---------------
+string length = 2
+program length = 4
+parse time = 24 msec.
+ambiguities = 15
+---------------
+string length = 3
+program length = 4
+parse time = 27 msec.
+ambiguities = 15
+---------------
+string length = 4
+program length = 4
+parse time = 31 msec.
+ambiguities = 15
+---------------
+string length = 5
+program length = 4
+parse time = 35 msec.
+ambiguities = 15
+---------------
+string length = 6
+program length = 4
+parse time = 38 msec.
+ambiguities = 15
+---------------
+string length = 7
+program length = 4
+parse time = 40 msec.
+ambiguities = 15
+---------------
+string length = 8
+program length = 4
+parse time = 41 msec.
+ambiguities = 15
+---------------
+string length = 9
+program length = 4
+parse time = 42 msec.
+ambiguities = 15
+---------------
+string length = 10
+program length = 4
+parse time = 45 msec.
+ambiguities = 15
+---------------
+string length = 11
+program length = 4
+parse time = 46 msec.
+ambiguities = 15
+---------------
+string length = 12
+program length = 4
+parse time = 50 msec.
+ambiguities = 15
+---------------
+string length = 13
+program length = 4
+parse time = 49 msec.
+ambiguities = 15
+---------------
+string length = 14
+program length = 4
+parse time = 51 msec.
+ambiguities = 15
+---------------
+string length = 15
+program length = 4
+parse time = 51 msec.
+ambiguities = 15
+---------------
+string length = 16
+program length = 4
+parse time = 55 msec.
+ambiguities = 15
+---------------
+string length = 17
+program length = 4
+parse time = 57 msec.
+ambiguities = 15
+---------------
+string length = 18
+program length = 4
+parse time = 57 msec.
+ambiguities = 15
+---------------
+string length = 19
+program length = 4
+parse time = 58 msec.
+ambiguities = 15
+---------------
+string length = 20
+program length = 4
+parse time = 59 msec.
+ambiguities = 15
+---------------
+string length = 1
+program length = 5
+parse time = 26 msec.
+ambiguities = 31
+---------------
+string length = 2
+program length = 5
+parse time = 31 msec.
+ambiguities = 31
+---------------
+string length = 3
+program length = 5
+parse time = 38 msec.
+ambiguities = 31
+---------------
+string length = 4
+program length = 5
+parse time = 40 msec.
+ambiguities = 31
+---------------
+string length = 5
+program length = 5
+parse time = 45 msec.
+ambiguities = 31
+---------------
+string length = 6
+program length = 5
+parse time = 50 msec.
+ambiguities = 31
+---------------
+string length = 7
+program length = 5
+parse time = 51 msec.
+ambiguities = 31
+---------------
+string length = 8
+program length = 5
+parse time = 52 msec.
+ambiguities = 31
+---------------
+string length = 9
+program length = 5
+parse time = 57 msec.
+ambiguities = 31
+---------------
+string length = 10
+program length = 5
+parse time = 60 msec.
+ambiguities = 31
+---------------
+string length = 11
+program length = 5
+parse time = 61 msec.
+ambiguities = 31
+---------------
+string length = 12
+program length = 5
+parse time = 60 msec.
+ambiguities = 31
+---------------
+string length = 13
+program length = 5
+parse time = 64 msec.
+ambiguities = 31
+---------------
+string length = 14
+program length = 5
+parse time = 65 msec.
+ambiguities = 31
+---------------
+string length = 15
+program length = 5
+parse time = 75 msec.
+ambiguities = 31
+---------------
+string length = 16
+program length = 5
+parse time = 69 msec.
+ambiguities = 31
+---------------
+string length = 17
+program length = 5
+parse time = 72 msec.
+ambiguities = 31
+---------------
+string length = 18
+program length = 5
+parse time = 70 msec.
+ambiguities = 31
+---------------
+string length = 19
+program length = 5
+parse time = 79 msec.
+ambiguities = 31
+---------------
+string length = 20
+program length = 5
+parse time = 75 msec.
+ambiguities = 31
+---------------
+string length = 1
+program length = 6
+parse time = 35 msec.
+ambiguities = 63
+---------------
+string length = 2
+program length = 6
+parse time = 43 msec.
+ambiguities = 63
+---------------
+string length = 3
+program length = 6
+parse time = 50 msec.
+ambiguities = 63
+---------------
+string length = 4
+program length = 6
+parse time = 53 msec.
+ambiguities = 63
+---------------
+string length = 5
+program length = 6
+parse time = 60 msec.
+ambiguities = 63
+---------------
+string length = 6
+program length = 6
+parse time = 62 msec.
+ambiguities = 63
+---------------
+string length = 7
+program length = 6
+parse time = 69 msec.
+ambiguities = 63
+---------------
+string length = 8
+program length = 6
+parse time = 68 msec.
+ambiguities = 63
+---------------
+string length = 9
+program length = 6
+parse time = 76 msec.
+ambiguities = 63
+---------------
+string length = 10
+program length = 6
+parse time = 78 msec.
+ambiguities = 63
+---------------
+string length = 11
+program length = 6
+parse time = 81 msec.
+ambiguities = 63
+---------------
+string length = 12
+program length = 6
+parse time = 81 msec.
+ambiguities = 63
+---------------
+string length = 13
+program length = 6
+parse time = 91 msec.
+ambiguities = 63
+---------------
+string length = 14
+program length = 6
+parse time = 87 msec.
+ambiguities = 63
+---------------
+string length = 15
+program length = 6
+parse time = 98 msec.
+ambiguities = 63
+---------------
+string length = 16
+program length = 6
+parse time = 91 msec.
+ambiguities = 63
+---------------
+string length = 17
+program length = 6
+parse time = 103 msec.
+ambiguities = 63
+---------------
+string length = 18
+program length = 6
+parse time = 103 msec.
+ambiguities = 63
+---------------
+string length = 19
+program length = 6
+parse time = 115 msec.
+ambiguities = 63
+---------------
+string length = 20
+program length = 6
+parse time = 118 msec.
+ambiguities = 63
+---------------
+string length = 1
+program length = 7
+parse time = 51 msec.
+ambiguities = 127
+---------------
+string length = 2
+program length = 7
+parse time = 59 msec.
+ambiguities = 127
+---------------
+string length = 3
+program length = 7
+parse time = 67 msec.
+ambiguities = 127
+---------------
+string length = 4
+program length = 7
+parse time = 67 msec.
+ambiguities = 127
+---------------
+string length = 5
+program length = 7
+parse time = 82 msec.
+ambiguities = 127
+---------------
+string length = 6
+program length = 7
+parse time = 79 msec.
+ambiguities = 127
+---------------
+string length = 7
+program length = 7
+parse time = 94 msec.
+ambiguities = 127
+---------------
+string length = 8
+program length = 7
+parse time = 88 msec.
+ambiguities = 127
+---------------
+string length = 9
+program length = 7
+parse time = 98 msec.
+ambiguities = 127
+---------------
+string length = 10
+program length = 7
+parse time = 95 msec.
+ambiguities = 127
+---------------
+string length = 11
+program length = 7
+parse time = 107 msec.
+ambiguities = 127
+---------------
+string length = 12
+program length = 7
+parse time = 105 msec.
+ambiguities = 127
+---------------
+string length = 13
+program length = 7
+parse time = 117 msec.
+ambiguities = 127
+---------------
+string length = 14
+program length = 7
+parse time = 107 msec.
+ambiguities = 127
+---------------
+string length = 15
+program length = 7
+parse time = 119 msec.
+ambiguities = 127
+---------------
+string length = 16
+program length = 7
+parse time = 117 msec.
+ambiguities = 127
+---------------
+string length = 17
+program length = 7
+parse time = 130 msec.
+ambiguities = 127
+---------------
+string length = 18
+program length = 7
+parse time = 136 msec.
+ambiguities = 127
+---------------
+string length = 19
+program length = 7
+parse time = 130 msec.
+ambiguities = 127
+---------------
+string length = 20
+program length = 7
+parse time = 135 msec.
+ambiguities = 127
+---------------
+string length = 1
+program length = 8
+parse time = 65 msec.
+ambiguities = 255
+---------------
+string length = 2
+program length = 8
+parse time = 74 msec.
+ambiguities = 255
+---------------
+string length = 3
+program length = 8
+parse time = 85 msec.
+ambiguities = 255
+---------------
+string length = 4
+program length = 8
+parse time = 85 msec.
+ambiguities = 255
+---------------
+string length = 5
+program length = 8
+parse time = 98 msec.
+ambiguities = 255
+---------------
+string length = 6
+program length = 8
+parse time = 98 msec.
+ambiguities = 255
+---------------
+string length = 7
+program length = 8
+parse time = 118 msec.
+ambiguities = 255
+---------------
+string length = 8
+program length = 8
+parse time = 110 msec.
+ambiguities = 255
+---------------
+string length = 9
+program length = 8
+parse time = 135 msec.
+ambiguities = 255
+---------------
+string length = 10
+program length = 8
+parse time = 123 msec.
+ambiguities = 255
+---------------
+string length = 11
+program length = 8
+parse time = 136 msec.
+ambiguities = 255
+---------------
+string length = 12
+program length = 8
+parse time = 134 msec.
+ambiguities = 255
+---------------
+string length = 13
+program length = 8
+parse time = 150 msec.
+ambiguities = 255
+---------------
+string length = 14
+program length = 8
+parse time = 142 msec.
+ambiguities = 255
+---------------
+string length = 15
+program length = 8
+parse time = 161 msec.
+ambiguities = 255
+---------------
+string length = 16
+program length = 8
+parse time = 157 msec.
+ambiguities = 255
+---------------
+string length = 17
+program length = 8
+parse time = 181 msec.
+ambiguities = 255
+---------------
+string length = 18
+program length = 8
+parse time = 170 msec.
+ambiguities = 255
+---------------
+string length = 19
+program length = 8
+parse time = 184 msec.
+ambiguities = 255
+---------------
+string length = 20
+program length = 8
+parse time = 171 msec.
+ambiguities = 255
+---------------
+string length = 1
+program length = 9
+parse time = 86 msec.
+ambiguities = 511
+---------------
+string length = 2
+program length = 9
+parse time = 91 msec.
+ambiguities = 511
+---------------
+string length = 3
+program length = 9
+parse time = 114 msec.
+ambiguities = 511
+---------------
+string length = 4
+program length = 9
+parse time = 110 msec.
+ambiguities = 511
+---------------
+string length = 5
+program length = 9
+parse time = 145 msec.
+ambiguities = 511
+---------------
+string length = 6
+program length = 9
+parse time = 143 msec.
+ambiguities = 511
+---------------
+string length = 7
+program length = 9
+parse time = 170 msec.
+ambiguities = 511
+---------------
+string length = 8
+program length = 9
+parse time = 152 msec.
+ambiguities = 511
+---------------
+string length = 9
+program length = 9
+parse time = 174 msec.
+ambiguities = 511
+---------------
+string length = 10
+program length = 9
+parse time = 162 msec.
+ambiguities = 511
+---------------
+string length = 11
+program length = 9
+parse time = 193 msec.
+ambiguities = 511
+---------------
+string length = 12
+program length = 9
+parse time = 187 msec.
+ambiguities = 511
+---------------
+string length = 13
+program length = 9
+parse time = 212 msec.
+ambiguities = 511
+---------------
+string length = 14
+program length = 9
+parse time = 207 msec.
+ambiguities = 511
+---------------
+string length = 15
+program length = 9
+parse time = 235 msec.
+ambiguities = 511
+---------------
+string length = 16
+program length = 9
+parse time = 229 msec.
+ambiguities = 511
+---------------
+string length = 17
+program length = 9
+parse time = 235 msec.
+ambiguities = 511
+---------------
+string length = 18
+program length = 9
+parse time = 230 msec.
+ambiguities = 511
+---------------
+string length = 19
+program length = 9
+parse time = 260 msec.
+ambiguities = 511
+---------------
+string length = 20
+program length = 9
+parse time = 252 msec.
+ambiguities = 511
+---------------
+string length = 1
+program length = 10
+parse time = 124 msec.
+ambiguities = 1023
+---------------
+string length = 2
+program length = 10
+parse time = 134 msec.
+ambiguities = 1023
+---------------
+string length = 3
+program length = 10
+parse time = 168 msec.
+ambiguities = 1023
+---------------
+string length = 4
+program length = 10
+parse time = 164 msec.
+ambiguities = 1023
+---------------
+string length = 5
+program length = 10
+parse time = 196 msec.
+ambiguities = 1023
+---------------
+string length = 6
+program length = 10
+parse time = 174 msec.
+ambiguities = 1023
+---------------
+string length = 7
+program length = 10
+parse time = 246 msec.
+ambiguities = 1023
+---------------
+string length = 8
+program length = 10
+parse time = 212 msec.
+ambiguities = 1023
+---------------
+string length = 9
+program length = 10
+parse time = 260 msec.
+ambiguities = 1023
+---------------
+string length = 10
+program length = 10
+parse time = 240 msec.
+ambiguities = 1023
+---------------
+string length = 11
+program length = 10
+parse time = 292 msec.
+ambiguities = 1023
+---------------
+string length = 12
+program length = 10
+parse time = 282 msec.
+ambiguities = 1023
+---------------
+string length = 13
+program length = 10
+parse time = 312 msec.
+ambiguities = 1023
+---------------
+string length = 14
+program length = 10
+parse time = 294 msec.
+ambiguities = 1023
+---------------
+string length = 15
+program length = 10
+parse time = 338 msec.
+ambiguities = 1023
+---------------
+string length = 16
+program length = 10
+parse time = 326 msec.
+ambiguities = 1023
+---------------
+string length = 17
+program length = 10
+parse time = 387 msec.
+ambiguities = 1023
+---------------
+string length = 18
+program length = 10
+parse time = 345 msec.
+ambiguities = 1023
+---------------
+string length = 19
+program length = 10
+parse time = 373 msec.
+ambiguities = 1023
+---------------
+string length = 20
+program length = 10
+parse time = 360 msec.
+ambiguities = 1023
+---------------
+string length = 1
+program length = 11
+parse time = 163 msec.
+ambiguities = 2047
+---------------
+string length = 2
+program length = 11
+parse time = 207 msec.
+ambiguities = 2047
+---------------
+string length = 3
+program length = 11
+parse time = 263 msec.
+ambiguities = 2047
+---------------
+string length = 4
+program length = 11
+parse time = 231 msec.
+ambiguities = 2047
+---------------
+string length = 5
+program length = 11
+parse time = 287 msec.
+ambiguities = 2047
+---------------
+string length = 6
+program length = 11
+parse time = 289 msec.
+ambiguities = 2047
+---------------
+string length = 7
+program length = 11
+parse time = 372 msec.
+ambiguities = 2047
+---------------
+string length = 8
+program length = 11
+parse time = 310 msec.
+ambiguities = 2047
+---------------
+string length = 9
+program length = 11
+parse time = 371 msec.
+ambiguities = 2047
+---------------
+string length = 10
+program length = 11
+parse time = 389 msec.
+ambiguities = 2047
+---------------
+string length = 11
+program length = 11
+parse time = 404 msec.
+ambiguities = 2047
+---------------
+string length = 12
+program length = 11
+parse time = 404 msec.
+ambiguities = 2047
+---------------
+string length = 13
+program length = 11
+parse time = 480 msec.
+ambiguities = 2047
+---------------
+string length = 14
+program length = 11
+parse time = 394 msec.
+ambiguities = 2047
+---------------
+string length = 15
+program length = 11
+parse time = 483 msec.
+ambiguities = 2047
+---------------
+string length = 16
+program length = 11
+parse time = 459 msec.
+ambiguities = 2047
+---------------
+string length = 17
+program length = 11
+parse time = 533 msec.
+ambiguities = 2047
+---------------
+string length = 18
+program length = 11
+parse time = 511 msec.
+ambiguities = 2047
+---------------
+string length = 19
+program length = 11
+parse time = 557 msec.
+ambiguities = 2047
+---------------
+string length = 20
+program length = 11
+parse time = 570 msec.
+ambiguities = 2047
+---------------
+string length = 1
+program length = 12
+parse time = 347 msec.
+ambiguities = 4095
+---------------
+string length = 2
+program length = 12
+parse time = 328 msec.
+ambiguities = 4095
+---------------
+string length = 3
+program length = 12
+parse time = 385 msec.
+ambiguities = 4095
+---------------
+string length = 4
+program length = 12
+parse time = 361 msec.
+ambiguities = 4095
+---------------
+string length = 5
+program length = 12
+parse time = 436 msec.
+ambiguities = 4095
+---------------
+string length = 6
+program length = 12
+parse time = 405 msec.
+ambiguities = 4095
+---------------
+string length = 7
+program length = 12
+parse time = 562 msec.
+ambiguities = 4095
+---------------
+string length = 8
+program length = 12
+parse time = 513 msec.
+ambiguities = 4095
+---------------
+string length = 9
+program length = 12
+parse time = 604 msec.
+ambiguities = 4095
+---------------
+string length = 10
+program length = 12
+parse time = 535 msec.
+ambiguities = 4095
+---------------
+string length = 11
+program length = 12
+parse time = 631 msec.
+ambiguities = 4095
+---------------
+string length = 12
+program length = 12
+parse time = 570 msec.
+ambiguities = 4095
+---------------
+string length = 13
+program length = 12
+parse time = 701 msec.
+ambiguities = 4095
+---------------
+string length = 14
+program length = 12
+parse time = 651 msec.
+ambiguities = 4095
+---------------
+string length = 15
+program length = 12
+parse time = 784 msec.
+ambiguities = 4095
+---------------
+string length = 16
+program length = 12
+parse time = 709 msec.
+ambiguities = 4095
+---------------
+string length = 17
+program length = 12
+parse time = 839 msec.
+ambiguities = 4095
+---------------
+string length = 18
+program length = 12
+parse time = 707 msec.
+ambiguities = 4095
+---------------
+string length = 19
+program length = 12
+parse time = 904 msec.
+ambiguities = 4095
+---------------
+string length = 20
+program length = 12
+parse time = 813 msec.
+ambiguities = 4095
+---------------
+string length = 1
+program length = 13
+parse time = 483 msec.
+ambiguities = 8191
+---------------
+string length = 2
+program length = 13
+parse time = 480 msec.
+ambiguities = 8191
+---------------
+string length = 3
+program length = 13
+parse time = 633 msec.
+ambiguities = 8191
+---------------
+string length = 4
+program length = 13
+parse time = 504 msec.
+ambiguities = 8191
+---------------
+string length = 5
+program length = 13
+parse time = 719 msec.
+ambiguities = 8191
+---------------
+string length = 6
+program length = 13
+parse time = 601 msec.
+ambiguities = 8191
+---------------
+string length = 7
+program length = 13
+parse time = 859 msec.
+ambiguities = 8191
+---------------
+string length = 8
+program length = 13
+parse time = 779 msec.
+ambiguities = 8191
+---------------
+string length = 9
+program length = 13
+parse time = 1028 msec.
+ambiguities = 8191
+---------------
+string length = 10
+program length = 13
+parse time = 741 msec.
+ambiguities = 8191
+---------------
+string length = 11
+program length = 13
+parse time = 1087 msec.
+ambiguities = 8191
+---------------
+string length = 12
+program length = 13
+parse time = 974 msec.
+ambiguities = 8191
+---------------
+string length = 13
+program length = 13
+parse time = 1224 msec.
+ambiguities = 8191
+---------------
+string length = 14
+program length = 13
+parse time = 1014 msec.
+ambiguities = 8191
+---------------
+string length = 15
+program length = 13
+parse time = 1409 msec.
+ambiguities = 8191
+---------------
+string length = 16
+program length = 13
+parse time = 1585 msec.
+ambiguities = 8191
+---------------
+string length = 17
+program length = 13
+parse time = 1452 msec.
+ambiguities = 8191
+---------------
+string length = 18
+program length = 13
+parse time = 1208 msec.
+ambiguities = 8191
+---------------
+string length = 19
+program length = 13
+parse time = 1977 msec.
+ambiguities = 8191
+---------------
+string length = 20
+program length = 13
+parse time = 1838 msec.
+ambiguities = 8191
+---------------
+string length = 1
+program length = 14
+parse time = 752 msec.
+ambiguities = 16383
+---------------
+string length = 2
+program length = 14
+parse time = 792 msec.
+ambiguities = 16383
+---------------
+string length = 3
+program length = 14
+parse time = 1056 msec.
+ambiguities = 16383
+---------------
+string length = 4
+program length = 14
+parse time = 730 msec.
+ambiguities = 16383
+---------------
+string length = 5
+program length = 14
+parse time = 1342 msec.
+ambiguities = 16383
+---------------
+string length = 6
+program length = 14
+parse time = 1097 msec.
+ambiguities = 16383
+---------------
+string length = 7
+program length = 14
+parse time = 1515 msec.
+ambiguities = 16383
+---------------
+string length = 8
+program length = 14
+parse time = 1626 msec.
+ambiguities = 16383
+---------------
+string length = 9
+program length = 14
+parse time = 2390 msec.
+ambiguities = 16383
+---------------
+string length = 10
+program length = 14
+parse time = 1996 msec.
+ambiguities = 16383
+---------------
+string length = 11
+program length = 14
+parse time = 2527 msec.
+ambiguities = 16383
+---------------
+string length = 12
+program length = 14
+parse time = 1925 msec.
+ambiguities = 16383
+---------------
+string length = 13
+program length = 14
+parse time = 2961 msec.
+ambiguities = 16383
+---------------
+string length = 14
+program length = 14
+parse time = 3466 msec.
+ambiguities = 16383
+---------------
+string length = 15
+program length = 14
+parse time = 2545 msec.
+ambiguities = 16383
+---------------
+string length = 16
+program length = 14
+parse time = 2525 msec.
+ambiguities = 16383
+---------------
+string length = 17
+program length = 14
+parse time = 3442 msec.
+ambiguities = 16383
+---------------
+string length = 18
+program length = 14
+parse time = 4016 msec.
+ambiguities = 16383
+---------------
+string length = 19
+program length = 14
+parse time = 3760 msec.
+ambiguities = 16383
+---------------
+string length = 20
+program length = 14
+parse time = 3273 msec.
+ambiguities = 16383
+---------------
+string length = 1
+program length = 15
+parse time = 1453 msec.
+ambiguities = 32767
+---------------
+string length = 2
+program length = 15
+parse time = 1275 msec.
+ambiguities = 32767
+---------------
+string length = 3
+program length = 15
+parse time = 1813 msec.
+ambiguities = 32767
+---------------
+string length = 4
+program length = 15
+parse time = 1747 msec.
+ambiguities = 32767
+---------------
+string length = 5
+program length = 15
+parse time = 3127 msec.
+ambiguities = 32767
+---------------
+string length = 6
+program length = 15
+parse time = 2051 msec.
+ambiguities = 32767
+---------------
+string length = 7
+program length = 15
+parse time = 2808 msec.
+ambiguities = 32767
+---------------
+string length = 8
+program length = 15
+parse time = 2383 msec.
+ambiguities = 32767
+---------------
+string length = 9
+program length = 15
+parse time = 3317 msec.
+ambiguities = 32767
+---------------
+string length = 10
+program length = 15
+parse time = 4653 msec.
+ambiguities = 32767
+---------------
+string length = 11
+program length = 15
+parse time = 4764 msec.
+ambiguities = 32767
+---------------
+string length = 12
+program length = 15
+parse time = 5557 msec.
+ambiguities = 32767
+---------------
+string length = 13
+program length = 15
+parse time = 5725 msec.
+ambiguities = 32767
+---------------
+string length = 14
+program length = 15
+parse time = 6367 msec.
+ambiguities = 32767
+---------------
+string length = 15
+program length = 15
+parse time = 7509 msec.
+ambiguities = 32767
+---------------
+string length = 16
+program length = 15
+parse time = 7786 msec.
+ambiguities = 32767
+---------------
+string length = 17
+program length = 15
+parse time = 8162 msec.
+ambiguities = 32767
+---------------
+string length = 18
+program length = 15
+parse time = 7299 msec.
+ambiguities = 32767
+---------------
+string length = 19
+program length = 15
+parse time = 9814 msec.
+ambiguities = 32767
+---------------
+string length = 20
+program length = 15
+parse time = 8695 msec.
+ambiguities = 32767
+---------------
+string length = 1
+program length = 16
+parse time = 2614 msec.
+ambiguities = 65535
+---------------
+string length = 2
+program length = 16
+parse time = 2293 msec.
+ambiguities = 65535
+---------------
+string length = 3
+program length = 16
+parse time = 4422 msec.
+ambiguities = 65535
+---------------
+string length = 4
+program length = 16
+parse time = 4095 msec.
+ambiguities = 65535
+---------------
+string length = 5
+program length = 16
+parse time = 7162 msec.
+ambiguities = 65535
+---------------
+string length = 6
+program length = 16
+parse time = 6091 msec.
+ambiguities = 65535
+---------------
+string length = 7
+program length = 16
+parse time = 9750 msec.
+ambiguities = 65535
+---------------
+string length = 8
+program length = 16
+parse time = 8201 msec.
+ambiguities = 65535
+---------------
+string length = 9
+program length = 16
+parse time = 12028 msec.
+ambiguities = 65535
+---------------
+string length = 10
+program length = 16
+parse time = 8284 msec.
+ambiguities = 65535
+---------------
+string length = 11
+program length = 16
+parse time = 13629 msec.
+ambiguities = 65535
+---------------
+string length = 12
+program length = 16
+parse time = 11713 msec.
+ambiguities = 65535
+---------------
+string length = 13
+program length = 16
+parse time = 15081 msec.
+ambiguities = 65535
+---------------
+string length = 14
+program length = 16
+parse time = 15702 msec.
+ambiguities = 65535
+---------------
+string length = 15
+program length = 16
+parse time = 15720 msec.
+ambiguities = 65535
+---------------
+string length = 16
+program length = 16
+parse time = 13875 msec.
+ambiguities = 65535
+---------------
+string length = 17
+program length = 16
+parse time = 20179 msec.
+ambiguities = 65535
+---------------
+string length = 18
+program length = 16
+parse time = 18179 msec.
+ambiguities = 65535
+---------------
+string length = 19
+program length = 16
+parse time = 22070 msec.
+ambiguities = 65535
+---------------
+string length = 20
+program length = 16
+parse time = 24950 msec.
+ambiguities = 65535
+---------------
+string length = 1
+program length = 17
+parse time = 5189 msec.
+ambiguities = 131071
+---------------
+string length = 2
+program length = 17
+parse time = 5999 msec.
+ambiguities = 131071
+---------------
+string length = 3
+program length = 17
+parse time = 9020 msec.
+ambiguities = 131071
+---------------
+string length = 4
+program length = 17
+parse time = 9779 msec.
+ambiguities = 131071
+---------------
+string length = 5
+program length = 17
+parse time = 17417 msec.
+ambiguities = 131071
+---------------
+string length = 6
+program length = 17
+parse time = 13652 msec.
+ambiguities = 131071
+---------------
+string length = 7
+program length = 17
+parse time = 19270 msec.
+ambiguities = 131071
+---------------
+string length = 8
+program length = 17
+parse time = 16053 msec.
+ambiguities = 131071
+---------------
+string length = 9
+program length = 17
+parse time = 25305 msec.
+ambiguities = 131071
+---------------
+string length = 10
+program length = 17
+parse time = 27969 msec.
+ambiguities = 131071
+---------------
+string length = 11
+program length = 17
+parse time = 31842 msec.
+ambiguities = 131071
+---------------
+string length = 12
+program length = 17
+parse time = 31901 msec.
+ambiguities = 131071
+---------------
+string length = 13
+program length = 17
+parse time = 35108 msec.
+ambiguities = 131071
+---------------
+string length = 14
+program length = 17
+parse time = 37314 msec.
+ambiguities = 131071
+---------------
+string length = 15
+program length = 17
+parse time = 37530 msec.
+ambiguities = 131071
+---------------
+string length = 16
+program length = 17
+parse time = 44057 msec.
+ambiguities = 131071
+---------------
+string length = 17
+program length = 17
+parse time = 45910 msec.
+ambiguities = 131071
+---------------
+string length = 18
+program length = 17
+parse time = 48805 msec.
+ambiguities = 131071
+---------------
+string length = 19
+program length = 17
+parse time = 48047 msec.
+ambiguities = 131071
+---------------
+string length = 20
+program length = 17
+parse time = 47935 msec.
+ambiguities = 131071
+---------------
+string length = 1
+program length = 18
+parse time = 13231 msec.
+ambiguities = 262143
+---------------
+string length = 2
+program length = 18
+parse time = 15332 msec.
+ambiguities = 262143
+---------------
+string length = 3
+program length = 18
+parse time = 25565 msec.
+ambiguities = 262143
+---------------
+string length = 4
+program length = 18
+parse time = 28531 msec.
+ambiguities = 262143
+---------------
+string length = 5
+program length = 18
+parse time = 37545 msec.
+ambiguities = 262143
+---------------
+string length = 6
+program length = 18
+parse time = 36890 msec.
+ambiguities = 262143
+---------------
+string length = 7
+program length = 18
+parse time = 42831 msec.
+ambiguities = 262143
+---------------
+string length = 8
+program length = 18
+parse time = 47730 msec.
+ambiguities = 262143
+---------------
+string length = 9
+program length = 18
+parse time = 61094 msec.
+ambiguities = 262143
+---------------
+string length = 10
+program length = 18
+parse time = 52482 msec.
+ambiguities = 262143
+---------------
+string length = 11
+program length = 18
+parse time = 72073 msec.
+ambiguities = 262143
+---------------
+string length = 12
+program length = 18
+parse time = 66566 msec.
+ambiguities = 262143
+---------------
+string length = 13
+program length = 18
+parse time = 82546 msec.
+ambiguities = 262143
+---------------
+string length = 14
+program length = 18
+parse time = 73579 msec.
+ambiguities = 262143
+---------------
+string length = 15
+program length = 18
+parse time = 92477 msec.
+ambiguities = 262143
+---------------
+string length = 16
+program length = 18
+parse time = 80376 msec.
+ambiguities = 262143
+---------------
+string length = 17
+program length = 18
+---------------
+string length = 18
+program length = 18
+---------------
+string length = 19
+program length = 18
+---------------
+string length = 20
+program length = 18
+---------------
+string length = 1
+program length = 19
+parse time = 34068 msec.
+ambiguities = 524287
+---------------
+string length = 2
+program length = 19
+parse time = 36209 msec.
+ambiguities = 524287
+---------------
+string length = 3
+program length = 19
+parse time = 63348 msec.
+ambiguities = 524287
+---------------
+string length = 4
+program length = 19
+parse time = 58586 msec.
+ambiguities = 524287
+---------------
+string length = 5
+program length = 19
+parse time = 83523 msec.
+ambiguities = 524287
+---------------
+string length = 6
+program length = 19
+parse time = 75386 msec.
+ambiguities = 524287
+---------------
+string length = 7
+program length = 19
+parse time = 111492 msec.
+ambiguities = 524287
+---------------
+string length = 8
+program length = 19
+---------------
+string length = 9
+program length = 19
+---------------
+string length = 10
+program length = 19
+---------------
+string length = 11
+program length = 19
+---------------
+string length = 12
+program length = 19
+---------------
+string length = 13
+program length = 19
+---------------
+string length = 14
+program length = 19
+---------------
+string length = 15
+program length = 19
+---------------
+string length = 16
+program length = 19
+---------------
+string length = 17
+program length = 19
+---------------
+string length = 18
+program length = 19
+---------------
+string length = 19
+program length = 19
+---------------
+string length = 20
+program length = 19
+---------------
+string length = 1
+program length = 20
+parse time = 82789 msec.
+ambiguities = 1048575
+---------------
+string length = 2
+program length = 20
+parse time = 86270 msec.
+ambiguities = 1048575
+---------------
+string length = 3
+program length = 20
+---------------
+string length = 4
+program length = 20
+---------------
+string length = 5
+program length = 20
+---------------
+string length = 6
+program length = 20
+---------------
+string length = 7
+program length = 20
+---------------
+string length = 8
+program length = 20
+---------------
+string length = 9
+program length = 20
+---------------
+string length = 10
+program length = 20
+---------------
+string length = 11
+program length = 20
+---------------
+string length = 12
+program length = 20
+---------------
+string length = 13
+program length = 20

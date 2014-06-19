@@ -1,0 +1,29 @@
+module SQLSelect
+imports
+    ExprSyntax
+    Common
+    
+exports
+  
+  context-free syntax    
+    "select" Expr "from" Expr "where" Expr -> Expr {"SQLSelect"}
+    
+    SQLCmpExpr -> CmpExpr
+    CmpExpr "<" AddExpr -> SQLCmpExpr {"SQLLT"}
+    CmpExpr ">" AddExpr -> SQLCmpExpr {"SQLGT"}
+    
+    SQLAddExpr -> AddExpr
+    AddExpr "+" MulExpr -> SQLAddExpr {"SQLAdd"}
+    AddExpr "-" MulExpr -> SQLAddExpr {"SQLSub"}
+    
+    SQLMulExpr -> MulExpr
+    MulExpr "*" PrefixExpr -> SQLMulExpr {"SQLMul"}
+    MulExpr "/" PrefixExpr -> SQLMulExpr {"SQLDiv"}
+    
+    SQLPrimary -> Primary
+    ID  -> SQLPrimary {"Column"}
+    INT -> SQLPrimary {"SQLInt"}
+    "*" -> SQLPrimary {"AllColumn"}
+    
+    SQLTable -> Primary
+    ID  -> SQLTable {"Table"}

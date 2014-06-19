@@ -1,0 +1,28 @@
+module Regex
+imports
+    ExprSyntax
+    
+exports
+  
+  context-free syntax
+    Regex -> Primary {"RegularExpression"}
+    
+  lexical syntax
+    Regex Regex       -> Regex {left, "RegSeq"}
+    Regex "*"         -> Regex {non-assoc, "RegStar"}
+    Regex "+"         -> Regex {non-assoc, "RegPlus"}
+    Regex "?"         -> Regex {non-assoc, "RegOption"}
+    [A-Za-z0-9\_\$\/] -> Regex {"RegChar"}
+    "."               -> Regex {"RegAny"}
+    
+  lexical priorities
+    {
+      [A-Za-z0-9\_\$\/] -> Regex
+      "."               -> Regex
+    } > { non-assoc:
+      Regex "*"         -> Regex
+      Regex "+"         -> Regex
+      Regex "?"         -> Regex
+    } > { left:
+      Regex Regex       -> Regex
+    }
