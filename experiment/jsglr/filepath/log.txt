@@ -1,0 +1,800 @@
+---------------
+length = 1
+parse time = 8 msec.
+ambiguities = 1
+---------------
+length = 2
+parse time = 11 msec.
+ambiguities = 3
+---------------
+length = 3
+parse time = 16 msec.
+ambiguities = 7
+---------------
+length = 4
+parse time = 20 msec.
+ambiguities = 15
+---------------
+length = 5
+parse time = 28 msec.
+ambiguities = 31
+---------------
+length = 6
+parse time = 40 msec.
+ambiguities = 63
+---------------
+length = 7
+parse time = 56 msec.
+ambiguities = 127
+---------------
+length = 8
+parse time = 78 msec.
+ambiguities = 255
+---------------
+length = 9
+parse time = 110 msec.
+ambiguities = 511
+---------------
+length = 10
+parse time = 145 msec.
+ambiguities = 1023
+---------------
+length = 11
+parse time = 211 msec.
+ambiguities = 2047
+---------------
+length = 12
+parse time = 303 msec.
+ambiguities = 4095
+---------------
+length = 13
+parse time = 593 msec.
+ambiguities = 8191
+---------------
+length = 14
+parse time = 900 msec.
+ambiguities = 16383
+---------------
+length = 15
+parse time = 2207 msec.
+ambiguities = 32767
+---------------
+length = 16
+parse time = 3481 msec.
+ambiguities = 65535
+---------------
+length = 17
+parse time = 6813 msec.
+ambiguities = 131071
+---------------
+length = 18
+parse time = 16341 msec.
+ambiguities = 262143
+---------------
+length = 19
+parse time = 39862 msec.
+ambiguities = 524287
+---------------
+length = 20
+parse time = 101007 msec.
+ambiguities = 1048575
+---------------
+length = 1
+parse time = 8 msec.
+ambiguities = 1
+---------------
+length = 2
+parse time = 11 msec.
+ambiguities = 3
+---------------
+length = 3
+parse time = 15 msec.
+ambiguities = 7
+---------------
+length = 4
+parse time = 21 msec.
+ambiguities = 15
+---------------
+length = 5
+parse time = 28 msec.
+ambiguities = 31
+---------------
+length = 6
+parse time = 40 msec.
+ambiguities = 63
+---------------
+length = 7
+parse time = 57 msec.
+ambiguities = 127
+---------------
+length = 8
+parse time = 74 msec.
+ambiguities = 255
+---------------
+length = 9
+parse time = 110 msec.
+ambiguities = 511
+---------------
+length = 10
+parse time = 145 msec.
+ambiguities = 1023
+---------------
+length = 11
+parse time = 243 msec.
+ambiguities = 2047
+---------------
+length = 12
+parse time = 305 msec.
+ambiguities = 4095
+---------------
+length = 13
+parse time = 606 msec.
+ambiguities = 8191
+---------------
+length = 14
+parse time = 943 msec.
+ambiguities = 16383
+---------------
+length = 15
+parse time = 2166 msec.
+ambiguities = 32767
+---------------
+length = 16
+parse time = 3314 msec.
+ambiguities = 65535
+---------------
+length = 17
+parse time = 6803 msec.
+ambiguities = 131071
+---------------
+length = 18
+parse time = 19869 msec.
+ambiguities = 262143
+---------------
+length = 19
+parse time = 45863 msec.
+ambiguities = 524287
+---------------
+length = 20
+parse time = 90218 msec.
+ambiguities = 1048575
+---------------
+length = 1
+parse time = 8 msec.
+ambiguities = 1
+---------------
+length = 2
+parse time = 11 msec.
+ambiguities = 3
+---------------
+length = 3
+parse time = 16 msec.
+ambiguities = 7
+---------------
+length = 4
+parse time = 21 msec.
+ambiguities = 15
+---------------
+length = 5
+parse time = 28 msec.
+ambiguities = 31
+---------------
+length = 6
+parse time = 39 msec.
+ambiguities = 63
+---------------
+length = 7
+parse time = 58 msec.
+ambiguities = 127
+---------------
+length = 8
+parse time = 77 msec.
+ambiguities = 255
+---------------
+length = 9
+parse time = 110 msec.
+ambiguities = 511
+---------------
+length = 10
+parse time = 160 msec.
+ambiguities = 1023
+---------------
+length = 11
+parse time = 199 msec.
+ambiguities = 2047
+---------------
+length = 12
+parse time = 345 msec.
+ambiguities = 4095
+---------------
+length = 13
+parse time = 634 msec.
+ambiguities = 8191
+---------------
+length = 14
+parse time = 946 msec.
+ambiguities = 16383
+---------------
+length = 15
+parse time = 2143 msec.
+ambiguities = 32767
+---------------
+length = 16
+parse time = 3351 msec.
+ambiguities = 65535
+---------------
+length = 17
+parse time = 6803 msec.
+ambiguities = 131071
+---------------
+length = 18
+parse time = 16456 msec.
+ambiguities = 262143
+---------------
+length = 19
+parse time = 46628 msec.
+ambiguities = 524287
+---------------
+length = 20
+parse time = 93284 msec.
+ambiguities = 1048575
+---------------
+length = 1
+parse time = 8 msec.
+ambiguities = 1
+---------------
+length = 2
+parse time = 11 msec.
+ambiguities = 3
+---------------
+length = 3
+parse time = 15 msec.
+ambiguities = 7
+---------------
+length = 4
+parse time = 21 msec.
+ambiguities = 15
+---------------
+length = 5
+parse time = 28 msec.
+ambiguities = 31
+---------------
+length = 6
+parse time = 40 msec.
+ambiguities = 63
+---------------
+length = 7
+parse time = 56 msec.
+ambiguities = 127
+---------------
+length = 8
+parse time = 75 msec.
+ambiguities = 255
+---------------
+length = 9
+parse time = 106 msec.
+ambiguities = 511
+---------------
+length = 10
+parse time = 144 msec.
+ambiguities = 1023
+---------------
+length = 11
+parse time = 232 msec.
+ambiguities = 2047
+---------------
+length = 12
+parse time = 327 msec.
+ambiguities = 4095
+---------------
+length = 13
+parse time = 571 msec.
+ambiguities = 8191
+---------------
+length = 14
+parse time = 943 msec.
+ambiguities = 16383
+---------------
+length = 15
+parse time = 2110 msec.
+ambiguities = 32767
+---------------
+length = 16
+parse time = 3348 msec.
+ambiguities = 65535
+---------------
+length = 17
+parse time = 7113 msec.
+ambiguities = 131071
+---------------
+length = 18
+parse time = 21007 msec.
+ambiguities = 262143
+---------------
+length = 19
+parse time = 47563 msec.
+ambiguities = 524287
+---------------
+length = 20
+parse time = 98145 msec.
+ambiguities = 1048575
+---------------
+length = 1
+parse time = 8 msec.
+ambiguities = 1
+---------------
+length = 2
+parse time = 11 msec.
+ambiguities = 3
+---------------
+length = 3
+parse time = 16 msec.
+ambiguities = 7
+---------------
+length = 4
+parse time = 22 msec.
+ambiguities = 15
+---------------
+length = 5
+parse time = 29 msec.
+ambiguities = 31
+---------------
+length = 6
+parse time = 40 msec.
+ambiguities = 63
+---------------
+length = 7
+parse time = 59 msec.
+ambiguities = 127
+---------------
+length = 8
+parse time = 74 msec.
+ambiguities = 255
+---------------
+length = 9
+parse time = 106 msec.
+ambiguities = 511
+---------------
+length = 10
+parse time = 137 msec.
+ambiguities = 1023
+---------------
+length = 11
+parse time = 209 msec.
+ambiguities = 2047
+---------------
+length = 12
+parse time = 307 msec.
+ambiguities = 4095
+---------------
+length = 13
+parse time = 577 msec.
+ambiguities = 8191
+---------------
+length = 14
+parse time = 899 msec.
+ambiguities = 16383
+---------------
+length = 15
+parse time = 2111 msec.
+ambiguities = 32767
+---------------
+length = 16
+parse time = 3330 msec.
+ambiguities = 65535
+---------------
+length = 17
+parse time = 7108 msec.
+ambiguities = 131071
+---------------
+length = 18
+parse time = 20713 msec.
+ambiguities = 262143
+---------------
+length = 19
+parse time = 49906 msec.
+ambiguities = 524287
+---------------
+length = 20
+parse time = 102525 msec.
+ambiguities = 1048575
+---------------
+length = 1
+parse time = 8 msec.
+ambiguities = 1
+---------------
+length = 2
+parse time = 11 msec.
+ambiguities = 3
+---------------
+length = 3
+parse time = 15 msec.
+ambiguities = 7
+---------------
+length = 4
+parse time = 21 msec.
+ambiguities = 15
+---------------
+length = 5
+parse time = 29 msec.
+ambiguities = 31
+---------------
+length = 6
+parse time = 41 msec.
+ambiguities = 63
+---------------
+length = 7
+parse time = 59 msec.
+ambiguities = 127
+---------------
+length = 8
+parse time = 73 msec.
+ambiguities = 255
+---------------
+length = 9
+parse time = 105 msec.
+ambiguities = 511
+---------------
+length = 10
+parse time = 163 msec.
+ambiguities = 1023
+---------------
+length = 11
+parse time = 203 msec.
+ambiguities = 2047
+---------------
+length = 12
+parse time = 301 msec.
+ambiguities = 4095
+---------------
+length = 13
+parse time = 587 msec.
+ambiguities = 8191
+---------------
+length = 14
+parse time = 937 msec.
+ambiguities = 16383
+---------------
+length = 15
+parse time = 2204 msec.
+ambiguities = 32767
+---------------
+length = 16
+parse time = 3363 msec.
+ambiguities = 65535
+---------------
+length = 17
+parse time = 7118 msec.
+ambiguities = 131071
+---------------
+length = 18
+parse time = 17744 msec.
+ambiguities = 262143
+---------------
+length = 19
+parse time = 40018 msec.
+ambiguities = 524287
+---------------
+length = 20
+parse time = 96863 msec.
+ambiguities = 1048575
+---------------
+length = 1
+parse time = 8 msec.
+ambiguities = 1
+---------------
+length = 2
+parse time = 11 msec.
+ambiguities = 3
+---------------
+length = 3
+parse time = 14 msec.
+ambiguities = 7
+---------------
+length = 4
+parse time = 21 msec.
+ambiguities = 15
+---------------
+length = 5
+parse time = 28 msec.
+ambiguities = 31
+---------------
+length = 6
+parse time = 41 msec.
+ambiguities = 63
+---------------
+length = 7
+parse time = 59 msec.
+ambiguities = 127
+---------------
+length = 8
+parse time = 75 msec.
+ambiguities = 255
+---------------
+length = 9
+parse time = 111 msec.
+ambiguities = 511
+---------------
+length = 10
+parse time = 141 msec.
+ambiguities = 1023
+---------------
+length = 11
+parse time = 203 msec.
+ambiguities = 2047
+---------------
+length = 12
+parse time = 328 msec.
+ambiguities = 4095
+---------------
+length = 13
+parse time = 611 msec.
+ambiguities = 8191
+---------------
+length = 14
+parse time = 940 msec.
+ambiguities = 16383
+---------------
+length = 15
+parse time = 2161 msec.
+ambiguities = 32767
+---------------
+length = 16
+parse time = 3339 msec.
+ambiguities = 65535
+---------------
+length = 17
+parse time = 6788 msec.
+ambiguities = 131071
+---------------
+length = 18
+parse time = 16362 msec.
+ambiguities = 262143
+---------------
+length = 19
+parse time = 43052 msec.
+ambiguities = 524287
+---------------
+length = 20
+parse time = 107584 msec.
+ambiguities = 1048575
+---------------
+length = 1
+parse time = 8 msec.
+ambiguities = 1
+---------------
+length = 2
+parse time = 11 msec.
+ambiguities = 3
+---------------
+length = 3
+parse time = 15 msec.
+ambiguities = 7
+---------------
+length = 4
+parse time = 20 msec.
+ambiguities = 15
+---------------
+length = 5
+parse time = 29 msec.
+ambiguities = 31
+---------------
+length = 6
+parse time = 40 msec.
+ambiguities = 63
+---------------
+length = 7
+parse time = 59 msec.
+ambiguities = 127
+---------------
+length = 8
+parse time = 77 msec.
+ambiguities = 255
+---------------
+length = 9
+parse time = 113 msec.
+ambiguities = 511
+---------------
+length = 10
+parse time = 159 msec.
+ambiguities = 1023
+---------------
+length = 11
+parse time = 237 msec.
+ambiguities = 2047
+---------------
+length = 12
+parse time = 297 msec.
+ambiguities = 4095
+---------------
+length = 13
+parse time = 547 msec.
+ambiguities = 8191
+---------------
+length = 14
+parse time = 942 msec.
+ambiguities = 16383
+---------------
+length = 15
+parse time = 2249 msec.
+ambiguities = 32767
+---------------
+length = 16
+parse time = 3485 msec.
+ambiguities = 65535
+---------------
+length = 17
+parse time = 6822 msec.
+ambiguities = 131071
+---------------
+length = 18
+parse time = 16900 msec.
+ambiguities = 262143
+---------------
+length = 19
+parse time = 44573 msec.
+ambiguities = 524287
+---------------
+length = 20
+parse time = 92023 msec.
+ambiguities = 1048575
+---------------
+length = 1
+parse time = 8 msec.
+ambiguities = 1
+---------------
+length = 2
+parse time = 11 msec.
+ambiguities = 3
+---------------
+length = 3
+parse time = 16 msec.
+ambiguities = 7
+---------------
+length = 4
+parse time = 20 msec.
+ambiguities = 15
+---------------
+length = 5
+parse time = 28 msec.
+ambiguities = 31
+---------------
+length = 6
+parse time = 39 msec.
+ambiguities = 63
+---------------
+length = 7
+parse time = 57 msec.
+ambiguities = 127
+---------------
+length = 8
+parse time = 75 msec.
+ambiguities = 255
+---------------
+length = 9
+parse time = 107 msec.
+ambiguities = 511
+---------------
+length = 10
+parse time = 142 msec.
+ambiguities = 1023
+---------------
+length = 11
+parse time = 196 msec.
+ambiguities = 2047
+---------------
+length = 12
+parse time = 327 msec.
+ambiguities = 4095
+---------------
+length = 13
+parse time = 596 msec.
+ambiguities = 8191
+---------------
+length = 14
+parse time = 944 msec.
+ambiguities = 16383
+---------------
+length = 15
+parse time = 2192 msec.
+ambiguities = 32767
+---------------
+length = 16
+parse time = 3294 msec.
+ambiguities = 65535
+---------------
+length = 17
+parse time = 7106 msec.
+ambiguities = 131071
+---------------
+length = 18
+parse time = 19283 msec.
+ambiguities = 262143
+---------------
+length = 19
+parse time = 39658 msec.
+ambiguities = 524287
+---------------
+length = 20
+parse time = 90794 msec.
+ambiguities = 1048575
+---------------
+length = 1
+parse time = 8 msec.
+ambiguities = 1
+---------------
+length = 2
+parse time = 12 msec.
+ambiguities = 3
+---------------
+length = 3
+parse time = 16 msec.
+ambiguities = 7
+---------------
+length = 4
+parse time = 21 msec.
+ambiguities = 15
+---------------
+length = 5
+parse time = 28 msec.
+ambiguities = 31
+---------------
+length = 6
+parse time = 40 msec.
+ambiguities = 63
+---------------
+length = 7
+parse time = 59 msec.
+ambiguities = 127
+---------------
+length = 8
+parse time = 74 msec.
+ambiguities = 255
+---------------
+length = 9
+parse time = 106 msec.
+ambiguities = 511
+---------------
+length = 10
+parse time = 140 msec.
+ambiguities = 1023
+---------------
+length = 11
+parse time = 238 msec.
+ambiguities = 2047
+---------------
+length = 12
+parse time = 330 msec.
+ambiguities = 4095
+---------------
+length = 13
+parse time = 591 msec.
+ambiguities = 8191
+---------------
+length = 14
+parse time = 917 msec.
+ambiguities = 16383
+---------------
+length = 15
+parse time = 1868 msec.
+ambiguities = 32767
+---------------
+length = 16
+parse time = 3476 msec.
+ambiguities = 65535
+---------------
+length = 17
+parse time = 6833 msec.
+ambiguities = 131071
+---------------
+length = 18
+parse time = 16502 msec.
+ambiguities = 262143
+---------------
+length = 19
+parse time = 38411 msec.
+ambiguities = 524287
+---------------
+length = 20
+parse time = 93598 msec.
+ambiguities = 1048575

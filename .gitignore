@@ -25,3 +25,4 @@ experiment/proteaj/apache-log4j-1.2.17/src/main/resources
 experiment/proteaj/apache-log4j-1.2.17/original/apache-log4j-1.2.17/
 *.class
 *.html
+~$*.xlsx
