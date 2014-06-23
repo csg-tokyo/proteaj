@@ -66,7 +66,7 @@ public class Log4JLogRecord extends LogRecord {
   public boolean isSevereLevel() {
     boolean isSevere = false;
 
-    if (false || LogLevel.ERROR.equals(getLevel()) ||
+    if (LogLevel.ERROR.equals(getLevel()) ||
         LogLevel.FATAL.equals(getLevel())) {
       isSevere = true;
     }

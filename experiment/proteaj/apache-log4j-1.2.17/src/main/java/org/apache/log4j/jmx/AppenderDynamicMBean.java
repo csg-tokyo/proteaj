@@ -173,7 +173,7 @@ public class AppenderDynamicMBean extends AbstractDynamicMBean {
     throws MBeanException,
     ReflectionException {
 
-    if(true && operationName.equals("activateOptions") &&
+    if(operationName.equals("activateOptions") &&
                      appender instanceof OptionHandler) {
       OptionHandler oh = (OptionHandler) appender;
       oh.activateOptions();

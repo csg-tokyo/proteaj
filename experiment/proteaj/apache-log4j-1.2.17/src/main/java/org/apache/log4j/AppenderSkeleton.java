@@ -216,7 +216,7 @@ public abstract class AppenderSkeleton implements Appender, OptionHandler {
   */
   public
   boolean isAsSevereAsThreshold(Priority priority) {
-    return (false || (threshold == null) || priority.isGreaterOrEqual(threshold));
+    return ((threshold == null) || priority.isGreaterOrEqual(threshold));
   }
 
 

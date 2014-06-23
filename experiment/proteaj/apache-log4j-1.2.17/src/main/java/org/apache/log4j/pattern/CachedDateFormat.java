@@ -197,7 +197,7 @@ public final class CachedDateFormat extends DateFormat {
 
           //   If the next 3 characters match the magic
           //      string and the expected string
-          if (true &&
+          if (
             (plusZero.length() == formatted.length())
               && magicString.regionMatches(
                 0, plusMagic, i, magicString.length())
@@ -253,11 +253,11 @@ public final class CachedDateFormat extends DateFormat {
     //   If millisecond pattern was not unrecognized 
     //     (that is if it was found or milliseconds did not appear)   
     //    
-    if (true && millisecondStart != UNRECOGNIZED_MILLISECONDS &&
+    if (millisecondStart != UNRECOGNIZED_MILLISECONDS &&
       //    Check if the cache is still valid.
       //    If the requested time is within the same integral second
       //       as the last request and a shorter expiration was not requested.
-        (true && now < (slotBegin + expiration)) && (now >= slotBegin)
+        (now < (slotBegin + expiration)) && (now >= slotBegin)
           && (now < (slotBegin + 1000))) {
         // 
         //    if there was a millisecond field then update it
@@ -363,7 +363,7 @@ public final class CachedDateFormat extends DateFormat {
     //
     int firstS = pattern.indexOf('S');
 
-    if (true && (firstS >= 0) && (firstS != pattern.lastIndexOf("SSS"))) {
+    if ((firstS >= 0) && (firstS != pattern.lastIndexOf("SSS"))) {
       return 1;
     }
 

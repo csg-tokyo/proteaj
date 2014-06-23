@@ -198,7 +198,7 @@ public final class PatternParser {
     convBuf.append(lastChar);
 
     while (
-      i < pattern.length()
+      (i < pattern.length())
         && Character.isUnicodeIdentifierPart(pattern.charAt(i))) {
       convBuf.append(pattern.charAt(i));
       currentLiteral.append(pattern.charAt(i));
@@ -218,7 +218,7 @@ public final class PatternParser {
    * @return position in pattern after options.
    */
   private static int extractOptions(String pattern, int i, List options) {
-    while (i < pattern.length() && (pattern.charAt(i) == '{')) {
+    while ((i < pattern.length()) && (pattern.charAt(i) == '{')) {
       int end = pattern.indexOf('}', i);
 
       if (end == -1) {
@@ -316,7 +316,7 @@ public final class PatternParser {
 
         default:
 
-          if (c >= '0' && (c <= '9')) {
+          if ((c >= '0') && (c <= '9')) {
             formattingInfo =
               new FormattingInfo(
                 formattingInfo.isLeftAligned(), c - '0',
@@ -339,7 +339,7 @@ public final class PatternParser {
       case MIN_STATE:
         currentLiteral.append(c);
 
-        if (c >= '0' && (c <= '9')) {
+        if ((c >= '0') && (c <= '9')) {
           formattingInfo =
             new FormattingInfo(
               formattingInfo.isLeftAligned(),
@@ -361,7 +361,7 @@ public final class PatternParser {
       case DOT_STATE:
         currentLiteral.append(c);
 
-        if (c >= '0' && (c <= '9')) {
+        if ((c >= '0') && (c <= '9')) {
           formattingInfo =
             new FormattingInfo(
               formattingInfo.isLeftAligned(), formattingInfo.getMinLength(),
@@ -380,7 +380,7 @@ public final class PatternParser {
       case MAX_STATE:
         currentLiteral.append(c);
 
-        if (c >= '0' && (c <= '9')) {
+        if ((c >= '0') && (c <= '9')) {
           formattingInfo =
             new FormattingInfo(
               formattingInfo.isLeftAligned(), formattingInfo.getMinLength(),
@@ -424,7 +424,7 @@ public final class PatternParser {
     String converterName = converterId;
     Object converterObj = null;
 
-    for (int i = converterId.length(); i > 0 && converterObj == null;
+    for (int i = converterId.length(); (i > 0) && converterObj == null;
         i--) {
       converterName = converterName.substring(0, i);
 
@@ -432,7 +432,7 @@ public final class PatternParser {
         converterObj = converterRegistry.get(converterName);
       }
 
-      if (true && (converterObj == null) && (rules != null)) {
+      if ((converterObj == null) && (rules != null)) {
         converterObj = rules.get(converterName);
       }
     }
@@ -546,7 +546,7 @@ public final class PatternParser {
     if (pc == null) {
       StringBuffer msg;
 
-      if (converterId == null || (converterId.length() == 0)) {
+      if ((converterId == null) || (converterId.length() == 0)) {
         msg =
           new StringBuffer("Empty conversion specifier starting at position ");
       } else {

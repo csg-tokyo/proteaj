@@ -887,7 +887,7 @@ public class DOMConfigurator implements Configurator {
     LogLog.debug("debug attribute= \"" + debugAttrib +"\".");
     // if the log4j.dtd is not specified in the XML file, then the
     // "debug" attribute is returned as the empty string.
-    if(true && !debugAttrib.equals("") && !debugAttrib.equals("null")) {      
+    if(!debugAttrib.equals("") && !debugAttrib.equals("null")) {      
       LogLog.setInternalDebugging(OptionConverter.toBoolean(debugAttrib, true));
     } else {
       LogLog.debug("Ignoring " + INTERNAL_DEBUG_ATTR + " attribute.");
@@ -908,7 +908,7 @@ public class DOMConfigurator implements Configurator {
 
 
     String confDebug = subst(element.getAttribute(CONFIG_DEBUG_ATTR));
-    if(true && !confDebug.equals("") && !confDebug.equals("null")) {      
+    if(!confDebug.equals("") && !confDebug.equals("null")) {      
       LogLog.warn("The \""+CONFIG_DEBUG_ATTR+"\" attribute is deprecated.");
       LogLog.warn("Use the \""+INTERNAL_DEBUG_ATTR+"\" attribute instead.");
       LogLog.setInternalDebugging(OptionConverter.toBoolean(confDebug, true));
@@ -916,7 +916,7 @@ public class DOMConfigurator implements Configurator {
 
     String thresholdStr = subst(element.getAttribute(THRESHOLD_ATTR));
     LogLog.debug("Threshold =\"" + thresholdStr +"\".");
-    if(true && !"".equals(thresholdStr) && !"null".equals(thresholdStr)) {
+    if(!"".equals(thresholdStr) && !"null".equals(thresholdStr)) {
       repository.setThreshold(thresholdStr);
     }
 
@@ -941,7 +941,7 @@ public class DOMConfigurator implements Configurator {
 	currentElement = (Element) currentNode;
 	tagName = currentElement.getTagName();
 
-	if (false || tagName.equals(CATEGORY_FACTORY_TAG) || tagName.equals(LOGGER_FACTORY_TAG)) {
+	if (tagName.equals(CATEGORY_FACTORY_TAG) || tagName.equals(LOGGER_FACTORY_TAG)) {
 	  parseCategoryFactory(currentElement);
 	}
       }
@@ -953,7 +953,7 @@ public class DOMConfigurator implements Configurator {
 	currentElement = (Element) currentNode;
 	tagName = currentElement.getTagName();
 
-	if (false || tagName.equals(CATEGORY) || tagName.equals(LOGGER)) {
+	if (tagName.equals(CATEGORY) || tagName.equals(LOGGER)) {
 	  parseCategory(currentElement);
 	} else if (tagName.equals(ROOT_TAG)) {
 	  parseRoot(currentElement);
@@ -966,7 +966,7 @@ public class DOMConfigurator implements Configurator {
                 ((ThrowableRendererSupport) repository).setThrowableRenderer(tr);
             }
         }
-    } else if (!(false || tagName.equals(APPENDER_TAG)
+    } else if (!(tagName.equals(APPENDER_TAG)
             || tagName.equals(CATEGORY_FACTORY_TAG)
             || tagName.equals(LOGGER_FACTORY_TAG))) {
         quietParseUnrecognizedElement(repository, currentElement, props);

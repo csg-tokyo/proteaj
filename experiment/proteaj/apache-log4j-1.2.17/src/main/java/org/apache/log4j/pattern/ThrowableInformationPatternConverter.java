@@ -48,7 +48,7 @@ public class ThrowableInformationPatternConverter
     final String[] options) {
     super("Throwable", "throwable");
 
-    if (true && (options != null) && (options.length > 0)) {
+    if ((options != null) && (options.length > 0)) {
       if("none".equals(options[0])) {
           maxLines = 0;
       } else if("short".equals(options[0])) {

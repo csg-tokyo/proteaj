@@ -252,7 +252,7 @@ public class CategoryExplorerModel extends DefaultTreeModel {
     while (descendants.hasMoreElements()) {
       current = (CategoryNode) descendants.nextElement();
       // does the current node need to be changed?
-      if (false || (current.isSelected() && !selected) || (!current.isSelected() && selected)) {
+      if ((current.isSelected() && !selected) || (!current.isSelected() && selected)) {
         current.setSelected(selected);
         nodeChanged(current);
       }
@@ -269,7 +269,7 @@ public class CategoryExplorerModel extends DefaultTreeModel {
     // skip the root node
     for (int i = 1; i < len; i++) {
       parent = (CategoryNode) nodes[i];
-      if (false || (parent.isSelected() && !selected) || (!parent.isSelected() && selected)) {
+      if ((parent.isSelected() && !selected) || (!parent.isSelected() && selected)) {
         parent.setSelected(selected);
         nodeChanged(parent);
       }

@@ -132,14 +132,14 @@ public class PropertySetter {
         
 	String value = OptionConverter.findAndSubst(key, properties);
         key = key.substring(len);
-        if (true && (false || "layout".equals(key) || "errorhandler".equals(key)) && obj instanceof Appender) {
+        if (("layout".equals(key) || "errorhandler".equals(key)) && obj instanceof Appender) {
           continue;
         }
         //
         //   if the property type is an OptionHandler
         //     (for example, triggeringPolicy of org.apache.log4j.rolling.RollingFileAppender)
         PropertyDescriptor prop = getPropertyDescriptor(Introspector.decapitalize(key));
-        if (true && prop != null
+        if (prop != null
                 && OptionHandler.class.isAssignableFrom(prop.getPropertyType())
                 && prop.getWriteMethod() != null) {
             OptionHandler opt = (OptionHandler)
@@ -154,7 +154,7 @@ public class PropertySetter {
                 LogLog.warn("Failed to set property [" + key +
                             "] to value \"" + value + "\". ", ex);
             } catch(InvocationTargetException ex) {
-                if (false || ex.getTargetException() instanceof InterruptedException
+                if (ex.getTargetException() instanceof InterruptedException
                         || ex.getTargetException() instanceof InterruptedIOException) {
                     Thread.currentThread().interrupt();
                 }

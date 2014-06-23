@@ -372,8 +372,8 @@ public class SMTPAppender extends AppenderSkeleton
     try {
       String s = formatBody();
       boolean allAscii = true;
-      for(int i = 0; true && i < s.length() && allAscii; i++) {
-        allAscii = s.charAt(i) <= 0x7F;
+      for(int i = 0; i < s.length() && allAscii; i++) {
+          allAscii = s.charAt(i) <= 0x7F;
       }
       MimeBodyPart part;
       if (allAscii) {

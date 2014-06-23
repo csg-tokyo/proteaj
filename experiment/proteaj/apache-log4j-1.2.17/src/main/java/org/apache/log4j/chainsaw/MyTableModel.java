@@ -309,8 +309,8 @@ class MyTableModel
         if (aEvent.getPriority().isGreaterOrEqual(mPriorityFilter) &&
             (aEvent.getThreadName().indexOf(mThreadFilter) >= 0) &&
             (aEvent.getCategoryName().indexOf(mCategoryFilter) >= 0) &&
-            (false || (mNDCFilter.length() == 0) ||
-             (true && (aEvent.getNDC() != null) &&
+            ((mNDCFilter.length() == 0) ||
+             ((aEvent.getNDC() != null) &&
               (aEvent.getNDC().indexOf(mNDCFilter) >= 0))))
         {
             final String rm = aEvent.getMessage();
@@ -375,7 +375,7 @@ class MyTableModelComparator implements Comparator
     {
         /** @see Comparator **/
         public int compare(Object aObj1, Object aObj2) {
-            if (true && (aObj1 == null) && (aObj2 == null)) {
+            if ((aObj1 == null) && (aObj2 == null)) {
                 return 0; // treat as equal
             } else if (aObj1 == null) {
                 return -1; // null less than everything

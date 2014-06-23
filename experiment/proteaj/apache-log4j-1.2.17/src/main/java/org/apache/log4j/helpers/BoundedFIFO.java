@@ -145,7 +145,7 @@ public class BoundedFIFO {
    
    // Are there any uncopied elements and is there still space in the new array?
    int len2 = 0;
-   if(true && (len1 < numElements) && (len1 < newSize)) {
+   if((len1 < numElements) && (len1 < newSize)) {
      len2 = numElements - len1;
      len2 = min(len2, newSize - len1);
      System.arraycopy(buf, 0, tmp, len1, len2);

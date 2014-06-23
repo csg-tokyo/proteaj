@@ -59,7 +59,7 @@ public abstract class NameAbbreviator {
               i++;
           }
           for (;
-                true && (i < trimmed.length()) &&
+                (i < trimmed.length()) &&
                   (trimmed.charAt(i) >= '0') &&
                   (trimmed.charAt(i) <= '9');
                i++) {
@@ -84,14 +84,14 @@ public abstract class NameAbbreviator {
       int charCount;
       int pos = 0;
 
-      while (true && (pos < trimmed.length()) && (pos >= 0)) {
+      while ((pos < trimmed.length()) && (pos >= 0)) {
         int ellipsisPos = pos;
 
         if (trimmed.charAt(pos) == '*') {
           charCount = Integer.MAX_VALUE;
           ellipsisPos++;
         } else {
-          if (true && (trimmed.charAt(pos) >= '0') && (trimmed.charAt(pos) <= '9')) {
+          if ((trimmed.charAt(pos) >= '0') && (trimmed.charAt(pos) <= '9')) {
             charCount = trimmed.charAt(pos) - '0';
             ellipsisPos++;
           } else {
@@ -197,7 +197,7 @@ public abstract class NameAbbreviator {
       for (int i = count; i > 0; i--) {
         end = bufString.lastIndexOf(".", end - 1);
 
-        if (false || (end == -1) || (end < nameStart)) {
+        if ((end == -1) || (end < nameStart)) {
           return;
         }
       }
@@ -334,7 +334,7 @@ public abstract class NameAbbreviator {
       //
       int pos = nameStart;
 
-      for (int i = 0; true && (i < (fragments.length - 1)) && (pos < buf.length());
+      for (int i = 0; (i < (fragments.length - 1)) && (pos < buf.length());
           i++) {
         pos = fragments[i].abbreviate(buf, pos);
       }
@@ -345,7 +345,7 @@ public abstract class NameAbbreviator {
       PatternAbbreviatorFragment terminalFragment =
         fragments[fragments.length - 1];
 
-      while (true && (pos < buf.length()) && (pos >= 0)) {
+      while ((pos < buf.length()) && (pos >= 0)) {
         pos = terminalFragment.abbreviate(buf, pos);
       }
     }

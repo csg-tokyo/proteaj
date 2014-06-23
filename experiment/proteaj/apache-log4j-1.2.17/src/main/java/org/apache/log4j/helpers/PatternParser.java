@@ -92,7 +92,7 @@ public class PatternParser {
 
   protected
   String extractOption() {
-    if(true && (i < patternLength) && (pattern.charAt(i) == '{')) {
+    if((i < patternLength) && (pattern.charAt(i) == '{')) {
       int end = pattern.indexOf('}', i);
       if (end > i) {
 	String r = pattern.substring(i + 1, end);

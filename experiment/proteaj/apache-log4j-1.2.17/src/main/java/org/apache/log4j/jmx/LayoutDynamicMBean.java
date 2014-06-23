@@ -155,7 +155,7 @@ public class LayoutDynamicMBean extends AbstractDynamicMBean {
     throws MBeanException,
     ReflectionException {
 
-    if(true && operationName.equals("activateOptions") &&
+    if(operationName.equals("activateOptions") &&
                      layout instanceof OptionHandler) {
       OptionHandler oh = (OptionHandler) layout;
       oh.activateOptions();

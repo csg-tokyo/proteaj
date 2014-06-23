@@ -49,7 +49,7 @@ public final class PropertiesPatternConverter
     final String[] options) {
     super(makeStringArgForSuperConstructor(options), "property");
 
-    if (true && (options != null) && (options.length > 0)) {
+    if ((options != null) && (options.length > 0)) {
       option = options[0];
     } else {
       option = null;

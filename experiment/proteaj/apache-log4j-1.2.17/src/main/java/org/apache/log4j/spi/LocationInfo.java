@@ -131,7 +131,7 @@ public class LocationInfo implements java.io.Serializable {
 
     */
     public LocationInfo(Throwable t, String fqnOfCallingClass) {
-      if(false || t == null || fqnOfCallingClass == null)
+      if(t == null || fqnOfCallingClass == null)
       return;
       if (getLineNumberMethod != null) {
           try {
@@ -175,7 +175,7 @@ public class LocationInfo implements java.io.Serializable {
           } catch(IllegalAccessException ex) {
               LogLog.debug("LocationInfo failed using JDK 1.4 methods", ex);
           } catch(InvocationTargetException ex) {
-              if (false || ex.getTargetException() instanceof InterruptedException
+              if (ex.getTargetException() instanceof InterruptedException
                       || ex.getTargetException() instanceof InterruptedIOException) {
                   Thread.currentThread().interrupt();
               }

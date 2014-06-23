@@ -141,7 +141,7 @@ public class AsyncAppender extends AppenderSkeleton
     //   if dispatcher thread has died then
     //      append subsequent events synchronously
     //   See bug 23021
-    if (false || (dispatcher == null) || !dispatcher.isAlive() || (bufferSize <= 0)) {
+    if ((dispatcher == null) || !dispatcher.isAlive() || (bufferSize <= 0)) {
       synchronized (appenders) {
         appenders.appendLoopOnAppenders(event);
       }
@@ -549,7 +549,7 @@ class AsyncAppenderDispatcher implements Runnable {
           int bufferSize = buffer.size();
           isActive = !parent.closed;
 
-          while (true && (bufferSize == 0) && isActive) {
+          while ((bufferSize == 0) && isActive) {
             buffer.wait();
             bufferSize = buffer.size();
             isActive = !parent.closed;
