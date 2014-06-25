@@ -166,7 +166,8 @@ public final class CachedDateFormat extends DateFormat {
       slotBegin = slotBegin - 1000;
     }
 
-    int millis = (<- long) (time - slotBegin);
+    long tmp = time - slotBegin;
+    int millis = (int)tmp;
 
     int magic = MAGIC1;
     String magicString = MAGICSTRING1;
@@ -263,7 +264,8 @@ public final class CachedDateFormat extends DateFormat {
         //    if there was a millisecond field then update it
         //
         if (millisecondStart >= 0) {
-          millisecondFormat((<- long) (now - slotBegin), cache, millisecondStart);
+          long tmp = now - slotBegin;
+          millisecondFormat((int) tmp, cache, millisecondStart);
         }
 
         //

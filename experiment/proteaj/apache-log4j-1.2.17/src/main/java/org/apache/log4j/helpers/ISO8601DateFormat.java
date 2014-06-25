@@ -65,7 +65,8 @@ public class ISO8601DateFormat extends AbsoluteTimeDateFormat {
 		      FieldPosition fieldPosition) {
 
     long now = date.getTime();
-    int millis = (<- long)(now % 1000);
+    long tmp = now % 1000;
+    int millis = (int)tmp;
 
     if ((now - millis) != lastTime || lastTimeString[0] == 0) {
       // We reach this point at most once per second

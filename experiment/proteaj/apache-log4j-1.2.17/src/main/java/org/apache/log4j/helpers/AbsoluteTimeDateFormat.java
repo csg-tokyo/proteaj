@@ -83,7 +83,8 @@ public class AbsoluteTimeDateFormat extends DateFormat {
 		      FieldPosition fieldPosition) {
 
     long now = date.getTime();
-    int millis = (<- long)(now % 1000);
+    long tmp = now % 1000;
+    int millis = (int)tmp;
 
     if ((now - millis) != previousTime || previousTimeWithoutMillis[0] == 0) {
       // We reach this point at most once per second

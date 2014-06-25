@@ -1,0 +1,101 @@
+package ambids;
+
+class ID0 {
+  ID0 (Identifier id) { this.id = id; }
+  public final Identifier id;
+}
+
+class ID1 {
+  ID1 (Identifier id) { this.id = id; }
+  public final Identifier id;
+}
+
+class ID2 {
+  ID2 (Identifier id) { this.id = id; }
+  public final Identifier id;
+}
+
+class ID3 {
+  ID3 (Identifier id) { this.id = id; }
+  public final Identifier id;
+}
+
+class ID4 {
+  ID4 (Identifier id) { this.id = id; }
+  public final Identifier id;
+}
+
+class ID5 {
+  ID5 (Identifier id) { this.id = id; }
+  public final Identifier id;
+}
+
+class ID6 {
+  ID6 (Identifier id) { this.id = id; }
+  public final Identifier id;
+}
+
+class ID7 {
+  ID7 (Identifier id) { this.id = id; }
+  public final Identifier id;
+}
+
+class ID8 {
+  ID8 (Identifier id) { this.id = id; }
+  public final Identifier id;
+}
+
+class ID9 {
+  ID9 (Identifier id) { this.id = id; }
+  public final Identifier id;
+}
+
+class ID10 {
+  ID10 (Identifier id) { this.id = id; }
+  public final Identifier id;
+}
+
+class ID11 {
+  ID11 (Identifier id) { this.id = id; }
+  public final Identifier id;
+}
+
+class ID12 {
+  ID12 (Identifier id) { this.id = id; }
+  public final Identifier id;
+}
+
+class ID13 {
+  ID13 (Identifier id) { this.id = id; }
+  public final Identifier id;
+}
+
+class ID14 {
+  ID14 (Identifier id) { this.id = id; }
+  public final Identifier id;
+}
+
+class ID15 {
+  ID15 (Identifier id) { this.id = id; }
+  public final Identifier id;
+}
+
+class ID16 {
+  ID16 (Identifier id) { this.id = id; }
+  public final Identifier id;
+}
+
+class ID17 {
+  ID17 (Identifier id) { this.id = id; }
+  public final Identifier id;
+}
+
+class ID18 {
+  ID18 (Identifier id) { this.id = id; }
+  public final Identifier id;
+}
+
+class ID19 {
+  ID19 (Identifier id) { this.id = id; }
+  public final Identifier id;
+}

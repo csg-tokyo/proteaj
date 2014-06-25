@@ -1,0 +1,6 @@
+package ambids;
+
+operators AmbIDsOperators {
+  readas ID0 _ (Identifier id) { return new ID0(id); }
+  readas ID1 _ (Identifier id) { return new ID1(id); }
+}
