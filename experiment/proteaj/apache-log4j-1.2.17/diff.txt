@@ -1118,10 +1118,11 @@ diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/config/Prope
 >     PropertySetter ps = new PropertySetter(obj);
 >     ps.setProperties(properties, prefix);
 diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/helpers/AbsoluteTimeDateFormat.java src/main/java/org/apache/log4j/helpers/AbsoluteTimeDateFormat.java
-86c86
+86c86,87
 <     int millis = (int)(now % 1000);
 ---
->     int millis = (<- long)(now % 1000);
+>     long tmp = now % 1000;
+>     int millis = (int)tmp;
 diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/helpers/BoundedFIFO.java src/main/java/org/apache/log4j/helpers/BoundedFIFO.java
 113c113,114
 <     return a < b ? a : b;
@@ -1140,10 +1141,11 @@ diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/helpers/Cycl
 >     int loopLen = numElems;
 >     if (newSize < numElems) loopLen = newSize;
 diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/helpers/ISO8601DateFormat.java src/main/java/org/apache/log4j/helpers/ISO8601DateFormat.java
-68c68
+68c68,69
 <     int millis = (int)(now % 1000);
 ---
->     int millis = (<- long)(now % 1000);
+>     long tmp = now % 1000;
+>     int millis = (int)tmp;
 diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/helpers/OptionConverter.java src/main/java/org/apache/log4j/helpers/OptionConverter.java
 415c415
 < 	  j += DELIM_START_LEN;
@@ -2893,19 +2895,21 @@ diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/pattern/Cach
 <       slotBegin -= 1000;
 ---
 >       slotBegin = slotBegin - 1000;
-169c169
+169c169,170
 <     int millis = (int) (time - slotBegin);
 ---
->     int millis = (<- long) (time - slotBegin);
-261c261
+>     long tmp = time - slotBegin;
+>     int millis = (int)tmp;
+261c262
 <           && (now < (slotBegin + 1000L))) {
 ---
 >           && (now < (slotBegin + 1000))) {
-266c266
+266c267,268
 <           millisecondFormat((int) (now - slotBegin), cache, millisecondStart);
 ---
->           millisecondFormat((<- long) (now - slotBegin), cache, millisecondStart);
-289c289
+>           long tmp = now - slotBegin;
+>           millisecondFormat((int) tmp, cache, millisecondStart);
+289c291
 <       slotBegin -= 1000;
 ---
 >       slotBegin = slotBegin - 1000;
