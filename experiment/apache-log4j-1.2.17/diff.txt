@@ -1,0 +1,3344 @@
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/AppenderSkeleton.java src/main/java/org/apache/log4j/AppenderSkeleton.java
+242c242
+<     FILTER_LOOP:
+---
+>     boolean accepted = false;
+246c246
+<       case Filter.ACCEPT: break FILTER_LOOP;
+---
+>       case Filter.ACCEPT: accepted = true; break;
+248a249
+>       if (accepted) break;
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/AsyncAppender.java src/main/java/org/apache/log4j/AsyncAppender.java
+113c113
+<       new Thread(new Dispatcher(this, buffer, discardMap, appenders));
+---
+>       new Thread(new AsyncAppenderDispatcher(this, buffer, discardMap, appenders));
+385c385,386
+<       bufferSize = (size < 1) ? 1 : size;
+---
+>       if (size < 1) bufferSize = 1;
+>       else bufferSize = size;
+423a425,427
+> 
+> }
+> 
+427,436c431,435
+<   private static final class DiscardSummary {
+<     /**
+<      * First event of the highest severity.
+<      */
+<     private LoggingEvent maxEvent;
+< 
+<     /**
+<      * Total count of messages discarded.
+<      */
+<     private int count;
+---
+> final class DiscardSummary {
+>   /**
+>    * First event of the highest severity.
+>    */
+>   private LoggingEvent maxEvent;
+438,446c437,440
+<     /**
+<      * Create new instance.
+<      *
+<      * @param event event, may not be null.
+<      */
+<     public DiscardSummary(final LoggingEvent event) {
+<       maxEvent = event;
+<       count = 1;
+<     }
+---
+>   /**
+>    * Total count of messages discarded.
+>    */
+>   private int count;
+448,456c442,450
+<     /**
+<      * Add discarded event to summary.
+<      *
+<      * @param event event, may not be null.
+<      */
+<     public void add(final LoggingEvent event) {
+<       if (event.getLevel().toInt() > maxEvent.getLevel().toInt()) {
+<         maxEvent = event;
+<       }
+---
+>   /**
+>    * Create new instance.
+>    *
+>    * @param event event, may not be null.
+>    */
+>   public DiscardSummary(final LoggingEvent event) {
+>     maxEvent = event;
+>     count = 1;
+>   }
+458c452,459
+<       count++;
+---
+>   /**
+>    * Add discarded event to summary.
+>    *
+>    * @param event event, may not be null.
+>    */
+>   public void add(final LoggingEvent event) {
+>     if (event.getLevel().toInt() > maxEvent.getLevel().toInt()) {
+>       maxEvent = event;
+461,470c462,463
+<     /**
+<      * Create event with summary information.
+<      *
+<      * @return new event.
+<      */
+<     public LoggingEvent createEvent() {
+<       String msg =
+<         MessageFormat.format(
+<           "Discarded {0} messages due to full event buffer including: {1}",
+<           new Object[] { new Integer(count), maxEvent.getMessage() });
+---
+>     count++;
+>   }
+472,478c465,481
+<       return new LoggingEvent(
+<               "org.apache.log4j.AsyncAppender.DONT_REPORT_LOCATION",
+<               Logger.getLogger(maxEvent.getLoggerName()),
+<               maxEvent.getLevel(),
+<               msg,
+<               null);
+<     }
+---
+>   /**
+>    * Create event with summary information.
+>    *
+>    * @return new event.
+>    */
+>   public LoggingEvent createEvent() {
+>     String msg =
+>       MessageFormat.format(
+>                            "Discarded {0} messages due to full event buffer including: {1}",
+>                            new Object[] { new Integer(count), maxEvent.getMessage() });
+> 
+>     return new LoggingEvent(
+>                             "org.apache.log4j.AsyncAppender.DONT_REPORT_LOCATION",
+>                             Logger.getLogger(maxEvent.getLoggerName()),
+>                             maxEvent.getLevel(),
+>                             msg,
+>                             null);
+479a483,484
+> }
+> 
+480a486,489
+> /**
+>  * Event dispatcher.
+>  */
+> class AsyncAppenderDispatcher implements Runnable {
+482c491
+<    * Event dispatcher.
+---
+>    * Parent AsyncAppender.
+484,488c493
+<   private static class Dispatcher implements Runnable {
+<     /**
+<      * Parent AsyncAppender.
+<      */
+<     private final AsyncAppender parent;
+---
+>   private final AsyncAppender parent;
+490,493c495,498
+<     /**
+<      * Event buffer.
+<      */
+<     private final List buffer;
+---
+>   /**
+>    * Event buffer.
+>    */
+>   private final List buffer;
+495,498c500,503
+<     /**
+<      * Map of DiscardSummary keyed by logger name.
+<      */
+<     private final Map discardMap;
+---
+>   /**
+>    * Map of DiscardSummary keyed by logger name.
+>    */
+>   private final Map discardMap;
+500,503c505,508
+<     /**
+<      * Wrapped appenders.
+<      */
+<     private final AppenderAttachableImpl appenders;
+---
+>   /**
+>    * Wrapped appenders.
+>    */
+>   private final AppenderAttachableImpl appenders;
+505,521c510,526
+<     /**
+<      * Create new instance of dispatcher.
+<      *
+<      * @param parent     parent AsyncAppender, may not be null.
+<      * @param buffer     event buffer, may not be null.
+<      * @param discardMap discard map, may not be null.
+<      * @param appenders  appenders, may not be null.
+<      */
+<     public Dispatcher(
+<       final AsyncAppender parent, final List buffer, final Map discardMap,
+<       final AppenderAttachableImpl appenders) {
+< 
+<       this.parent = parent;
+<       this.buffer = buffer;
+<       this.appenders = appenders;
+<       this.discardMap = discardMap;
+<     }
+---
+>   /**
+>    * Create new instance of dispatcher.
+>    *
+>    * @param parent     parent AsyncAppender, may not be null.
+>    * @param buffer     event buffer, may not be null.
+>    * @param discardMap discard map, may not be null.
+>    * @param appenders  appenders, may not be null.
+>    */
+>   public AsyncAppenderDispatcher(
+>                     final AsyncAppender parent, final List buffer, final Map discardMap,
+>                     final AppenderAttachableImpl appenders) {
+> 
+>     this.parent = parent;
+>     this.buffer = buffer;
+>     this.appenders = appenders;
+>     this.discardMap = discardMap;
+>   }
+523,527c528,532
+<     /**
+<      * {@inheritDoc}
+<      */
+<     public void run() {
+<       boolean isActive = true;
+---
+>   /**
+>    * {@inheritDoc}
+>    */
+>   public void run() {
+>     boolean isActive = true;
+528a534,537
+>     //
+>     //   if interrupted (unlikely), end thread
+>     //
+>     try {
+530c539
+<       //   if interrupted (unlikely), end thread
+---
+>       //   loop until the AsyncAppender is closed.
+532c541,543
+<       try {
+---
+>       while (isActive) {
+>         LoggingEvent[] events = null;
+> 
+534c545,546
+<         //   loop until the AsyncAppender is closed.
+---
+>         //   extract pending events while synchronized
+>         //       on buffer
+536,537c548,550
+<         while (isActive) {
+<           LoggingEvent[] events = null;
+---
+>         synchronized (buffer) {
+>           int bufferSize = buffer.size();
+>           isActive = !parent.closed;
+539,544c552,554
+<           //
+<           //   extract pending events while synchronized
+<           //       on buffer
+<           //
+<           synchronized (buffer) {
+<             int bufferSize = buffer.size();
+---
+>           while ((bufferSize == 0) && isActive) {
+>             buffer.wait();
+>             bufferSize = buffer.size();
+545a556
+>           }
+547,551c558,560
+<             while ((bufferSize == 0) && isActive) {
+<               buffer.wait();
+<               bufferSize = buffer.size();
+<               isActive = !parent.closed;
+<             }
+---
+>           if (bufferSize > 0) {
+>             events = new LoggingEvent[bufferSize + discardMap.size()];
+>             buffer.toArray(events);
+553,576c562,570
+<             if (bufferSize > 0) {
+<               events = new LoggingEvent[bufferSize + discardMap.size()];
+<               buffer.toArray(events);
+< 
+<               //
+<               //   add events due to buffer overflow
+<               //
+<               int index = bufferSize;
+< 
+<               for (
+<                 Iterator iter = discardMap.values().iterator();
+<                   iter.hasNext();) {
+<                 events[index++] = ((DiscardSummary) iter.next()).createEvent();
+<               }
+< 
+<               //
+<               //    clear buffer and discard map
+<               //
+<               buffer.clear();
+<               discardMap.clear();
+< 
+<               //
+<               //    allow blocked appends to continue
+<               buffer.notifyAll();
+---
+>             //
+>             //   add events due to buffer overflow
+>             //
+>             int index = bufferSize;
+> 
+>             for (
+>                  Iterator iter = discardMap.values().iterator();
+>                  iter.hasNext();) {
+>               events[index++] = ((DiscardSummary) iter.next()).createEvent();
+577a572,581
+> 
+>             //
+>             //    clear buffer and discard map
+>             //
+>             buffer.clear();
+>             discardMap.clear();
+> 
+>             //
+>             //    allow blocked appends to continue
+>             buffer.notifyAll();
+578a583
+>         }
+580,587c585,591
+<           //
+<           //   process events after lock on buffer is released.
+<           //
+<           if (events != null) {
+<             for (int i = 0; i < events.length; i++) {
+<               synchronized (appenders) {
+<                 appenders.appendLoopOnAppenders(events[i]);
+<               }
+---
+>         //
+>         //   process events after lock on buffer is released.
+>         //
+>         if (events != null) {
+>           for (int i = 0; i < events.length; i++) {
+>             synchronized (appenders) {
+>               appenders.appendLoopOnAppenders(events[i]);
+591,592d594
+<       } catch (InterruptedException ex) {
+<         Thread.currentThread().interrupt();
+593a596,597
+>     } catch (InterruptedException ex) {
+>       Thread.currentThread().interrupt();
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/Category.java src/main/java/org/apache/log4j/Category.java
+206c206
+< 	  writes += c.aai.appendLoopOnAppenders(event);
+---
+> 	  writes = writes + c.aai.appendLoopOnAppenders(event);
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/ConsoleAppender.java src/main/java/org/apache/log4j/ConsoleAppender.java
+159a160,162
+> 
+> }
+> 
+165c168
+<     private static class SystemErrStream extends OutputStream {
+---
+>     class SystemErrStream extends OutputStream {
+195c198
+<     private static class SystemOutStream extends OutputStream {
+---
+>     class SystemOutStream extends OutputStream {
+220d222
+< }
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/Dispatcher.java src/main/java/org/apache/log4j/Dispatcher.java
+115c115
+<         if ((aai != null) && (event != null)) {
+---
+>         if (aai != null && event != null) {
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/EnhancedPatternLayout.java src/main/java/org/apache/log4j/EnhancedPatternLayout.java
+480,481c480,481
+<     head = createPatternParser(
+<             (pattern == null) ? DEFAULT_CONVERSION_PATTERN : pattern).parse();
+---
+>     if (pattern == null) head = createPatternParser(DEFAULT_CONVERSION_PATTERN).parse();
+>     else head = createPatternParser(pattern).parse();
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/EnhancedThrowableRenderer.java src/main/java/org/apache/log4j/EnhancedThrowableRenderer.java
+90c90
+<             String className = getClassNameMethod.invoke(element, (Object[]) null).toString();
+---
+>             String className = getClassNameMethod.invoke(element, null).toString();
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/LogMF.java src/main/java/org/apache/log4j/LogMF.java
+167c167
+<                     retval += pattern.substring(prev, pos);
+---
+>                     retval = retval + pattern.substring(prev, pos);
+175c175
+<                     retval += formatted[index];
+---
+>                     retval = retval + formatted[index];
+182c182
+<             retval += pattern.substring(prev);
+---
+>             retval = retval + pattern.substring(prev);
+213c213
+<                     retval += pattern.substring(prev, pos);
+---
+>                     retval = retval + pattern.substring(prev, pos);
+215c215
+<                         retval += pattern.substring(pos, pos+3);
+---
+>                         retval = retval + pattern.substring(pos, pos+3);
+220c220
+<                         retval += formatted;
+---
+>                         retval = retval + formatted;
+228c228
+<             retval += pattern.substring(prev);
+---
+>             retval = retval + pattern.substring(prev);
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/LogSF.java src/main/java/org/apache/log4j/LogSF.java
+60c60
+<                     retval += pattern.substring(prev, pos);
+---
+>                     retval = retval + pattern.substring(prev, pos);
+63c63
+<                             retval += arguments[count++];
+---
+>                             retval = retval + arguments[count++];
+65c65
+<                             retval += "{}";
+---
+>                             retval = retval + "{}";
+69c69
+<                         retval += "{";
+---
+>                         retval = retval + "{";
+73c73
+<                     retval += pattern.substring(prev, pos - 1) + "{";
+---
+>                     retval = retval + pattern.substring(prev, pos - 1) + "{";
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/LogXF.java src/main/java/org/apache/log4j/LogXF.java
+243c243
+<                 msg += "null";
+---
+>                 msg = msg + "null";
+246c246
+<                     msg += param;
+---
+>                     msg = msg + param;
+248c248
+<                     msg += "?";
+---
+>                     msg = msg + "?";
+274c274
+<                         msg += delim + params[i];
+---
+>                         msg = msg + delim + params[i];
+276c276
+<                         msg += delim + "?";
+---
+>                         msg = msg + delim + "?";
+280c280
+<                 msg += "}";
+---
+>                 msg = msg + "}";
+282c282
+<                 msg += "{}";
+---
+>                 msg = msg + "{}";
+340c340
+<                 msg += "null";
+---
+>                 msg = msg + "null";
+343c343
+<                     msg += result;
+---
+>                     msg = msg + result;
+345c345
+<                     msg += "?";
+---
+>                     msg = msg + "?";
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/NDC.java src/main/java/org/apache/log4j/NDC.java
+421c421,423
+<    private static class DiagnosticContext {
+---
+> }
+> 
+> class DiagnosticContext {
+435,436d436
+< }
+< 
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/PatternLayout.java src/main/java/org/apache/log4j/PatternLayout.java
+438,439c438,439
+<     head = createPatternParser((pattern == null) ? DEFAULT_CONVERSION_PATTERN :
+< 			     pattern).parse();
+---
+>     if (pattern == null) head = createPatternParser(DEFAULT_CONVERSION_PATTERN).parse();
+>     else head = createPatternParser(pattern).parse();
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/PropertyConfigurator.java src/main/java/org/apache/log4j/PropertyConfigurator.java
+674c674
+< 	}
+---
+>     }
+681c681
+< 	}
+---
+>           }
+696d695
+< 
+712c711
+<     if((value != null) && (!value.equals(""))) {
+---
+>     if(value != null && !value.equals("")) {
+753c752
+< 	logger.setLevel(OptionConverter.toLevel(levelStr, (Level) Level.DEBUG));
+---
+>         //        logger.setLevel(OptionConverter.toLevel(levelStr, (Level) Level.DEBUG));
+755c754
+<       LogLog.debug("Category " + loggerName + " set to " + logger.getLevel());
+---
+>       //LogLog.debug("Category " + loggerName + " set to " + logger.getLevel());
+862,863c861,863
+< 			Logger logger = (loggerFactory == null) ? hierarchy.getLogger(loggerName)
+< 			                : hierarchy.getLogger(loggerName, loggerFactory);
+---
+> 			Logger logger;
+>       if (loggerFactory == null) logger = hierarchy.getLogger(loggerName);
+>       else logger = hierarchy.getLogger(loggerName, loggerFactory);
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/chainsaw/ControlPanel.java src/main/java/org/apache/log4j/chainsaw/ControlPanel.java
+110,116c110
+<         priorities.addActionListener(new ActionListener() {
+<                 public void actionPerformed(ActionEvent aEvent) {
+<                     aModel.setPriorityFilter(
+<                         (Priority) priorities.getSelectedItem());
+<                 }
+<             });
+< 
+---
+>         priorities.addActionListener(new ControlPanelActionListener1(priorities, aModel));
+121,131c115,116
+<         threadField.getDocument().addDocumentListener(new DocumentListener () {
+<                 public void insertUpdate(DocumentEvent aEvent) {
+<                     aModel.setThreadFilter(threadField.getText());
+<                 }
+<                 public void removeUpdate(DocumentEvent aEvente) {
+<                     aModel.setThreadFilter(threadField.getText());
+<                 }
+<                 public void changedUpdate(DocumentEvent aEvent) {
+<                     aModel.setThreadFilter(threadField.getText());
+<                 }
+<             });
+---
+>         threadField.getDocument()
+>           .addDocumentListener(new ControlPanelDocumentListener1(threadField, aModel));
+137,147c122,123
+<         catField.getDocument().addDocumentListener(new DocumentListener () {
+<                 public void insertUpdate(DocumentEvent aEvent) {
+<                     aModel.setCategoryFilter(catField.getText());
+<                 }
+<                 public void removeUpdate(DocumentEvent aEvent) {
+<                     aModel.setCategoryFilter(catField.getText());
+<                 }
+<                 public void changedUpdate(DocumentEvent aEvent) {
+<                     aModel.setCategoryFilter(catField.getText());
+<                 }
+<             });
+---
+>         catField.getDocument()
+>           .addDocumentListener(new ControlPanelDocumentListener2(catField, aModel));
+153,163c129,130
+<         ndcField.getDocument().addDocumentListener(new DocumentListener () {
+<                 public void insertUpdate(DocumentEvent aEvent) {
+<                     aModel.setNDCFilter(ndcField.getText());
+<                 }
+<                 public void removeUpdate(DocumentEvent aEvent) {
+<                     aModel.setNDCFilter(ndcField.getText());
+<                 }
+<                 public void changedUpdate(DocumentEvent aEvent) {
+<                     aModel.setNDCFilter(ndcField.getText());
+<                 }
+<             });
+---
+>         ndcField.getDocument()
+>           .addDocumentListener(new ControlPanelDocumentListener3(ndcField, aModel));
+169,181c136,137
+<         msgField.getDocument().addDocumentListener(new DocumentListener () {
+<                 public void insertUpdate(DocumentEvent aEvent) {
+<                     aModel.setMessageFilter(msgField.getText());
+<                 }
+<                 public void removeUpdate(DocumentEvent aEvent) {
+<                     aModel.setMessageFilter(msgField.getText());
+<                 }
+<                 public void changedUpdate(DocumentEvent aEvent) {
+<                     aModel.setMessageFilter(msgField.getText());
+<                 }
+<             });
+< 
+< 
+---
+>         msgField.getDocument()
+>           .addDocumentListener(new ControlPanelDocumentListener4(msgField, aModel));
+201,205c157
+<         clearButton.addActionListener(new ActionListener() {
+<                 public void actionPerformed(ActionEvent aEvent) {
+<                     aModel.clear();
+<                 }
+<             });
+---
+>         clearButton.addActionListener(new ControlPanelActionListener2(aModel));
+212,218c164
+<         toggleButton.addActionListener(new ActionListener() {
+<                 public void actionPerformed(ActionEvent aEvent) {
+<                     aModel.toggle();
+<                     toggleButton.setText(
+<                         aModel.isPaused() ? "Resume" : "Pause");
+<                 }
+<             });
+---
+>         toggleButton.addActionListener(new ControlPanelActionListener3(toggleButton, aModel));
+222a169,277
+> 
+> class ControlPanelActionListener1 implements ActionListener {
+>   public ControlPanelActionListener1 (JComboBox priorities, MyTableModel aModel) {
+>     this.priorities = priorities;
+>     this.aModel = aModel;
+>   }
+>   public void actionPerformed(ActionEvent aEvent) {
+>     aModel.setPriorityFilter((Priority) priorities.getSelectedItem());
+>   }
+>   private JComboBox priorities;
+>   private MyTableModel aModel;
+> }
+> 
+> class ControlPanelActionListener2 implements ActionListener {
+>   public ControlPanelActionListener2 (MyTableModel aModel) {
+>     this.aModel = aModel;
+>   }
+>   public void actionPerformed(ActionEvent aEvent) {
+>     aModel.clear();
+>   }
+>   private MyTableModel aModel;
+> }
+> 
+> class ControlPanelActionListener3 implements ActionListener {
+>   public ControlPanelActionListener3 (JButton toggleButton, MyTableModel aModel) {
+>     this.toggleButton = toggleButton;
+>     this.aModel = aModel;
+>   }
+>   public void actionPerformed(ActionEvent aEvent) {
+>     aModel.toggle();
+>     if (aModel.isPaused()) toggleButton.setText("Resume");
+>     else toggleButton.setText("Pause");
+>   }
+>   private JButton toggleButton;
+>   private MyTableModel aModel;
+> }
+> 
+> class ControlPanelDocumentListener1 implements DocumentListener {
+>   public ControlPanelDocumentListener1 (JTextField threadField, MyTableModel aModel) {
+>     this.threadField = threadField;
+>     this.aModel = aModel;
+>   }
+>   public void insertUpdate(DocumentEvent aEvent) {
+>     aModel.setThreadFilter(threadField.getText());
+>   }
+>   public void removeUpdate(DocumentEvent aEvente) {
+>     aModel.setThreadFilter(threadField.getText());
+>   }
+>   public void changedUpdate(DocumentEvent aEvent) {
+>     aModel.setThreadFilter(threadField.getText());
+>   }
+>   private JTextField threadField;
+>   private MyTableModel aModel;
+> }
+> 
+> class ControlPanelDocumentListener2 implements DocumentListener {
+>   public ControlPanelDocumentListener2 (JTextField catField, MyTableModel aModel) {
+>     this.catField = catField;
+>     this.aModel = aModel;
+>   }
+>   public void insertUpdate(DocumentEvent aEvent) {
+>     aModel.setCategoryFilter(catField.getText());
+>   }
+>   public void removeUpdate(DocumentEvent aEvent) {
+>     aModel.setCategoryFilter(catField.getText());
+>   }
+>   public void changedUpdate(DocumentEvent aEvent) {
+>     aModel.setCategoryFilter(catField.getText());
+>   }
+>   private JTextField catField;
+>   private MyTableModel aModel;
+> }
+> 
+> class ControlPanelDocumentListener3 implements DocumentListener {
+>   public ControlPanelDocumentListener3 (JTextField ndcField, MyTableModel aModel) {
+>     this.ndcField = ndcField;
+>     this.aModel = aModel;
+>   }
+>   public void insertUpdate(DocumentEvent aEvent) {
+>     aModel.setNDCFilter(ndcField.getText());
+>   }
+>   public void removeUpdate(DocumentEvent aEvent) {
+>     aModel.setNDCFilter(ndcField.getText());
+>   }
+>   public void changedUpdate(DocumentEvent aEvent) {
+>     aModel.setNDCFilter(ndcField.getText());
+>   }
+>   private JTextField ndcField;
+>   private MyTableModel aModel;
+> }
+> 
+> class ControlPanelDocumentListener4 implements DocumentListener {
+>   public ControlPanelDocumentListener4 (JTextField msgField, MyTableModel aModel) {
+>     this.msgField = msgField;
+>     this.aModel = aModel;
+>   }
+>   public void insertUpdate(DocumentEvent aEvent) {
+>     aModel.setMessageFilter(msgField.getText());
+>   }
+>   public void removeUpdate(DocumentEvent aEvent) {
+>     aModel.setMessageFilter(msgField.getText());
+>   }
+>   public void changedUpdate(DocumentEvent aEvent) {
+>     aModel.setMessageFilter(msgField.getText());
+>   }
+>   private JTextField msgField;
+>   private MyTableModel aModel;
+> }
+> 
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/chainsaw/EventDetails.java src/main/java/org/apache/log4j/chainsaw/EventDetails.java
+92,93c92
+<              (aEvent.getLocationInformation() == null)
+<              ? null : aEvent.getLocationInformation().fullInfo);
+---
+>              getLocationInfo_FullInfo(aEvent));
+95a95,99
+>   private static String getLocationInfo_FullInfo (LoggingEvent aEvent) {
+>     if (aEvent.getLocationInformation() == null) return null;
+>     else return aEvent.getLocationInformation().fullInfo;
+>   }
+> 
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/chainsaw/LoadXMLAction.java src/main/java/org/apache/log4j/chainsaw/LoadXMLAction.java
+54,57d53
+<     {
+<         mChooser.setMultiSelectionEnabled(false);
+<         mChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+<     }
+79a76,78
+> 
+>         mChooser.setMultiSelectionEnabled(false);
+>         mChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/chainsaw/LoggingReceiver.java src/main/java/org/apache/log4j/chainsaw/LoggingReceiver.java
+36c36,75
+<     private static final Logger LOG = Logger.getLogger(LoggingReceiver.class);
+---
+>     static final Logger LOG = Logger.getLogger(LoggingReceiver.class);
+> 
+> 
+>     /** where to put the events **/
+>     MyTableModel mModel;
+> 
+>     /** server for listening for connections **/
+>     private ServerSocket mSvrSock;
+>     
+>     /**
+>      * Creates a new <code>LoggingReceiver</code> instance.
+>      *
+>      * @param aModel model to place put received into
+>      * @param aPort port to listen on
+>      * @throws IOException if an error occurs
+>      */
+>     LoggingReceiver(MyTableModel aModel, int aPort) throws IOException {
+>         setDaemon(true);
+>         mModel = aModel;
+>         mSvrSock = new ServerSocket(aPort);
+>     }
+> 
+>     /** Listens for client connections **/
+>     public void run() {
+>         LOG.info("Thread started");
+>         try {
+>             while (true) {
+>                 LOG.debug("Waiting for a connection");
+>                 final Socket client = mSvrSock.accept();
+>                 LOG.debug("Got a connection from " +
+>                           client.getInetAddress().getHostName());
+>                 final Thread t = new Thread(new Slurper(client, this));
+>                 t.setDaemon(true);
+>                 t.start();
+>             }
+>         } catch (IOException e) {
+>             LOG.error("Error in accepting connections, stopping.", e);
+>         }
+>     }
+> }
+44c83
+<     private class Slurper implements Runnable {
+---
+>     class Slurper implements Runnable {
+46a86
+>       private final LoggingReceiver lr;
+53c93
+<         Slurper(Socket aClient) {
+---
+>       Slurper(Socket aClient, LoggingReceiver lr) {
+54a95
+>             this.lr = lr;
+59c100
+<             LOG.debug("Starting to get data");
+---
+>             LoggingReceiver.LOG.debug("Starting to get data");
+65c106
+<                     mModel.addEvent(new EventDetails(event));
+---
+>                     lr.mModel.addEvent(new EventDetails(event));
+68c109
+<                 LOG.info("Reached EOF, closing connection");
+---
+>                 LoggingReceiver.LOG.info("Reached EOF, closing connection");
+70c111
+<                 LOG.info("Caught SocketException, closing connection");
+---
+>                 LoggingReceiver.LOG.info("Caught SocketException, closing connection");
+72c113
+<                 LOG.warn("Got IOException, closing connection", e);
+---
+>                 LoggingReceiver.LOG.warn("Got IOException, closing connection", e);
+74c115
+<                 LOG.warn("Got ClassNotFoundException, closing connection", e);
+---
+>                 LoggingReceiver.LOG.warn("Got ClassNotFoundException, closing connection", e);
+80c121
+<                 LOG.warn("Error closing connection", e);
+---
+>                 LoggingReceiver.LOG.warn("Error closing connection", e);
+84,121d124
+< 
+<     /** where to put the events **/
+<     private MyTableModel mModel;
+< 
+<     /** server for listening for connections **/
+<     private ServerSocket mSvrSock;
+<     
+<     /**
+<      * Creates a new <code>LoggingReceiver</code> instance.
+<      *
+<      * @param aModel model to place put received into
+<      * @param aPort port to listen on
+<      * @throws IOException if an error occurs
+<      */
+<     LoggingReceiver(MyTableModel aModel, int aPort) throws IOException {
+<         setDaemon(true);
+<         mModel = aModel;
+<         mSvrSock = new ServerSocket(aPort);
+<     }
+< 
+<     /** Listens for client connections **/
+<     public void run() {
+<         LOG.info("Thread started");
+<         try {
+<             while (true) {
+<                 LOG.debug("Waiting for a connection");
+<                 final Socket client = mSvrSock.accept();
+<                 LOG.debug("Got a connection from " +
+<                           client.getInetAddress().getHostName());
+<                 final Thread t = new Thread(new Slurper(client));
+<                 t.setDaemon(true);
+<                 t.start();
+<             }
+<         } catch (IOException e) {
+<             LOG.error("Error in accepting connections, stopping.", e);
+<         }
+<     }
+< }
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/chainsaw/Main.java src/main/java/org/apache/log4j/chainsaw/Main.java
+116,120c116
+<         addWindowListener(new WindowAdapter() {
+<                 public void windowClosing(WindowEvent aEvent) {
+<                     ExitAction.INSTANCE.actionPerformed(null);
+<                 }
+<             });
+---
+>         addWindowListener(new MyWindowAdapter());
+192a189,195
+> 
+> 
+> class MyWindowAdapter extends WindowAdapter {
+>   public void windowClosing(WindowEvent aEvent) {
+>     ExitAction.INSTANCE.actionPerformed(null);
+>   }
+> }
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/chainsaw/MyTableModel.java src/main/java/org/apache/log4j/chainsaw/MyTableModel.java
+45,109c45
+<     private static final Comparator MY_COMP = new Comparator()
+<     {
+<         /** @see Comparator **/
+<         public int compare(Object aObj1, Object aObj2) {
+<             if ((aObj1 == null) && (aObj2 == null)) {
+<                 return 0; // treat as equal
+<             } else if (aObj1 == null) {
+<                 return -1; // null less than everything
+<             } else if (aObj2 == null) {
+<                 return 1; // think about it. :->
+<             }
+< 
+<             // will assume only have LoggingEvent
+<             final EventDetails le1 = (EventDetails) aObj1;
+<             final EventDetails le2 = (EventDetails) aObj2;
+< 
+<             if (le1.getTimeStamp() < le2.getTimeStamp()) {
+<                 return 1;
+<             }
+<             // assume not two events are logged at exactly the same time
+<             return -1;
+<         }
+<         };
+< 
+<     /**
+<      * Helper that actually processes incoming events.
+<      * @author <a href="mailto:oliver@puppycrawl.com">Oliver Burn</a>
+<      */
+<     private class Processor
+<         implements Runnable
+<     {
+<         /** loops getting the events **/
+<         public void run() {
+<             while (true) {
+<                 try {
+<                     Thread.sleep(1000);
+<                 } catch (InterruptedException e) {
+<                     // ignore
+<                 }
+< 
+<                 synchronized (mLock) {
+<                     if (mPaused) {
+<                         continue;
+<                     }
+< 
+<                     boolean toHead = true; // were events added to head
+<                     boolean needUpdate = false;
+<                     final Iterator it = mPendingEvents.iterator();
+<                     while (it.hasNext()) {
+<                         final EventDetails event = (EventDetails) it.next();
+<                         mAllEvents.add(event);
+<                         toHead = toHead && (event == mAllEvents.first());
+<                         needUpdate = needUpdate || matchFilter(event);
+<                     }
+<                     mPendingEvents.clear();
+< 
+<                     if (needUpdate) {
+<                         updateFilteredEvents(toHead);
+<                     }
+<                 }
+<             }
+< 
+<         }
+<     }
+< 
+---
+>     private static final Comparator MY_COMP = new MyTableModelComparator();
+123c59
+<     private final Object mLock = new Object();
+---
+>     final Object mLock = new Object();
+125c61
+<     private final SortedSet mAllEvents = new TreeSet(MY_COMP);
+---
+>     final SortedSet mAllEvents = new TreeSet(MY_COMP);
+129c65
+<     private final List mPendingEvents = new ArrayList();
+---
+>     final List mPendingEvents = new ArrayList();
+131c67
+<     private boolean mPaused = false;
+---
+>     boolean mPaused = false;
+150c86
+<         final Thread t = new Thread(new Processor());
+---
+>         final Thread t = new Thread(new Processor(this));
+182c118,119
+<         return (aCol == 2) ? Boolean.class : Object.class;
+---
+>       if (aCol == 2) return Boolean.class;
+>       else return Object.class;
+195,196c132,133
+<                 return (event.getThrowableStrRep() == null)
+<                     ? Boolean.FALSE : Boolean.TRUE;
+---
+>               if (event.getThrowableStrRep() == null) return Boolean.FALSE;
+>               else return Boolean.TRUE;
+330c267
+<     private void updateFilteredEvents(boolean aInsertedToFront) {
+---
+>     void updateFilteredEvents(boolean aInsertedToFront) {
+343,345c280,282
+<         final EventDetails lastFirst = (mFilteredEvents.length == 0)
+<             ? null
+<             : mFilteredEvents[0];
+---
+>         final EventDetails lastFirst;
+>         if (mFilteredEvents.length == 0) lastFirst = null;
+>         else lastFirst = mFilteredEvents[0];
+362c299
+<                   + " in update, size: " + size);
+---
+>                   + " in update, size: " + Integer.toString(size));
+371c308
+<     private boolean matchFilter(EventDetails aEvent) {
+---
+>     boolean matchFilter(EventDetails aEvent) {
+390a328,396
+> 
+> 
+> /**
+>  * Helper that actually processes incoming events.
+>  * @author <a href="mailto:oliver@puppycrawl.com">Oliver Burn</a>
+>  */
+> class Processor
+>   implements Runnable
+> {
+>   public Processor (MyTableModel mtm) { this.mtm = mtm; }
+>   private MyTableModel mtm;
+>   
+>   /** loops getting the events **/
+>   public void run() {
+>     while (true) {
+>       try {
+>         Thread.sleep(1000);
+>       } catch (InterruptedException e) {
+>         // ignore
+>       }
+>       
+>       synchronized (mtm.mLock) {
+>         if (mtm.mPaused) {
+>           continue;
+>         }
+> 
+>         boolean toHead = true; // were events added to head
+>         boolean needUpdate = false;
+>         final Iterator it = mtm.mPendingEvents.iterator();
+>         while (it.hasNext()) {
+>           final EventDetails event = (EventDetails) it.next();
+>           mtm.mAllEvents.add(event);
+>           toHead = toHead && (event == mtm.mAllEvents.first());
+>           needUpdate = needUpdate || mtm.matchFilter(event);
+>         }
+>         mtm.mPendingEvents.clear();
+> 
+>         if (needUpdate) {
+>           mtm.updateFilteredEvents(toHead);
+>         }
+>       }
+>     }
+> 
+>   }
+> }
+> 
+> class MyTableModelComparator implements Comparator
+>     {
+>         /** @see Comparator **/
+>         public int compare(Object aObj1, Object aObj2) {
+>             if ((aObj1 == null) && (aObj2 == null)) {
+>                 return 0; // treat as equal
+>             } else if (aObj1 == null) {
+>                 return -1; // null less than everything
+>             } else if (aObj2 == null) {
+>                 return 1; // think about it. :->
+>             }
+> 
+>             // will assume only have LoggingEvent
+>             final EventDetails le1 = (EventDetails) aObj1;
+>             final EventDetails le2 = (EventDetails) aObj2;
+> 
+>             if (le1.getTimeStamp() < le2.getTimeStamp()) {
+>                 return 1;
+>             }
+>             // assume not two events are logged at exactly the same time
+>             return -1;
+>         }
+>         }
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/config/PropertyGetter.java src/main/java/org/apache/log4j/config/PropertyGetter.java
+42,44c42
+<   public interface PropertyCallback {
+<     void foundProperty(Object obj, String prefix, String name, Object value);
+<   }
+---
+> 
+64c62,63
+<       new PropertyGetter(obj).getProperties(callback, prefix);
+---
+>       PropertyGetter pg = new PropertyGetter(obj);
+>       pg.getProperties(callback, prefix);
+108a108,111
+> 
+> interface PropertyCallback {
+>   void foundProperty(Object obj, String prefix, String name, Object value);
+> }
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/config/PropertyPrinter.java src/main/java/org/apache/log4j/config/PropertyPrinter.java
+37c37
+< public class PropertyPrinter implements PropertyGetter.PropertyCallback {
+---
+> public class PropertyPrinter implements PropertyCallback {
+100c100,101
+<     String appenderString = (prio == null ? "" : prio.toString());
+---
+>     String appenderString = "";
+>     if (prio != null) appenderString = prio.toString();
+119c120
+<       appenderString += ", " + name;
+---
+>       appenderString = appenderString + ", " + name;
+121,123c122,123
+<     String catKey = (cat == Logger.getRootLogger())
+<         ? "log4j.rootLogger"
+<         : "log4j.logger." + cat.getName();
+---
+>     String catKey = "log4j.rootLogger";
+>     if (cat != Logger.getRootLogger()) catKey = "log4j.logger." + cat.getName();
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/config/PropertySetter.java src/main/java/org/apache/log4j/config/PropertySetter.java
+104c104,105
+<     new PropertySetter(obj).setProperties(properties, prefix);
+---
+>     PropertySetter ps = new PropertySetter(obj);
+>     ps.setProperties(properties, prefix);
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/helpers/AbsoluteTimeDateFormat.java src/main/java/org/apache/log4j/helpers/AbsoluteTimeDateFormat.java
+86c86,87
+<     int millis = (int)(now % 1000);
+---
+>     long tmp = now % 1000;
+>     int millis = (int)tmp;
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/helpers/BoundedFIFO.java src/main/java/org/apache/log4j/helpers/BoundedFIFO.java
+113c113,114
+<     return a < b ? a : b;
+---
+>     if (a < b) return a;
+>     else return b;
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/helpers/CountingQuietWriter.java src/main/java/org/apache/log4j/helpers/CountingQuietWriter.java
+46c46
+<       count += string.length();
+---
+>       count = count + string.length();
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/helpers/CyclicBuffer.java src/main/java/org/apache/log4j/helpers/CyclicBuffer.java
+141c141,142
+<     int loopLen = newSize < numElems ? newSize : numElems;
+---
+>     int loopLen = numElems;
+>     if (newSize < numElems) loopLen = newSize;
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/helpers/ISO8601DateFormat.java src/main/java/org/apache/log4j/helpers/ISO8601DateFormat.java
+68c68,69
+<     int millis = (int)(now % 1000);
+---
+>     long tmp = now % 1000;
+>     int millis = (int)tmp;
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/helpers/OptionConverter.java src/main/java/org/apache/log4j/helpers/OptionConverter.java
+415c415
+< 	  j += DELIM_START_LEN;
+---
+>     j = j + DELIM_START_LEN;
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/helpers/PatternConverter.java src/main/java/org/apache/log4j/helpers/PatternConverter.java
+102c102
+<       length -= 32;
+---
+>       length = length - 32;
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/helpers/PatternParser.java src/main/java/org/apache/log4j/helpers/PatternParser.java
+382,383c382
+<   private static class BasicPatternConverter extends PatternConverter {
+<     int type;
+---
+> }
+385,405c384,406
+<     BasicPatternConverter(FormattingInfo formattingInfo, int type) {
+<       super(formattingInfo);
+<       this.type = type;
+<     }
+< 
+<     public
+<     String convert(LoggingEvent event) {
+<       switch(type) {
+<       case RELATIVE_TIME_CONVERTER:
+< 	return (Long.toString(event.timeStamp - LoggingEvent.getStartTime()));
+<       case THREAD_CONVERTER:
+< 	return event.getThreadName();
+<       case LEVEL_CONVERTER:
+< 	return event.getLevel().toString();
+<       case NDC_CONVERTER:
+< 	return event.getNDC();
+<       case MESSAGE_CONVERTER: {
+< 	return event.getRenderedMessage();
+<       }
+<       default: return null;
+<       }
+---
+> class BasicPatternConverter extends PatternConverter {
+>   int type;
+> 
+>   BasicPatternConverter(FormattingInfo formattingInfo, int type) {
+>     super(formattingInfo);
+>     this.type = type;
+>   }
+> 
+>   public
+>     String convert(LoggingEvent event) {
+>     switch(type) {
+>     case PatternParser.RELATIVE_TIME_CONVERTER:
+>       return (Long.toString(event.timeStamp - LoggingEvent.getStartTime()));
+>     case PatternParser.THREAD_CONVERTER:
+>       return event.getThreadName();
+>     case PatternParser.LEVEL_CONVERTER:
+>       return event.getLevel().toString();
+>     case PatternParser.NDC_CONVERTER:
+>       return event.getNDC();
+>     case PatternParser.MESSAGE_CONVERTER: {
+>       return event.getRenderedMessage();
+>     }
+>     default: return null;
+407a409
+> }
+409,410c411,412
+<   private static class LiteralPatternConverter extends PatternConverter {
+<     private String literal;
+---
+> class LiteralPatternConverter extends PatternConverter {
+>   private String literal;
+412,414c414,416
+<     LiteralPatternConverter(String value) {
+<       literal = value;
+<     }
+---
+>   LiteralPatternConverter(String value) {
+>     literal = value;
+>   }
+416c418
+<     public
+---
+>   public
+419,420c421,422
+<       sbuf.append(literal);
+<     }
+---
+>     sbuf.append(literal);
+>   }
+422c424
+<     public
+---
+>   public
+424,425c426
+<       return literal;
+<     }
+---
+>     return literal;
+426a428
+> }
+428,430c430,432
+<   private static class DatePatternConverter extends PatternConverter {
+<     private DateFormat df;
+<     private Date date;
+---
+> class DatePatternConverter extends PatternConverter {
+>   private DateFormat df;
+>   private Date date;
+432,436c434,438
+<     DatePatternConverter(FormattingInfo formattingInfo, DateFormat df) {
+<       super(formattingInfo);
+<       date = new Date();
+<       this.df = df;
+<     }
+---
+>   DatePatternConverter(FormattingInfo formattingInfo, DateFormat df) {
+>     super(formattingInfo);
+>     date = new Date();
+>     this.df = df;
+>   }
+438c440
+<     public
+---
+>   public
+440,448c442,448
+<       date.setTime(event.timeStamp);
+<       String converted = null;
+<       try {
+<         converted = df.format(date);
+<       }
+<       catch (Exception ex) {
+<         LogLog.error("Error occured while converting date.", ex);
+<       }
+<       return converted;
+---
+>     date.setTime(event.timeStamp);
+>     String converted = null;
+>     try {
+>       converted = df.format(date);
+>     }
+>     catch (Exception ex) {
+>       LogLog.error("Error occured while converting date.", ex);
+449a450
+>     return converted;
+450a452
+> }
+452,453c454,455
+<   private static class MDCPatternConverter extends PatternConverter {
+<     private String key;
+---
+> class MDCPatternConverter extends PatternConverter {
+>   private String key;
+455,475c457,474
+<     MDCPatternConverter(FormattingInfo formattingInfo, String key) {
+<       super(formattingInfo);
+<       this.key = key;
+<     }
+< 
+<     public
+<     String convert(LoggingEvent event) {
+<       if (key == null) {
+<           StringBuffer buf = new StringBuffer("{");
+<           Map properties = event.getProperties();
+<           if (properties.size() > 0) {
+<             Object[] keys = properties.keySet().toArray();
+<             Arrays.sort(keys);
+<             for (int i = 0; i < keys.length; i++) {
+<                 buf.append('{');
+<                 buf.append(keys[i]);
+<                 buf.append(',');
+<                 buf.append(properties.get(keys[i]));
+<                 buf.append('}');
+<             }
+<           }
+---
+>   MDCPatternConverter(FormattingInfo formattingInfo, String key) {
+>     super(formattingInfo);
+>     this.key = key;
+>   }
+> 
+>   public
+>     String convert(LoggingEvent event) {
+>     if (key == null) {
+>       StringBuffer buf = new StringBuffer("{");
+>       Map properties = event.getProperties();
+>       if (properties.size() > 0) {
+>         Object[] keys = properties.keySet().toArray();
+>         Arrays.sort(keys);
+>         for (int i = 0; i < keys.length; i++) {
+>           buf.append('{');
+>           buf.append(keys[i]);
+>           buf.append(',');
+>           buf.append(properties.get(keys[i]));
+477,483d475
+<           return buf.toString();
+<       } else {
+<         Object val = event.getMDC(key);
+<         if(val == null) {
+< 	        return null;
+<         } else {
+< 	        return val.toString();
+485a478,486
+>       buf.append('}');
+>       return buf.toString();
+>     } else {
+>       Object val = event.getMDC(key);
+>       if(val == null) {
+>         return null;
+>       } else {
+>         return val.toString();
+>       }
+487a489
+> }
+490,491c492,493
+<   private class LocationPatternConverter extends PatternConverter {
+<     int type;
+---
+> class LocationPatternConverter extends PatternConverter {
+>   int type;
+493,511c495,512
+<     LocationPatternConverter(FormattingInfo formattingInfo, int type) {
+<       super(formattingInfo);
+<       this.type = type;
+<     }
+< 
+<     public
+<     String convert(LoggingEvent event) {
+<       LocationInfo locationInfo = event.getLocationInformation();
+<       switch(type) {
+<       case FULL_LOCATION_CONVERTER:
+< 	return locationInfo.fullInfo;
+<       case METHOD_LOCATION_CONVERTER:
+< 	return locationInfo.getMethodName();
+<       case LINE_LOCATION_CONVERTER:
+< 	return locationInfo.getLineNumber();
+<       case FILE_LOCATION_CONVERTER:
+< 	return locationInfo.getFileName();
+<       default: return null;
+<       }
+---
+>   LocationPatternConverter(FormattingInfo formattingInfo, int type) {
+>     super(formattingInfo);
+>     this.type = type;
+>   }
+> 
+>   public
+>     String convert(LoggingEvent event) {
+>     LocationInfo locationInfo = event.getLocationInformation();
+>     switch(type) {
+>     case PatternParser.FULL_LOCATION_CONVERTER:
+>       return locationInfo.fullInfo;
+>     case PatternParser.METHOD_LOCATION_CONVERTER:
+>       return locationInfo.getMethodName();
+>     case PatternParser.LINE_LOCATION_CONVERTER:
+>       return locationInfo.getLineNumber();
+>     case PatternParser.FILE_LOCATION_CONVERTER:
+>       return locationInfo.getFileName();
+>     default: return null;
+513a515
+> }
+515,516c517,518
+<   private static abstract class NamedPatternConverter extends PatternConverter {
+<     int precision;
+---
+> abstract class NamedPatternConverter extends PatternConverter {
+>   int precision;
+518,521c520,523
+<     NamedPatternConverter(FormattingInfo formattingInfo, int precision) {
+<       super(formattingInfo);
+<       this.precision =  precision;
+<     }
+---
+>   NamedPatternConverter(FormattingInfo formattingInfo, int precision) {
+>     super(formattingInfo);
+>     this.precision =  precision;
+>   }
+523c525
+<     abstract
+---
+>   abstract
+526c528
+<     public
+---
+>   public
+528,543c530,543
+<       String n = getFullyQualifiedName(event);
+<       if(precision <= 0)
+< 	return n;
+<       else {
+< 	int len = n.length();
+< 
+< 	// We substract 1 from 'len' when assigning to 'end' to avoid out of
+< 	// bounds exception in return r.substring(end+1, len). This can happen if
+< 	// precision is 1 and the category name ends with a dot.
+< 	int end = len -1 ;
+< 	for(int i = precision; i > 0; i--) {
+< 	  end = n.lastIndexOf('.', end-1);
+< 	  if(end == -1)
+< 	    return n;
+< 	}
+< 	return n.substring(end+1, len);
+---
+>     String n = getFullyQualifiedName(event);
+>     if(precision <= 0)
+>       return n;
+>     else {
+>       int len = n.length();
+> 
+>       // We substract 1 from 'len' when assigning to 'end' to avoid out of
+>       // bounds exception in return r.substring(end+1, len). This can happen if
+>       // precision is 1 and the category name ends with a dot.
+>       int end = len -1 ;
+>       for(int i = precision; i > 0; i--) {
+>         end = n.lastIndexOf('.', end-1);
+>         if(end == -1)
+>           return n;
+544a545
+>       return n.substring(end+1, len);
+546a548
+> }
+548c550
+<   private class ClassNamePatternConverter extends NamedPatternConverter {
+---
+> class ClassNamePatternConverter extends NamedPatternConverter {
+550,552c552,554
+<     ClassNamePatternConverter(FormattingInfo formattingInfo, int precision) {
+<       super(formattingInfo, precision);
+<     }
+---
+>   ClassNamePatternConverter(FormattingInfo formattingInfo, int precision) {
+>     super(formattingInfo, precision);
+>   }
+554,556c556,557
+<     String getFullyQualifiedName(LoggingEvent event) {
+<       return event.getLocationInformation().getClassName();
+<     }
+---
+>   String getFullyQualifiedName(LoggingEvent event) {
+>     return event.getLocationInformation().getClassName();
+557a559
+> }
+559c561
+<   private class CategoryPatternConverter extends NamedPatternConverter {
+---
+> class CategoryPatternConverter extends NamedPatternConverter {
+561,563c563,565
+<     CategoryPatternConverter(FormattingInfo formattingInfo, int precision) {
+<       super(formattingInfo, precision);
+<     }
+---
+>   CategoryPatternConverter(FormattingInfo formattingInfo, int precision) {
+>     super(formattingInfo, precision);
+>   }
+565,567c567,568
+<     String getFullyQualifiedName(LoggingEvent event) {
+<       return event.getLoggerName();
+<     }
+---
+>   String getFullyQualifiedName(LoggingEvent event) {
+>     return event.getLoggerName();
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/helpers/SyslogWriter.java src/main/java/org/apache/log4j/helpers/SyslogWriter.java
+82c82
+<             }
+---
+>              }
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/jmx/AbstractDynamicMBean.java src/main/java/org/apache/log4j/jmx/AbstractDynamicMBean.java
+148c148
+<     getLogger().debug("preRegister called. Server="+server+ ", name="+name);
+---
+>     getLogger().debug("preRegister called. Server="+server+ ", name="+name.toString());
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/jmx/AppenderDynamicMBean.java src/main/java/org/apache/log4j/jmx/AppenderDynamicMBean.java
+337c337
+<     cat.debug("preRegister called. Server="+server+ ", name="+name);
+---
+>     cat.debug("preRegister called. Server="+server+ ", name="+name.toString());
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/jmx/LayoutDynamicMBean.java src/main/java/org/apache/log4j/jmx/LayoutDynamicMBean.java
+188c188
+<     cat.debug("----name="+attributeName+", mu="+mu);
+---
+>     cat.debug("----name="+attributeName+", mu="+mu.toString());
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/lf5/LogRecord.java src/main/java/org/apache/log4j/lf5/LogRecord.java
+381c381
+<     _seqCount++;
+---
+>     _seqCount = _seqCount + 1;
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/lf5/util/LogFileParser.java src/main/java/org/apache/log4j/lf5/util/LogFileParser.java
+137c137
+<       if (isLogFile == false) {
+---
+>       if (! isLogFile) {
+140,144c140
+<       SwingUtilities.invokeLater(new Runnable() {
+<         public void run() {
+<           destroyDialog();
+<         }
+<       });
+---
+>       SwingUtilities.invokeLater(new LogFileParser_Runnable(this));
+170c166
+<   private void destroyDialog() {
+---
+>   void destroyDialog() {
+301a298,305
+> 
+> class LogFileParser_Runnable implements Runnable {
+>   public LogFileParser_Runnable (LogFileParser lfp) { this.lfp = lfp; }
+>   public void run() {
+>     lfp.destroyDialog();
+>   }
+>   private LogFileParser lfp;
+> }
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/lf5/viewer/FilteredLogTableModel.java src/main/java/org/apache/log4j/lf5/viewer/FilteredLogTableModel.java
+119c119
+<     if (_filter.passes(record) == false) {
+---
+>     if (! _filter.passes(record)) {
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/lf5/viewer/LF5SwingUtils.java src/main/java/org/apache/log4j/lf5/viewer/LF5SwingUtils.java
+70c70
+<     if (contains(row, table.getModel()) == false) {
+---
+>     if (! contains(row, table.getModel())) {
+139,143c139
+<     SwingUtilities.invokeLater(new Runnable() {
+<       public void run() {
+<         component.repaint();
+<       }
+<     });
+---
+>     SwingUtilities.invokeLater(new LF5SwingUtils_Runnable(component));
+153a150,157
+> class LF5SwingUtils_Runnable implements Runnable {
+>   public LF5SwingUtils_Runnable (JComponent component) { this.component = component; }
+>   public void run() {
+>     component.repaint();
+>   }
+>   private JComponent component;
+> }
+> 
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/lf5/viewer/LogBrokerMonitor.java src/main/java/org/apache/log4j/lf5/viewer/LogBrokerMonitor.java
+184,190c184
+<     SwingUtilities.invokeLater(new Runnable() {
+<       public void run() {
+<         Thread.yield();
+<         pause(delay);
+<         _logMonitorFrame.setVisible(true);
+<       }
+<     });
+---
+>     SwingUtilities.invokeLater(new LogBrokerMonitor_Runnable(this, delay));
+204c198
+<     if (_callSystemExitOnClose == true) {
+---
+>     if (_callSystemExitOnClose) {
+252c246
+<     if (_isDisposed == true) {
+---
+>     if (_isDisposed) {
+258,264c252
+<     SwingUtilities.invokeLater(new Runnable() {
+<       public void run() {
+<         _categoryExplorerTree.getExplorerModel().addLogRecord(lr);
+<         _table.getFilteredLogTableModel().addLogRecord(lr); // update table
+<         updateStatusLabel(); // show updated counts
+<       }
+<     });
+---
+>     SwingUtilities.invokeLater(new LogBrokerMonitor_Runnable2(this, lr));
+611,618c599
+<     LogRecordFilter result = new LogRecordFilter() {
+<       public boolean passes(LogRecord record) {
+<         CategoryPath path = new CategoryPath(record.getCategory());
+<         return
+<             getMenuItem(record.getLevel()).isSelected() &&
+<             _categoryExplorerTree.getExplorerModel().isCategoryPathActive(path);
+<       }
+<     };
+---
+>     LogRecordFilter result = new LogBrokerMonitor_LogRecordFilter(this);
+626,639c607
+<     LogRecordFilter result = new LogRecordFilter() {
+<       public boolean passes(LogRecord record) {
+<         String NDC = record.getNDC();
+<         CategoryPath path = new CategoryPath(record.getCategory());
+<         if (NDC == null || _NDCTextFilter == null) {
+<           return false;
+<         } else if (NDC.toLowerCase().indexOf(_NDCTextFilter.toLowerCase()) == -1) {
+<           return false;
+<         } else {
+<           return getMenuItem(record.getLevel()).isSelected() &&
+<               _categoryExplorerTree.getExplorerModel().isCategoryPathActive(path);
+<         }
+<       }
+<     };
+---
+>     LogRecordFilter result = new LogBrokerMonitor_NDCLogRecordFilter(this);
+657,667c625,626
+<     addDisplayedProperty(new Object() {
+<       public String toString() {
+<         return getRecordsDisplayedMessage();
+<       }
+<     });
+<     addDisplayedProperty(new Object() {
+<       public String toString() {
+<         return "Maximum number of displayed LogRecords: "
+<             + model._maxNumberOfLogRecords;
+<       }
+<     });
+---
+>     addDisplayedProperty(new LogBrokerMonitor_TableModelProperty1(this));
+>     addDisplayedProperty(new LogBrokerMonitor_TableModelProperty2(this, model));
+681,686c640
+<     ActionListener listener = new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         _table.getFilteredLogTableModel().refresh();
+<         updateStatusLabel();
+<       }
+<     };
+---
+>     ActionListener listener = new LogBrokerMonitor_ActionListener(this);
+746,752c700
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         selectAllLogLevels(true);
+<         _table.getFilteredLogTableModel().refresh();
+<         updateStatusLabel();
+<       }
+<     });
+---
+>     result.addActionListener(new LogBrokerMonitor_ActionListener2(this));
+759,765c707
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         selectAllLogLevels(false);
+<         _table.getFilteredLogTableModel().refresh();
+<         updateStatusLabel();
+<       }
+<     });
+---
+>     result.addActionListener(new LogBrokerMonitor_ActionListener3(this));
+783,791c725
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         // reset the level colors in the map
+<         LogLevel.resetLogLevelColorMap();
+< 
+<         // refresh the table
+<         _table.getFilteredLogTableModel().refresh();
+<       }
+<     });
+---
+>     result.addActionListener(new LogBrokerMonitor_ActionListener4(this));
+815,819c749
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         showLogLevelColorChangeDialog(result, logLevel);
+<       }
+<     });
+---
+>     result.addActionListener(new LogBrokerMonitor_ActionListener5(this, result, logLevel));
+844,849c774
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         _table.getFilteredLogTableModel().refresh();
+<         updateStatusLabel();
+<       }
+<     });
+---
+>     result.addActionListener(new LogBrokerMonitor_ActionListener(this));
+882,888c807
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         // update list of columns and reset the view
+<         List selectedColumns = updateView();
+<         _table.setView(selectedColumns);
+<       }
+<     });
+---
+>     result.addActionListener(new LogBrokerMonitor_ActionListener6(this));
+910,917c829
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         selectAllLogTableColumns(true);
+<         // update list of columns and reset the view
+<         List selectedColumns = updateView();
+<         _table.setView(selectedColumns);
+<       }
+<     });
+---
+>     result.addActionListener(new LogBrokerMonitor_ActionListener7(this));
+924,931c836
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         selectAllLogTableColumns(false);
+<         // update list of columns and reset the view
+<         List selectedColumns = updateView();
+<         _table.setView(selectedColumns);
+<       }
+<     });
+---
+>     result.addActionListener(new LogBrokerMonitor_ActionListener8(this));
+963,967c868
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         requestOpen();
+<       }
+<     });
+---
+>     result.addActionListener(new LogBrokerMonitor_ActionListener9(this));
+978,982c879
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         requestOpenURL();
+<       }
+<     });
+---
+>     result.addActionListener(new LogBrokerMonitor_ActionListener10(this));
+990,994c887
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         requestClose();
+<       }
+<     });
+---
+>     result.addActionListener(new LogBrokerMonitor_ActionListener11(this));
+1011,1015c904
+<         result.addActionListener(new ActionListener() {
+<           public void actionPerformed(ActionEvent e) {
+<             requestOpenMRU(e);
+<           }
+<         });
+---
+>         result.addActionListener(new LogBrokerMonitor_ActionListener12(this));
+1024,1028c913
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         requestExit();
+<       }
+<     });
+---
+>     result.addActionListener(new LogBrokerMonitor_ActionListener13(this));
+1045,1049c930
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         saveConfiguration();
+<       }
+<     });
+---
+>     result.addActionListener(new LogBrokerMonitor_ActionListener14(this));
+1057,1061c938
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         resetConfiguration();
+<       }
+<     });
+---
+>     result.addActionListener(new LogBrokerMonitor_ActionListener15(this));
+1069,1073c946
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         setMaxRecordConfiguration();
+<       }
+<     });
+---
+>     result.addActionListener(new LogBrokerMonitor_ActionListener16(this));
+1117,1121c990
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         showPropertiesDialog(title);
+<       }
+<     });
+---
+>     result.addActionListener(new LogBrokerMonitor_ActionListener17(this, title));
+1149,1153c1018
+<     editFindNextMI.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         findSearchText();
+<       }
+<     });
+---
+>     editFindNextMI.addActionListener(new LogBrokerMonitor_ActionListener18(this));
+1162,1177c1027
+<     editFindMI.addActionListener(
+<         new ActionListener() {
+<           public void actionPerformed(ActionEvent e) {
+<             String inputValue =
+<                 JOptionPane.showInputDialog(
+<                     _logMonitorFrame,
+<                     "Find text: ",
+<                     "Search Record Messages",
+<                     JOptionPane.QUESTION_MESSAGE
+<                 );
+<             setSearchText(inputValue);
+<             findSearchText();
+<           }
+<         }
+< 
+<     );
+---
+>     editFindMI.addActionListener(new LogBrokerMonitor_ActionListener19(this));
+1187,1204c1037
+<     editSortNDCMI.addActionListener(
+<         new ActionListener() {
+<           public void actionPerformed(ActionEvent e) {
+<             String inputValue =
+<                 JOptionPane.showInputDialog(
+<                     _logMonitorFrame,
+<                     "Sort by this NDC: ",
+<                     "Sort Log Records by NDC",
+<                     JOptionPane.QUESTION_MESSAGE
+<                 );
+<             setNDCTextFilter(inputValue);
+<             sortByNDC();
+<             _table.getFilteredLogTableModel().refresh();
+<             updateStatusLabel();
+<           }
+<         }
+< 
+<     );
+---
+>     editSortNDCMI.addActionListener(new LogBrokerMonitor_ActionListener20(this));
+1213,1223c1046
+<     editRestoreAllNDCMI.addActionListener(
+<         new ActionListener() {
+<           public void actionPerformed(ActionEvent e) {
+<             _table.getFilteredLogTableModel().setLogRecordFilter(createLogRecordFilter());
+<             // reset the text filter
+<             setNDCTextFilter("");
+<             _table.getFilteredLogTableModel().refresh();
+<             updateStatusLabel();
+<           }
+<         }
+<     );
+---
+>     editRestoreAllNDCMI.addActionListener(new LogBrokerMonitor_ActionListener21(this));
+1256,1266c1079
+<     newButton.addActionListener(
+<         new ActionListener() {
+<           public void actionPerformed(ActionEvent e) {
+<             _table.clearLogRecords();
+<             _categoryExplorerTree.getExplorerModel().resetAllNodeCounts();
+<             updateStatusLabel();
+<             clearDetailTextArea();
+<             LogRecord.resetSequenceNumber();
+<           }
+<         }
+<     );
+---
+>     newButton.addActionListener(new LogBrokerMonitor_ActionListener22(this));
+1286,1296c1099
+<     fontCombo.addActionListener(
+< 
+<         new ActionListener() {
+<           public void actionPerformed(ActionEvent e) {
+<             JComboBox box = (JComboBox) e.getSource();
+<             String font = (String) box.getSelectedItem();
+<             _table.setFont(new Font(font, Font.PLAIN, _fontSize));
+<             _fontName = font;
+<           }
+<         }
+<     );
+---
+>     fontCombo.addActionListener(new LogBrokerMonitor_ActionListener23(this));
+1308,1320c1111
+<     fontSizeCombo.addActionListener(
+<         new ActionListener() {
+<           public void actionPerformed(ActionEvent e) {
+<             JComboBox box = (JComboBox) e.getSource();
+<             String size = (String) box.getSelectedItem();
+<             int s = Integer.valueOf(size).intValue();
+< 
+<             setFontSizeSilently(s);
+<             refreshDetailTextArea();
+<             _fontSize = s;
+<           }
+<         }
+<     );
+---
+>     fontSizeCombo.addActionListener(new LogBrokerMonitor_ActionListener24(this));
+1371,1377c1162
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         JComboBox box = (JComboBox) e.getSource();
+<         LogLevel level = (LogLevel) box.getSelectedItem();
+<         setLeastSevereDisplayedLogLevel(level);
+<       }
+<     });
+---
+>     result.addActionListener(new LogBrokerMonitor_ActionListener25(this));
+1521c1306
+<     if (_callSystemExitOnClose == false) {
+---
+>     if (! _callSystemExitOnClose) {
+1534c1319
+<     if (_callSystemExitOnClose == true) {
+---
+>     if (_callSystemExitOnClose) {
+1599,1600c1384
+<   class LogBrokerMonitorWindowAdaptor extends WindowAdapter {
+<     protected LogBrokerMonitor _monitor;
+---
+> }
+1602,1604c1386,1391
+<     public LogBrokerMonitorWindowAdaptor(LogBrokerMonitor monitor) {
+<       _monitor = monitor;
+<     }
+---
+> class LogBrokerMonitorWindowAdaptor extends WindowAdapter {
+>   protected LogBrokerMonitor _monitor;
+> 
+>   public LogBrokerMonitorWindowAdaptor(LogBrokerMonitor monitor) {
+>     _monitor = monitor;
+>   }
+1606,1607c1393,1449
+<     public void windowClosing(WindowEvent ev) {
+<       _monitor.requestClose();
+---
+>   public void windowClosing(WindowEvent ev) {
+>     _monitor.requestClose();
+>   }
+> }
+> 
+> 
+> class LogBrokerMonitor_Runnable implements Runnable {
+>   public LogBrokerMonitor_Runnable(LogBrokerMonitor lbm, int delay) {
+>     this.lbm = lbm;
+>     this.delay = delay;
+>   }
+>   public void run() {
+>     Thread.yield();
+>     lbm.pause(delay);
+>     lbm._logMonitorFrame.setVisible(true);
+>   }
+>   private LogBrokerMonitor lbm;
+>   private int delay;
+> }
+> 
+> class LogBrokerMonitor_Runnable2 implements Runnable {
+>   public LogBrokerMonitor_Runnable2(LogBrokerMonitor lbm, LogRecord lr) {
+>     this.lbm = lbm;
+>     this.lr = lr;
+>   }
+>   public void run() {
+>     lbm._categoryExplorerTree.getExplorerModel().addLogRecord(lr);
+>     lbm._table.getFilteredLogTableModel().addLogRecord(lr); // update table
+>     lbm.updateStatusLabel(); // show updated counts
+>   }
+>   private LogBrokerMonitor lbm;
+>   private LogRecord lr;
+> }
+> 
+> class LogBrokerMonitor_LogRecordFilter implements LogRecordFilter {
+>   public LogBrokerMonitor_LogRecordFilter (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public boolean passes(LogRecord record) {
+>     CategoryPath path = new CategoryPath(record.getCategory());
+>     return
+>       lbm.getMenuItem(record.getLevel()).isSelected() &&
+>       lbm._categoryExplorerTree.getExplorerModel().isCategoryPathActive(path);
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_NDCLogRecordFilter implements LogRecordFilter {
+>   public LogBrokerMonitor_NDCLogRecordFilter (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public boolean passes(LogRecord record) {
+>     String NDC = record.getNDC();
+>     CategoryPath path = new CategoryPath(record.getCategory());
+>     if (NDC == null || lbm._NDCTextFilter == null) {
+>       return false;
+>     } else if (NDC.toLowerCase().indexOf(lbm._NDCTextFilter.toLowerCase()) == -1) {
+>       return false;
+>     } else {
+>       return lbm.getMenuItem(record.getLevel()).isSelected() &&
+>         lbm._categoryExplorerTree.getExplorerModel().isCategoryPathActive(path);
+1609a1452,1732
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_TableModelProperty1 extends Object {
+>   public LogBrokerMonitor_TableModelProperty1 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public String toString() {
+>     return lbm.getRecordsDisplayedMessage();
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_TableModelProperty2 extends Object {
+>   public LogBrokerMonitor_TableModelProperty2 (LogBrokerMonitor lbm, FilteredLogTableModel model) { this.lbm = lbm; this.model = model; }
+>   public String toString() {
+>     return "Maximum number of displayed LogRecords: "
+>       + model._maxNumberOfLogRecords;
+>   }
+>   private LogBrokerMonitor lbm;
+>   private FilteredLogTableModel model;
+> }
+> 
+> class LogBrokerMonitor_ActionListener implements ActionListener {
+>   public LogBrokerMonitor_ActionListener (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     lbm._table.getFilteredLogTableModel().refresh();
+>     lbm.updateStatusLabel();
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener2 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener2 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     lbm.selectAllLogLevels(true);
+>     lbm._table.getFilteredLogTableModel().refresh();
+>     lbm.updateStatusLabel();
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener3 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener3 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     lbm.selectAllLogLevels(false);
+>     lbm._table.getFilteredLogTableModel().refresh();
+>     lbm.updateStatusLabel();
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener4 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener4 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     // reset the level colors in the map
+>     LogLevel.resetLogLevelColorMap();
+>     // refresh the table
+>     lbm._table.getFilteredLogTableModel().refresh();
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener5 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener5 (LogBrokerMonitor lbm, JMenuItem result, LogLevel logLevel) {
+>     this.lbm = lbm;
+>     this.result = result;
+>     this.logLevel = logLevel;
+>   }
+>   public void actionPerformed(ActionEvent e) {
+>     lbm.showLogLevelColorChangeDialog(result, logLevel);
+>   }
+>   private LogBrokerMonitor lbm;
+>   private JMenuItem result;
+>   private LogLevel logLevel;
+> }
+> 
+> class LogBrokerMonitor_ActionListener6 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener6 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     // update list of columns and reset the view
+>     List selectedColumns = lbm.updateView();
+>     lbm._table.setView(selectedColumns);
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener7 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener7 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     lbm.selectAllLogTableColumns(true);
+>     // update list of columns and reset the view
+>     List selectedColumns = lbm.updateView();
+>     lbm._table.setView(selectedColumns);
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener8 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener8 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     lbm.selectAllLogTableColumns(false);
+>     // update list of columns and reset the view
+>     List selectedColumns = lbm.updateView();
+>     lbm._table.setView(selectedColumns);
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener9 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener9 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     lbm.requestOpen();
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener10 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener10 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     lbm.requestOpenURL();
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener11 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener11 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     lbm.requestClose();
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener12 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener12 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     lbm.requestOpenMRU(e);
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener13 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener13 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     lbm.requestExit();
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener14 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener14 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     lbm.saveConfiguration();
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener15 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener15 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     lbm.resetConfiguration();
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener16 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener16 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     lbm.setMaxRecordConfiguration();
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener17 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener17 (LogBrokerMonitor lbm, String title) {
+>     this.lbm = lbm;
+>     this.title = title;
+>   }
+>   public void actionPerformed(ActionEvent e) {
+>     lbm.showPropertiesDialog(title);
+>   }
+>   private LogBrokerMonitor lbm;
+>   private String title;
+> }
+> 
+> class LogBrokerMonitor_ActionListener18 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener18 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     lbm.findSearchText();
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener19 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener19 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     String inputValue =
+>       JOptionPane.showInputDialog(lbm._logMonitorFrame,
+>                                   "Find text: ",
+>                                   "Search Record Messages",
+>                                   JOptionPane.QUESTION_MESSAGE
+>                                   );
+>     lbm.setSearchText(inputValue);
+>     lbm.findSearchText();
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener20 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener20 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     String inputValue =
+>                 JOptionPane.showInputDialog(
+>                     lbm._logMonitorFrame,
+>                     "Sort by this NDC: ",
+>                     "Sort Log Records by NDC",
+>                     JOptionPane.QUESTION_MESSAGE
+>                 );
+>             lbm.setNDCTextFilter(inputValue);
+>             lbm.sortByNDC();
+>             lbm._table.getFilteredLogTableModel().refresh();
+>             lbm.updateStatusLabel();
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener21 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener21 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     lbm._table.getFilteredLogTableModel().setLogRecordFilter(lbm.createLogRecordFilter());
+>     // reset the text filter
+>     lbm.setNDCTextFilter("");
+>     lbm._table.getFilteredLogTableModel().refresh();
+>     lbm.updateStatusLabel();
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener22 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener22 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     lbm._table.clearLogRecords();
+>     lbm._categoryExplorerTree.getExplorerModel().resetAllNodeCounts();
+>     lbm.updateStatusLabel();
+>     lbm.clearDetailTextArea();
+>     LogRecord.resetSequenceNumber();
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener23 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener23 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     JComboBox box = (JComboBox) e.getSource();
+>     String font = (String) box.getSelectedItem();
+>     lbm._table.setFont(new Font(font, Font.PLAIN, lbm._fontSize));
+>     lbm._fontName = font;
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener24 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener24 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     JComboBox box = (JComboBox) e.getSource();
+>     String size = (String) box.getSelectedItem();
+>     int s = Integer.valueOf(size).intValue();
+> 
+>     lbm.setFontSizeSilently(s);
+>     lbm.refreshDetailTextArea();
+>     lbm._fontSize = s;
+>   }
+>   private LogBrokerMonitor lbm;
+> }
+> 
+> class LogBrokerMonitor_ActionListener25 implements ActionListener {
+>   public LogBrokerMonitor_ActionListener25 (LogBrokerMonitor lbm) { this.lbm = lbm; }
+>   public void actionPerformed(ActionEvent e) {
+>     JComboBox box = (JComboBox) e.getSource();
+>     LogLevel level = (LogLevel) box.getSelectedItem();
+>     lbm.setLeastSevereDisplayedLogLevel(level);
+>   }
+>   private LogBrokerMonitor lbm;
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/lf5/viewer/LogFactor5Dialog.java src/main/java/org/apache/log4j/lf5/viewer/LogFactor5Dialog.java
+125,126c125,126
+<     constraints.weightx = 1.0;
+<     constraints.weighty = 1.0;
+---
+>     constraints.weightx = 1;
+>     constraints.weighty = 1;
+151c151
+< }
+\ No newline at end of file
+---
+> }
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/lf5/viewer/LogFactor5ErrorDialog.java src/main/java/org/apache/log4j/lf5/viewer/LogFactor5ErrorDialog.java
+37a38,45
+> class LogFactor5ErrorDialogOKActionListener implements ActionListener {
+>   public LogFactor5ErrorDialogOKActionListener (LogFactor5ErrorDialog lf5ed) { this.lf5ed = lf5ed; }
+>   public void actionPerformed(ActionEvent e) {
+>     lf5ed.hide();
+>   }
+>   private LogFactor5ErrorDialog lf5ed;
+> }
+> 
+58,62c66
+<     ok.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         hide();
+<       }
+<     });
+---
+>     ok.addActionListener(new LogFactor5ErrorDialogOKActionListener(this));
+92c96
+< }
+\ No newline at end of file
+---
+> }
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/lf5/viewer/LogFactor5InputDialog.java src/main/java/org/apache/log4j/lf5/viewer/LogFactor5InputDialog.java
+37a38,71
+> class LogFactor5InputDialogKeyAdapter extends KeyAdapter {
+>   public LogFactor5InputDialogKeyAdapter (LogFactor5InputDialog d) { this.d = d; }
+> 
+>   public void keyPressed(KeyEvent e) {
+>     if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+>       d.hide();
+>     }
+>   }
+> 
+>   private LogFactor5InputDialog d;
+> }
+> 
+> class LogFactor5InputDialogActionListener implements ActionListener {
+>   public LogFactor5InputDialogActionListener (LogFactor5InputDialog d) { this.d = d; }
+>   
+>   public void actionPerformed(ActionEvent e) {
+>     d.hide();
+>   }
+> 
+>   private LogFactor5InputDialog d;
+> }
+> 
+> class LogFactor5InputDialogActionListener2 implements ActionListener {
+>   public LogFactor5InputDialogActionListener2 (LogFactor5InputDialog d) { this.d = d; }
+>   
+>   public void actionPerformed(ActionEvent e) {
+>     d.hide();
+>     d.clearText();
+>   }
+> 
+>   private LogFactor5InputDialog d;
+> }
+> 
+> 
+85,91c119
+<     addKeyListener(new KeyAdapter() {
+<       public void keyPressed(KeyEvent e) {
+<         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+<           hide();
+<         }
+<       }
+<     });
+---
+>     addKeyListener(new LogFactor5InputDialogKeyAdapter(this));
+94,98c122
+<     ok.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         hide();
+<       }
+<     });
+---
+>     ok.addActionListener(new LogFactor5InputDialogActionListener(this));
+101,109c125
+<     cancel.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         hide();
+<         // set the text field to blank just in case
+<         // a file was selected before the Cancel
+<         // button was pressed.
+<         _textField.setText("");
+<       }
+<     });
+---
+>     cancel.addActionListener(new LogFactor5InputDialogActionListener2(this));
+137a154,157
+>   void clearText() {
+>     _textField.setText("");
+>   }
+> 
+145c165
+< }
+\ No newline at end of file
+---
+> }
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/lf5/viewer/LogTable.java src/main/java/org/apache/log4j/lf5/viewer/LogTable.java
+214a215,216
+> }
+> 
+216c218
+<     protected JTable _table;
+---
+>     private LogTable lt;
+218,219c220,221
+<     public LogTableListSelectionListener(JTable table) {
+<       _table = table;
+---
+>     public LogTableListSelectionListener(LogTable lt) {
+>       this.lt = lt;
+235c237
+<         for (int i = 0; i < _numCols - 1; i++) {
+---
+>         for (int i = 0; i < lt._numCols - 1; i++) {
+237c239
+<           Object obj = _table.getModel().getValueAt(selectedRow, i);
+---
+>           Object obj = lt.getModel().getValueAt(selectedRow, i);
+242c244
+<           buf.append(_colNames[i] + ":");
+---
+>           buf.append(lt._colNames[i] + ":");
+245c247
+<           if (i == _colThread || i == _colMessage || i == _colLevel) {
+---
+>           if (i == lt._colThread || i == lt._colMessage || i == lt._colLevel) {
+249c251
+<           if (i == _colDate || i == _colNDC) {
+---
+>           if (i == lt._colDate || i == lt._colNDC) {
+261,262c263,264
+<         buf.append(_colNames[_numCols - 1] + ":\n");
+<         Object obj = _table.getModel().getValueAt(selectedRow, _numCols - 1);
+---
+>         buf.append(lt._colNames[lt._numCols - 1] + ":\n");
+>         Object obj = lt.getModel().getValueAt(selectedRow, lt._numCols - 1);
+267c269
+<         _detailTextArea.setText(buf.toString());
+---
+>         lt._detailTextArea.setText(buf.toString());
+271,272d272
+< }
+< 
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/lf5/viewer/categoryexplorer/CategoryAbstractCellEditor.java src/main/java/org/apache/log4j/lf5/viewer/categoryexplorer/CategoryAbstractCellEditor.java
+139c139
+<     for (int i = listeners.length - 2; i >= 0; i -= 2) {
+---
+>     for (int i = listeners.length - 2; i >= 0; i = i - 2) {
+153c153
+<     for (int i = listeners.length - 2; i >= 0; i -= 2) {
+---
+>     for (int i = listeners.length - 2; i >= 0; i = i - 2) {
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/lf5/viewer/categoryexplorer/CategoryExplorerModel.java src/main/java/org/apache/log4j/lf5/viewer/categoryexplorer/CategoryExplorerModel.java
+132c132
+<       if (categoryAlreadyExists == false) {
+---
+>       if (! categoryAlreadyExists) {
+176c176
+<       if (active == false || categoryAlreadyExists == false) {
+---
+>       if (! active || ! categoryAlreadyExists) {
+216c216
+<       if (categoryAlreadyExists == false) {
+---
+>       if (! categoryAlreadyExists) {
+239,241d238
+<     if (node.isSelected() == selected) {
+<       return; // nothing was changed, nothing to do
+<     }
+243a241
+>       if (node.isSelected()) return;
+245a244
+>       if (! node.isSelected()) return;
+256c255
+<       if (current.isSelected() != selected) {
+---
+>       if ((current.isSelected() && !selected) || (!current.isSelected() && selected)) {
+273c272
+<       if (parent.isSelected() != selected) {
+---
+>       if ((parent.isSelected() && !selected) || (!parent.isSelected() && selected)) {
+326,330c325
+<     SwingUtilities.invokeLater(new Runnable() {
+<       public void run() {
+<         nodeChanged(node); // remind the tree to render the new node
+<       }
+<     });
+---
+>     SwingUtilities.invokeLater(new CategoryExplorerModel_Runnable(this, node));
+343c338,345
+< 
+---
+> class CategoryExplorerModel_Runnable implements Runnable {
+>   public CategoryExplorerModel_Runnable (CategoryExplorerModel cem, CategoryNode node) { this.cem = cem; this.node = node; }
+>   public void run() {
+>     cem.nodeChanged(node); // remind the tree to render the new node
+>   }
+>   private CategoryExplorerModel cem;
+>   private CategoryNode node;
+> }
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/lf5/viewer/categoryexplorer/CategoryExplorerTree.java src/main/java/org/apache/log4j/lf5/viewer/categoryexplorer/CategoryExplorerTree.java
+136,140c136
+<     _model.addTreeModelListener(new TreeModelAdapter() {
+<       public void treeNodesInserted(TreeModelEvent e) {
+<         expandRootNode();
+<       }
+<     });
+---
+>     _model.addTreeModelListener(new CategoryExplorerTreeModelListener(this));
+153c149,155
+< 
+---
+> class CategoryExplorerTreeModelListener extends TreeModelAdapter {
+>   public CategoryExplorerTreeModelListener(CategoryExplorerTree cet) { this.cet = cet; }
+>   public void treeNodesInserted(TreeModelEvent e) {
+>     cet.expandRootNode();
+>   }
+>   private CategoryExplorerTree cet;
+> }
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/lf5/viewer/categoryexplorer/CategoryNode.java src/main/java/org/apache/log4j/lf5/viewer/categoryexplorer/CategoryNode.java
+70,71c70,71
+<     if (s != _selected) {
+<       _selected = s;
+---
+>     if (s) {
+>       if (! _selected) _selected = s;
+72a73
+>     else if (_selected) _selected = s;
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/lf5/viewer/categoryexplorer/CategoryNodeEditor.java src/main/java/org/apache/log4j/lf5/viewer/categoryexplorer/CategoryNodeEditor.java
+42a43,115
+> class CategoryNodeEditorCheckBoxActionListener implements ActionListener {
+>   public CategoryNodeEditorCheckBoxActionListener (CategoryNodeEditor cne) { this.cne = cne; }
+>   public void actionPerformed(ActionEvent e) {
+>     cne._categoryModel.update(cne._lastEditedNode, cne._checkBox.isSelected());
+>     cne.stopCellEditing();
+>   }
+>   private CategoryNodeEditor cne;
+> }
+> 
+> class CategoryNodeEditorRendererMouseListener extends MouseAdapter {
+>   public CategoryNodeEditorRendererMouseListener (CategoryNodeEditor cne) { this.cne = cne; }
+>   public void mousePressed(MouseEvent e) {
+>     if ((e.getModifiers() & MouseEvent.BUTTON3_MASK) != 0) {
+>       cne.showPopup(cne._lastEditedNode, e.getX(), e.getY());
+>     }
+>     cne.stopCellEditing();
+>   }
+>   private CategoryNodeEditor cne;
+> }
+> 
+> class CategoryNodeEditorPropertiesMenuItemActionListener implements ActionListener {
+>   public CategoryNodeEditorPropertiesMenuItemActionListener (CategoryNodeEditor cne, CategoryNode node) { this.cne = cne; this.node = node; }
+>   public void actionPerformed(ActionEvent e) {
+>     cne.showPropertiesDialog(node);
+>   }
+>   private CategoryNodeEditor cne;
+>   private CategoryNode node;
+> }
+> 
+> class CategoryNodeEditorSelectDescendantsActionListener implements ActionListener {
+>   public CategoryNodeEditorSelectDescendantsActionListener (CategoryNodeEditor cne, CategoryNode node) { this.cne = cne; this.node = node; }
+>   public void actionPerformed(ActionEvent e) {
+>     cne._categoryModel.setDescendantSelection(node, true);
+>   }
+>   private CategoryNodeEditor cne;
+>   private CategoryNode node;
+> }
+> 
+> class CategoryNodeEditorUnselectDescendantsActionListener implements ActionListener {
+>   public CategoryNodeEditorUnselectDescendantsActionListener (CategoryNodeEditor cne, CategoryNode node) { this.cne = cne; this.node = node; }
+>   public void actionPerformed(ActionEvent e) {
+>     cne._categoryModel.setDescendantSelection(node, false);
+>   }
+>   private CategoryNodeEditor cne;
+>   private CategoryNode node;
+> }
+> 
+> class CategoryNodeEditorExpandMenuItemActionListener implements ActionListener {
+>   public CategoryNodeEditorExpandMenuItemActionListener (CategoryNodeEditor cne, CategoryNode node) { this.cne = cne; this.node = node; }
+>   public void actionPerformed(ActionEvent e) {
+>     cne.expandDescendants(node);    
+>   }
+>   private CategoryNodeEditor cne;
+>   private CategoryNode node;
+> }
+> 
+> class CategoryNodeEditorCollapseMenuItemActionListener implements ActionListener {
+>   public CategoryNodeEditorCollapseMenuItemActionListener (CategoryNodeEditor cne, CategoryNode node) { this.cne = cne; this.node = node; }
+>   public void actionPerformed(ActionEvent e) {
+>     cne.collapseDescendants(node);    
+>   }
+>   private CategoryNodeEditor cne;
+>   private CategoryNode node;
+> }
+> 
+> class CategoryNodeEditorRemoveMenuItemActionListener implements ActionListener {
+>   public CategoryNodeEditorRemoveMenuItemActionListener (CategoryNodeEditor cne) { this.cne = cne; }
+>   public void actionPerformed(ActionEvent e) {
+>     while (cne.removeUnusedNodes() > 0) {}
+>   }
+>   private CategoryNodeEditor cne;
+> }
+> 
+70,75c143
+<     _checkBox.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         _categoryModel.update(_lastEditedNode, _checkBox.isSelected());
+<         stopCellEditing();
+<       }
+<     });
+---
+>     _checkBox.addActionListener(new CategoryNodeEditorCheckBoxActionListener(this));
+77,84c145
+<     _renderer.addMouseListener(new MouseAdapter() {
+<       public void mousePressed(MouseEvent e) {
+<         if ((e.getModifiers() & MouseEvent.BUTTON3_MASK) != 0) {
+<           showPopup(_lastEditedNode, e.getX(), e.getY());
+<         }
+<         stopCellEditing();
+<       }
+<     });
+---
+>     _renderer.addMouseListener(new CategoryNodeEditorRendererMouseListener(this));
+112,116c173
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         showPropertiesDialog(node);
+<       }
+<     });
+---
+>     result.addActionListener(new CategoryNodeEditorPropertiesMenuItemActionListener(this, node));
+170,176c227
+<     selectDescendants.addActionListener(
+<         new ActionListener() {
+<           public void actionPerformed(ActionEvent e) {
+<             _categoryModel.setDescendantSelection(node, true);
+<           }
+<         }
+<     );
+---
+>     selectDescendants.addActionListener(new CategoryNodeEditorSelectDescendantsActionListener(this, node));
+183,191c234
+<     unselectDescendants.addActionListener(
+< 
+<         new ActionListener() {
+<           public void actionPerformed(ActionEvent e) {
+<             _categoryModel.setDescendantSelection(node, false);
+<           }
+<         }
+< 
+<     );
+---
+>     unselectDescendants.addActionListener(new CategoryNodeEditorUnselectDescendantsActionListener(this, node));
+197,201c240
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         expandDescendants(node);
+<       }
+<     });
+---
+>     result.addActionListener(new CategoryNodeEditorExpandMenuItemActionListener(this, node));
+207,211c246
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         collapseDescendants(node);
+<       }
+<     });
+---
+>     result.addActionListener(new CategoryNodeEditorCollapseMenuItemActionListener(this, node));
+226,230c261
+<     result.addActionListener(new ActionListener() {
+<       public void actionPerformed(ActionEvent e) {
+<         while (removeUnusedNodes() > 0) ;
+<       }
+<     });
+---
+>     result.addActionListener(new CategoryNodeEditorRemoveMenuItemActionListener(this));
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/lf5/viewer/configure/ConfigurationManager.java src/main/java/org/apache/log4j/lf5/viewer/configure/ConfigurationManager.java
+197c197,198
+<     int j = (getValue(map, NAME).equalsIgnoreCase(FIRST_CATEGORY_NAME)) ? 1 : 0;
+---
+>     int j = 0;
+>     if (getValue(map, NAME).equalsIgnoreCase(FIRST_CATEGORY_NAME)) j = 1;
+204,205c205
+<       chnode.setSelected((getValue(map, SELECTED).equalsIgnoreCase("true")) ? true : false);
+<       if (getValue(map, EXPANDED).equalsIgnoreCase("true")) ;
+---
+>       chnode.setSelected(getValue(map, SELECTED).equalsIgnoreCase("true"));
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/net/SMTPAppender.java src/main/java/org/apache/log4j/net/SMTPAppender.java
+97,98c97,98
+<   private String smtpUsername;
+<   private String smtpPassword;
+---
+>   String smtpUsername;
+>   String smtpPassword;
+219,223c219
+<       auth = new Authenticator() {
+<         protected PasswordAuthentication getPasswordAuthentication() {
+<           return new PasswordAuthentication(smtpUsername, smtpPassword);
+<         }
+<       };
+---
+>       auth = new SMTPAppenderAuthenticator(this);
+431c427,428
+<     return evaluator == null ? null : evaluator.getClass().getName();
+---
+>     if (evaluator == null) return null;
+>     else return evaluator.getClass().getName();
+787a785,792
+> 
+> class SMTPAppenderAuthenticator extends Authenticator {
+>   public SMTPAppenderAuthenticator (SMTPAppender smtpa) { this.smtpa = smtpa; }
+>   protected PasswordAuthentication getPasswordAuthentication() {
+>     return new PasswordAuthentication(smtpa.smtpUsername, smtpa.smtpPassword);
+>   }
+>   private SMTPAppender smtpa;
+> }
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/net/SocketAppender.java src/main/java/org/apache/log4j/net/SocketAppender.java
+133c133
+<   private Connector connector;
+---
+>   Connector connector;
+232c232
+<         msg += " We will try again later.";
+---
+>         msg = msg + " We will try again later.";
+235c235
+<           msg += " We are not retrying.";
+---
+>           msg = msg + " We are not retrying.";
+305c305
+<       connector = new Connector();
+---
+>       connector = new Connector(this);
+419c419,422
+<   /**
+---
+>   
+> }
+> 
+> /**
+432d434
+< 
+440,442c442,444
+< 	  sleep(reconnectionDelay);
+< 	  LogLog.debug("Attempting connection to "+address.getHostName());
+< 	  socket = new Socket(address, port);
+---
+> 	  sleep(sa.reconnectionDelay);
+> 	  LogLog.debug("Attempting connection to "+sa.address.getHostName());
+> 	  socket = new Socket(sa.address, sa.port);
+444,445c446,447
+< 	    oos = new ObjectOutputStream(socket.getOutputStream());
+< 	    connector = null;
+---
+> 	    sa.oos = new ObjectOutputStream(socket.getOutputStream());
+> 	    sa.connector = null;
+453c455
+< 	  LogLog.debug("Remote host "+address.getHostName()
+---
+> 	  LogLog.debug("Remote host "+sa.address.getHostName()
+459c461
+< 	    LogLog.debug("Could not connect to " + address.getHostName()+
+---
+> 	    LogLog.debug("Could not connect to " + sa.address.getHostName()+
+471a474,476
+>     public Connector (SocketAppender sa) { this.sa = sa; }
+> 
+>     private SocketAppender sa;
+474d478
+< }
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/net/SocketHubAppender.java src/main/java/org/apache/log4j/net/SocketHubAppender.java
+114c114
+<   private int port = DEFAULT_PORT;
+---
+>   int port = DEFAULT_PORT;
+118c118
+<   private CyclicBuffer buffer = null;
+---
+>   CyclicBuffer buffer = null;
+127c127
+<   private ServerSocket serverSocket;
+---
+>   ServerSocket serverSocket;
+224c224
+<     if ((event == null) || (oosList.size() == 0)) {
+---
+>     if (event == null || (oosList.size() == 0)) {
+356c356
+<     serverMonitor = new ServerMonitor(port, oosList);
+---
+>     serverMonitor = new ServerMonitor(port, oosList, this);
+368a369,370
+> }
+> 
+373c375
+<   private class ServerMonitor implements Runnable {
+---
+>   class ServerMonitor implements Runnable {
+377a380
+>     private SocketHubAppender sha;
+382c385
+<     ServerMonitor(int _port, Vector _oosList) {
+---
+>       ServerMonitor(int _port, Vector _oosList, SocketHubAppender sha) {
+385a389
+>       this.sha = sha;
+400,402c404,406
+<             if (serverSocket != null) {
+<                 serverSocket.close();
+<                 serverSocket = null;
+---
+>             if (sha.serverSocket != null) {
+>                 sha.serverSocket.close();
+>                 sha.serverSocket = null;
+422,424c426,428
+<       if (buffer != null) {
+<         for (int i = 0; i < buffer.length(); i++) {
+<           stream.writeObject(buffer.get(i));
+---
+>       if (sha.buffer != null) {
+>         for (int i = 0; i < sha.buffer.length(); i++) {
+>           stream.writeObject(sha.buffer.get(i));
+436c440
+<       serverSocket = null;
+---
+>       sha.serverSocket = null;
+438,439c442,443
+<         serverSocket = createServerSocket(port);
+<         serverSocket.setSoTimeout(1000);
+---
+>         sha.serverSocket = sha.createServerSocket(sha.port);
+>         sha.serverSocket.setSoTimeout(1000);
+452c456
+<         	serverSocket.setSoTimeout(1000);
+---
+>         	sha.serverSocket.setSoTimeout(1000);
+462c466
+<             socket = serverSocket.accept();
+---
+>             socket = sha.serverSocket.accept();
+484c488
+<               if (buffer != null && buffer.length() > 0) {
+---
+>               if (sha.buffer != null && sha.buffer.length() > 0) {
+502c506
+<     		serverSocket.close();
+---
+>     		sha.serverSocket.close();
+511d514
+< }
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/net/SyslogAppender.java src/main/java/org/apache/log4j/net/SyslogAppender.java
+180c180
+<       facilityStr += ":";
+---
+>       facilityStr = facilityStr + ":";
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/net/TelnetAppender.java src/main/java/org/apache/log4j/net/TelnetAppender.java
+133c133,136
+<   //---------------------------------------------------------- SocketHandler:
+---
+>   
+> }
+> 
+> //---------------------------------------------------------- SocketHandler:
+138c141
+<   protected class SocketHandler extends Thread {
+---
+>   class SocketHandler extends Thread {
+236d238
+< }
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/pattern/BridgePatternConverter.java src/main/java/org/apache/log4j/pattern/BridgePatternConverter.java
+82c82
+<         handlesExceptions |= patternConverters[i].handlesThrowable();
+---
+>         handlesExceptions = handlesExceptions || patternConverters[i].handlesThrowable();
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/pattern/CachedDateFormat.java src/main/java/org/apache/log4j/pattern/CachedDateFormat.java
+166c166
+<       slotBegin -= 1000;
+---
+>       slotBegin = slotBegin - 1000;
+169c169,170
+<     int millis = (int) (time - slotBegin);
+---
+>     long tmp = time - slotBegin;
+>     int millis = (int)tmp;
+261c262
+<           && (now < (slotBegin + 1000L))) {
+---
+>           && (now < (slotBegin + 1000))) {
+266c267,268
+<           millisecondFormat((int) (now - slotBegin), cache, millisecondStart);
+---
+>           long tmp = now - slotBegin;
+>           millisecondFormat((int) tmp, cache, millisecondStart);
+289c291
+<       slotBegin -= 1000;
+---
+>       slotBegin = slotBegin - 1000;
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/pattern/DatePatternConverter.java src/main/java/org/apache/log4j/pattern/DatePatternConverter.java
+68,106d67
+< 
+<     /**
+<      * This class wraps a DateFormat and forces the time zone to the
+<      *   default time zone before each format and parse request.
+<      */
+<   private static class DefaultZoneDateFormat extends DateFormat {
+<      /**
+<       * Serialization version ID.
+<       */
+<      private static final long serialVersionUID = 1;
+<      /**
+<          * Wrapped instance of DateFormat.
+<          */
+<     private final DateFormat dateFormat;
+< 
+<         /**
+<          * Construct new instance.
+<          * @param format format, may not be null.
+<          */
+<     public DefaultZoneDateFormat(final DateFormat format) {
+<         dateFormat = format;
+<     }
+< 
+<         /**
+<          * @{inheritDoc}
+<          */
+<     public StringBuffer format(Date date, StringBuffer toAppendTo, FieldPosition fieldPosition) {
+<         dateFormat.setTimeZone(TimeZone.getDefault());
+<         return dateFormat.format(date, toAppendTo, fieldPosition);
+<     }
+< 
+<         /**
+<          * @{inheritDoc}
+<          */
+<     public Date parse(String source, ParsePosition pos) {
+<         dateFormat.setTimeZone(TimeZone.getDefault());
+<         return dateFormat.parse(source, pos);
+<     }
+<   }
+117c78
+<     if ((options == null) || (options.length == 0)) {
+---
+>     if (options == null || (options.length == 0)) {
+128,129c89
+<       (patternOption == null)
+<         || patternOption.equalsIgnoreCase(ISO8601_FORMAT)) {
+---
+>       patternOption == null || patternOption.equalsIgnoreCase(ISO8601_FORMAT)) {
+155c115
+<     if ((options != null) && (options.length > 1)) {
+---
+>     if (options != null && (options.length > 1)) {
+205a166,205
+> 
+> 
+>     /**
+>      * This class wraps a DateFormat and forces the time zone to the
+>      *   default time zone before each format and parse request.
+>      */
+>   class DefaultZoneDateFormat extends DateFormat {
+>      /**
+>       * Serialization version ID.
+>       */
+>      private static final long serialVersionUID = 1;
+>      /**
+>          * Wrapped instance of DateFormat.
+>          */
+>     private final DateFormat dateFormat;
+> 
+>         /**
+>          * Construct new instance.
+>          * @param format format, may not be null.
+>          */
+>     public DefaultZoneDateFormat(final DateFormat format) {
+>         dateFormat = format;
+>     }
+> 
+>         /**
+>          * @{inheritDoc}
+>          */
+>     public StringBuffer format(Date date, StringBuffer toAppendTo, FieldPosition fieldPosition) {
+>         dateFormat.setTimeZone(TimeZone.getDefault());
+>         return dateFormat.format(date, toAppendTo, fieldPosition);
+>     }
+> 
+>         /**
+>          * @{inheritDoc}
+>          */
+>     public Date parse(String source, ParsePosition pos) {
+>         dateFormat.setTimeZone(TimeZone.getDefault());
+>         return dateFormat.parse(source, pos);
+>     }
+>   }
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/pattern/FormattingInfo.java src/main/java/org/apache/log4j/pattern/FormattingInfo.java
+126c126
+<         for (; padLength > 8; padLength -= 8) {
+---
+>         for (; padLength > 8; padLength = padLength - 8) {
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/pattern/NameAbbreviator.java src/main/java/org/apache/log4j/pattern/NameAbbreviator.java
+148c148,151
+<   /**
+---
+>   
+> }
+> 
+> /**
+151c154
+<   private static class NOPAbbreviator extends NameAbbreviator {
+---
+>   class NOPAbbreviator extends NameAbbreviator {
+168c171
+<   private static class MaxElementAbbreviator extends NameAbbreviator {
+---
+>   class MaxElementAbbreviator extends NameAbbreviator {
+209c212
+<   private static class DropElementAbbreviator extends NameAbbreviator {
+---
+>   class DropElementAbbreviator extends NameAbbreviator {
+246c249
+<   private static class PatternAbbreviatorFragment {
+---
+>   class PatternAbbreviatorFragment {
+302c305
+<   private static class PatternAbbreviator extends NameAbbreviator {
+---
+>   class PatternAbbreviator extends NameAbbreviator {
+350d352
+< }
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/pattern/PatternParser.java src/main/java/org/apache/log4j/pattern/PatternParser.java
+427c427
+<     for (int i = converterId.length(); (i > 0) && (converterObj == null);
+---
+>     for (int i = converterId.length(); (i > 0) && converterObj == null;
+581a582,583
+> }
+> 
+585c587
+<   private static class ReadOnlyMap implements Map {
+---
+>   class ReadOnlyMap implements Map {
+683c685
+< }
+---
+> 
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/pattern/PropertiesPatternConverter.java src/main/java/org/apache/log4j/pattern/PropertiesPatternConverter.java
+50,52c50
+<     super(
+<       ((options != null) && (options.length > 0))
+<       ? ("Property{" + options[0] + "}") : "Properties", "property");
+---
+>     super(makeStringArgForSuperConstructor(options), "property");
+60a59,63
+>   private static String makeStringArgForSuperConstructor (String[] options) {
+>     if (options != null && options.length > 0) return "Property{" + options[0] + "}";
+>     else return "Properties";
+>   }
+> 
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/pattern/RelativeTimePatternConverter.java src/main/java/org/apache/log4j/pattern/RelativeTimePatternConverter.java
+64a65
+> }
+66c67
+<   /**
+---
+> /**
+69c70
+<   private static final class CachedTimestamp {
+---
+>   final class CachedTimestamp {
+106d106
+< }
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/pattern/ThrowableInformationPatternConverter.java src/main/java/org/apache/log4j/pattern/ThrowableInformationPatternConverter.java
+88c88
+<             length += maxLines;
+---
+>             length = length + maxLines;
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/rewrite/MapRewritePolicy.java src/main/java/org/apache/log4j/rewrite/MapRewritePolicy.java
+22a23
+> import org.apache.log4j.Category;
+68c69,71
+< 
+---
+>             
+>             Category logger = source.getLogger();
+>             if (logger == null) logger = Logger.getLogger(source.getLoggerName());
+71c74
+<                     source.getLogger() != null ? source.getLogger(): Logger.getLogger(source.getLoggerName()), 
+---
+>                     logger,
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/rewrite/PropertyRewritePolicy.java src/main/java/org/apache/log4j/rewrite/PropertyRewritePolicy.java
+24a25
+> import org.apache.log4j.Category;
+75a77,79
+>             Category logger = source.getLogger();
+>             if (logger == null) logger = Logger.getLogger(source.getLoggerName());
+> 
+78c82
+<                     source.getLogger() != null ? source.getLogger(): Logger.getLogger(source.getLoggerName()), 
+---
+>                     logger,
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/rewrite/ReflectionRewritePolicy.java src/main/java/org/apache/log4j/rewrite/ReflectionRewritePolicy.java
+23a24
+> import org.apache.log4j.Category;
+58,59c59
+<                                 props[i].getReadMethod().invoke(msg,
+<                                         (Object[]) null);
+---
+>                               props[i].getReadMethod().invoke(msg, null);
+69c69,71
+<                     }
+---
+>                         }
+>                     Category logger = source.getLogger();
+>                     if (logger == null) logger = Logger.getLogger(source.getLoggerName());
+72c74
+<                             source.getLogger() != null ? source.getLogger(): Logger.getLogger(source.getLoggerName()),
+---
+>                             logger,
+81c83
+<                 }
+---
+>                             }
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/spi/LocationInfo.java src/main/java/org/apache/log4j/spi/LocationInfo.java
+135c135
+< 	return;
+---
+>       return;
+152c152,153
+<                           int line = ((Integer) getLineNumberMethod.invoke(elements[caller], noArgs)).intValue();
+---
+>                           Integer lineInteger = (Integer) getLineNumberMethod.invoke(elements[caller], noArgs);
+>                           int line = lineInteger.intValue();
+172c173
+<               }
+---
+>                   }
+227c228
+<       ibegin+= Layout.LINE_SEP_LEN;
+---
+>       ibegin = ibegin + Layout.LINE_SEP_LEN;
+242c243
+< 	ibegin += 3;
+---
+> 	ibegin = ibegin + 3;
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/varia/LevelMatchFilter.java src/main/java/org/apache/log4j/varia/LevelMatchFilter.java
+59c59,60
+<     return levelToMatch == null ? null : levelToMatch.toString();
+---
+>     if (levelToMatch == null) return null;
+>     else return levelToMatch.toString();
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/varia/LevelRangeFilter.java src/main/java/org/apache/log4j/varia/LevelRangeFilter.java
+70c70
+<       if (event.getLevel().isGreaterOrEqual(levelMin) == false) {
+---
+>       if (! event.getLevel().isGreaterOrEqual(levelMin)) {
+diff -r original/apache-log4j-1.2.17/src/main/java/org/apache/log4j/xml/DOMConfigurator.java src/main/java/org/apache/log4j/xml/DOMConfigurator.java
+188c188
+<   Appender findAppenderByReference(Element appenderRef) {    
+---
+>   Appender findAppenderByReference(Element appenderRef) {
+337,339c337,342
+< 	    String loggerName = currentElement.getAttribute(REF_ATTR);	    
+< 	    Logger logger = (catFactory == null) ? repository.getLogger(loggerName)
+<                 : repository.getLogger(loggerName, catFactory);
+---
+> 	    String loggerName = currentElement.getAttribute(REF_ATTR);	  
+>   
+> 	    Logger logger;
+>       if (catFactory == null) logger = repository.getLogger(loggerName);
+>       else logger = repository.getLogger(loggerName, catFactory);
+> 
+402c405,406
+<       cat = (catFactory == null) ? repository.getLogger(catName) : repository.getLogger(catName, catFactory);
+---
+>       if (catFactory == null) cat = repository.getLogger(catName); 
+>       else cat = repository.getLogger(catName, catFactory);
+740,743c744
+<   private interface ParseAction {
+<       Document parse(final DocumentBuilder parser) throws SAXException, IOException;
+<   }
+< 
+---
+>   
+747,754c748
+<     ParseAction action = new ParseAction() {
+<           public Document parse(final DocumentBuilder parser) throws SAXException, IOException {
+<               return parser.parse(new File(filename));
+<           }
+<           public String toString() { 
+<               return "file [" + filename + "]"; 
+<           }
+<     };
+---
+>     ParseAction action = new ParseAction1(filename);
+761,778c755,756
+<       ParseAction action = new ParseAction() {
+<           public Document parse(final DocumentBuilder parser) throws SAXException, IOException {
+<               URLConnection uConn = url.openConnection();
+<               uConn.setUseCaches(false);
+<               InputStream stream = uConn.getInputStream();
+<               try {
+<                 InputSource src = new InputSource(stream);
+<                 src.setSystemId(url.toString());
+<                 return parser.parse(src);
+<               } finally {
+<                 stream.close();
+<               }
+<           }
+<           public String toString() { 
+<               return "url [" + url.toString() + "]"; 
+<           }
+<       };
+<       doConfigure(action, repository);
+---
+>     ParseAction action = new ParseAction2(url);
+>     doConfigure(action, repository);
+789,799c767,768
+<       ParseAction action = new ParseAction() {
+<           public Document parse(final DocumentBuilder parser) throws SAXException, IOException {
+<               InputSource inputSource = new InputSource(inputStream);
+<               inputSource.setSystemId("dummy://log4j.dtd");
+<               return parser.parse(inputSource);
+<           }
+<           public String toString() { 
+<               return "input stream [" + inputStream.toString() + "]"; 
+<           }
+<       };
+<       doConfigure(action, repository);
+---
+>     ParseAction action = new ParseAction3(inputStream);
+>     doConfigure(action, repository);
+810,819c779
+<       ParseAction action = new ParseAction() {
+<           public Document parse(final DocumentBuilder parser) throws SAXException, IOException {
+<               InputSource inputSource = new InputSource(reader);
+<               inputSource.setSystemId("dummy://log4j.dtd");
+<               return parser.parse(inputSource);
+<           }
+<           public String toString() { 
+<               return "reader [" + reader.toString() + "]"; 
+<           }
+<       };
+---
+>     ParseAction action = new ParseAction4(reader);
+834,841c794
+<       ParseAction action = new ParseAction() {
+<           public Document parse(final DocumentBuilder parser) throws SAXException, IOException {
+<               return parser.parse(inputSource);
+<           }
+<           public String toString() { 
+<               return "input source [" + inputSource.toString() + "]"; 
+<           }
+<       };
+---
+>       ParseAction action = new ParseAction5(inputSource);
+1112a1066,1137
+>  interface ParseAction {
+>       Document parse(final DocumentBuilder parser) throws SAXException, IOException;
+>   }
+> 
+> class ParseAction1 implements ParseAction {
+>   public ParseAction1 (String filename) { this.filename = filename; }
+> 
+>   public Document parse(final DocumentBuilder parser) throws SAXException, IOException {
+>               return parser.parse(new File(filename));
+>           }
+>           public String toString() { 
+>               return "file [" + filename + "]"; 
+>           }
+>   private String filename;
+> }
+> 
+> class ParseAction2 implements ParseAction {
+>   public ParseAction2 (URL url) { this.url = url; }
+>   public Document parse(final DocumentBuilder parser) throws SAXException, IOException {
+>               URLConnection uConn = url.openConnection();
+>               uConn.setUseCaches(false);
+>               InputStream stream = uConn.getInputStream();
+>               try {
+>                 InputSource src = new InputSource(stream);
+>                 src.setSystemId(url.toString());
+>                 return parser.parse(src);
+>               } finally {
+>                 stream.close();
+>               }
+>           }
+>           public String toString() { 
+>               return "url [" + url.toString() + "]"; 
+>           }
+>   private URL url;
+> }
+> 
+> class ParseAction3 implements ParseAction {
+>   public ParseAction3 (InputStream inputStream) { this.inputStream = inputStream; }
+>   public Document parse(final DocumentBuilder parser) throws SAXException, IOException {
+>               InputSource inputSource = new InputSource(inputStream);
+>               inputSource.setSystemId("dummy://log4j.dtd");
+>               return parser.parse(inputSource);
+>           }
+>           public String toString() { 
+>               return "input stream [" + inputStream.toString() + "]"; 
+>           }
+>   private InputStream inputStream;
+> }
+> 
+> class ParseAction4 implements ParseAction {
+>   public ParseAction4 (Reader reader) { this.reader = reader; }
+>   public Document parse(final DocumentBuilder parser) throws SAXException, IOException {
+>               InputSource inputSource = new InputSource(reader);
+>               inputSource.setSystemId("dummy://log4j.dtd");
+>               return parser.parse(inputSource);
+>           }
+>           public String toString() { 
+>               return "reader [" + reader.toString() + "]"; 
+>           }
+>   private Reader reader;
+> }
+> 
+> class ParseAction5 implements ParseAction {
+>   public ParseAction5(InputSource inputSource) { this.inputSource = inputSource; }
+>    public Document parse(final DocumentBuilder parser) throws SAXException, IOException {
+>               return parser.parse(inputSource);
+>           }
+>           public String toString() { 
+>               return "input source [" + inputSource.toString() + "]"; 
+>           }
+>   private InputSource inputSource;
+> }
